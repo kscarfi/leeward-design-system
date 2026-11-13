@@ -1,0 +1,39 @@
+.skeleton {
+  display: block;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--lw-color-skeleton-base) 0%,
+    var(--lw-color-skeleton-highlight) 50%,
+    var(--lw-color-skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s var(--lw-motion-easing-standard) infinite;
+}
+
+.text {
+  height: var(--lw-type-body-md-size);
+  margin-block: var(--lw-space-2xs);
+  border-radius: var(--lw-radius-sm);
+}
+
+.last { width: 60%; }
+.rect { height: var(--lw-size-control-lg); border-radius: var(--lw-radius-md); }
+
+.circle {
+  width: var(--lw-size-avatar-md);
+  height: var(--lw-size-avatar-md);
+  border-radius: var(--lw-radius-pill);
+}
+
+.stack { display: flex; flex-direction: column; width: 100%; }
+
+@keyframes shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+/* No shimmer for reduced motion: a still placeholder is enough. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none !important; background: var(--lw-color-skeleton-base); }
+}

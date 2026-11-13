@@ -1,0 +1,18 @@
+.root { display: flex; flex-direction: column; gap: var(--lw-space-2xs); }
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-2xs);
+  margin-inline-start: 0;
+}
+
+.label { composes: labelSm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
+.meta { composes: caption from "../../styles/type.module.css"; color: var(--lw-color-text-tertiary); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lw-space-sm);
+  margin-top: var(--lw-space-md);
+}

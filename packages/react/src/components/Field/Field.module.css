@@ -1,0 +1,33 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-2xs);
+  min-width: 0;
+}
+
+.label {
+  composes: labelSm from "../../styles/type.module.css";
+  color: var(--lw-color-text-primary);
+}
+
+.optional {
+  color: var(--lw-color-text-secondary);
+  font-weight: var(--lw-type-body-sm-weight);
+}
+
+.hint {
+  composes: bodySm from "../../styles/type.module.css";
+  color: var(--lw-color-text-secondary);
+}
+
+.error {
+  composes: bodySm from "../../styles/type.module.css";
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lw-space-2xs);
+  color: var(--lw-color-text-danger);
+}
+
+.errorIcon {
+  margin-top: var(--lw-space-3xs);
+}

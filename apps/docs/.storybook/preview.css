@@ -1,0 +1,5 @@
+/* Storybook frame only. Not part of the design system. */
+body { margin: 0; }
+.lw-frame { padding: var(--lw-space-lg); min-height: 100%; }
+.lw-frame-full { padding: 0; min-height: 100vh; }
+.lw-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); min-height: 100vh; }

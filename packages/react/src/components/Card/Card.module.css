@@ -1,0 +1,17 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-md);
+  min-width: 0;
+  border-radius: var(--lw-radius-card);
+  color: var(--lw-color-text-primary);
+}
+
+.outlined { background: var(--lw-color-surface-default); border: var(--lw-size-border-default) solid var(--lw-color-border-subtle); }
+.elevated { background: var(--lw-color-surface-raised); box-shadow: var(--lw-shadow-1); }
+.filled { background: var(--lw-color-surface-sunken); }
+
+.padding-none { padding: 0; }
+.padding-sm { padding: var(--lw-space-sm); }
+.padding-md { padding: var(--lw-space-md); }
+.padding-lg { padding: var(--lw-space-lg); }

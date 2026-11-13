@@ -1,0 +1,33 @@
+/* Type roles shared by components through `composes`. Values come from tokens only. */
+.base {
+  font-family: var(--lw-type-body-md-family);
+  margin: 0;
+}
+
+.displayLg { composes: base; font-size: var(--lw-type-display-lg-size); line-height: var(--lw-type-display-lg-line-height); font-weight: var(--lw-type-display-lg-weight); letter-spacing: var(--lw-type-display-lg-tracking); }
+.displayMd { composes: base; font-size: var(--lw-type-display-md-size); line-height: var(--lw-type-display-md-line-height); font-weight: var(--lw-type-display-md-weight); letter-spacing: var(--lw-type-display-md-tracking); }
+.headingXl { composes: base; font-size: var(--lw-type-heading-xl-size); line-height: var(--lw-type-heading-xl-line-height); font-weight: var(--lw-type-heading-xl-weight); letter-spacing: var(--lw-type-heading-xl-tracking); }
+.headingLg { composes: base; font-size: var(--lw-type-heading-lg-size); line-height: var(--lw-type-heading-lg-line-height); font-weight: var(--lw-type-heading-lg-weight); letter-spacing: var(--lw-type-heading-lg-tracking); }
+.headingMd { composes: base; font-size: var(--lw-type-heading-md-size); line-height: var(--lw-type-heading-md-line-height); font-weight: var(--lw-type-heading-md-weight); letter-spacing: var(--lw-type-heading-md-tracking); }
+.headingSm { composes: base; font-size: var(--lw-type-heading-sm-size); line-height: var(--lw-type-heading-sm-line-height); font-weight: var(--lw-type-heading-sm-weight); letter-spacing: var(--lw-type-heading-sm-tracking); }
+.headingXs { composes: base; font-size: var(--lw-type-heading-xs-size); line-height: var(--lw-type-heading-xs-line-height); font-weight: var(--lw-type-heading-xs-weight); letter-spacing: var(--lw-type-heading-xs-tracking); }
+.bodyMd { composes: base; font-size: var(--lw-type-body-md-size); line-height: var(--lw-type-body-md-line-height); font-weight: var(--lw-type-body-md-weight); letter-spacing: var(--lw-type-body-md-tracking); }
+.bodySm { composes: base; font-size: var(--lw-type-body-sm-size); line-height: var(--lw-type-body-sm-line-height); font-weight: var(--lw-type-body-sm-weight); letter-spacing: var(--lw-type-body-sm-tracking); }
+.labelMd { composes: base; font-size: var(--lw-type-label-md-size); line-height: var(--lw-type-label-md-line-height); font-weight: var(--lw-type-label-md-weight); letter-spacing: var(--lw-type-label-md-tracking); }
+.labelSm { composes: base; font-size: var(--lw-type-label-sm-size); line-height: var(--lw-type-label-sm-line-height); font-weight: var(--lw-type-label-sm-weight); letter-spacing: var(--lw-type-label-sm-tracking); }
+.caption { composes: base; font-size: var(--lw-type-caption-size); line-height: var(--lw-type-caption-line-height); font-weight: var(--lw-type-caption-weight); letter-spacing: var(--lw-type-caption-tracking); }
+.amountLg { composes: base; font-size: var(--lw-type-amount-lg-size); line-height: var(--lw-type-amount-lg-line-height); font-weight: var(--lw-type-amount-lg-weight); letter-spacing: var(--lw-type-amount-lg-tracking); font-variant-numeric: tabular-nums; }
+.amountMd { composes: base; font-size: var(--lw-type-amount-md-size); line-height: var(--lw-type-amount-md-line-height); font-weight: var(--lw-type-amount-md-weight); letter-spacing: var(--lw-type-amount-md-tracking); font-variant-numeric: tabular-nums; }
+.amountSm { composes: base; font-size: var(--lw-type-amount-sm-size); line-height: var(--lw-type-amount-sm-line-height); font-weight: var(--lw-type-amount-sm-weight); letter-spacing: var(--lw-type-amount-sm-tracking); font-variant-numeric: tabular-nums; }
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

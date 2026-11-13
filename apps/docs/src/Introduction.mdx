@@ -1,0 +1,36 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction" />
+
+# Leeward Design System
+
+An open-source, AI-ready design system for a fictional digital bank.
+
+Leeward is not a real company. In sailing, the lee is the side of the ship sheltered from the wind. The interface follows that idea: calm, clear and protected, with every number and fee in plain sight.
+
+## Principles
+
+| Principle | What it changes in the UI |
+|---|---|
+| **Clear over clever** | Labels describe outcomes. No icon-only actions for moving money. |
+| **Honest numbers** | Amounts use tabular figures. Fees use the same text size as the amount they belong to. |
+| **Calm confidence** | Restrained motion. Red only for real errors. Outgoing money is never red. |
+| **Accessible by default** | WCAG 2.2 AA minimum, APCA reported, 44px touch targets. |
+
+## Use the theme switcher
+
+The toolbar has a **Theme** menu: Light, Dark, or Side by side. Every story is checked with axe in both themes in CI.
+
+## Install
+
+```bash
+pnpm add @leeward/react @leeward/tokens
+```
+
+```tsx
+import "@leeward/react/fonts.css";
+import "@leeward/react/styles.css";
+import { Button } from "@leeward/react";
+```
+
+Set `data-theme="light"`, `"dark"` or `"auto"` on any container to pick a theme.

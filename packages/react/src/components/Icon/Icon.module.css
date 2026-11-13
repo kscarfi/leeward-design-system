@@ -1,0 +1,9 @@
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.sm { width: var(--lw-size-icon-sm); height: var(--lw-size-icon-sm); }
+.md { width: var(--lw-size-icon-md); height: var(--lw-size-icon-md); }
+.lg { width: var(--lw-size-icon-lg); height: var(--lw-size-icon-lg); }

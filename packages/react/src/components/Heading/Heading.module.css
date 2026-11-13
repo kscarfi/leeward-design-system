@@ -1,0 +1,21 @@
+.displayLg { composes: displayLg from "../../styles/type.module.css"; }
+.displayMd { composes: displayMd from "../../styles/type.module.css"; }
+.headingXl { composes: headingXl from "../../styles/type.module.css"; }
+.headingLg { composes: headingLg from "../../styles/type.module.css"; }
+.headingMd { composes: headingMd from "../../styles/type.module.css"; }
+.headingSm { composes: headingSm from "../../styles/type.module.css"; }
+.headingXs { composes: headingXs from "../../styles/type.module.css"; }
+
+.tone-primary { color: var(--lw-color-text-primary); }
+.tone-secondary { color: var(--lw-color-text-secondary); }
+.tone-inverse { color: var(--lw-color-text-inverse); }
+
+.displayLg,
+.displayMd,
+.headingXl,
+.headingLg,
+.headingMd,
+.headingSm,
+.headingXs {
+  text-wrap: balance;
+}

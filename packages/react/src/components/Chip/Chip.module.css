@@ -1,0 +1,35 @@
+.chip {
+  composes: labelSm from "../../styles/type.module.css";
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-2xs);
+  min-height: var(--lw-size-control-sm);
+  padding-inline: var(--lw-space-sm);
+  background: var(--lw-color-surface-default);
+  color: var(--lw-color-text-primary);
+  border: var(--lw-size-border-default) solid var(--lw-color-border-default);
+  border-radius: var(--lw-radius-pill);
+  cursor: pointer;
+  transition: background-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
+}
+
+.chip::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: var(--lw-size-touch-target);
+  transform: translateY(-50%);
+}
+
+.chip:hover:not(:disabled) { background: var(--lw-color-surface-hover); }
+
+.selected,
+.selected:hover:not(:disabled) {
+  background: var(--lw-color-surface-brand);
+  color: var(--lw-color-text-brand);
+  border-color: var(--lw-color-border-brand);
+}
+
+.chip:disabled { color: var(--lw-color-text-disabled); border-color: var(--lw-color-border-subtle); cursor: not-allowed; }

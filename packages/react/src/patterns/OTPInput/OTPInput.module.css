@@ -1,0 +1,60 @@
+.root { display: flex; flex-direction: column; gap: var(--lw-space-2xs); }
+
+.boxes {
+  position: relative;
+  display: flex;
+  gap: var(--lw-space-xs);
+  margin-top: var(--lw-space-2xs);
+}
+
+/* The real input covers the boxes, so taps, paste and autofill go straight to it. */
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  font-size: var(--lw-type-body-md-size);
+  caret-color: transparent;
+  cursor: text;
+}
+
+.input:disabled { cursor: not-allowed; }
+
+.box {
+  composes: amountMd from "../../styles/type.module.css";
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: var(--lw-size-control-lg);
+  height: var(--lw-size-control-lg);
+  background: var(--lw-color-control-bg);
+  color: var(--lw-color-text-primary);
+  border: var(--lw-size-border-default) solid var(--lw-color-border-default);
+  border-radius: var(--lw-radius-control);
+}
+
+.active {
+  outline: var(--lw-size-focus-ring-width) solid var(--lw-color-border-focus);
+  outline-offset: var(--lw-size-focus-ring-offset);
+}
+
+.invalid { border-color: var(--lw-color-border-danger); border-width: var(--lw-size-border-strong); }
+.disabled { background: var(--lw-color-action-disabled-bg); color: var(--lw-color-text-disabled); border-color: var(--lw-color-border-subtle); }
+
+.caret {
+  width: var(--lw-size-border-strong);
+  height: var(--lw-type-amount-md-size);
+  background: var(--lw-color-text-primary);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .caret { animation: none !important; }
+}

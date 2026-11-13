@@ -1,0 +1,65 @@
+.root { display: flex; flex-direction: column; gap: var(--lw-space-2xs); }
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lw-space-sm);
+}
+
+/* The visible box is 20px. A pseudo element extends the hit area to 44px. */
+.box {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lw-size-icon-md);
+  height: var(--lw-size-icon-md);
+  margin-top: var(--lw-space-3xs);
+  padding: 0;
+  background: var(--lw-color-control-bg);
+  border: var(--lw-size-border-strong) solid var(--lw-color-border-default);
+  border-radius: var(--lw-radius-sm);
+  color: var(--lw-color-control-fg-checked);
+  cursor: pointer;
+}
+
+.box::before {
+  content: "";
+  position: absolute;
+  width: var(--lw-size-touch-target);
+  height: var(--lw-size-touch-target);
+}
+
+.box:hover:not(:disabled) { border-color: var(--lw-color-border-strong); }
+
+.box[data-state="checked"],
+.box[data-state="indeterminate"] {
+  background: var(--lw-color-control-bg-checked);
+  border-color: var(--lw-color-control-bg-checked);
+}
+
+.box:disabled {
+  background: var(--lw-color-action-disabled-bg);
+  border-color: var(--lw-color-border-subtle);
+  color: var(--lw-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.invalid { border-color: var(--lw-color-border-danger); }
+
+.indicator { display: inline-flex; }
+.indicator[data-state="unchecked"] { visibility: hidden; }
+
+.label {
+  composes: bodyMd from "../../styles/type.module.css";
+  color: var(--lw-color-text-primary);
+  cursor: pointer;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-2xs);
+  padding-inline-start: var(--lw-space-xl);
+}

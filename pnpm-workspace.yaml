@@ -1,3 +1,8 @@
 packages:
   - 'packages/*'
   - 'apps/*'
+minimumReleaseAgeExclude:
+  - jsdom@31.0.1
+
+allowBuilds:
+  esbuild: true

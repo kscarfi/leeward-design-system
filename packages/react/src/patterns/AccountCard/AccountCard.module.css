@@ -1,0 +1,29 @@
+.card { gap: var(--lw-space-md); }
+
+.top { display: flex; align-items: center; gap: var(--lw-space-sm); }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lw-size-avatar-md);
+  height: var(--lw-size-avatar-md);
+  border-radius: var(--lw-radius-lg);
+  background: var(--lw-color-surface-brand);
+  color: var(--lw-color-icon-brand);
+}
+
+.titles { display: flex; flex-direction: column; min-width: 0; }
+.name { composes: headingXs from "../../styles/type.module.css"; color: var(--lw-color-text-primary); }
+.type { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
+
+.iban {
+  composes: bodySm from "../../styles/type.module.css";
+  color: var(--lw-color-text-secondary);
+  font-variant-numeric: tabular-nums slashed-zero;
+  letter-spacing: var(--lw-type-caption-tracking);
+}
+
+.footer { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--lw-space-xs); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

@@ -1,0 +1,58 @@
+.root {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lw-space-md);
+}
+
+.text { display: flex; flex-direction: column; gap: var(--lw-space-3xs); }
+
+.label {
+  composes: bodyMd from "../../styles/type.module.css";
+  color: var(--lw-color-text-primary);
+  cursor: pointer;
+}
+
+/* 44 by 24 track: the touch target spans the full width. */
+.track {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--lw-size-touch-target);
+  height: var(--lw-size-icon-lg);
+  padding: 0;
+  background: var(--lw-color-control-track);
+  border: 0;
+  border-radius: var(--lw-radius-pill);
+  cursor: pointer;
+  transition: background-color var(--lw-motion-duration-base) var(--lw-motion-easing-standard);
+}
+
+.track::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: var(--lw-size-touch-target);
+  transform: translateY(-50%);
+}
+
+.track[data-state="checked"] { background: var(--lw-color-control-bg-checked); }
+.track:disabled { background: var(--lw-color-action-disabled-bg); cursor: not-allowed; }
+
+.thumb {
+  display: block;
+  width: var(--lw-size-icon-md);
+  height: var(--lw-size-icon-md);
+  margin-inline-start: var(--lw-space-3xs);
+  background: var(--lw-color-control-thumb);
+  border-radius: var(--lw-radius-pill);
+  box-shadow: var(--lw-shadow-1);
+  transition: transform var(--lw-motion-duration-base) var(--lw-motion-easing-standard);
+}
+
+/* Travel distance: track width minus thumb width minus both insets. */
+.thumb[data-state="checked"] {
+  transform: translateX(calc(var(--lw-size-touch-target) - var(--lw-size-icon-md) - var(--lw-space-3xs) * 2));
+}
+
+.track:disabled .thumb { background: var(--lw-color-text-disabled); box-shadow: none; }

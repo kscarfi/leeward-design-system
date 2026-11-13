@@ -1,0 +1,67 @@
+.trigger {
+  composes: bodyMd from "../../styles/type.module.css";
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lw-space-xs);
+  width: 100%;
+  min-height: var(--lw-size-control-md);
+  padding-inline: var(--lw-space-sm);
+  background: var(--lw-color-control-bg);
+  color: var(--lw-color-text-primary);
+  border: var(--lw-size-border-default) solid var(--lw-color-border-default);
+  border-radius: var(--lw-radius-control);
+  cursor: pointer;
+  text-align: start;
+}
+
+.trigger:hover:not(:disabled) { border-color: var(--lw-color-border-strong); }
+
+.trigger:disabled {
+  background: var(--lw-color-action-disabled-bg);
+  color: var(--lw-color-text-disabled);
+  border-color: var(--lw-color-border-subtle);
+  cursor: not-allowed;
+}
+
+.invalid,
+.invalid:hover:not(:disabled) {
+  border-color: var(--lw-color-border-danger);
+  border-width: var(--lw-size-border-strong);
+}
+
+.placeholder { color: var(--lw-color-text-tertiary); }
+.chevron { display: inline-flex; color: var(--lw-color-icon-secondary); }
+
+.content {
+  z-index: var(--lw-layer-overlay);
+  min-width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+  overflow: hidden;
+  background: var(--lw-color-surface-overlay);
+  border: var(--lw-size-border-default) solid var(--lw-color-border-subtle);
+  border-radius: var(--lw-radius-lg);
+  box-shadow: var(--lw-shadow-2);
+}
+
+.viewport { padding: var(--lw-space-2xs); }
+
+.item {
+  composes: bodyMd from "../../styles/type.module.css";
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lw-space-xs);
+  min-height: var(--lw-size-touch-target);
+  padding-inline: var(--lw-space-sm);
+  border-radius: var(--lw-radius-md);
+  color: var(--lw-color-text-primary);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.item[data-highlighted] { background: var(--lw-color-surface-hover); }
+.item[data-state="checked"] { color: var(--lw-color-text-brand); font-weight: var(--lw-type-label-md-weight); }
+.item[data-disabled] { color: var(--lw-color-text-disabled); cursor: not-allowed; }
+.indicator { display: inline-flex; }

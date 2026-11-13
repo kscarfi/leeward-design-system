@@ -1,0 +1,45 @@
+.root { display: flex; flex-direction: column; gap: var(--lw-space-md); }
+
+.list {
+  display: flex;
+  gap: var(--lw-space-lg);
+  border-bottom: var(--lw-size-border-default) solid var(--lw-color-border-subtle);
+  overflow-x: auto;
+}
+
+.fullWidth { gap: 0; }
+.fullWidth .trigger { flex: 1; }
+
+.trigger {
+  composes: labelMd from "../../styles/type.module.css";
+  position: relative;
+  min-height: var(--lw-size-touch-target);
+  padding-inline: var(--lw-space-2xs);
+  background: transparent;
+  border: 0;
+  color: var(--lw-color-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.trigger:hover:not(:disabled) { color: var(--lw-color-text-primary); }
+.trigger:focus-visible { outline-offset: calc(var(--lw-size-focus-ring-width) * -1); }
+
+/* The selected tab uses weight and an underline, not color alone. */
+.trigger[data-state="active"] {
+  color: var(--lw-color-text-brand);
+  font-weight: var(--lw-type-heading-xs-weight);
+}
+
+.trigger[data-state="active"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(var(--lw-size-border-default) * -1);
+  height: var(--lw-size-border-strong);
+  background: var(--lw-color-border-brand);
+  border-radius: var(--lw-radius-pill);
+}
+
+.trigger:disabled { color: var(--lw-color-text-disabled); cursor: not-allowed; }
+.panel:focus-visible { outline-offset: var(--lw-size-focus-ring-offset); }

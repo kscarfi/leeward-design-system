@@ -17,7 +17,9 @@
     "build": "pnpm -r --if-present build",
     "check:copy": "node scripts/check-copy.ts",
     "contrast": "node scripts/contrast-report.ts",
-    "build:tokens": "pnpm --filter @leeward/tokens build"
+    "build:tokens": "pnpm --filter @leeward/tokens build",
+    "test:stories": "pnpm --filter @leeward/docs test-storybook",
+    "storybook": "pnpm --filter @leeward/docs storybook"
   },
   "devDependencies": {
     "@types/node": "26.6.6",

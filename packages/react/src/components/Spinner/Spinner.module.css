@@ -1,0 +1,13 @@
+.spinner {
+  width: var(--lw-size-icon-md);
+  height: var(--lw-size-icon-md);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+}

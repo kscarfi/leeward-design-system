@@ -1,0 +1,29 @@
+.amount {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--lw-space-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.value-sm { composes: amountSm from "../../styles/type.module.css"; }
+.value-md { composes: amountMd from "../../styles/type.module.css"; }
+.value-lg { composes: amountLg from "../../styles/type.module.css"; }
+
+.incoming { color: var(--lw-color-amount-incoming); }
+.outgoing { color: var(--lw-color-amount-outgoing); }
+.neutral { color: var(--lw-color-text-primary); }
+.pending .value-sm,
+.pending .value-md,
+.pending .value-lg { color: var(--lw-color-amount-pending); }
+
+.pendingLabel {
+  composes: labelSm from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-3xs);
+  color: var(--lw-color-amount-pending);
+}
+
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

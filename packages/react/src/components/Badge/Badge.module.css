@@ -1,0 +1,17 @@
+.badge {
+  composes: labelSm from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-2xs);
+  padding-block: var(--lw-space-3xs);
+  padding-inline: var(--lw-space-xs);
+  border: var(--lw-size-border-default) solid transparent;
+  border-radius: var(--lw-radius-pill);
+  white-space: nowrap;
+}
+
+.neutral { background: var(--lw-color-surface-sunken); color: var(--lw-color-text-secondary); border-color: var(--lw-color-border-subtle); }
+.info { background: var(--lw-color-feedback-info-bg); color: var(--lw-color-feedback-info-text); border-color: var(--lw-color-feedback-info-border); }
+.success { background: var(--lw-color-feedback-success-bg); color: var(--lw-color-feedback-success-text); border-color: var(--lw-color-feedback-success-border); }
+.warning { background: var(--lw-color-feedback-warning-bg); color: var(--lw-color-feedback-warning-text); border-color: var(--lw-color-feedback-warning-border); }
+.danger { background: var(--lw-color-feedback-danger-bg); color: var(--lw-color-feedback-danger-text); border-color: var(--lw-color-feedback-danger-border); }

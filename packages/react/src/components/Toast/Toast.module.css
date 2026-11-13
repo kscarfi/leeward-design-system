@@ -1,0 +1,64 @@
+.viewport {
+  position: fixed;
+  z-index: var(--lw-layer-toast);
+  inset-inline: var(--lw-space-md);
+  bottom: var(--lw-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-xs);
+  max-width: var(--lw-size-dialog);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  outline: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lw-space-sm);
+  padding: var(--lw-space-sm);
+  padding-inline-start: var(--lw-space-md);
+  background: var(--lw-color-surface-overlay);
+  color: var(--lw-color-text-primary);
+  border: var(--lw-size-border-default) solid var(--lw-color-border-subtle);
+  border-inline-start-width: var(--lw-space-2xs);
+  border-radius: var(--lw-radius-lg);
+  box-shadow: var(--lw-shadow-2);
+}
+
+.toast[data-state="open"] { animation: slide-in var(--lw-motion-duration-slow) var(--lw-motion-easing-enter); }
+.toast[data-state="closed"] { animation: fade-out var(--lw-motion-duration-base) var(--lw-motion-easing-exit); }
+.toast[data-swipe="move"] { transform: translateY(var(--radix-toast-swipe-move-y)); }
+
+.neutral { border-inline-start-color: var(--lw-color-feedback-info-icon); }
+.neutral .icon { color: var(--lw-color-feedback-info-icon); }
+.success { border-inline-start-color: var(--lw-color-feedback-success-icon); }
+.success .icon { color: var(--lw-color-feedback-success-icon); }
+.warning { border-inline-start-color: var(--lw-color-feedback-warning-icon); }
+.warning .icon { color: var(--lw-color-feedback-warning-icon); }
+.danger { border-inline-start-color: var(--lw-color-feedback-danger-icon); }
+.danger .icon { color: var(--lw-color-feedback-danger-icon); }
+
+.icon { margin-top: var(--lw-space-xs); }
+.text { display: flex; flex: 1; flex-direction: column; padding-block: var(--lw-space-xs); }
+.title { composes: labelMd from "../../styles/type.module.css"; }
+.description { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
+
+.action {
+  composes: labelSm from "../../styles/type.module.css";
+  align-self: center;
+  min-height: var(--lw-size-touch-target);
+  padding-inline: var(--lw-space-sm);
+  background: transparent;
+  border: 0;
+  border-radius: var(--lw-radius-control);
+  color: var(--lw-color-text-link);
+  cursor: pointer;
+}
+
+.action:hover { background: var(--lw-color-action-ghost-bg-hover); }
+.close { flex-shrink: 0; }
+
+@keyframes slide-in { from { opacity: 0; transform: translateY(var(--lw-space-md)); } }
+@keyframes fade-out { to { opacity: 0; } }

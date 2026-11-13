@@ -1,0 +1,16 @@
+.content {
+  composes: bodySm from "../../styles/type.module.css";
+  z-index: var(--lw-layer-tooltip);
+  max-width: var(--lw-size-tooltip-max);
+  padding-block: var(--lw-space-xs);
+  padding-inline: var(--lw-space-sm);
+  background: var(--lw-color-surface-inverse);
+  color: var(--lw-color-text-inverse);
+  border-radius: var(--lw-radius-md);
+  box-shadow: var(--lw-shadow-2);
+  animation: fade-in var(--lw-motion-duration-fast) var(--lw-motion-easing-enter);
+}
+
+.arrow { fill: var(--lw-color-surface-inverse); }
+
+@keyframes fade-in { from { opacity: 0; } }

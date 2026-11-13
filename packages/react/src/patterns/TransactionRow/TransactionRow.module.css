@@ -1,0 +1,58 @@
+.row { display: block; list-style: none; }
+
+.button,
+.static {
+  display: block;
+  width: 100%;
+  min-height: var(--lw-size-touch-target);
+  padding-block: var(--lw-space-sm);
+  padding-inline: var(--lw-space-md);
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+
+.button {
+  cursor: pointer;
+  transition: background-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
+}
+
+.button:hover { background: var(--lw-color-surface-hover); }
+.button:active { background: var(--lw-color-surface-pressed); }
+.button:focus-visible { outline-offset: calc(var(--lw-size-focus-ring-width) * -1); }
+
+.visual { display: flex; align-items: center; gap: var(--lw-space-sm); }
+.text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+
+.merchant {
+  composes: labelMd from "../../styles/type.module.css";
+  color: var(--lw-color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  composes: bodySm from "../../styles/type.module.css";
+  color: var(--lw-color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.end { display: flex; flex-direction: column; align-items: flex-end; gap: var(--lw-space-3xs); }
+
+.amount {
+  composes: amountSm from "../../styles/type.module.css";
+  white-space: nowrap;
+}
+
+.incoming { color: var(--lw-color-amount-incoming); }
+.outgoing { color: var(--lw-color-amount-outgoing); }
+
+/* Declined money never moved: struck through, and the badge says why. */
+.declined { color: var(--lw-color-text-secondary); text-decoration: line-through; }
+
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

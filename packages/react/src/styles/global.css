@@ -1,0 +1,57 @@
+/* Leeward base styles. Import once at the root of the app, after fonts.css. */
+@import "@leeward/tokens/css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  font-family: var(--lw-type-body-md-family);
+  font-size: 100%;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    color-scheme: dark;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--lw-color-bg-canvas);
+  color: var(--lw-color-text-primary);
+  font-size: var(--lw-type-body-md-size);
+  line-height: var(--lw-type-body-md-line-height);
+}
+
+/* A themed container also paints its own canvas, so two themes can sit side by side. */
+[data-theme] {
+  background: var(--lw-color-bg-canvas);
+  color: var(--lw-color-text-primary);
+}
+
+:focus-visible {
+  outline: var(--lw-size-focus-ring-width) solid var(--lw-color-border-focus);
+  outline-offset: var(--lw-size-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
