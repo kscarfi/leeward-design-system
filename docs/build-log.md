@@ -14,6 +14,7 @@ The evidence for this project. Updated at the end of every task.
 | 2026-11-13 | Day 1: docs and governance skeleton | Wrote CLAUDE.md, README draft, LICENSE, ADR 0001 (tokens) and 0002 (tooling), PR template with accessibility checklist, CI workflow, em dash check script | | _Kemal to confirm_ | _Kemal_ | README headline is a draft until Kemal approves |
 
 | 2026-11-13 | Tokens, themes, components, patterns, governance | OKLCH ramps, light and dark themes, CSS/TS/Figma outputs, contrast gate (208 pairs, 0 failures), 20 components and 5 patterns with stories, docs and tests, ESLint and Stylelint rules, visual regression, CI | Asked to build everything without day gates, and delegated color, type and dark mode choices | _Kemal to confirm_ | _Kemal_ | See ADR 0003 |
+| 2026-11-13 | Agent layer, partner themes, demo scaffold, README | Manifest from component source and docs, DESIGN.md and llms.txt from one guidelines source, MCP server on SDK v2 with 5 tools and tests, partner theme generator with AA gate and live Storybook page, demo prompt, runbook and comparison script, README with numbers from scripts | | _Kemal to confirm_ | _Kemal_ | Demo runs wait for Kemal's choice of agent |
 
 ## AI mistakes
 
@@ -28,6 +29,9 @@ The evidence for this project. Updated at the end of every task.
 | 2026-11-13 | OTPInput `maxLength` cut "482 913" pasted from an SMS to 5 digits | Story interaction test | Removed `maxLength`, digits are sliced after stripping spaces |
 | 2026-11-13 | TransactionRow used an `aria-label` that did not contain the visible text (WCAG 2.5.3) | axe `label-content-name-mismatch` | Name now comes from a hidden sentence that starts with the merchant |
 | 2026-11-13 | A Style Dictionary transitive transform ran twice, making every spacing and size token 16 times too small. All tests and the contrast gate still passed. | Looking at the visual regression screenshots | Fixed the transform and added a token output test that compares compiled sizes to the source |
+| 2026-11-13 | Committed twice while a check in the same command had failed, because the command used `;` instead of `&&` | Reading the command output after the commit | Fixed in the next commit each time (copy check, em dash escape) |
+| 2026-11-13 | The validator's money rule flagged "Send ₺250", a button label the guidelines recommend | Its own unit test on clean code | The rule now flags only text that is nothing but an amount |
+| 2026-11-13 | First drafted the MCP server for SDK v1 | Checking the official docs before writing code: v2 is the current stable line | Built on `@modelcontextprotocol/server` 2.4.0 |
 
 ## Day summaries
 
