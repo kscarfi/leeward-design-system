@@ -16,3 +16,4 @@ playwright-report/
 # macOS baselines are for local use only. CI compares against Linux baselines.
 apps/docs/visual/__screenshots__/darwin/
 apps/demo/results/
+.claude/launch.json
