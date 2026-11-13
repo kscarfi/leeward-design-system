@@ -26,10 +26,12 @@ export interface ValidationResult {
   ok: boolean;
   issues: Issue[];
   summary: Record<IssueRule, number>;
-  stats: { lines: number; leewardComponents: number; customComponents: string[] };
+  stats: { lines: number; leewardComponents: number; customComponents: string[]; customCssVariables: string[] };
 }
 
-const RAW_COLOR = /#[0-9a-fA-F]{3,8}\b|\b(rgba?|hsla?|oklch|oklab|hwb)\(/;
+const RAW_COLOR = /#[0-9a-fA-F]{3,8}\b|\b(rgba?|hsla?|oklch|oklab|hwb)\(/g;
+// Spacing declarations inside CSS written as a string, for example in a <style> template.
+const CSS_SPACING = /(?:^|[;{\s])((?:margin|padding|gap|row-gap|column-gap|inset|top|right|bottom|left)(?:-[a-z]+)?)\s*:\s*([^;}]*?\d*\.?\d+(?:px|rem|em)[^;}]*)/g;
 const PRIMITIVE = /^--lw-(color-(white|ink|iris|coral|teal|danger|warning|deep|tint)|space-\d|radius-(\d|full)|size-\d|font-|duration-|easing-)/;
 const MONEY_WORDS = /\b(send|pay|transfer|withdraw|top ?up|add money|request)\b/i;
 const SPACING_KEYS = /^(margin|padding|gap|rowGap|columnGap|inset|top|right|bottom|left)/;
@@ -50,6 +52,14 @@ function attrText(attr: ts.JsxAttribute | undefined): string | undefined {
   return undefined;
 }
 
+/** True when the element sits inside a <label>, which labels it implicitly. */
+function insideLabel(node: ts.Node): boolean {
+  for (let p = node.parent; p; p = p.parent) {
+    if (ts.isJsxElement(p) && p.openingElement.tagName.getText() === "label") return true;
+  }
+  return false;
+}
+
 function hasSpread(node: ts.JsxOpeningLikeElement) {
   return node.attributes.properties.some((p) => ts.isJsxSpreadAttribute(p));
 }
@@ -66,6 +76,9 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
   const usedLeeward = new Set<string>();
   const usedCustom = new Set<string>();
 
+  // CSS custom properties the code defines itself are its own variables, not misspelled Leeward tokens.
+  const definedVars = new Set([...code.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]!));
+
   const visitDecl = (node: ts.Node) => {
     if ((ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) && node.name && /^[A-Z]/.test(node.name.text)) localComponents.add(node.name.text);
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && /^[A-Z]/.test(node.name.text) && node.initializer && (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer) || ts.isCallExpression(node.initializer))) {
@@ -80,11 +93,16 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
   visitDecl(source);
 
   const checkString = (node: ts.Node, text: string) => {
-    const color = text.match(RAW_COLOR)?.[0];
-    if (color) add("raw-color", node, `Raw color "${color}".`, "Use a semantic token, for example var(--lw-color-text-primary) or var(--lw-color-action-primary-bg).");
+    for (const m of text.matchAll(RAW_COLOR)) {
+      add("raw-color", node, `Raw color "${m[0]}".`, "Use a semantic token, for example var(--lw-color-text-primary) or var(--lw-color-action-primary-bg).");
+    }
+    for (const m of text.matchAll(CSS_SPACING)) {
+      if (m[2]!.includes("var(")) continue;
+      add("raw-spacing", node, `Raw spacing "${m[1]}: ${m[2]!.trim()}".`, "Use var(--lw-space-*) tokens: 2xs 4px, xs 8px, sm 12px, md 16px, lg 24px, xl 32px.");
+    }
     for (const m of text.matchAll(/--lw-[\w-]+/g)) {
       const name = m[0];
-      if (allowedVars.has(name) || name.endsWith("-")) continue;
+      if (allowedVars.has(name) || name.endsWith("-") || definedVars.has(name)) continue;
       if (PRIMITIVE.test(name)) add("primitive-token", node, `"${name}" is a primitive token.`, "Use the semantic token for the role, for example --lw-color-action-primary-bg instead of --lw-color-iris-600.");
       else add("unknown-token", node, `Unknown token "${name}".`, "Call get_tokens to list valid names.");
     }
@@ -126,7 +144,7 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
         const label = attrText(a.get("label"));
         if (label && MONEY_WORDS.test(label)) add("icon-only-money-action", node, `IconButton "${label}" moves money.`, "Use <Button> with a visible text label for money movement.");
       }
-      if (NATIVE_LABELLED.has(tag) && !a.has("aria-label") && !a.has("aria-labelledby") && !a.has("id") && !spread) {
+      if (NATIVE_LABELLED.has(tag) && !a.has("aria-label") && !a.has("aria-labelledby") && !a.has("id") && !spread && !insideLabel(node)) {
         add("missing-label", node, `<${tag}> has no label.`, "Use the Leeward TextField or Select, which include a visible label.");
       }
       if (tag === "img" && !a.has("alt")) add("missing-label", node, "<img> has no alt text.", 'Add alt="" for decoration or a short description.');
@@ -158,6 +176,7 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
       lines: code.split("\n").length,
       leewardComponents: usedLeeward.size,
       customComponents: [...usedCustom].sort(),
+      customCssVariables: [...definedVars].filter((v) => !allowedVars.has(v)).sort(),
     },
   };
 }

@@ -83,6 +83,25 @@ test("validate_ui catches the usual agent mistakes", () => {
   assert.deepEqual(stats.customComponents, ["FeeRow"]);
 });
 
+test("validate_ui accepts inputs wrapped in a label", () => {
+  const { summary } = validateUi(`export const A = () => <label><input type="radio" name="r" /> Deniz</label>;`);
+  assert.equal(summary["missing-label"], 0);
+});
+
+test("validate_ui counts every raw color and CSS spacing in style strings, and skips variables the code defines", () => {
+  const code = `
+    const css = \`
+      :root { --lw-bg: #f4f6f8; --lw-text: #0f1b2d; }
+      .card { padding: 16px 20px; color: var(--lw-text); margin: var(--lw-space-md); }
+    \`;
+    export function Screen() { return <style>{css}</style>; }`;
+  const { summary, stats } = validateUi(code);
+  assert.equal(summary["raw-color"], 2);
+  assert.equal(summary["raw-spacing"], 1);
+  assert.equal(summary["unknown-token"], 0);
+  assert.deepEqual(stats.customCssVariables, ["--lw-bg", "--lw-text"]);
+});
+
 test("validate_ui passes clean Leeward code", () => {
   const code = `
     import { AmountDisplay, Button, TextField } from "@leeward/react";

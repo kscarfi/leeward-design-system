@@ -15,6 +15,7 @@ The evidence for this project. Updated at the end of every task.
 
 | 2026-11-13 | Tokens, themes, components, patterns, governance | OKLCH ramps, light and dark themes, CSS/TS/Figma outputs, contrast gate (208 pairs, 0 failures), 20 components and 5 patterns with stories, docs and tests, ESLint and Stylelint rules, visual regression, CI | Asked to build everything without day gates, and delegated color, type and dark mode choices | _Kemal to confirm_ | _Kemal_ | See ADR 0003 |
 | 2026-11-13 | Agent layer, partner themes, demo scaffold, README | Manifest from component source and docs, DESIGN.md and llms.txt from one guidelines source, MCP server on SDK v2 with 5 tools and tests, partner theme generator with AA gate and live Storybook page, demo prompt, runbook and comparison script, README with numbers from scripts | | _Kemal to confirm_ | _Kemal_ | Demo runs wait for Kemal's choice of agent |
+| 2026-11-13 | Demo runs | Ran Run A and Run B with Claude Code headless under identical conditions, measured both with axe and validate_ui | Chose Claude Code as the demo agent, logged in to the CLI | _Kemal to confirm_ | _Kemal_ | Run A 333 s, Run B 240 s (from RUN.md) |
 
 ## AI mistakes
 
@@ -32,6 +33,9 @@ The evidence for this project. Updated at the end of every task.
 | 2026-11-13 | Committed twice while a check in the same command had failed, because the command used `;` instead of `&&` | Reading the command output after the commit | Fixed in the next commit each time (copy check, em dash escape) |
 | 2026-11-13 | The validator's money rule flagged "Send ₺250", a button label the guidelines recommend | Its own unit test on clean code | The rule now flags only text that is nothing but an amount |
 | 2026-11-13 | Started researching the MCP SDK from the v1 docs, the version I knew | The v1 README says v2 is now the current stable line | Built on `@modelcontextprotocol/server` 2.4.0 |
+| 2026-11-13 | The comparison undercounted Run A: raw colors were counted once per string (1 instead of 17), CSS inside strings was not checked for spacing (0 instead of 38), and Run A's own `--lw-` variables were reported as 73 unknown Leeward tokens | Reading Run A's source after the first comparison looked wrong | Count every match, check CSS in strings, treat variables the code defines as its own. Applied to both runs, with tests |
+| 2026-11-13 | The validator flagged 2 inputs in Run A as unlabelled, but they were wrapped in `<label>` | Checking each finding by hand against the source | Implicit labels are now accepted, with a test |
+| 2026-11-13 | The first demo host loaded Leeward CSS for both runs, which would have restyled Run A | Reviewing the host before the comparison | Run A renders on a plain page, Run B with the setup DESIGN.md asks for |
 
 ## Day summaries
 

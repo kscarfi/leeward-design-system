@@ -36,7 +36,8 @@ const rows = present.map((run) => {
       "Lines of code": v.stats.lines,
       "Raw colors": v.summary["raw-color"],
       "Raw spacing values": v.summary["raw-spacing"],
-      "Unknown or primitive tokens": v.summary["unknown-token"] + v.summary["primitive-token"],
+      "Unknown or primitive Leeward tokens": v.summary["unknown-token"] + v.summary["primitive-token"],
+      "Own CSS variables defined (a private palette)": v.stats.customCssVariables.length,
       "Custom components invented": v.stats.customComponents.length,
       "Leeward components used": v.stats.leewardComponents,
       "Missing labels (static)": v.summary["missing-label"],
@@ -69,6 +70,8 @@ const md = [
   "- Static checks come from the same `validate_ui` function the MCP server exposes.",
   "- axe runs in Chromium on the rendered screen with WCAG 2.0, 2.1 and 2.2 A and AA rules.",
   "- Custom components are capitalized components declared in the file and not imported from Leeward.",
+  "- Raw colors and raw spacing count every occurrence, including CSS written inside strings. Code comments are not counted.",
+  "- Run A is shown on a plain page. Run B is shown with the app setup DESIGN.md asks for (Leeward CSS, a theme and providers). The output files are not changed.",
   "",
   ...rows.flatMap((r) => [
     `## ${r.run.label}`,
