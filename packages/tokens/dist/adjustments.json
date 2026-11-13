@@ -1,0 +1,528 @@
+{
+  "leeward.light": [
+    {
+      "token": "text.placeholder",
+      "ramp": "slate",
+      "from": "400",
+      "to": "500",
+      "reason": "text.placeholder on fill.surface.canvas was 2.43:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "slate",
+      "from": "400",
+      "to": "500",
+      "reason": "text.subtler on fill.surface.canvas was 2.43:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "200",
+      "to": "300",
+      "reason": "border.default on fill.surface.canvas was 1.18:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "300",
+      "to": "400",
+      "reason": "border.default on fill.surface.default was 1.47:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "400",
+      "to": "500",
+      "reason": "border.default on fill.surface.raised was 2.54:1, needs 3:1"
+    },
+    {
+      "token": "text.success",
+      "ramp": "teal",
+      "from": "600",
+      "to": "700",
+      "reason": "text.success on fill.surface.canvas was 3.58:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.success.default",
+      "ramp": "teal",
+      "from": "600",
+      "to": "700",
+      "reason": "text.success-on-success on fill.success.default was 3.74:1, needs 4.5:1"
+    },
+    {
+      "token": "text.warning",
+      "ramp": "pumpkin",
+      "from": "600",
+      "to": "700",
+      "reason": "text.warning on fill.surface.canvas was 3.33:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.warning.default",
+      "ramp": "pumpkin",
+      "from": "600",
+      "to": "700",
+      "reason": "text.warning-on-warning on fill.warning.default was 3.48:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "slate",
+      "from": "400",
+      "to": "500",
+      "reason": "fill.control.track on fill.surface.canvas was 2.43:1, needs 3:1"
+    }
+  ],
+  "leeward.dark": [
+    {
+      "token": "text.subtle",
+      "ramp": "slate",
+      "from": "500",
+      "to": "400",
+      "reason": "text.subtle on fill.surface.canvas was 3.89:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "slate",
+      "from": "600",
+      "to": "500",
+      "reason": "text.placeholder on fill.surface.canvas was 2.49:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "slate",
+      "from": "500",
+      "to": "400",
+      "reason": "text.placeholder on fill.surface.default was 3.49:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "slate",
+      "from": "600",
+      "to": "500",
+      "reason": "text.subtler on fill.surface.canvas was 2.49:1, needs 3:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "slate",
+      "from": "500",
+      "to": "400",
+      "reason": "text.subtler on fill.surface.overlay was 2.57:1, needs 3:1"
+    },
+    {
+      "token": "icon.subtle",
+      "ramp": "slate",
+      "from": "500",
+      "to": "400",
+      "reason": "icon.subtle on fill.surface.overlay was 2.57:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "800",
+      "to": "700",
+      "reason": "border.default on fill.surface.canvas was 1.66:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "700",
+      "to": "600",
+      "reason": "border.default on fill.surface.default was 1.64:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "600",
+      "to": "500",
+      "reason": "border.default on fill.surface.raised was 1.93:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "slate",
+      "from": "500",
+      "to": "400",
+      "reason": "border.default on fill.surface.overlay was 2.57:1, needs 3:1"
+    },
+    {
+      "token": "text.primary",
+      "ramp": "indigo",
+      "from": "400",
+      "to": "300",
+      "reason": "text.primary on fill.surface.overlay was 4.16:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.default",
+      "ramp": "yellow",
+      "from": "600",
+      "to": "700",
+      "reason": "text.attention-on-attention on fill.attention.default was 2.94:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.emphasis",
+      "ramp": "yellow",
+      "from": "500",
+      "to": "600",
+      "reason": "text.attention-on-attention on fill.attention.emphasis was 1.92:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.strong",
+      "ramp": "yellow",
+      "from": "400",
+      "to": "500",
+      "reason": "text.attention-on-attention on fill.attention.strong was 1.53:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.emphasis",
+      "ramp": "yellow",
+      "from": "600",
+      "to": "700",
+      "reason": "fill.attention.on-default on fill.attention.emphasis was 2.94:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.strong",
+      "ramp": "yellow",
+      "from": "500",
+      "to": "600",
+      "reason": "fill.attention.on-default on fill.attention.strong was 1.92:1, needs 4.5:1"
+    },
+    {
+      "token": "text.danger",
+      "ramp": "red",
+      "from": "400",
+      "to": "300",
+      "reason": "text.danger on fill.surface.overlay was 4.49:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "slate",
+      "from": "600",
+      "to": "500",
+      "reason": "fill.control.track on fill.surface.canvas was 2.49:1, needs 3:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "slate",
+      "from": "500",
+      "to": "400",
+      "reason": "fill.control.track on fill.surface.overlay was 2.57:1, needs 3:1"
+    },
+    {
+      "token": "fill.attention.strong",
+      "ramp": "yellow",
+      "from": "600",
+      "to": "700",
+      "reason": "text.attention-on-attention on fill.attention.strong was 2.94:1, needs 4.5:1"
+    }
+  ],
+  "business.light": [
+    {
+      "token": "text.subtle",
+      "ramp": "richBlack",
+      "from": "500",
+      "to": "550",
+      "reason": "text.subtle on fill.surface.canvas was 3.55:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtle",
+      "ramp": "richBlack",
+      "from": "550",
+      "to": "600",
+      "reason": "text.subtle on fill.surface.emphasis was 4.25:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "400",
+      "to": "450",
+      "reason": "text.placeholder on fill.surface.canvas was 2.54:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "450",
+      "to": "500",
+      "reason": "text.placeholder on fill.surface.default was 3.20:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "500",
+      "to": "550",
+      "reason": "text.placeholder on fill.surface.raised was 3.81:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "550",
+      "to": "600",
+      "reason": "text.placeholder on fill.surface.emphasis was 4.25:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "richBlack",
+      "from": "400",
+      "to": "450",
+      "reason": "text.subtler on fill.surface.canvas was 2.54:1, needs 3:1"
+    },
+    {
+      "token": "text.link-default",
+      "ramp": "cyan",
+      "from": "600",
+      "to": "700",
+      "reason": "text.link-default on fill.surface.canvas was 3.43:1, needs 4.5:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "200",
+      "to": "250",
+      "reason": "border.default on fill.surface.canvas was 1.43:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "250",
+      "to": "300",
+      "reason": "border.default on fill.surface.default was 1.75:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "300",
+      "to": "350",
+      "reason": "border.default on fill.surface.raised was 2.01:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "350",
+      "to": "400",
+      "reason": "border.default on fill.surface.overlay was 2.33:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "400",
+      "to": "450",
+      "reason": "border.default on fill.surface.emphasis was 2.54:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "450",
+      "to": "500",
+      "reason": "border.default on fill.surface.bold was 2.94:1, needs 3:1"
+    },
+    {
+      "token": "text.info",
+      "ramp": "cyan",
+      "from": "600",
+      "to": "700",
+      "reason": "text.info on fill.surface.canvas was 3.43:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.info.default",
+      "ramp": "cyan",
+      "from": "600",
+      "to": "700",
+      "reason": "text.info-on-info on fill.info.default was 3.68:1, needs 4.5:1"
+    },
+    {
+      "token": "text.success",
+      "ramp": "green",
+      "from": "600",
+      "to": "700",
+      "reason": "text.success on fill.surface.canvas was 3.07:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.success.default",
+      "ramp": "green",
+      "from": "600",
+      "to": "700",
+      "reason": "text.success-on-success on fill.success.default was 3.30:1, needs 4.5:1"
+    },
+    {
+      "token": "text.warning",
+      "ramp": "pumpkin",
+      "from": "600",
+      "to": "700",
+      "reason": "text.warning on fill.surface.canvas was 3.24:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.warning.default",
+      "ramp": "pumpkin",
+      "from": "600",
+      "to": "700",
+      "reason": "text.warning-on-warning on fill.warning.default was 3.48:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "richBlack",
+      "from": "400",
+      "to": "450",
+      "reason": "fill.control.track on fill.surface.canvas was 2.54:1, needs 3:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "richBlack",
+      "from": "450",
+      "to": "500",
+      "reason": "text.subtler on fill.surface.canvas was 2.99:1, needs 3:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "richBlack",
+      "from": "450",
+      "to": "500",
+      "reason": "fill.control.track on fill.surface.canvas was 2.99:1, needs 3:1"
+    }
+  ],
+  "business.dark": [
+    {
+      "token": "text.subtle",
+      "ramp": "richBlack",
+      "from": "500",
+      "to": "450",
+      "reason": "text.subtle on fill.surface.raised was 4.34:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtle",
+      "ramp": "richBlack",
+      "from": "450",
+      "to": "400",
+      "reason": "text.subtle on fill.surface.overlay was 4.31:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "600",
+      "to": "550",
+      "reason": "text.placeholder on fill.surface.canvas was 3.43:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "550",
+      "to": "500",
+      "reason": "text.placeholder on fill.surface.default was 3.90:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "500",
+      "to": "450",
+      "reason": "text.placeholder on fill.surface.raised was 4.34:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "richBlack",
+      "from": "450",
+      "to": "400",
+      "reason": "text.placeholder on fill.surface.overlay was 4.31:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "richBlack",
+      "from": "600",
+      "to": "550",
+      "reason": "text.subtler on fill.surface.raised was 3.00:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "800",
+      "to": "750",
+      "reason": "border.default on fill.surface.canvas was 1.87:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "750",
+      "to": "700",
+      "reason": "border.default on fill.surface.default was 1.97:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "700",
+      "to": "650",
+      "reason": "border.default on fill.surface.raised was 2.04:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "650",
+      "to": "600",
+      "reason": "border.default on fill.surface.overlay was 2.06:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "richBlack",
+      "from": "600",
+      "to": "550",
+      "reason": "border.default on fill.surface.emphasis was 3.00:1, needs 3:1"
+    },
+    {
+      "token": "text.primary",
+      "ramp": "lapisBlue",
+      "from": "400",
+      "to": "300",
+      "reason": "text.primary on fill.surface.default was 4.44:1, needs 4.5:1"
+    },
+    {
+      "token": "text.secondary",
+      "ramp": "purpleHaze",
+      "from": "400",
+      "to": "300",
+      "reason": "text.secondary on fill.surface.raised was 4.35:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.default",
+      "ramp": "yellow",
+      "from": "600",
+      "to": "700",
+      "reason": "text.attention-on-attention on fill.attention.default was 2.94:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.emphasis",
+      "ramp": "yellow",
+      "from": "500",
+      "to": "600",
+      "reason": "text.attention-on-attention on fill.attention.emphasis was 1.92:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.strong",
+      "ramp": "yellow",
+      "from": "400",
+      "to": "500",
+      "reason": "text.attention-on-attention on fill.attention.strong was 1.53:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.emphasis",
+      "ramp": "yellow",
+      "from": "600",
+      "to": "700",
+      "reason": "fill.attention.on-default on fill.attention.emphasis was 2.94:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.attention.strong",
+      "ramp": "yellow",
+      "from": "500",
+      "to": "600",
+      "reason": "fill.attention.on-default on fill.attention.strong was 1.92:1, needs 4.5:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "richBlack",
+      "from": "600",
+      "to": "550",
+      "reason": "fill.control.track on fill.surface.raised was 3.00:1, needs 3:1"
+    },
+    {
+      "token": "fill.attention.strong",
+      "ramp": "yellow",
+      "from": "600",
+      "to": "700",
+      "reason": "text.attention-on-attention on fill.attention.strong was 2.94:1, needs 4.5:1"
+    }
+  ]
+}

@@ -23,7 +23,7 @@
     "./palette": "./build/palette.ts",
     "./themes": "./build/themes.ts",
     "./build": "./build/build.ts",
-    "./tokens.json": "./dist/ts/light.json",
+    "./tokens.json": "./dist/ts/leeward.light.json",
     "./partners/*": "./partners/*",
     "./contrast": "./build/contrast.ts",
     "./partner": "./build/partner.ts",
@@ -34,6 +34,7 @@
     "build",
     "src",
     "themes",
-    "partners"
+    "partners",
+    "reference"
   ]
 }

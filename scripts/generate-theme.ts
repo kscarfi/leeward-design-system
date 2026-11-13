@@ -4,17 +4,17 @@
 //   pnpm theme:generate --name harbor --seed "#0E7490"
 //   pnpm theme:generate --name sunny --seed "#FFD000" --pin-action   (uses the seed itself for buttons)
 //
-// Output: packages/tokens/partners/<name>.css with [data-theme="<name>"] and
-// [data-theme="<name>-dark"], plus a Markdown contrast report in docs/themes/.
+// Output: packages/tokens/partners/<name>.css for data-brand="<name>" in light and dark,
+// plus a Markdown contrast report in docs/themes/.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { contrastOnWhite } from "@leeward/tokens/palette";
-import { generatePartnerTheme, type PartnerTheme } from "@leeward/tokens/partner";
+import { generatePartnerTheme, rampsFromPrimitives, type PartnerTheme } from "@leeward/tokens/partner";
 
 const root = new URL("../", import.meta.url).pathname;
 
 function report(theme: PartnerTheme): string {
-  const rows = theme.results.map((r) => `| ${r.theme} | \`${r.fg}\` | \`${r.bg}\` | ${r.wcag.toFixed(2)}:1 | ${r.apca.toFixed(1)} | ${r.pass ? "Pass" : "**Fail**"} |`);
+  const rows = theme.results.map((r) => `| ${r.theme} | \`${r.fg}\` | \`${r.bg}\` | ${r.min}:1 | ${r.wcag.toFixed(2)}:1 | ${r.pass ? "Pass" : "**Fail**"} |`);
   return [
     `# Partner theme: ${theme.name}`,
     "",
@@ -28,7 +28,7 @@ function report(theme: PartnerTheme): string {
     "",
     `## Contrast: ${theme.results.length} pairs, ${theme.failures.length} failures`,
     "",
-    "| Theme | Foreground | Background | WCAG | APCA Lc | Result |",
+    "| Theme | Foreground | Background | Min | WCAG | Result |",
     "|---|---|---|---|---|---|",
     ...rows,
     "",
@@ -42,8 +42,8 @@ if (import.meta.main) {
     process.exit(2);
   }
   const started = performance.now();
-  const basePrimitives = JSON.parse(readFileSync(`${root}packages/tokens/src/primitive/color.json`, "utf8")).color;
-  const theme = generatePartnerTheme({ name: values.name, seed: values.seed, pinAction: values["pin-action"], basePrimitives });
+  const ramps = rampsFromPrimitives(JSON.parse(readFileSync(`${root}packages/tokens/src/primitive/color.json`, "utf8")));
+  const theme = generatePartnerTheme({ name: values.name, seed: values.seed, pinAction: values["pin-action"], ramps });
   const ms = Math.round(performance.now() - started);
   console.log(`Seed ${theme.seed} pinned at step ${theme.seedStep}. Ramp: ${Object.values(theme.ramp).join(" ")}`);
   console.log(`Checked ${theme.results.length} pairs in light and dark in ${ms} ms.`);
@@ -56,5 +56,5 @@ if (import.meta.main) {
   mkdirSync(`${root}docs/themes`, { recursive: true });
   writeFileSync(`${root}packages/tokens/partners/${theme.name}.css`, theme.css);
   writeFileSync(`${root}docs/themes/${theme.name}.md`, report(theme));
-  console.log(`Wrote packages/tokens/partners/${theme.name}.css and docs/themes/${theme.name}.md. Use data-theme="${theme.name}" or "${theme.name}-dark".`);
+  console.log(`Wrote packages/tokens/partners/${theme.name}.css and docs/themes/${theme.name}.md. Use data-brand="${theme.name}" with data-theme="light" or "dark".`);
 }

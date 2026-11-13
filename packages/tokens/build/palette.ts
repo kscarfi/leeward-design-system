@@ -1,31 +1,29 @@
-// Ramp generation in OKLCH. Used by the token build and by scripts/generate-theme.ts.
+// Ramp generation in OKLCH for partner brands (scripts/generate-theme.ts).
 //
-// Each ramp has 11 steps. A step is defined by its WCAG 2 contrast against white,
-// so every ramp shares one accessibility shape: step 500 is always the lightest
-// step that passes AA as text on white and on the Mist canvas, step 400 always
-// passes 3:1 for borders, and so on. Hue stays constant; chroma tapers toward the
-// light and dark ends and is clamped to the sRGB gamut.
+// A ramp has steps 0 to 1000 like Leeward's ramps. Each step is defined by its WCAG 2
+// contrast against white. Hue stays constant; chroma tapers toward the light and dark ends
+// and is clamped to the sRGB gamut. The seed is pinned exactly at the nearest step.
 import Color from "colorjs.io";
 
-export const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
+export const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 975, 1000] as const;
 export type Step = (typeof STEPS)[number];
 
-// Contrast against #FFFFFF per step. Chosen so that:
-// 400 >= 3:1 on white and Mist (borders, icons, large text, WCAG 1.4.11)
-// 500 >= 4.5:1 on white and Mist (body text, WCAG 1.4.3)
-// 800 and darker carry light text at AAA.
+// Contrast against #FFFFFF per step: the median of the 19 vivid ramps
+// in Leeward's token source, so generated ramps share the shape of the hand-made ones. Step 0 is white.
 export const CONTRAST_TARGETS: Record<Step, number> = {
-  50: 1.06,
-  100: 1.15,
-  200: 1.35,
-  300: 1.8,
-  400: 3.3,
-  500: 5.0,
-  600: 6.6,
-  700: 9.2,
-  800: 12,
-  900: 15,
-  950: 17.4,
+  50: 1.09,
+  100: 1.2,
+  200: 1.39,
+  300: 1.81,
+  400: 2.65,
+  500: 3.53,
+  600: 4.69,
+  700: 6.04,
+  800: 8.02,
+  900: 9.73,
+  950: 11.31,
+  975: 13.37,
+  1000: 15.57,
 };
 
 const WHITE = new Color("#ffffff");
@@ -42,7 +40,7 @@ export interface RampSpec {
   darkHueShift?: number;
 }
 
-export type Ramp = Record<Step, string>;
+export type Ramp = Record<string, string>;
 
 interface Anchor {
   step: Step;
@@ -146,7 +144,7 @@ export function generateRamp(spec: RampSpec): Ramp {
   if (pinned.size !== anchors.length) {
     throw new Error(`Two seeds map to the same step: ${spec.seeds.join(", ")}`);
   }
-  const ramp = {} as Ramp;
+  const ramp: Ramp = { "0": "#ffffff" };
   for (const step of STEPS) {
     ramp[step] = pinned.get(step) ?? solveStep(CONTRAST_TARGETS[step], anchors, spec.neutral ?? false, spec.darkHueShift ?? 0);
   }
@@ -158,34 +156,3 @@ export function seedSteps(spec: RampSpec): Step[] {
   return spec.seeds.map((seed) => nearestStep(contrastOnWhite(seed)));
 }
 
-/** Low-chroma dark surfaces for dark mode, tinted with the neutral hue. */
-export function generateDeepRamp(hueSeed: string): Record<string, string> {
-  const { h } = oklch(hueSeed);
-  // OKLCH lightness per step. Lighter steps sit higher in the elevation stack.
-  const levels: Record<string, [number, number]> = {
-    "950": [0.19, 0.024],
-    "900": [0.225, 0.028],
-    "850": [0.255, 0.03],
-    "800": [0.29, 0.032],
-    "700": [0.37, 0.034],
-  };
-  return Object.fromEntries(Object.entries(levels).map(([step, [l, c]]) => [step, toHex(l, c, h)]));
-}
-
-/**
- * Dark mode tinted surfaces for feedback (info, success, warning, danger).
- * The dark end of a vivid ramp turns muddy brown or maroon, so dark feedback
- * backgrounds are a low-chroma tint of the deep surface instead.
- */
-export function generateDarkTints(hues: Record<string, string>, shift: Record<string, number> = {}): Record<string, string> {
-  return Object.fromEntries(
-    Object.entries(hues).map(([name, seed]) => {
-      const { h } = oklch(seed);
-      const hue = (h + (shift[name] ?? 0) + 360) % 360;
-      return [
-        [name, toHex(0.29, 0.05, hue)],
-        [`${name}-border`, toHex(0.42, 0.08, hue)],
-      ];
-    }).flat(),
-  );
-}

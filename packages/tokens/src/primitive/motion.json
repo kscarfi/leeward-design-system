@@ -1,11 +1,5 @@
 {
   "duration": {
-    "0": {
-      "$value": {
-        "value": 0,
-        "unit": "ms"
-      }
-    },
     "100": {
       "$value": {
         "value": 100,
@@ -46,8 +40,7 @@
         0,
         0,
         1
-      ],
-      "$description": "Most UI movement"
+      ]
     },
     "decelerate": {
       "$value": [
@@ -55,8 +48,7 @@
         0,
         0,
         1
-      ],
-      "$description": "Elements entering"
+      ]
     },
     "accelerate": {
       "$value": [
@@ -64,8 +56,7 @@
         0,
         1,
         1
-      ],
-      "$description": "Elements leaving"
+      ]
     }
   }
 }

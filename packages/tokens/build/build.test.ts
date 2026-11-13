@@ -4,24 +4,17 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
-const light = JSON.parse(readFileSync(new URL("../dist/ts/light.json", import.meta.url), "utf8")) as Record<string, { value: string; type?: string; ref?: string }>;
-const read = (file: string) => JSON.parse(readFileSync(new URL(`../src/primitive/${file}`, import.meta.url), "utf8"));
-const primitives = { ...read("space.json"), ...read("radius.json"), ...read("size.json"), ...read("font.json") };
+const light = JSON.parse(readFileSync(new URL("../dist/ts/leeward.light.json", import.meta.url), "utf8")) as Record<string, { value: string; ref?: string }>;
+const scale = JSON.parse(readFileSync(new URL("../src/primitive/scale.json", import.meta.url), "utf8"));
 
 function primitivePx(ref: string): number | undefined {
-  let node: any = primitives;
+  let node: any = scale;
   for (const key of ref.split(".")) node = node?.[key];
-  const value = node?.$value;
-  return value && typeof value === "object" && value.unit === "px" ? value.value : undefined;
+  const v = node?.$value;
+  return v && typeof v === "object" && v.unit === "px" ? v.value : undefined;
 }
 
-function toPx(css: string): number {
-  if (css === "0") return 0;
-  const n = parseFloat(css);
-  if (css.endsWith("rem")) return n * 16;
-  if (css.endsWith("px")) return n;
-  throw new Error(`Unexpected unit in ${css}`);
-}
+const toPx = (css: string) => (css === "0" ? 0 : css.endsWith("rem") ? parseFloat(css) * 16 : css.endsWith("px") ? parseFloat(css) : NaN);
 
 test("every referenced dimension compiles to the primitive's size", () => {
   let checked = 0;
@@ -35,11 +28,15 @@ test("every referenced dimension compiles to the primitive's size", () => {
   assert.ok(checked > 40, `only ${checked} dimensions checked`);
 });
 
-test("touch target is 44px", () => {
+test("touch target is 44px and the default control height meets it", () => {
   assert.equal(toPx(light["size.touch-target"]!.value), 44);
+  assert.equal(toPx(light["size.control.md"]!.value), 44);
 });
 
-test("body text is 16px and captions are at least 12px", () => {
-  assert.equal(toPx(light["type.body.md.size"]!.value), 16);
-  assert.ok(toPx(light["type.caption.size"]!.value) >= 12);
+test("no visible text role is under 12px", () => {
+  for (const [name, token] of Object.entries(light)) {
+    if (!name.startsWith("type.") || !name.endsWith(".size")) continue;
+    const min = token.value.startsWith("clamp(") ? parseFloat(token.value.slice(6)) * 16 : toPx(token.value);
+    assert.ok(min >= 12, `${name} is ${min}px`);
+  }
 });
