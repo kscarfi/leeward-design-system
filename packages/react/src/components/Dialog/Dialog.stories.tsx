@@ -29,6 +29,7 @@ export const Default: Story = {
     // Wait for the entry animation to finish.
     await waitFor(() => expect(dialog).toBeVisible());
     await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
   },
 };
 

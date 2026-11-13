@@ -4,13 +4,13 @@
   max-width: var(--lw-size-tooltip-max);
   padding-block: var(--lw-space-xs);
   padding-inline: var(--lw-space-sm);
-  background: var(--lw-color-surface-inverse);
-  color: var(--lw-color-text-inverse);
+  background: var(--lw-fill-neutral-default);
+  color: var(--lw-text-inverse);
   border-radius: var(--lw-radius-md);
-  box-shadow: var(--lw-shadow-2);
+  box-shadow: var(--lw-elevation-400);
   animation: fade-in var(--lw-motion-duration-fast) var(--lw-motion-easing-enter);
 }
 
-.arrow { fill: var(--lw-color-surface-inverse); }
+.arrow { fill: var(--lw-fill-neutral-default); }
 
 @keyframes fade-in { from { opacity: 0; } }

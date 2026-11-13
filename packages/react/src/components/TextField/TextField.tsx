@@ -15,11 +15,13 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   optional?: boolean;
   /** Use tabular figures, for amounts and codes. */
   numeric?: boolean;
+  /** sm 36 px, md 44 px (default, touch friendly), lg 48 px. */
+  size?: "sm" | "md" | "lg";
   className?: string;
   ref?: Ref<HTMLInputElement>;
 }
 
-export function TextField({ label, hint, error, prefix, suffix, optional, numeric, id, className, disabled, ref, ...rest }: TextFieldProps) {
+export function TextField({ label, hint, error, prefix, suffix, optional, numeric, size = "md", id, className, disabled, ref, ...rest }: TextFieldProps) {
   const ids = useFieldIds({ id, hint, error });
   return (
     <FieldRoot className={className}>
@@ -27,7 +29,7 @@ export function TextField({ label, hint, error, prefix, suffix, optional, numeri
         {label}
       </FieldLabel>
       <FieldHint id={ids.hint}>{hint}</FieldHint>
-      <div className={cx(styles.control, error && styles.invalid, disabled && styles.disabled)}>
+      <div className={cx(styles.control, styles[size], error && styles.invalid, disabled && styles.disabled)}>
         {prefix && (
           <span className={styles.affix} aria-hidden="true">
             {prefix}

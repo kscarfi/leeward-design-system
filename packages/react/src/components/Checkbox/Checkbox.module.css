@@ -17,10 +17,10 @@
   height: var(--lw-size-icon-md);
   margin-top: var(--lw-space-3xs);
   padding: 0;
-  background: var(--lw-color-control-bg);
-  border: var(--lw-size-border-strong) solid var(--lw-color-border-default);
+  background: var(--lw-fill-surface-default);
+  border: var(--lw-size-border-strong) solid var(--lw-border-default);
   border-radius: var(--lw-radius-sm);
-  color: var(--lw-color-control-fg-checked);
+  color: var(--lw-fill-primary-on-default);
   cursor: pointer;
 }
 
@@ -31,29 +31,29 @@
   height: var(--lw-size-touch-target);
 }
 
-.box:hover:not(:disabled) { border-color: var(--lw-color-border-strong); }
+.box:hover:not(:disabled) { border-color: var(--lw-border-strong); }
 
 .box[data-state="checked"],
 .box[data-state="indeterminate"] {
-  background: var(--lw-color-control-bg-checked);
-  border-color: var(--lw-color-control-bg-checked);
+  background: var(--lw-fill-primary-default);
+  border-color: var(--lw-fill-primary-default);
 }
 
 .box:disabled {
-  background: var(--lw-color-action-disabled-bg);
-  border-color: var(--lw-color-border-subtle);
-  color: var(--lw-color-text-disabled);
+  background: var(--lw-fill-disabled-default);
+  border-color: var(--lw-border-subtle);
+  color: var(--lw-text-subtler);
   cursor: not-allowed;
 }
 
-.invalid { border-color: var(--lw-color-border-danger); }
+.invalid { border-color: var(--lw-border-danger); }
 
 .indicator { display: inline-flex; }
 .indicator[data-state="unchecked"] { visibility: hidden; }
 
 .label {
   composes: bodyMd from "../../styles/type.module.css";
-  color: var(--lw-color-text-primary);
+  color: var(--lw-text-default);
   cursor: pointer;
 }
 

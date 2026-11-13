@@ -5,7 +5,7 @@
 }
 
 .divided > .item + .item {
-  border-top: var(--lw-size-border-default) solid var(--lw-color-border-subtle);
+  border-top: var(--lw-size-border-default) solid var(--lw-border-subtle);
 }
 
 .item { display: block; }
@@ -31,8 +31,8 @@
   transition: background-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
 }
 
-.interactive:hover { background: var(--lw-color-surface-hover); }
-.interactive:active { background: var(--lw-color-surface-pressed); }
+.interactive:hover { background: var(--lw-fill-surface-bold); }
+.interactive:active { background: var(--lw-fill-surface-bolder); }
 .interactive:focus-visible { outline-offset: calc(var(--lw-size-focus-ring-width) * -1); }
 
 .leading, .trailing { display: inline-flex; align-items: center; flex-shrink: 0; }
@@ -42,7 +42,7 @@
 
 .title {
   composes: labelMd from "../../styles/type.module.css";
-  color: var(--lw-color-text-primary);
+  color: var(--lw-text-default);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -50,10 +50,10 @@
 
 .description {
   composes: bodySm from "../../styles/type.module.css";
-  color: var(--lw-color-text-secondary);
+  color: var(--lw-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.chevron { color: var(--lw-color-icon-secondary); }
+.chevron { color: var(--lw-icon-muted); }

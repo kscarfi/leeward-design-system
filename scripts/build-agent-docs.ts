@@ -1,7 +1,7 @@
 // Writes components.manifest.json, DESIGN.md and llms.txt. Run: pnpm build:agent
 // Everything comes from source: component code, Name.docs.md, tokens and guidelines.
 import { writeFileSync } from "node:fs";
-import { tokens } from "@leeward/tokens";
+import { brandNames, brands, tokens } from "@leeward/tokens";
 import { guidelines } from "../packages/mcp-server/src/guidelines.ts";
 import { buildManifest } from "./build-manifest.ts";
 
@@ -11,10 +11,14 @@ const repo = "https://github.com/kscarfi/leeward-design-system";
 const manifest = buildManifest();
 writeFileSync(`${root}components.manifest.json`, JSON.stringify(manifest, null, 2) + "\n");
 
-const light = tokens.light as Record<string, { value: unknown; cssVar: string; description?: string }>;
+type Entry = { value: unknown; cssVar: string; description?: string };
+const light = tokens.leeward.light as Record<string, Entry>;
+const dark = tokens.leeward.dark as Record<string, Entry>;
+// The most used color tokens. The full list (700+) is in get_tokens and the Figma files.
+const KEY = /^(text\.(default|muted|subtle|placeholder|inverse|primary|link-default|success|warning|danger)|fill\.surface\.(canvas|default|raised|overlay|bold)|fill\.(primary|neutral|success|warning|danger)\.(default|on-default|weak)|border\.(default|subtle|strong|focus|danger)|amount\.\w+|fill\.accent\.default)$/;
 const colorRows = Object.entries(light)
-  .filter(([name]) => name.startsWith("color."))
-  .map(([name, t]) => `| \`${t.cssVar}\` | ${String(light[name]!.value)} | ${String((tokens.dark as typeof light)[name]?.value ?? "")} | ${t.description ?? ""} |`);
+  .filter(([name]) => KEY.test(name))
+  .map(([name, t]) => `| \`${t.cssVar}\` | ${String(t.value)} | ${String(dark[name]?.value ?? "")} | ${t.description ?? ""} |`);
 
 const section = (key: string) => {
   const g = guidelines[key]!;
@@ -43,7 +47,7 @@ const design = [
   'import "@leeward/react/styles.css";',
   'import { ToastProvider, TooltipProvider } from "@leeward/react";',
   "",
-  '<div data-theme="light">',
+  '<div data-brand="leeward" data-theme="light">',
   "  <TooltipProvider>",
   "    <ToastProvider>{app}</ToastProvider>",
   "  </TooltipProvider>",
@@ -51,6 +55,13 @@ const design = [
   "```",
   "",
   ...Object.keys(guidelines).map(section),
+  "## Brands",
+  "",
+  "| Brand | data-brand | Notes |",
+  "|---|---|---|",
+  ...brands.map((b) => `| ${brandNames[b]} | \`${b}\` | ${b === "leeward" ? "Default. Indigo primary, slate neutrals, comfortable density." : "Lapis primary, purple haze secondary, compact density, tighter radii."} |`),
+  "| Partner | your name | Generated from one color with `pnpm theme:generate`. Refused if any pair misses AA. |",
+  "",
   "## Components",
   "",
   "| Component | Kind | Purpose |",
@@ -63,13 +74,13 @@ const design = [
   "",
   manifest.icons.map((i) => `\`${i}\``).join(", "),
   "",
-  "## Color tokens",
+  "## Key color tokens (Leeward)",
   "",
   "| CSS variable | Light | Dark | Use |",
   "|---|---|---|---|",
   ...colorRows,
   "",
-  "Every required pair is checked against WCAG 2.2 AA in [docs/contrast-report.md](docs/contrast-report.md).",
+  "Every token: `get_tokens` in the MCP server, or `packages/tokens/dist/ts/`. Every required pair is checked against WCAG 2.2 AA in [docs/contrast-report.md](docs/contrast-report.md).",
   "",
 ].join("\n");
 writeFileSync(`${root}DESIGN.md`, design);

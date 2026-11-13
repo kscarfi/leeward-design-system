@@ -21,4 +21,16 @@ export const Tones: Story = {
     </div>
   ),
 };
+export const Solid: Story = {
+  render: () => (
+    <div style={{ display: "flex", gap: "var(--lw-space-xs)", flexWrap: "wrap" }}>
+      <Badge appearance="solid" tone="neutral">Card</Badge>
+      <Badge appearance="solid" tone="info">New</Badge>
+      <Badge appearance="solid" tone="success">Paid</Badge>
+      <Badge appearance="solid" tone="warning">Pending</Badge>
+      <Badge appearance="solid" tone="danger">Declined</Badge>
+    </div>
+  ),
+};
+export const Small: Story = { args: { size: "sm" } };
 export const WithoutIcon: Story = { args: { tone: "info", icon: null, children: "Beta" } };

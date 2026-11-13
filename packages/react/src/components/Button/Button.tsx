@@ -5,11 +5,11 @@ import type { IconName } from "../Icon/icons.ts";
 import { Spinner } from "../Spinner/Spinner.tsx";
 import styles from "./Button.module.css";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger";
+export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** primary: the one main action on a screen. danger: irreversible actions only. */
+  /** primary: the one main action on a screen. secondary and outline: alternatives. danger: irreversible actions only. */
   variant?: ButtonVariant;
   size?: ButtonSize;
   /** Shows a spinner, keeps the label for screen readers and blocks repeat clicks. */
@@ -20,6 +20,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   ref?: Ref<HTMLButtonElement>;
 }
+
+const iconSize = { xs: "sm", sm: "sm", md: "md", lg: "md", xl: "lg" } as const;
 
 export function Button({
   variant = "primary",
@@ -51,9 +53,9 @@ export function Button({
     >
       {loading && <Spinner className={styles.spinner} />}
       <span className={styles.content}>
-        {iconStart && <Icon name={iconStart} size={size === "lg" ? "lg" : "md"} />}
+        {iconStart && <Icon name={iconStart} size={iconSize[size]} />}
         <span>{children}</span>
-        {iconEnd && <Icon name={iconEnd} size={size === "lg" ? "lg" : "md"} />}
+        {iconEnd && <Icon name={iconEnd} size={iconSize[size]} />}
       </span>
     </button>
   );

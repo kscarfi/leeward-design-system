@@ -4,10 +4,11 @@ Triggers an action. One primary button per screen or section.
 
 ## Do
 
-- Use primary for the one main action, secondary for alternatives, ghost for low emphasis, danger only for irreversible actions.
+- Use primary for the one main action, secondary or outline for alternatives, ghost for low emphasis, danger only for irreversible actions.
+- Sizes: xs 32, sm 36, md 44 (default), lg 48, xl 56 px. Use xl full width for the last step of a mobile flow.
 - Write the label as the outcome: "Send ₺250", "Freeze card".
 - Use `loading` while the action runs, so the label stays readable and repeat clicks are blocked.
-- Use `fullWidth` with `size="lg"` for the final step of a mobile flow.
+- Every size keeps a 44 px hit area on touch screens.
 
 ## Don't
 

@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--lw-space-xs);
+  padding: var(--lw-space-xl) var(--lw-space-md);
+  text-align: center;
+}
+
+.art {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lw-size-avatar-xl);
+  height: var(--lw-size-avatar-xl);
+  margin-bottom: var(--lw-space-xs);
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-fill-primary-weak);
+  color: var(--lw-icon-primary);
+}
+
+.title { composes: headingH4 from "../../styles/type.module.css"; color: var(--lw-text-default); }
+.description { composes: bodySm from "../../styles/type.module.css"; max-width: var(--lw-size-content-sm); color: var(--lw-text-muted); }
+.action { margin-top: var(--lw-space-sm); }

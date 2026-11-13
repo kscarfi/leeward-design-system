@@ -6,6 +6,7 @@ Short status label such as Pending, Paid or Declined.
 
 - Keep it to one or two words.
 - Status tones add an icon by default.
+- Use appearance="solid" for strong status and counts, subtle for lists.
 
 ## Don't
 

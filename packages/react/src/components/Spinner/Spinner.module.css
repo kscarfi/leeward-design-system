@@ -1,13 +1,13 @@
-.spinner {
-  width: var(--lw-size-icon-md);
-  height: var(--lw-size-icon-md);
-  animation: spin 0.8s linear infinite;
-}
+.wrap { display: inline-flex; }
+.spinner { animation: spin 0.8s linear infinite; }
+.sm { width: var(--lw-size-icon-sm); height: var(--lw-size-icon-sm); }
+.md { width: var(--lw-size-icon-md); height: var(--lw-size-icon-md); }
+.lg { width: var(--lw-size-icon-xl); height: var(--lw-size-icon-xl); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
+/* Reduced motion: keep turning slowly, because a frozen spinner looks broken. */
 @media (prefers-reduced-motion: reduce) {
   .spinner { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
 }

@@ -18,7 +18,7 @@ const typeScale = "leeward/type-scale";
 
 const messages = {
   [noRawColor]: utils.ruleMessages(noRawColor, {
-    rejected: (value: string) => `Raw color "${value}". Use a semantic color token, for example var(--lw-color-text-primary).`,
+    rejected: (value: string) => `Raw color "${value}". Use a semantic color token, for example var(--lw-text-default).`,
   }),
   [knownToken]: utils.ruleMessages(knownToken, {
     primitive: (name: string) => `"${name}" is a primitive. Components may only use semantic or component tokens.`,

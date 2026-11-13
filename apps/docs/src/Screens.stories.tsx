@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AccountCard, BalanceHeader, Button, Card, Chip, Heading, List, TransactionRow } from "@leeward/react";
+import { AccountCard, Alert, AmountInput, BalanceHeader, Button, Card, Chip, Heading, IconButton, List, OTPInput, QuickActions, SegmentedControl, Stepper, TextField, TransactionRow } from "@leeward/react";
+import { useState } from "react";
 
 const meta = { title: "Screens/Home", parameters: { layout: "fullscreen" } } satisfies Meta;
 export default meta;
@@ -23,13 +24,8 @@ export const Home: Story = {
         currency="TRY"
         locale="tr-TR"
         meta="Updated just now"
-        actions={
-          <>
-            <Button iconStart="arrow-up-right">Send</Button>
-            <Button variant="secondary" iconStart="arrow-down-left">Request</Button>
-          </>
-        }
       />
+      <QuickActions label="Quick actions" actions={[{ label: "Send", icon: "send", onClick: () => {} }, { label: "Request", icon: "hand-money", onClick: () => {} }, { label: "Top up", icon: "wallet-money", onClick: () => {} }, { label: "Pay bills", icon: "bill", onClick: () => {}, badge: 2 }]} />
       <AccountCard headingLevel={2} name="Everyday" type="Current account" iban="TR33 0006 1005 1978 6457 8413 26" balance={24580.35} currency="TRY" locale="tr-TR" actions={[{ label: "Add money", icon: "plus", onClick: () => {} }, { label: "Details", onClick: () => {} }]} />
       <section aria-labelledby="activity" style={{ display: "grid", gap: "var(--lw-space-sm)" }}>
         <Heading level={2} size="xs" id="activity">Recent activity</Heading>
@@ -49,3 +45,33 @@ export const Home: Story = {
     </main>
   ),
 };
+
+function TransferFlow() {
+  const [step, setStep] = useState(1);
+  return (
+    <main style={{ maxWidth: "440px", margin: "0 auto", padding: "var(--lw-space-lg) var(--lw-space-md)", display: "grid", gap: "var(--lw-space-lg)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "var(--lw-space-xs)" }}>
+        <IconButton icon="arrow-left" label="Back" onClick={() => setStep((s) => Math.max(0, s - 1))} />
+        <Heading level={1} size="h3">Send money</Heading>
+      </div>
+      <Stepper steps={["Recipient", "Amount", "Review", "Confirm"]} current={step} variant="compact" />
+      {step <= 1 && (
+        <>
+          <TextField label="Recipient" defaultValue="Deniz Yılmaz" hint="TR33 0006 1005 1978 6457 8413 26" />
+          <AmountInput label="Amount" currency="TRY" locale="tr-TR" max={24580.35} hint="Available: ₺24.580,35" defaultValue={250} />
+          <SegmentedControl label="When" options={[{ value: "now", label: "Now" }, { value: "later", label: "Later" }]} fullWidth />
+          <Button fullWidth size="xl" onClick={() => setStep(2)}>Review</Button>
+        </>
+      )}
+      {step === 2 && (
+        <>
+          <Alert tone="info" title="The fee is ₺0,00">Transfers to Leeward accounts are free and arrive in seconds.</Alert>
+          <Button fullWidth size="xl" onClick={() => setStep(3)}>Send ₺250,00</Button>
+        </>
+      )}
+      {step === 3 && <OTPInput label="Verification code" hint="We sent a code to •••• 4821" />}
+    </main>
+  );
+}
+
+export const Transfer: Story = { render: () => <TransferFlow /> };

@@ -7,8 +7,8 @@
   margin-inline-start: 0;
 }
 
-.label { composes: labelSm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
-.meta { composes: caption from "../../styles/type.module.css"; color: var(--lw-color-text-tertiary); }
+.label { composes: labelSm from "../../styles/type.module.css"; color: var(--lw-text-muted); }
+.meta { composes: caption from "../../styles/type.module.css"; color: var(--lw-text-subtle); }
 
 .actions {
   display: flex;

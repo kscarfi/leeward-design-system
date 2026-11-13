@@ -32,7 +32,7 @@ export interface ValidationResult {
 const RAW_COLOR = /#[0-9a-fA-F]{3,8}\b|\b(rgba?|hsla?|oklch|oklab|hwb)\(/g;
 // Spacing declarations inside CSS written as a string, for example in a <style> template.
 const CSS_SPACING = /(?:^|[;{\s])((?:margin|padding|gap|row-gap|column-gap|inset|top|right|bottom|left)(?:-[a-z]+)?)\s*:\s*([^;}]*?\d*\.?\d+(?:px|rem|em)[^;}]*)/g;
-const PRIMITIVE = /^--lw-(color-(white|ink|iris|coral|teal|danger|warning|deep|tint)|space-\d|radius-(\d|full)|size-\d|font-|duration-|easing-)/;
+const PRIMITIVE = /^--lw-(color-|space-\d|sizer-|radii-|border-width-|font-size-|font-weight-|duration-|easing-)/;
 const MONEY_WORDS = /\b(send|pay|transfer|withdraw|top ?up|add money|request)\b/i;
 const SPACING_KEYS = /^(margin|padding|gap|rowGap|columnGap|inset|top|right|bottom|left)/;
 const NATIVE_LABELLED = new Set(["input", "select", "textarea"]);
@@ -94,7 +94,7 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
 
   const checkString = (node: ts.Node, text: string) => {
     for (const m of text.matchAll(RAW_COLOR)) {
-      add("raw-color", node, `Raw color "${m[0]}".`, "Use a semantic token, for example var(--lw-color-text-primary) or var(--lw-color-action-primary-bg).");
+      add("raw-color", node, `Raw color "${m[0]}".`, "Use a semantic token, for example var(--lw-text-default) or var(--lw-fill-primary-default).");
     }
     for (const m of text.matchAll(CSS_SPACING)) {
       if (m[2]!.includes("var(")) continue;
@@ -103,7 +103,7 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
     for (const m of text.matchAll(/--lw-[\w-]+/g)) {
       const name = m[0];
       if (allowedVars.has(name) || name.endsWith("-") || definedVars.has(name)) continue;
-      if (PRIMITIVE.test(name)) add("primitive-token", node, `"${name}" is a primitive token.`, "Use the semantic token for the role, for example --lw-color-action-primary-bg instead of --lw-color-iris-600.");
+      if (PRIMITIVE.test(name)) add("primitive-token", node, `"${name}" is a primitive token.`, "Use the semantic token for the role, for example --lw-fill-primary-default instead of --lw-color-indigo-600.");
       else add("unknown-token", node, `Unknown token "${name}".`, "Call get_tokens to list valid names.");
     }
     if (text.includes("\u2014")) add("em-dash", node, "Em dash in copy.", "Use a comma, colon or period.");

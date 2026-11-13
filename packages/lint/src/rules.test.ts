@@ -19,11 +19,11 @@ function jsMessages(code: string): string[] {
 }
 
 test("stylelint accepts token-only CSS", async () => {
-  assert.deepEqual(await cssWarnings(".a { color: var(--lw-color-text-primary); padding: var(--lw-space-md); border: 0; background: transparent; }"), []);
+  assert.deepEqual(await cssWarnings(".a { color: var(--lw-text-default); padding: var(--lw-space-md); border: 0; background: transparent; }"), []);
 });
 
 test("stylelint rejects raw colors, primitives, typos and off-scale values", async () => {
-  const rules = await cssWarnings(".a { color: #f00; background: var(--lw-color-iris-600); border-color: var(--lw-color-text-primry); padding: 13px; font-size: 15px; }");
+  const rules = await cssWarnings(".a { color: #f00; background: var(--lw-color-indigo-600); border-color: var(--lw-text-defualt); padding: 13px; font-size: 15px; }");
   assert.deepEqual(rules.sort(), ["leeward/known-token", "leeward/known-token", "leeward/no-raw-color", "leeward/spacing-scale", "leeward/type-scale"]);
 });
 

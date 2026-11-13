@@ -1,0 +1,52 @@
+.root {
+  display: inline-flex;
+  gap: var(--lw-space-3xs);
+  padding: var(--lw-space-3xs);
+  background: var(--lw-fill-surface-bold);
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
+  border-radius: var(--lw-radius-control);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.fullWidth { display: flex; width: 100%; }
+.fullWidth .item { flex: 1; }
+
+.item {
+  composes: buttonSm from "../../styles/type.module.css";
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-2xs);
+  min-height: var(--lw-size-control-sm);
+  padding-inline: var(--lw-space-control-sm);
+  background: transparent;
+  border: 0;
+  border-radius: var(--lw-radius-control-sm);
+  color: var(--lw-text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.md .item { min-height: var(--lw-size-control-md); padding-inline: var(--lw-space-control-md); }
+
+.item::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  min-height: var(--lw-size-touch-target);
+  transform: translateY(-50%);
+}
+
+.item:hover:not([data-disabled]) { color: var(--lw-text-default); }
+
+/* Selected: raised surface, shadow and stronger text, not color alone. */
+.item[data-state="on"] {
+  background: var(--lw-fill-surface-default);
+  color: var(--lw-text-default);
+  box-shadow: var(--lw-elevation-100);
+}
+
+.item[data-disabled] { color: var(--lw-text-subtler); cursor: not-allowed; }

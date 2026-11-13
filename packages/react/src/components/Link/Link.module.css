@@ -1,0 +1,18 @@
+.link {
+  color: var(--lw-text-link-default);
+  font-weight: var(--lw-type-label-md-weight);
+  text-decoration-thickness: var(--lw-size-border-default);
+  text-underline-offset: 0.2em;
+  border-radius: var(--lw-radius-xs);
+}
+
+.link:hover { color: var(--lw-text-link-hover); }
+.link:visited { color: var(--lw-text-link-visited); }
+
+/* Inline links are always underlined so they never rely on color inside a sentence. */
+.inline { text-decoration-line: underline; }
+.standalone { text-decoration-line: none; display: inline-flex; align-items: center; gap: var(--lw-space-3xs); }
+.standalone:hover { text-decoration-line: underline; }
+
+.icon { margin-inline-start: var(--lw-space-3xs); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

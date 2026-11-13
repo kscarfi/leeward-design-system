@@ -13,7 +13,8 @@ export interface AmountDisplayProps {
   locale?: Locale;
   /** incoming: plus sign and teal. outgoing: minus sign and ink, never red. neutral: no sign, for balances. */
   direction?: AmountDirection;
-  size?: "sm" | "md" | "lg";
+  /** xl for the hero balance, lg for account cards, md and sm for lists. */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Not settled yet. Adds a clock icon and a "Pending" label. */
   pending?: boolean;
   /** Replace digits with dots, for example when the user hides balances. */

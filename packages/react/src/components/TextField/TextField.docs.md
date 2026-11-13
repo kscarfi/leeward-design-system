@@ -5,6 +5,7 @@ Single-line input with label, hint, error, prefix and suffix.
 ## Do
 
 - Always set a visible `label`.
+- Sizes: sm 36, md 44 (default), lg 48 px. On touch screens small fields still get 44 px and 16 px text so iOS does not zoom.
 - Use `hint` for format help before people type, `error` for what went wrong and how to fix it.
 - For amounts use `prefix="₺"`, `inputMode="decimal"` and `numeric`.
 

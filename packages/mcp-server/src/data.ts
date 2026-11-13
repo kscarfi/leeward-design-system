@@ -1,6 +1,6 @@
 // Loads the manifest and tokens the tools serve. Both are generated and committed in the repo.
 import { readFileSync } from "node:fs";
-import { tokens, themes } from "@leeward/tokens";
+import { brands, modes, tokens } from "@leeward/tokens";
 
 export interface ManifestProp {
   name: string;
@@ -37,6 +37,7 @@ export const componentNames = new Set(manifest.components.map((c) => c.name));
 for (const extra of ["List", "DialogClose", "ToastProvider", "TooltipProvider"]) componentNames.add(extra);
 
 export type TokenEntry = { value: string | number; cssVar: string; type?: string; description?: string; ref?: string };
-export const tokenThemes = themes as readonly string[];
-export const tokenData = tokens as unknown as Record<string, Record<string, TokenEntry>>;
-export const allowedVars = new Set(Object.values(tokenData.light!).map((t) => t.cssVar));
+export const tokenBrands = brands as readonly string[];
+export const tokenModes = modes as readonly string[];
+export const tokenData = tokens as unknown as Record<string, Record<string, Record<string, TokenEntry>>>;
+export const allowedVars = new Set(Object.values(tokenData.leeward!.light!).map((t) => t.cssVar));

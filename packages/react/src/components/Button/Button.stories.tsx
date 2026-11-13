@@ -18,15 +18,18 @@ export const Primary: Story = {
   },
 };
 export const Secondary: Story = { args: { variant: "secondary", children: "Request money" } };
+export const Outline: Story = { args: { variant: "outline", children: "Download statement" } };
 export const Ghost: Story = { args: { variant: "ghost", children: "See all" } };
 export const Danger: Story = { args: { variant: "danger", children: "Close account" } };
 
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: "flex", gap: "var(--lw-space-sm)", alignItems: "center", flexWrap: "wrap" }}>
+      <Button {...args} size="xs">Extra small</Button>
       <Button {...args} size="sm">Small</Button>
       <Button {...args} size="md">Medium</Button>
       <Button {...args} size="lg">Large</Button>
+      <Button {...args} size="xl">Extra large</Button>
     </div>
   ),
 };
@@ -45,12 +48,12 @@ export const Loading: Story = {
 };
 
 export const Disabled: Story = { args: { disabled: true } };
-export const FullWidth: Story = { args: { fullWidth: true, size: "lg", children: "Confirm transfer" } };
+export const FullWidth: Story = { args: { fullWidth: true, size: "xl", children: "Confirm transfer" } };
 
 export const AllVariants: Story = {
   render: (args) => (
     <div style={{ display: "grid", gap: "var(--lw-space-sm)", justifyItems: "start" }}>
-      {(["primary", "secondary", "ghost", "danger"] as const).map((variant) => (
+      {(["primary", "secondary", "outline", "ghost", "danger"] as const).map((variant) => (
         <div key={variant} style={{ display: "flex", gap: "var(--lw-space-sm)", flexWrap: "wrap" }}>
           <Button {...args} variant={variant}>{variant}</Button>
           <Button {...args} variant={variant} disabled>Disabled</Button>

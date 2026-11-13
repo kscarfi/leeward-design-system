@@ -1,0 +1,28 @@
+.textarea {
+  composes: bodyMd from "../../styles/type.module.css";
+  display: block;
+  width: 100%;
+  min-height: var(--lw-size-control-xl);
+  padding: var(--lw-space-sm);
+  background: var(--lw-fill-surface-default);
+  color: var(--lw-text-default);
+  border: var(--lw-size-border-default) solid var(--lw-border-default);
+  border-radius: var(--lw-radius-control);
+  resize: vertical;
+  field-sizing: content;
+}
+
+.textarea::placeholder { color: var(--lw-text-placeholder); opacity: 1; }
+.textarea:hover:not(:disabled) { border-color: var(--lw-border-strong); }
+.textarea:focus-visible { outline: var(--lw-size-focus-ring-width) solid var(--lw-border-focus); outline-offset: var(--lw-size-focus-ring-offset); }
+.textarea:disabled { background: var(--lw-fill-disabled-default); color: var(--lw-text-subtler); cursor: not-allowed; }
+
+.invalid,
+.invalid:hover:not(:disabled) { border-color: var(--lw-border-danger); border-width: var(--lw-size-border-strong); }
+
+.count {
+  composes: caption from "../../styles/type.module.css";
+  align-self: flex-end;
+  color: var(--lw-text-subtle);
+  font-variant-numeric: tabular-nums;
+}

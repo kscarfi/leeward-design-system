@@ -10,20 +10,22 @@
 .value-sm { composes: amountSm from "../../styles/type.module.css"; }
 .value-md { composes: amountMd from "../../styles/type.module.css"; }
 .value-lg { composes: amountLg from "../../styles/type.module.css"; }
+.value-xl { composes: amountXl from "../../styles/type.module.css"; }
 
-.incoming { color: var(--lw-color-amount-incoming); }
-.outgoing { color: var(--lw-color-amount-outgoing); }
-.neutral { color: var(--lw-color-text-primary); }
+.incoming { color: var(--lw-amount-incoming); }
+.outgoing { color: var(--lw-amount-outgoing); }
+.neutral { color: var(--lw-text-default); }
 .pending .value-sm,
 .pending .value-md,
-.pending .value-lg { color: var(--lw-color-amount-pending); }
+.pending .value-lg,
+.pending .value-xl { color: var(--lw-amount-pending); }
 
 .pendingLabel {
   composes: labelSm from "../../styles/type.module.css";
   display: inline-flex;
   align-items: center;
   gap: var(--lw-space-3xs);
-  color: var(--lw-color-amount-pending);
+  color: var(--lw-amount-pending);
 }
 
 .srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

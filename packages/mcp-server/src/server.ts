@@ -1,11 +1,11 @@
 // Leeward MCP server: tokens, components, guidelines and a UI validator for AI agents.
 import { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
-import { manifest, tokenData, tokenThemes } from "./data.ts";
+import { manifest, tokenBrands, tokenData, tokenModes } from "./data.ts";
 import { guidelines, topics } from "./guidelines.ts";
 import { validateUi } from "./validate.ts";
 
-const CATEGORIES = ["color", "space", "radius", "size", "type", "shadow", "motion", "layer"] as const;
+const CATEGORIES = ["fill", "text", "icon", "border", "focus-ring", "amount", "space", "size", "radius", "type", "elevation", "motion", "layer"] as const;
 
 const json = (value: unknown) => ({ content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }], structuredContent: value as Record<string, unknown> });
 const fail = (text: string) => ({ content: [{ type: "text" as const, text }], isError: true });
@@ -33,15 +33,17 @@ export function createServer() {
   server.registerTool(
     "get_tokens",
     {
-      description: "List Leeward design tokens (semantic CSS variables) for a theme, optionally filtered by category. Use these instead of raw values.",
+      description: "List Leeward design tokens (semantic CSS variables) for a brand and mode, optionally filtered by category. Use these instead of raw values. Colors: fill, text, icon, border.",
       inputSchema: z.object({
-        theme: z.enum(tokenThemes as [string, ...string[]]).optional().describe("Theme name. Defaults to light."),
-        category: z.enum(CATEGORIES).optional().describe("Token category, for example color or space."),
+        brand: z.enum(tokenBrands as [string, ...string[]]).optional().describe("Brand. Defaults to leeward."),
+        mode: z.enum(tokenModes as [string, ...string[]]).optional().describe("light or dark. Defaults to light."),
+        category: z.enum(CATEGORIES).optional().describe("Token category, for example fill, text or space."),
       }),
     },
-    async ({ theme = "light", category }) => {
-      const all = tokenData[theme];
-      if (!all) return fail(`Unknown theme "${theme}". Themes: ${tokenThemes.join(", ")}.`);
+    async ({ brand = "leeward", mode = "light", category }) => {
+      const all = tokenData[brand]?.[mode];
+      if (!all) return fail(`Unknown brand or mode "${brand} ${mode}". Brands: ${tokenBrands.join(", ")}. Modes: ${tokenModes.join(", ")}.`);
+      const theme = `${brand} ${mode}`;
       const entries = Object.entries(all)
         .filter(([name]) => !category || name.startsWith(`${category}.`))
         .map(([name, t]) => ({ name, cssVar: t.cssVar, value: t.value, ...(t.description ? { description: t.description } : {}) }));

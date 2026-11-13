@@ -19,7 +19,7 @@ import "@leeward/react/fonts.css";
 import "@leeward/react/styles.css";
 import { ToastProvider, TooltipProvider } from "@leeward/react";
 
-<div data-theme="light">
+<div data-brand="leeward" data-theme="light">
   <TooltipProvider>
     <ToastProvider>{app}</ToastProvider>
   </TooltipProvider>
@@ -41,32 +41,32 @@ Style only with semantic CSS variables. Primitives do not exist in CSS.
 
 - Use var(--lw-*) semantic tokens for every color, space, radius, size, type and motion value.
 - Never write hex, rgb, hsl or oklch values in components or screens.
-- Never reference primitive names such as --lw-color-iris-600 or --lw-space-4. They are not emitted and lint rejects them.
-- Spacing: --lw-space-3xs (2px), 2xs (4), xs (8), sm (12), md (16), lg (24), xl (32), 2xl (48), 3xl (64).
-- Radius: --lw-radius-control for inputs and buttons, --lw-radius-card for cards and dialogs, --lw-radius-pill for chips and badges.
+- Never reference primitive names such as --lw-color-indigo-600 or --lw-space-4. They are not emitted and lint rejects them.
+- Spacing: --lw-space-3xs (2px), 2xs (4), xs-tight (6), xs (8), sm-tight (10), sm (12), md (16), md-loose (20), lg (24), xl (32), 2xl (48), 3xl (64), 4xl (80).
+- Radius: --lw-radius-control for inputs and buttons, --lw-radius-card for cards, --lw-radius-dialog for dialogs and sheets, --lw-radius-pill for chips and badges. Brands scale these.
 - If a token is missing, propose one. Do not hardcode.
 
 ```tsx
-.panel { padding: var(--lw-space-lg); background: var(--lw-color-surface-raised); border-radius: var(--lw-radius-card); box-shadow: var(--lw-shadow-1); }
+.panel { padding: var(--lw-space-lg); background: var(--lw-fill-surface-raised); border-radius: var(--lw-radius-card); box-shadow: var(--lw-elevation-200); }
 ```
 
 ## Color
 
 Ink for text, Iris for actions, Teal for money in, Coral for decoration only.
 
-- Text: --lw-color-text-primary, -secondary, -tertiary. All pass AA on every surface in both themes.
-- Surfaces: --lw-color-bg-canvas behind everything, -surface-default, -surface-raised for cards, -surface-overlay for dialogs.
-- Actions use --lw-color-action-* tokens. Use the Button component rather than styling buttons.
+- Text: --lw-text-default, -secondary, -tertiary. All pass AA on every surface in both themes.
+- Surfaces: --lw-fill-surface-canvas behind everything, then --lw-fill-surface-default, -raised for cards and -overlay for dialogs and menus. In dark mode each step up is lighter.
+- Roles: primary, secondary, neutral, info, success, warning, attention, danger. Each has fill (default, emphasis, strong, subtle, subtler, subtlest, weak, on-default), text, icon and border tokens, for example --lw-fill-primary-default with --lw-fill-primary-on-default. Use the Button component rather than styling buttons.
 - Danger red is for real errors and irreversible actions only.
-- Coral (--lw-color-accent-decorative) is decorative: never text, never the only signal of state, under about 10% of a screen.
+- The accent (--lw-fill-accent-default) is decorative: never text, never the only signal of state, under about 10% of a screen.
 - State is never carried by color alone. Pair it with an icon and words.
 
 ## Typography
 
-Inter with optical sizing. Type roles, not raw sizes.
+Plus Jakarta Sans for display and text, IBM Plex Mono for codes. Type roles, not raw sizes.
 
 - Use Heading (level is required) and Text components, or --lw-type-<role>-* tokens.
-- Roles: display lg/md, heading xl/lg/md/sm/xs, body md/sm, label md/sm, caption, amount lg/md/sm.
+- Roles: display lg/md, title xl to xs, subtitle lg/md/sm, heading h1 to h6, body lg/md/sm, label lg/md/sm/xs, caption, badge, button lg/md/sm/xs, amount xl/lg/md/sm, code. Display, title and amount xl/lg are fluid between 360 and 1280 px.
 - Minimum visible text size is 12px (caption).
 - Every number in an amount, balance or table column uses tabular figures.
 - One h1 per screen. Do not skip heading levels.
@@ -113,7 +113,8 @@ Say what happened and what to do. Calm, specific, never blaming.
 Mobile first, 4px grid, one primary action per screen.
 
 - Spacing comes from --lw-space-* only. Stack sections with --lw-space-lg, related items with --lw-space-sm.
-- Mobile screens: max width about 440px, side padding --lw-space-md.
+- Mobile screens: max width about 440px, side padding --lw-space-md. Dialog turns into a bottom sheet under 640 px.
+- Control heights: --lw-size-control-xs 32, sm 36, md 44 (default), lg 48, xl 56. On touch screens every target keeps a 44 px hit area.
 - One primary Button per screen or section. Put the final action full width at the bottom on mobile.
 - Touch targets are at least 44 by 44px. Components already guarantee this.
 - Use Card for grouping, List with ListItem or TransactionRow for rows.
@@ -143,22 +144,33 @@ WCAG 2.2 AA is the floor. The components do most of the work if you use them.
 
 Short and calm. Motion explains, it does not decorate.
 
-- Durations: --lw-motion-duration-instant (100ms), fast (150), base (200), slow (300).
+- Durations: --lw-motion-duration-instant (100ms), fast (150), base (200), slow (300), slower (400).
 - Easing: --lw-motion-easing-standard, -enter for elements arriving, -exit for leaving.
 - No looping animation except loading indicators.
 
 ## Themes and dark mode
 
-Themes swap semantic tokens. Components never change.
+Brands and modes swap semantic tokens. Components never change.
 
-- Set data-theme="light", "dark" or "auto" on a container. Two themes can sit side by side.
+- Set data-brand (leeward, business or a generated partner) and data-theme (light, dark or auto) on a container. Brands and modes can sit side by side.
+- A brand chooses a ramp per role, a roundness and a density. pnpm theme:generate builds a partner brand from one color and refuses it if any pair misses AA.
 - Never write theme-specific CSS in components. If something looks wrong in dark, the token mapping changes.
 - Dark surfaces get lighter as they rise: canvas, default, raised, overlay.
+
+## Brands
+
+| Brand | data-brand | Notes |
+|---|---|---|
+| Leeward | `leeward` | Default. Indigo primary, slate neutrals, comfortable density. |
+| Leeward Business | `business` | Lapis primary, purple haze secondary, compact density, tighter radii. |
+| Partner | your name | Generated from one color with `pnpm theme:generate`. Refused if any pair misses AA. |
 
 ## Components
 
 | Component | Kind | Purpose |
 |---|---|---|
+| `Accordion` | component | Expandable sections for fees, FAQs and account details. |
+| `Alert` | component | Inline message on the page: what happened and what to do next. |
 | `Avatar` | component | Initials, image or category icon for a person or merchant. |
 | `Badge` | component | Short status label such as Pending, Paid or Declined. |
 | `Button` | component | Triggers an action. One primary button per screen or section. |
@@ -166,112 +178,85 @@ Themes swap semantic tokens. Components never change.
 | `Checkbox` | component | A yes or no choice inside a form, or one of many independent choices. |
 | `Chip` | component | Filter toggle, for example in a transaction list. |
 | `Dialog` | component | Modal for a decision that needs full attention, such as confirming a transfer or freezing a card. |
+| `Divider` | component | Separates groups of content. |
+| `DropdownMenu` | component | Secondary actions for an item, behind a More button. |
+| `EmptyState` | component | Shown when a list or search has nothing to show yet. |
 | `Heading` | component | Section and page headings with a required outline level. |
-| `Icon` | component | Inline SVG icons on a 24px grid with a 1.75 stroke. 43 icons. |
+| `Icon` | component | Solar icons (480 Design, CC BY 4.0) on a 24 px grid: 142 icons in three weights. Use linear by default, bold for selected or active states, duotone for illustrations and empty states. |
 | `IconButton` | component | Icon-only button for secondary actions such as close, settings or show balance. |
+| `Link` | component | Navigation to another page or site. |
 | `ListItem` | component | Row in a list with title, description, leading and trailing slots. Use inside List. |
 | `ProgressBar` | component | Progress toward a goal or limit. |
 | `RadioGroup` | component | Pick exactly one option from 2 to 5 visible choices. |
+| `SegmentedControl` | component | Pick one view or filter from 2 to 5 short options. |
 | `Select` | component | Pick one option from a short list. Built on Radix Select. |
+| `Sheet` | component | Panel for a task in context, such as filters or transaction details. |
 | `Skeleton` | component | Placeholder while content loads. |
+| `Spinner` | component | Short wait indicator when the shape of the result is unknown. |
+| `Stepper` | component | Shows where people are in a multi-step flow. |
 | `Switch` | component | A setting that applies immediately, such as online card payments. |
 | `Tabs` | component | Switch between views of the same object, such as Activity and Statements. |
 | `Text` | component | Body, label and caption text with token-based type roles and tones. |
 | `TextField` | component | Single-line input with label, hint, error, prefix and suffix. |
+| `Textarea` | component | Multi-line text for payment notes and messages. |
 | `Toast` | component | Short confirmation after an action, such as "Money sent". Use with ToastProvider and useToast. |
 | `Tooltip` | component | Extra information on hover and focus. Wrap the app in TooltipProvider. |
 | `AccountCard` | pattern | Account summary with type, masked IBAN, balance and up to three quick actions. |
 | `AmountDisplay` | pattern | Money amount with locale formatting, tabular figures and a direction that never relies on color. |
+| `AmountInput` | pattern | Money entry with the decimal keypad, locale formatting and a clear limit error. |
 | `BalanceHeader` | pattern | Account balance with a hide and show control. |
 | `OTPInput` | pattern | One-time code entry with paste, SMS autofill and clear errors. |
+| `QuickActions` | pattern | Row of shortcuts such as Send, Request, Top up and Pay bills. |
 | `TransactionRow` | pattern | One transaction: merchant, category, date, amount and status. |
 
 Full props, rules and examples: [`components.manifest.json`](components.manifest.json).
 
 ## Icons
 
-`arrow-left`, `arrow-right`, `arrow-up-right`, `arrow-down-left`, `arrows-left-right`, `plus`, `minus`, `check`, `close`, `chevron-down`, `chevron-up`, `chevron-left`, `chevron-right`, `search`, `eye`, `eye-off`, `info`, `alert-circle`, `alert-triangle`, `check-circle`, `clock`, `bell`, `home`, `card`, `bank`, `wallet`, `user`, `settings`, `lock`, `shield`, `copy`, `receipt`, `shopping-bag`, `coffee`, `transport`, `bolt`, `more-horizontal`, `refresh`, `phone`, `download`, `calendar`, `percent`, `globe`
 
-## Color tokens
+
+## Key color tokens (Leeward)
 
 | CSS variable | Light | Dark | Use |
 |---|---|---|---|
-| `--lw-color-bg-canvas` | #f6f6fb | #11131e | App background behind all surfaces |
-| `--lw-color-surface-default` | #ffffff | #191a29 |  |
-| `--lw-color-surface-raised` | #ffffff | #202131 | Cards and menus. Pair with an elevation token. |
-| `--lw-color-surface-overlay` | #ffffff | #282a3b | Dialogs, popovers, toasts |
-| `--lw-color-surface-sunken` | #eeeff4 | #11131e |  |
-| `--lw-color-surface-inverse` | #16163a | #f6f6fb |  |
-| `--lw-color-surface-hover` | #eeeff4 | #282a3b |  |
-| `--lw-color-surface-pressed` | #dddde3 | #3c3e52 |  |
-| `--lw-color-surface-brand` | #f5f9ff | #282a3b | Tinted surface for selected or highlighted items |
-| `--lw-color-scrim` | rgba(22, 22, 58, 0.48) | rgba(0, 0, 0, 0.62) | Backdrop behind dialogs |
-| `--lw-color-text-primary` | #16163a | #f6f6fb |  |
-| `--lw-color-text-secondary` | #5a5b70 | #dddde3 |  |
-| `--lw-color-text-tertiary` | #6d6f80 | #c0c1c7 | Hints, captions, placeholders. Still AA. |
-| `--lw-color-text-disabled` | #8c8d99 | #6d6f80 | Exempt from contrast rules. Never the only cue. |
-| `--lw-color-text-inverse` | #f6f6fb | #16163a |  |
-| `--lw-color-text-link` | #4c3fe0 | #b2beff |  |
-| `--lw-color-text-link-hover` | #3c2dbb | #d4dcff |  |
-| `--lw-color-text-brand` | #4c3fe0 | #b2beff |  |
-| `--lw-color-text-accent` | #c2410c | #ffae95 | Rare emphasis text in the accent hue |
-| `--lw-color-text-success` | #08745d | #93cdba |  |
-| `--lw-color-text-warning` | #b45309 | #f9b18a |  |
-| `--lw-color-text-danger` | #c8283e | #ffacab |  |
-| `--lw-color-icon-primary` | #16163a | #f6f6fb |  |
-| `--lw-color-icon-secondary` | #5a5b70 | #dddde3 |  |
-| `--lw-color-icon-brand` | #4c3fe0 | #b2beff |  |
-| `--lw-color-border-subtle` | #dddde3 | #3c3e52 | Dividers and card outlines. Decorative only. |
-| `--lw-color-border-default` | #8c8d99 | #8c8d99 | Input and control boundaries. At least 3:1. |
-| `--lw-color-border-strong` | #5a5b70 | #c0c1c7 |  |
-| `--lw-color-border-focus` | #4c3fe0 | #b2beff | Focus ring. At least 3:1 against every surface. |
-| `--lw-color-border-brand` | #4c3fe0 | #b2beff |  |
-| `--lw-color-border-danger` | #c8283e | #ffacab |  |
-| `--lw-color-action-primary-bg` | #4c3fe0 | #b2beff |  |
-| `--lw-color-action-primary-bg-hover` | #3c2dbb | #d4dcff |  |
-| `--lw-color-action-primary-bg-active` | #2e1d99 | #e9efff |  |
-| `--lw-color-action-primary-text` | #ffffff | #16163a |  |
-| `--lw-color-action-secondary-bg` | #f5f9ff | #282a3b |  |
-| `--lw-color-action-secondary-bg-hover` | #e9efff | #3c3e52 |  |
-| `--lw-color-action-secondary-bg-active` | #d4dcff | #3c3e52 |  |
-| `--lw-color-action-secondary-text` | #3c2dbb | #d4dcff |  |
-| `--lw-color-action-secondary-border` | #d4dcff | #3c3e52 |  |
-| `--lw-color-action-ghost-bg-hover` | #f5f9ff | #282a3b |  |
-| `--lw-color-action-ghost-bg-active` | #e9efff | #3c3e52 |  |
-| `--lw-color-action-ghost-text` | #4c3fe0 | #b2beff |  |
-| `--lw-color-action-danger-bg` | #c8283e | #ffacab |  |
-| `--lw-color-action-danger-bg-hover` | #b41e35 | #ffd4d2 |  |
-| `--lw-color-action-danger-bg-active` | #920a25 | #ffebe9 |  |
-| `--lw-color-action-danger-text` | #ffffff | #16163a |  |
-| `--lw-color-action-disabled-bg` | #eeeff4 | #282a3b |  |
-| `--lw-color-action-disabled-text` | #8c8d99 | #5a5b70 |  |
-| `--lw-color-control-bg` | #ffffff | #191a29 |  |
-| `--lw-color-control-bg-checked` | #4c3fe0 | #b2beff |  |
-| `--lw-color-control-fg-checked` | #ffffff | #16163a |  |
-| `--lw-color-control-track` | #8c8d99 | #8c8d99 |  |
-| `--lw-color-control-thumb` | #ffffff | #f6f6fb |  |
-| `--lw-color-feedback-info-bg` | #f5f9ff | #252944 |  |
-| `--lw-color-feedback-info-border` | #d4dcff | #424878 |  |
-| `--lw-color-feedback-info-text` | #3c2dbb | #d4dcff |  |
-| `--lw-color-feedback-info-icon` | #4c3fe0 | #b2beff |  |
-| `--lw-color-feedback-success-bg` | #ecfbf6 | #083329 |  |
-| `--lw-color-feedback-success-border` | #c0e6d9 | #035b48 |  |
-| `--lw-color-feedback-success-text` | #005340 | #c0e6d9 |  |
-| `--lw-color-feedback-success-icon` | #006a54 | #93cdba |  |
-| `--lw-color-feedback-warning-bg` | #fff7f0 | #3a270b |  |
-| `--lw-color-feedback-warning-border` | #ffd6bd | #674611 |  |
-| `--lw-color-feedback-warning-text` | #783300 | #ffd6bd |  |
-| `--lw-color-feedback-warning-icon` | #994500 | #f9b18a |  |
-| `--lw-color-feedback-danger-bg` | #fff7f6 | #412121 |  |
-| `--lw-color-feedback-danger-border` | #ffd4d2 | #723a3b |  |
-| `--lw-color-feedback-danger-text` | #920a25 | #ffd4d2 |  |
-| `--lw-color-feedback-danger-icon` | #b41e35 | #ffacab |  |
-| `--lw-color-amount-incoming` | #08745d | #93cdba | Money in. Always with a plus sign. |
-| `--lw-color-amount-outgoing` | #16163a | #f6f6fb | Money out. Never red. Always with a minus sign. |
-| `--lw-color-amount-pending` | #b45309 | #f9b18a | Not settled yet. Always with a pending label. |
-| `--lw-color-accent-decorative` | #ff7a59 | #ff7a59 | Illustration and highlights only. Never text or the only signal of state. |
-| `--lw-color-accent-decorative-subtle` | #ffece3 | #3e0000 |  |
-| `--lw-color-skeleton-base` | #eeeff4 | #282a3b |  |
-| `--lw-color-skeleton-highlight` | #f6f6fb | #3c3e52 |  |
+| `--lw-fill-surface-default` | #ffffff | #151d2d |  |
+| `--lw-fill-surface-raised` | #ffffff | #1f293a |  |
+| `--lw-fill-surface-bold` | #f9fafb | #1f293a |  |
+| `--lw-fill-surface-canvas` | #f9fafb | #0b1120 |  |
+| `--lw-fill-surface-overlay` | #ffffff | #293546 |  |
+| `--lw-fill-primary-default` | #4f46e5 | #818cf8 |  |
+| `--lw-fill-primary-weak` | #eef2ff | #212a4c |  |
+| `--lw-fill-primary-on-default` | #ffffff | #1e1b4b |  |
+| `--lw-fill-neutral-default` | #293546 | #f3f4f6 |  |
+| `--lw-fill-neutral-weak` | #f9fafb | #232b3b |  |
+| `--lw-fill-neutral-on-default` | #ffffff | #0b1120 |  |
+| `--lw-fill-success-default` | #0f766e | #2dd4bf |  |
+| `--lw-fill-success-weak` | #f0fdfa | #1c3641 |  |
+| `--lw-fill-success-on-default` | #ffffff | #042f2e |  |
+| `--lw-fill-warning-default` | #c73f07 | #ff9137 |  |
+| `--lw-fill-warning-weak` | #fff7ed | #3b2e32 |  |
+| `--lw-fill-warning-on-default` | #ffffff | #451305 |  |
+| `--lw-fill-danger-default` | #dc2626 | #f87171 |  |
+| `--lw-fill-danger-weak` | #fef2f2 | #3a2834 |  |
+| `--lw-fill-danger-on-default` | #ffffff | #450a0a |  |
+| `--lw-fill-accent-default` | #ff6464 | #ed1515 |  |
+| `--lw-text-default` | #293546 | #f3f4f6 |  |
+| `--lw-text-muted` | #4b5563 | #d1d5db |  |
+| `--lw-text-subtle` | #6b7280 | #9ca3af |  |
+| `--lw-text-inverse` | #ffffff | #0f1113 |  |
+| `--lw-text-placeholder` | #6b7280 | #9ca3af |  |
+| `--lw-text-primary` | #4f46e5 | #a5b4fc |  |
+| `--lw-text-success` | #0f766e | #2dd4bf |  |
+| `--lw-text-warning` | #c73f07 | #ff9137 |  |
+| `--lw-text-danger` | #dc2626 | #fca5a5 |  |
+| `--lw-text-link-default` | #2563eb | #60a5fa |  |
+| `--lw-border-default` | #6b7280 | #9ca3af |  |
+| `--lw-border-subtle` | #f9fafb | #1f293a |  |
+| `--lw-border-strong` | #6b7280 | #9ca3af |  |
+| `--lw-border-danger` | #dc2626 | #f87171 |  |
+| `--lw-border-focus` | #4f46e5 | #818cf8 |  |
+| `--lw-amount-incoming` | #0f766e | #5eead4 |  |
+| `--lw-amount-outgoing` | #293546 | #f3f4f6 |  |
+| `--lw-amount-pending` | #c73f07 | #ffba70 |  |
 
-Every required pair is checked against WCAG 2.2 AA in [docs/contrast-report.md](docs/contrast-report.md).
+Every token: `get_tokens` in the MCP server, or `packages/tokens/dist/ts/`. Every required pair is checked against WCAG 2.2 AA in [docs/contrast-report.md](docs/contrast-report.md).

@@ -29,7 +29,7 @@ const noRawColor: Rule.RuleModule = {
   meta: {
     type: "problem",
     docs: { description: "Disallow raw color values. Use semantic color tokens." },
-    messages: { raw: 'Raw color "{{value}}". Use a semantic token such as var(--lw-color-text-primary).' },
+    messages: { raw: 'Raw color "{{value}}". Use a semantic token such as var(--lw-text-default).' },
     schema: [],
   },
   create(context: Context) {

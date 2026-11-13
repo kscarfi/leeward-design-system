@@ -21,7 +21,7 @@ test("lists the five tools", async () => {
 
 test("get_tokens filters by theme and category", async () => {
   const client = await connect();
-  const result = await client.callTool({ name: "get_tokens", arguments: { theme: "dark", category: "space" } });
+  const result = await client.callTool({ name: "get_tokens", arguments: { brand: "business", mode: "dark", category: "space" } });
   const data = result.structuredContent as { count: number; tokens: Array<{ cssVar: string }> };
   assert.ok(data.count >= 9);
   assert.ok(data.tokens.every((t) => t.cssVar.startsWith("--lw-space-")));
@@ -65,7 +65,7 @@ test("validate_ui catches the usual agent mistakes", () => {
           <IconButton icon="arrow-up-right" label="Send money" />
           <input type="text" />
           <Text tone="danger" tabular>-85</Text>
-          <div style={{ background: "var(--lw-color-iris-600)" }} />
+          <div style={{ background: "var(--lw-color-indigo-600)" }} />
           <FeeRow />
           <span>{(12.5).toFixed(2)}</span>
         </main>

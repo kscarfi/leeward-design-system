@@ -9,52 +9,143 @@
     "Set data-theme=\"light\" | \"dark\" | \"auto\" on a root element.",
     "Wrap the app in <TooltipProvider> and <ToastProvider>."
   ],
-  "icons": [
-    "arrow-left",
-    "arrow-right",
-    "arrow-up-right",
-    "arrow-down-left",
-    "arrows-left-right",
-    "plus",
-    "minus",
-    "check",
-    "close",
-    "chevron-down",
-    "chevron-up",
-    "chevron-left",
-    "chevron-right",
-    "search",
-    "eye",
-    "eye-off",
-    "info",
-    "alert-circle",
-    "alert-triangle",
-    "check-circle",
-    "clock",
-    "bell",
-    "home",
-    "card",
-    "bank",
-    "wallet",
-    "user",
-    "settings",
-    "lock",
-    "shield",
-    "copy",
-    "receipt",
-    "shopping-bag",
-    "coffee",
-    "transport",
-    "bolt",
-    "more-horizontal",
-    "refresh",
-    "phone",
-    "download",
-    "calendar",
-    "percent",
-    "globe"
-  ],
+  "icons": [],
   "components": [
+    {
+      "name": "Accordion",
+      "kind": "component",
+      "import": "import { Accordion } from \"@leeward/react\";",
+      "purpose": "Expandable sections for fees, FAQs and account details.",
+      "props": [
+        {
+          "name": "items",
+          "type": "AccordionItem[]",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "\"single\" | \"multiple\"",
+          "required": false,
+          "description": "single opens one item at a time, multiple lets people open several.",
+          "values": [
+            "single",
+            "multiple"
+          ]
+        },
+        {
+          "name": "defaultValue",
+          "type": "string[]",
+          "required": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3 | 4",
+          "required": false,
+          "description": "Heading level of each trigger, to fit the page outline."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Write the trigger as a question or a clear topic.",
+        "Set headingLevel so triggers fit the page outline."
+      ],
+      "dont": [
+        "Do not hide information people need to make a decision, such as the fee of a transfer."
+      ],
+      "accessibility": [
+        "Triggers are buttons inside headings with aria-expanded.",
+        "Arrow keys move between triggers. Behavior from Radix Accordion."
+      ],
+      "example": "<Accordion items={[{ value: \"fees\", title: \"What does a transfer cost?\", content: \"Free between Leeward accounts.\" }]} />"
+    },
+    {
+      "name": "Alert",
+      "kind": "component",
+      "import": "import { Alert } from \"@leeward/react\";",
+      "purpose": "Inline message on the page: what happened and what to do next.",
+      "props": [
+        {
+          "name": "tone",
+          "type": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"neutral\"",
+          "required": false,
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "neutral"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Buttons or links under the message."
+        },
+        {
+          "name": "onDismiss",
+          "type": "() => void",
+          "required": false,
+          "description": "Shows a close button. The parent decides what closing means."
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "live",
+          "type": "\"alert\" | \"status\" | \"off\"",
+          "required": false,
+          "description": "Use \"alert\" only for urgent problems that need attention now. Default \"status\".",
+          "values": [
+            "alert",
+            "status",
+            "off"
+          ]
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<HTMLAttributes<HTMLDivElement>, \"title\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "tone": [
+          "info",
+          "success",
+          "warning",
+          "danger",
+          "neutral"
+        ]
+      },
+      "do": [
+        "Use info for useful context, success after something completed, warning before a limit, danger when something failed.",
+        "Lead with what happened in the title, then what to do in the text.",
+        "Use live=\"alert\" only for urgent failures."
+      ],
+      "dont": [
+        "Do not use an Alert for field errors: put the error on the field.",
+        "Do not stack more than one Alert at the top of a screen."
+      ],
+      "accessibility": [
+        "role=\"status\" by default, role=\"alert\" when urgent.",
+        "Every tone has an icon and text, never color alone.",
+        "The dismiss button is labelled."
+      ],
+      "example": "<Alert tone=\"warning\" title=\"You are close to your daily limit\">₺1.500 left today.</Alert>"
+    },
     {
       "name": "Avatar",
       "kind": "component",
@@ -80,12 +171,14 @@
         },
         {
           "name": "size",
-          "type": "\"sm\" | \"md\" | \"lg\"",
+          "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
           "required": false,
           "values": [
+            "xs",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
           ]
         },
         {
@@ -97,9 +190,11 @@
       ],
       "variants": {
         "size": [
+          "xs",
           "sm",
           "md",
-          "lg"
+          "lg",
+          "xl"
         ]
       },
       "do": [
@@ -140,47 +235,165 @@
           "values": [
             "arrow-left",
             "arrow-right",
+            "arrow-up",
+            "arrow-down",
             "arrow-up-right",
             "arrow-down-left",
             "arrows-left-right",
+            "arrows-up-down",
+            "chevron-left",
+            "chevron-right",
+            "chevron-up",
+            "chevron-down",
+            "refresh",
+            "undo",
+            "download",
+            "upload",
+            "export",
+            "login",
+            "logout",
+            "send",
             "plus",
             "minus",
             "check",
             "close",
-            "chevron-down",
-            "chevron-up",
-            "chevron-left",
-            "chevron-right",
+            "plus-circle",
+            "close-circle",
+            "alert-triangle",
+            "help",
             "search",
+            "filter",
+            "sort",
+            "settings",
+            "tuning",
+            "menu",
+            "more-horizontal",
+            "more-vertical",
+            "home",
+            "widget",
+            "star",
+            "heart",
+            "gift",
+            "percent",
+            "bolt",
+            "sparkles",
+            "trash",
+            "share",
+            "pin",
+            "flag",
+            "copy",
+            "edit",
+            "link",
+            "power",
             "eye",
             "eye-off",
-            "alert-triangle",
-            "bell",
-            "home",
-            "card",
-            "bank",
-            "wallet",
-            "user",
-            "settings",
             "lock",
+            "unlock",
             "shield",
-            "copy",
-            "receipt",
-            "shopping-bag",
-            "coffee",
-            "transport",
-            "bolt",
-            "more-horizontal",
-            "refresh",
-            "phone",
-            "download",
+            "shield-warning",
+            "key",
+            "fingerprint",
+            "face-id",
+            "qr-code",
+            "scan",
+            "password",
+            "bell",
+            "bell-off",
+            "user",
+            "users",
+            "user-plus",
+            "user-check",
+            "user-id",
+            "wallet",
+            "wallet-money",
+            "card",
+            "card-send",
+            "card-receive",
+            "card-transfer",
+            "cardholder",
+            "banknote",
+            "coins",
+            "piggy-bank",
+            "safe",
+            "bill",
+            "bill-check",
+            "cash-out",
+            "money-bag",
+            "tag",
+            "ticket",
+            "dollar",
+            "euro",
+            "hand-money",
+            "handshake",
+            "chart",
+            "pie-chart",
+            "trend-up",
+            "trend-down",
+            "bank",
+            "building",
+            "house",
             "calendar",
-            "percent",
+            "calendar-date",
+            "history",
+            "hourglass",
+            "chat",
+            "mail",
+            "inbox",
+            "paperclip",
+            "phone",
+            "smartphone",
+            "laptop",
+            "document",
+            "documents",
+            "receipt",
+            "clipboard",
+            "shopping-bag",
+            "cart",
+            "shop",
+            "coffee",
+            "restaurant",
+            "transport",
+            "car",
+            "airplane",
+            "fuel",
+            "health",
+            "education",
+            "book",
+            "calculator",
+            "gym",
+            "clothing",
+            "waterdrop",
+            "fire",
+            "lightbulb",
+            "wifi",
             "globe",
+            "map-point",
+            "language",
+            "sun",
+            "moon",
             "info",
             "check-circle",
             "clock",
             "alert-circle"
+          ]
+        },
+        {
+          "name": "appearance",
+          "type": "\"subtle\" | \"solid\"",
+          "required": false,
+          "description": "subtle for lists and tables, solid for counts and strong status.",
+          "values": [
+            "subtle",
+            "solid"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md"
           ]
         },
         {
@@ -202,11 +415,16 @@
           "success",
           "warning",
           "danger"
+        ],
+        "size": [
+          "sm",
+          "md"
         ]
       },
       "do": [
         "Keep it to one or two words.",
-        "Status tones add an icon by default."
+        "Status tones add an icon by default.",
+        "Use appearance=\"solid\" for strong status and counts, subtle for lists."
       ],
       "dont": [
         "Do not use as a button.",
@@ -226,24 +444,27 @@
       "props": [
         {
           "name": "variant",
-          "type": "\"primary\" | \"secondary\" | \"ghost\" | \"danger\"",
+          "type": "\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | \"danger\"",
           "required": false,
-          "description": "primary: the one main action on a screen. danger: irreversible actions only.",
+          "description": "primary: the one main action on a screen. secondary and outline: alternatives. danger: irreversible actions only.",
           "values": [
             "primary",
             "secondary",
+            "outline",
             "ghost",
             "danger"
           ]
         },
         {
           "name": "size",
-          "type": "\"sm\" | \"md\" | \"lg\"",
+          "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
           "required": false,
           "values": [
+            "xs",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
           ]
         },
         {
@@ -285,20 +506,24 @@
         "variant": [
           "primary",
           "secondary",
+          "outline",
           "ghost",
           "danger"
         ],
         "size": [
+          "xs",
           "sm",
           "md",
-          "lg"
+          "lg",
+          "xl"
         ]
       },
       "do": [
-        "Use primary for the one main action, secondary for alternatives, ghost for low emphasis, danger only for irreversible actions.",
+        "Use primary for the one main action, secondary or outline for alternatives, ghost for low emphasis, danger only for irreversible actions.",
+        "Sizes: xs 32, sm 36, md 44 (default), lg 48, xl 56 px. Use xl full width for the last step of a mobile flow.",
         "Write the label as the outcome: \"Send ₺250\", \"Freeze card\".",
         "Use `loading` while the action runs, so the label stays readable and repeat clicks are blocked.",
-        "Use `fullWidth` with `size=\"lg\"` for the final step of a mobile flow."
+        "Every size keeps a 44 px hit area on touch screens."
       ],
       "dont": [
         "Do not use danger for normal payments. Sending money is not an error.",
@@ -592,6 +817,139 @@
       "example": "<Dialog title=\"Freeze your card?\" trigger={<Button variant=\"secondary\">Freeze card</Button>} actions={<Button>Freeze card</Button>} />"
     },
     {
+      "name": "Divider",
+      "kind": "component",
+      "import": "import { Divider } from \"@leeward/react\";",
+      "purpose": "Separates groups of content.",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "required": false,
+          "values": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Optional text in the middle, for example \"or\"."
+        },
+        {
+          "name": "decorative",
+          "type": "boolean",
+          "required": false,
+          "description": "Decorative dividers are hidden from screen readers. Set false when it separates real sections."
+        }
+      ],
+      "variants": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "do": [
+        "Prefer spacing to dividers. Use a divider when two groups would otherwise blur together."
+      ],
+      "dont": [
+        "Do not use a divider as the only signal that sections differ."
+      ],
+      "accessibility": [
+        "Hidden from screen readers by default. Set decorative={false} when it separates real sections."
+      ],
+      "example": "<Divider label=\"or\" />"
+    },
+    {
+      "name": "DropdownMenu",
+      "kind": "component",
+      "import": "import { DropdownMenu } from \"@leeward/react\";",
+      "purpose": "Secondary actions for an item, behind a More button.",
+      "props": [
+        {
+          "name": "trigger",
+          "type": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+          "required": true,
+          "description": "A single focusable trigger, usually an IconButton labelled \"More actions\"."
+        },
+        {
+          "name": "actions",
+          "type": "MenuAction[]",
+          "required": true
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "required": false,
+          "values": [
+            "start",
+            "end"
+          ]
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Order actions by how often they are used. Destructive actions go last and are separated."
+      ],
+      "dont": [
+        "Do not hide the main action in a menu.",
+        "Do not use a menu for navigation."
+      ],
+      "accessibility": [
+        "menu role with menuitems. Arrow keys move, Enter selects, Escape closes. Behavior from Radix."
+      ],
+      "example": "<DropdownMenu trigger={<IconButton icon=\"more-vertical\" label=\"More actions\" />} actions={[{ label: \"Copy IBAN\", icon: \"copy\", onSelect: copy }]} />"
+    },
+    {
+      "name": "EmptyState",
+      "kind": "component",
+      "import": "import { EmptyState } from \"@leeward/react\";",
+      "purpose": "Shown when a list or search has nothing to show yet.",
+      "props": [
+        {
+          "name": "icon",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "Say what is missing in plain words: \"No payments yet\"."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Say what people can do next."
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3 | 4",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Say what is missing, then what people can do.",
+        "Offer one action when there is a clear next step."
+      ],
+      "dont": [
+        "Do not blame people for an empty state."
+      ],
+      "accessibility": [
+        "Real heading at the level you choose. The illustration is decorative."
+      ],
+      "example": "<EmptyState icon=\"wallet-money\" title=\"No payments yet\" description=\"Your payments show up here.\" />"
+    },
+    {
       "name": "Heading",
       "kind": "component",
       "import": "import { Heading } from \"@leeward/react\";",
@@ -605,12 +963,23 @@
         },
         {
           "name": "size",
-          "type": "\"display-lg\" | \"display-md\" | \"xl\" | \"lg\" | \"md\" | \"sm\" | \"xs\"",
+          "type": "\"display-lg\" | \"display-md\" | \"title-xl\" | \"title-lg\" | \"title-md\" | \"title-sm\" | \"title-xs\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" | \"xl\" | \"lg\" | \"md\" | \"sm\" | \"xs\"",
           "required": false,
-          "description": "Visual size. Defaults from the level, can differ when the design needs it.",
+          "description": "Visual size. Defaults to the heading role of the same level. Display and title sizes are fluid.",
           "values": [
             "display-lg",
             "display-md",
+            "title-xl",
+            "title-lg",
+            "title-md",
+            "title-sm",
+            "title-xs",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
             "xl",
             "lg",
             "md",
@@ -620,11 +989,12 @@
         },
         {
           "name": "tone",
-          "type": "\"primary\" | \"secondary\" | \"inverse\"",
+          "type": "\"default\" | \"muted\" | \"primary\" | \"inverse\"",
           "required": false,
           "values": [
+            "default",
+            "muted",
             "primary",
-            "secondary",
             "inverse"
           ]
         },
@@ -644,6 +1014,17 @@
         "size": [
           "display-lg",
           "display-md",
+          "title-xl",
+          "title-lg",
+          "title-md",
+          "title-sm",
+          "title-xs",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
           "xl",
           "lg",
           "md",
@@ -651,8 +1032,9 @@
           "xs"
         ],
         "tone": [
+          "default",
+          "muted",
           "primary",
-          "secondary",
           "inverse"
         ]
       },
@@ -674,7 +1056,7 @@
       "name": "Icon",
       "kind": "component",
       "import": "import { Icon } from \"@leeward/react\";",
-      "purpose": "Inline SVG icons on a 24px grid with a 1.75 stroke. 43 icons.",
+      "purpose": "Solar icons (480 Design, CC BY 4.0) on a 24 px grid: 142 icons in three weights. Use linear by default, bold for selected or active states, duotone for illustrations and empty states.",
       "props": [
         {
           "name": "name",
@@ -684,12 +1066,25 @@
         },
         {
           "name": "size",
-          "type": "\"sm\" | \"md\" | \"lg\"",
+          "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
           "required": false,
           "values": [
+            "xs",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
+          ]
+        },
+        {
+          "name": "weight",
+          "type": "\"bold\" | \"duotone\" | \"linear\"",
+          "required": false,
+          "description": "linear for most UI, bold for selected or active states, duotone for illustrations and empty states.",
+          "values": [
+            "bold",
+            "duotone",
+            "linear"
           ]
         },
         {
@@ -700,16 +1095,18 @@
         },
         {
           "name": "...rest",
-          "type": "Omit<SVGProps<SVGSVGElement>, \"children\">",
+          "type": "Omit<SVGProps<SVGSVGElement>, \"children\" | \"dangerouslySetInnerHTML\">",
           "required": false,
           "description": "Other native props are passed to the root element."
         }
       ],
       "variants": {
         "size": [
+          "xs",
           "sm",
           "md",
-          "lg"
+          "lg",
+          "xl"
         ]
       },
       "do": [
@@ -717,7 +1114,7 @@
         "Give `label` only when the icon carries meaning on its own."
       ],
       "dont": [
-        "Do not draw new SVGs inline in product code. Add them to the set.",
+        "Do not draw new SVGs inline in product code. Add them with `pnpm icons:import` (see scripts/import-solar-icons.ts).",
         "Do not use an icon as the only signal of state."
       ],
       "accessibility": [
@@ -747,21 +1144,24 @@
         },
         {
           "name": "variant",
-          "type": "\"ghost\" | \"secondary\" | \"primary\"",
+          "type": "\"ghost\" | \"secondary\" | \"outline\" | \"primary\"",
           "required": false,
           "values": [
             "ghost",
             "secondary",
+            "outline",
             "primary"
           ]
         },
         {
           "name": "size",
-          "type": "\"sm\" | \"md\"",
+          "type": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
           "required": false,
           "values": [
+            "xs",
             "sm",
-            "md"
+            "md",
+            "lg"
           ]
         },
         {
@@ -775,11 +1175,14 @@
         "variant": [
           "ghost",
           "secondary",
+          "outline",
           "primary"
         ],
         "size": [
+          "xs",
           "sm",
-          "md"
+          "md",
+          "lg"
         ]
       },
       "do": [
@@ -796,6 +1199,64 @@
         "Use `aria-pressed` for toggles such as hide balance."
       ],
       "example": "<IconButton icon=\"close\" label=\"Close\" onClick={onClose} />"
+    },
+    {
+      "name": "Link",
+      "kind": "component",
+      "import": "import { Link } from \"@leeward/react\";",
+      "purpose": "Navigation to another page or site.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "external",
+          "type": "boolean",
+          "required": false,
+          "description": "Opens in a new tab with an icon and screen reader text that say so."
+        },
+        {
+          "name": "variant",
+          "type": "\"inline\" | \"standalone\"",
+          "required": false,
+          "description": "standalone for links on their own line, inline for links inside a sentence (always underlined).",
+          "values": [
+            "inline",
+            "standalone"
+          ]
+        },
+        {
+          "name": "externalLabel",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "...rest",
+          "type": "AnchorHTMLAttributes<HTMLAnchorElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "variant": [
+          "inline",
+          "standalone"
+        ]
+      },
+      "do": [
+        "Use inline links inside sentences: they are always underlined.",
+        "Use external for other sites, so people know a new tab opens."
+      ],
+      "dont": [
+        "Do not use a link for actions such as Send or Delete: use Button.",
+        "Do not write \"click here\". Name the destination."
+      ],
+      "accessibility": [
+        "Native anchor. External links add an icon and screen reader text."
+      ],
+      "example": "<Link href=\"/fees\" variant=\"standalone\">See all fees</Link>"
     },
     {
       "name": "ListItem",
@@ -1024,6 +1485,73 @@
       "example": "<RadioGroup label=\"When should it arrive?\" options={options} defaultValue=\"now\" />"
     },
     {
+      "name": "SegmentedControl",
+      "kind": "component",
+      "import": "import { SegmentedControl } from \"@leeward/react\";",
+      "purpose": "Pick one view or filter from 2 to 5 short options.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Accessible name for the group, for example \"Period\"."
+        },
+        {
+          "name": "options",
+          "type": "SegmentOption[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md"
+          ]
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md"
+        ]
+      },
+      "do": [
+        "Keep labels to one word when you can: Week, Month, Year.",
+        "Use fullWidth on phones."
+      ],
+      "dont": [
+        "Do not use it for navigation between pages: use Tabs.",
+        "Do not use it for form choices that need a submit: use RadioGroup."
+      ],
+      "accessibility": [
+        "radiogroup role named by label. Arrow keys move. One option is always selected.",
+        "The selected option uses a raised surface and shadow, not color alone."
+      ],
+      "example": "<SegmentedControl label=\"Period\" options={[{ value: \"week\", label: \"Week\" }, { value: \"month\", label: \"Month\" }]} />"
+    },
+    {
       "name": "Select",
       "kind": "component",
       "import": "import { Select } from \"@leeward/react\";",
@@ -1088,9 +1616,26 @@
           "name": "id",
           "type": "string",
           "required": false
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "description": "sm 36 px, md 44 px (default), lg 48 px.",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
         }
       ],
-      "variants": {},
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
       "do": [
         "Use for 5 to 15 options. Use RadioGroup for fewer, a searchable list for more.",
         "Write a placeholder that asks: \"Choose an account\"."
@@ -1104,6 +1649,86 @@
         "Options are 44px tall."
       ],
       "example": "<Select label=\"Pay from\" options={[{ value: \"everyday\", label: \"Everyday account\" }]} onValueChange={setAccount} />"
+    },
+    {
+      "name": "Sheet",
+      "kind": "component",
+      "import": "import { Sheet } from \"@leeward/react\";",
+      "purpose": "Panel for a task in context, such as filters or transaction details.",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "trigger",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "side",
+          "type": "\"bottom\" | \"end\"",
+          "required": false,
+          "description": "bottom on phones by default; end slides in from the right on wider screens.",
+          "values": [
+            "bottom",
+            "end"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {
+        "side": [
+          "bottom",
+          "end"
+        ]
+      },
+      "do": [
+        "Use side=\"bottom\" on phones and side=\"end\" for side panels on wide screens.",
+        "Put the main action last in footer."
+      ],
+      "dont": [
+        "Do not open a sheet from inside another sheet."
+      ],
+      "accessibility": [
+        "Modal dialog: traps focus, closes on Escape and returns focus. Named by title."
+      ],
+      "example": "<Sheet title=\"Filter transactions\" trigger={<Button variant=\"outline\">Filter</Button>}>...</Sheet>"
     },
     {
       "name": "Skeleton",
@@ -1158,6 +1783,101 @@
         "Hidden from screen readers. No shimmer with reduced motion."
       ],
       "example": "<div role=\"status\" aria-busy=\"true\" aria-label=\"Loading transactions\"><Skeleton lines={2} /></div>"
+    },
+    {
+      "name": "Spinner",
+      "kind": "component",
+      "import": "import { Spinner } from \"@leeward/react\";",
+      "purpose": "Short wait indicator when the shape of the result is unknown.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "With a label the spinner is announced as a status. Without one it is decorative."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "do": [
+        "Give it a label when it is the only thing on screen."
+      ],
+      "dont": [
+        "Do not use for page content: use Skeleton.",
+        "Do not use inside buttons: use Button loading."
+      ],
+      "accessibility": [
+        "With a label it is a status region. It keeps turning slowly under reduced motion so it never looks frozen."
+      ],
+      "example": "<Spinner label=\"Loading your accounts\" />"
+    },
+    {
+      "name": "Stepper",
+      "kind": "component",
+      "import": "import { Stepper } from \"@leeward/react\";",
+      "purpose": "Shows where people are in a multi-step flow.",
+      "props": [
+        {
+          "name": "steps",
+          "type": "string[]",
+          "required": true,
+          "description": "Short step names, for example [\"Recipient\", \"Amount\", \"Review\", \"Confirm\"]."
+        },
+        {
+          "name": "current",
+          "type": "number",
+          "required": true,
+          "description": "Zero-based index of the current step."
+        },
+        {
+          "name": "variant",
+          "type": "\"full\" | \"compact\"",
+          "required": false,
+          "description": "compact shows \"Step 2 of 4\" and a bar, for phones.",
+          "values": [
+            "full",
+            "compact"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {
+        "variant": [
+          "full",
+          "compact"
+        ]
+      },
+      "do": [
+        "Use short step names.",
+        "Use variant=\"compact\" on phones."
+      ],
+      "dont": [
+        "Do not use for more than 5 steps.",
+        "Do not make steps clickable unless going back is safe."
+      ],
+      "accessibility": [
+        "nav landmark with an ordered list. The current step has aria-current=\"step\", completed steps say so in text."
+      ],
+      "example": "<Stepper steps={[\"Recipient\", \"Amount\", \"Review\", \"Confirm\"]} current={1} />"
     },
     {
       "name": "Switch",
@@ -1283,9 +2003,10 @@
       "props": [
         {
           "name": "as",
-          "type": "\"p\" | \"span\" | \"div\" | \"label\" | \"strong\" | \"em\" | \"small\" | \"dt\" | \"dd\" | \"li\"",
+          "type": "\"code\" | \"p\" | \"span\" | \"div\" | \"label\" | \"strong\" | \"em\" | \"small\" | \"dt\" | \"dd\" | \"li\"",
           "required": false,
           "values": [
+            "code",
             "p",
             "span",
             "div",
@@ -1300,20 +2021,28 @@
         },
         {
           "name": "variant",
-          "type": "\"body-md\" | \"body-sm\" | \"label-md\" | \"label-sm\" | \"caption\"",
+          "type": "\"body-lg\" | \"body-md\" | \"body-sm\" | \"label-lg\" | \"label-md\" | \"label-sm\" | \"label-xs\" | \"subtitle-lg\" | \"subtitle-md\" | \"subtitle-sm\" | \"caption\" | \"code\"",
           "required": false,
           "values": [
+            "body-lg",
             "body-md",
             "body-sm",
+            "label-lg",
             "label-md",
             "label-sm",
-            "caption"
+            "label-xs",
+            "subtitle-lg",
+            "subtitle-md",
+            "subtitle-sm",
+            "caption",
+            "code"
           ]
         },
         {
           "name": "tone",
           "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"brand\" | \"success\" | \"warning\" | \"danger\" | \"inverse\"",
           "required": false,
+          "description": "primary = default text, secondary = muted, tertiary = subtle. All pass AA on every surface.",
           "values": [
             "primary",
             "secondary",
@@ -1335,7 +2064,7 @@
           "name": "truncate",
           "type": "boolean",
           "required": false,
-          "description": "Clamp to a number of lines with an ellipsis."
+          "description": "Cut to one line with an ellipsis."
         },
         {
           "name": "htmlFor",
@@ -1356,11 +2085,18 @@
       ],
       "variants": {
         "variant": [
+          "body-lg",
           "body-md",
           "body-sm",
+          "label-lg",
           "label-md",
           "label-sm",
-          "caption"
+          "label-xs",
+          "subtitle-lg",
+          "subtitle-md",
+          "subtitle-sm",
+          "caption",
+          "code"
         ],
         "tone": [
           "primary",
@@ -1433,15 +2169,33 @@
           "description": "Use tabular figures, for amounts and codes."
         },
         {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "description": "sm 36 px, md 44 px (default, touch friendly), lg 48 px.",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
           "name": "...rest",
           "type": "Omit<InputHTMLAttributes<HTMLInputElement>, \"size\" | \"prefix\">",
           "required": false,
           "description": "Other native props are passed to the root element."
         }
       ],
-      "variants": {},
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
       "do": [
         "Always set a visible `label`.",
+        "Sizes: sm 36, md 44 (default), lg 48 px. On touch screens small fields still get 44 px and 16 px text so iOS does not zoom.",
         "Use `hint` for format help before people type, `error` for what went wrong and how to fix it.",
         "For amounts use `prefix=\"₺\"`, `inputMode=\"decimal\"` and `numeric`."
       ],
@@ -1455,6 +2209,58 @@
         "Errors pair an icon with text and a thicker border, never color alone."
       ],
       "example": "<TextField label=\"IBAN\" hint=\"26 characters, starts with TR\" error={error} />"
+    },
+    {
+      "name": "Textarea",
+      "kind": "component",
+      "import": "import { Textarea } from \"@leeward/react\";",
+      "purpose": "Multi-line text for payment notes and messages.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "optional",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "showCount",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows \"12 of 140\" and announces it politely as people type."
+        },
+        {
+          "name": "...rest",
+          "type": "TextareaHTMLAttributes<HTMLTextAreaElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Show the limit with maxLength and showCount when there is one."
+      ],
+      "dont": [
+        "Do not use it for single-line values such as names or IBANs: use TextField."
+      ],
+      "accessibility": [
+        "Visible label, hint and error linked like TextField.",
+        "The counter is announced politely."
+      ],
+      "example": "<Textarea label=\"Payment note\" maxLength={140} showCount optional />"
     },
     {
       "name": "Toast",
@@ -1651,12 +2457,14 @@
         },
         {
           "name": "size",
-          "type": "\"sm\" | \"md\" | \"lg\"",
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
           "required": false,
+          "description": "xl for the hero balance, lg for account cards, md and sm for lists.",
           "values": [
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
           ]
         },
         {
@@ -1681,7 +2489,8 @@
         "size": [
           "sm",
           "md",
-          "lg"
+          "lg",
+          "xl"
         ]
       },
       "do": [
@@ -1699,6 +2508,94 @@
         "Incoming uses a plus sign, outgoing a typographic minus (U+2212)."
       ],
       "example": "<AmountDisplay value={1250} currency=\"TRY\" locale=\"tr-TR\" direction=\"incoming\" />"
+    },
+    {
+      "name": "AmountInput",
+      "kind": "pattern",
+      "import": "import { AmountInput } from \"@leeward/react\";",
+      "purpose": "Money entry with the decimal keypad, locale formatting and a clear limit error.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "number | null",
+          "required": false,
+          "description": "Amount in major units (lira, not kuruş). null when empty."
+        },
+        {
+          "name": "defaultValue",
+          "type": "number | null",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: number | null) => void",
+          "required": false
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "locale",
+          "type": "\"en-US\" | \"tr-TR\"",
+          "required": false,
+          "values": [
+            "en-US",
+            "tr-TR"
+          ]
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": "Maximum allowed, for example the available balance. Going over shows an error."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Overrides the built-in error."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Pass max as the available balance so the error explains the limit.",
+        "Show the available balance in hint."
+      ],
+      "dont": [
+        "Do not use a plain TextField for money.",
+        "Do not block typing: show the error and let people fix it."
+      ],
+      "accessibility": [
+        "inputMode=\"decimal\" opens the number keypad. The error is linked to the field. Values use tabular figures."
+      ],
+      "example": "<AmountInput label=\"Amount\" currency=\"TRY\" locale=\"tr-TR\" max={24580.35} hint=\"Available: ₺24.580,35\" />"
     },
     {
       "name": "BalanceHeader",
@@ -1865,6 +2762,37 @@
         "Spaces and letters are stripped, so pasting \"482 913\" works."
       ],
       "example": "<OTPInput label=\"Verification code\" hint=\"We sent a code to •••• 4821\" onComplete={verify} />"
+    },
+    {
+      "name": "QuickActions",
+      "kind": "pattern",
+      "import": "import { QuickActions } from \"@leeward/react\";",
+      "purpose": "Row of shortcuts such as Send, Request, Top up and Pay bills.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Accessible name for the group, for example \"Quick actions\"."
+        },
+        {
+          "name": "actions",
+          "type": "QuickAction[]",
+          "required": true
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Keep to four actions on phones.",
+        "Use a badge only for a count that needs attention."
+      ],
+      "dont": [
+        "Do not use icon-only shortcuts: every action has a text label."
+      ],
+      "accessibility": [
+        "A labelled list of buttons or links. Each target is at least 44 px."
+      ],
+      "example": "<QuickActions label=\"Quick actions\" actions={[{ label: \"Send\", icon: \"send\", onClick: send }]} />"
     },
     {
       "name": "TransactionRow",

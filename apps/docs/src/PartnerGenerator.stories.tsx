@@ -3,7 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMemo, useState } from "react";
 import { AccountCard, Badge, BalanceHeader, Button, Card, Heading, List, Switch, Text, TextField, TransactionRow } from "@leeward/react";
 import primitives from "@leeward/tokens/primitives.json";
-import { generatePartnerTheme } from "@leeward/tokens/partner";
+import { generatePartnerTheme, rampsFromPrimitives } from "@leeward/tokens/partner";
+
+const ramps = rampsFromPrimitives(primitives);
 
 const meta = { title: "Themes/Partner generator", parameters: { layout: "fullscreen" } } satisfies Meta;
 export default meta;
@@ -11,7 +13,7 @@ type Story = StoryObj;
 
 function Preview({ theme, mode }: { theme: string; mode: string }) {
   return (
-    <div data-theme={theme} style={{ padding: "var(--lw-space-lg)", display: "grid", gap: "var(--lw-space-md)", borderRadius: "var(--lw-radius-card)" }}>
+    <div data-brand="live" data-theme={theme} style={{ padding: "var(--lw-space-lg)", display: "grid", gap: "var(--lw-space-md)", borderRadius: "var(--lw-radius-card)" }}>
       <BalanceHeader label={`Total balance, ${mode} preview`} balance={144580.35} currency="TRY" locale="tr-TR" actions={<><Button iconStart="arrow-up-right">Send</Button><Button variant="secondary">Request</Button></>} />
       <AccountCard headingLevel={2} name="Everyday" type="Current account" iban="TR33 0006 1005 1978 6457 8413 26" balance={24580.35} currency="TRY" locale="tr-TR" actions={[{ label: "Add money", icon: "plus", onClick: () => {} }]} />
       <Card padding="none">
@@ -30,7 +32,7 @@ function Generator() {
   const [pin, setPin] = useState(false);
   const theme = useMemo(() => {
     try {
-      return generatePartnerTheme({ name: "live", seed, pinAction: pin, basePrimitives: primitives.color });
+      return generatePartnerTheme({ name: "live", seed, pinAction: pin, ramps });
     } catch {
       return null;
     }
@@ -41,7 +43,7 @@ function Generator() {
       {theme && <style>{theme.css}</style>}
       <header style={{ display: "grid", gap: "var(--lw-space-xs)" }}>
         <Heading level={1} size="lg">Partner theme from one color</Heading>
-        <Text tone="secondary">Pick a brand color. The generator builds OKLCH ramps, maps every semantic role for light and dark, and checks {theme?.results.length ?? 0} required pairs against WCAG 2.2 AA.</Text>
+        <Text tone="secondary">Pick a brand color. The generator builds OKLCH ramps, maps every semantic role for light and dark, and runs the same contrast resolver as the core brands, and checks {theme?.results.length ?? 0} required pairs against WCAG 2.2 AA.</Text>
       </header>
       <div style={{ display: "flex", gap: "var(--lw-space-md)", alignItems: "flex-end", flexWrap: "wrap" }}>
         <label style={{ display: "grid", gap: "var(--lw-space-2xs)", fontSize: "var(--lw-type-label-sm-size)", fontWeight: "var(--lw-type-label-sm-weight)" }}>
@@ -59,8 +61,8 @@ function Generator() {
           </div>
           <ol aria-label="Generated ramp" style={{ display: "grid", gridTemplateColumns: "repeat(11, 1fr)", gap: "var(--lw-space-3xs)", padding: 0, margin: 0, listStyle: "none" }}>
             {Object.entries(theme.ramp).map(([step, hex]) => (
-              <li key={step} style={{ display: "grid", gap: "var(--lw-space-3xs)", fontSize: "var(--lw-type-caption-size)", color: "var(--lw-color-text-secondary)" }}>
-                <span style={{ height: "var(--lw-size-control-lg)", background: hex, borderRadius: "var(--lw-radius-sm)", outline: step === String(theme.seedStep) ? "var(--lw-size-border-strong) solid var(--lw-color-border-strong)" : undefined }} />
+              <li key={step} style={{ display: "grid", gap: "var(--lw-space-3xs)", fontSize: "var(--lw-type-caption-size)", color: "var(--lw-text-muted)" }}>
+                <span style={{ height: "var(--lw-size-control-lg)", background: hex, borderRadius: "var(--lw-radius-sm)", outline: step === String(theme.seedStep) ? "var(--lw-size-border-strong) solid var(--lw-border-strong)" : undefined }} />
                 {step}
               </li>
             ))}
@@ -76,8 +78,8 @@ function Generator() {
             </Card>
           )}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "var(--lw-space-md)" }}>
-            <Preview theme="live" mode="light" />
-            <Preview theme="live-dark" mode="dark" />
+            <Preview theme="light" mode="light" />
+            <Preview theme="dark" mode="dark" />
           </div>
         </>
       ) : (

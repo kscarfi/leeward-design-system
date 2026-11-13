@@ -1,0 +1,67 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--lw-layer-overlay);
+  background: var(--lw-fill-overlay-scrim);
+  animation: fade var(--lw-motion-duration-base) var(--lw-motion-easing-enter);
+}
+
+.sheet {
+  position: fixed;
+  z-index: var(--lw-layer-overlay);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lw-space-md);
+  padding: var(--lw-space-lg);
+  background: var(--lw-fill-surface-overlay);
+  color: var(--lw-text-default);
+  box-shadow: var(--lw-elevation-800);
+  overflow-y: auto;
+}
+
+.sheet:focus-visible { outline: none; }
+
+.bottom {
+  inset-inline: 0;
+  bottom: 0;
+  max-height: 90dvh;
+  padding-bottom: calc(var(--lw-space-lg) + env(safe-area-inset-bottom));
+  border-start-start-radius: var(--lw-radius-dialog);
+  border-start-end-radius: var(--lw-radius-dialog);
+  animation: up var(--lw-motion-duration-slow) var(--lw-motion-easing-enter);
+}
+
+.end {
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: min(100%, var(--lw-size-sheet));
+  animation: in var(--lw-motion-duration-slow) var(--lw-motion-easing-enter);
+}
+
+/* Wide screens: a bottom sheet stays a readable width, centered. */
+@media (min-width: 768px) {
+  .bottom { max-width: var(--lw-size-sheet); margin-inline: auto; }
+}
+
+.handle {
+  align-self: center;
+  width: var(--lw-space-2xl);
+  height: var(--lw-space-2xs);
+  margin-top: calc(var(--lw-space-xs) * -1);
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-border-default);
+}
+
+.header { display: flex; align-items: center; justify-content: space-between; gap: var(--lw-space-sm); }
+.title { composes: headingH3 from "../../styles/type.module.css"; }
+.description { composes: bodyMd from "../../styles/type.module.css"; color: var(--lw-text-muted); }
+.body { display: flex; flex-direction: column; gap: var(--lw-space-md); }
+.footer { display: flex; flex-direction: column-reverse; gap: var(--lw-space-sm); }
+
+@media (min-width: 640px) {
+  .footer { flex-direction: row; justify-content: flex-end; }
+}
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes up { from { transform: translateY(100%); } }
+@keyframes in { from { transform: translateX(100%); } }

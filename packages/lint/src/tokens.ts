@@ -8,7 +8,7 @@ const light = require("@leeward/tokens/tokens.json") as Record<string, { cssVar:
 export const allowedVars = new Set(Object.values(light).map((t) => t.cssVar));
 
 /** Primitive ramp names, used to give a better message when someone reaches for one. */
-export const primitivePattern = /^--lw-(color-(white|ink|iris|coral|teal|danger|warning|deep)(-\d+)?|space-\d+(_\d+)?|radius-(\d+|full)|size-\d+|font-|duration-|easing-)/;
+export const primitivePattern = /^--lw-(color-|space-\d|sizer-|radii-|border-width-|font-size-|font-weight-|duration-|easing-)/;
 
 /** Suggest the closest allowed variable by shared prefix. */
 export function suggest(name: string): string | undefined {

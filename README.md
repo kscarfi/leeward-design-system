@@ -32,10 +32,12 @@ Leeward is a fictional digital-only bank. It is not a real company. In sailing, 
 
 | Area | What you get | Where |
 |---|---|---|
-| Tokens | Seed colors turned into OKLCH ramps where each step has a fixed contrast against white. 202 semantic tokens. Output as CSS variables, typed TS and Figma variables (DTCG). | [packages/tokens](packages/tokens) |
-| Themes | Light and dark, plus partner themes generated from one color. | [ADR 0003](docs/decisions/0003-color-and-type.md), [ADR 0004](docs/decisions/0004-partner-themes.md) |
-| Components | 20 core components (Text and Heading count as one, as in the brief): Button, IconButton, Text, Heading, Icon (43 icons), TextField, Select, Checkbox, RadioGroup, Switch, Badge, Chip, Avatar, Card, ListItem, Tabs, Dialog, Toast, Tooltip, Skeleton, ProgressBar. | [packages/react](packages/react/src/components) |
-| Banking patterns | AmountDisplay, BalanceHeader, TransactionRow, AccountCard, OTPInput. | [packages/react](packages/react/src/patterns) |
+| Tokens | Imported from Leeward's token source: 26 ramps with 14 steps, spacing, sizer, radii, border widths, type scale and 8 elevation levels. 711 semantic tokens per brand and mode (`fill`, `text`, `icon`, `border` for 8 roles). Output as CSS variables, typed TS and Figma variables (DTCG). | [packages/tokens](packages/tokens), [ADR 0005](docs/decisions/0005-token-system-v2.md) |
+| Brands and modes | Leeward and Leeward Business, each in light and dark, plus partner brands generated from one color. A contrast resolver guarantees WCAG 2.2 AA for every brand and mode. | [ADR 0004](docs/decisions/0004-partner-themes.md), [ADR 0005](docs/decisions/0005-token-system-v2.md) |
+| Typography | Plus Jakarta Sans (display and text) and IBM Plex Mono (codes), both OFL. 34 type roles; display, title and hero amounts are fluid from phone to desktop. | [ADR 0005](docs/decisions/0005-token-system-v2.md) |
+| Icons | 142 Solar icons in linear, bold and duotone (CC BY 4.0, by 480 Design). | [LICENSE-THIRD-PARTY.md](LICENSE-THIRD-PARTY.md) |
+| Components | 32 components: Button, IconButton, Text, Heading, Icon, TextField, Textarea, Select, Checkbox, RadioGroup, Switch, SegmentedControl, Badge, Chip, Avatar, Card, ListItem, Divider, Link, Tabs, Accordion, Stepper, Dialog, Sheet, DropdownMenu, Toast, Tooltip, Alert, EmptyState, Skeleton, Spinner, ProgressBar. | [packages/react](packages/react/src/components) |
+| Banking patterns | AmountDisplay, AmountInput, BalanceHeader, QuickActions, TransactionRow, AccountCard, OTPInput. | [packages/react](packages/react/src/patterns) |
 | Governance | Contrast gate, ESLint and Stylelint rules, story tests with axe in three themes, visual regression, unit tests. | [packages/lint](packages/lint), [CI](.github/workflows/ci.yml) |
 | Agent layer | [DESIGN.md](DESIGN.md), [llms.txt](llms.txt), [components.manifest.json](components.manifest.json) and an MCP server with five tools. | [packages/mcp-server](packages/mcp-server) |
 | Demo | Same prompt, two results: an agent builds a transfer screen without and with the system. | [apps/demo](apps/demo) |
@@ -46,11 +48,11 @@ Every number here is printed by a script or test runner in this repo.
 
 | Check | Result |
 |---|---|
-| Contrast gate (`pnpm contrast`) | 208 required pairs across light and dark, 0 failures against WCAG 2.2 AA. APCA reported in [docs/contrast-report.md](docs/contrast-report.md). |
-| Partner themes | 200 random seed colors, every one passes all required pairs (property test). |
-| Story tests with axe (`pnpm test:stories`) | 133 stories, each run in light, dark and the Harbor partner theme. 0 axe violations. |
-| Unit tests (`pnpm test`) | 72 tests: React 50, MCP server 10, lint rules 6, tokens 6. |
-| Visual regression | Every story screenshotted in light and dark with Playwright. |
+| Contrast gate (`pnpm contrast`) | 1,336 required pairs across 2 brands in light and dark, 0 failures against WCAG 2.2 AA. Every resolver change is listed in [docs/contrast-report.md](docs/contrast-report.md). |
+| Partner brands | 120 random seed colors, every one passes all required pairs in light and dark (property test). |
+| Story tests with axe (`pnpm test:stories`) | 176 stories, each run in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,056 runs, 0 axe violations. |
+| Unit tests (`pnpm test`) | 87 tests: React 65, MCP server 10, lint rules 6, tokens 6. |
+| Visual regression | Every story screenshotted in Leeward light, Leeward dark and Business light with Playwright. |
 | Lint (`pnpm lint`) | No raw colors, only known semantic tokens, spacing and type on scale, no icon-only money actions, no red amounts. |
 | Copy (`pnpm check:copy`) | No em dashes in any tracked text file. |
 | Freshness | CI fails if token outputs or agent docs are out of date with their sources. |
@@ -92,7 +94,7 @@ import { AmountDisplay, Button } from "@leeward/react";
 </div>
 ```
 
-Themes: `data-theme="light"`, `"dark"` or `"auto"`. Generate a partner theme:
+Brands: `data-brand="leeward"` (default) or `"business"`. Modes: `data-theme="light"`, `"dark"` or `"auto"`. Code written against v1 variable names can import `@leeward/tokens/css/compat-v1.css` while migrating. Generate a partner brand:
 
 ```bash
 pnpm theme:generate --name harbor --seed "#0E7490"
@@ -101,6 +103,8 @@ pnpm theme:generate --name harbor --seed "#0E7490"
 ## The demo: same prompt, two results
 
 The prompt is fixed in [apps/demo/PROMPT.md](apps/demo/PROMPT.md). Run A has no design system. Run B has the MCP server. Outputs are saved unedited and measured by [apps/demo/scripts/compare.ts](apps/demo/scripts/compare.ts): raw colors, contrast failures, axe violations, invented components and lines of code.
+
+Recorded on v1 of the system, before token system v2. Run B renders with the v1 compatibility layer, and its output is unchanged.
 
 Both runs used Claude Code 2.1.309 with `claude-opus-5-5`, headless, one attempt each, in a fresh empty folder with user settings and other MCP servers off. Run B called the Leeward MCP tools 27 times (`get_component` 18, `search_components` 5, `validate_ui` 2, `get_tokens` 1, `get_guidelines` 1). Full transcripts are in [apps/demo/runs](apps/demo/runs).
 
@@ -170,7 +174,9 @@ Time spent and AI mistakes, with how each was caught: [docs/build-log.md](docs/b
 
 ## Toolchain
 
-Claude Code, Figma, ColorsMine, Coverage Report, DesignOps.Tools.
+Claude Code, Figma, ColorsMine, Coverage Report, DesignOps.Tools. The token source is in [packages/tokens/source](packages/tokens/source).
+
+Icons: [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736) by 480 Design, CC BY 4.0, via [saoudi-h/solar-icons](https://github.com/saoudi-h/solar-icons). Fonts: Plus Jakarta Sans and IBM Plex Mono, OFL. See [LICENSE-THIRD-PARTY.md](LICENSE-THIRD-PARTY.md).
 
 ## Credits
 

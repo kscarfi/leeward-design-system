@@ -7,7 +7,7 @@
 .frame {
   width: 100%;
   height: calc(100vh - var(--lw-space-3xl) * 3);
-  border: var(--lw-size-border-default) solid var(--lw-color-border-subtle);
+  border: var(--lw-size-border-default) solid var(--lw-border-subtle);
   border-radius: var(--lw-radius-card);
-  background: var(--lw-color-surface-default);
+  background: var(--lw-fill-surface-default);
 }

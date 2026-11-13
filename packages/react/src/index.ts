@@ -4,7 +4,7 @@ export { IconButton, type IconButtonProps } from "./components/IconButton/IconBu
 export { Text, type TextProps, type TextVariant, type TextTone } from "./components/Text/Text.tsx";
 export { Heading, type HeadingProps, type HeadingSize } from "./components/Heading/Heading.tsx";
 export { Icon, type IconProps } from "./components/Icon/Icon.tsx";
-export { icons, iconNames, type IconName } from "./components/Icon/icons.ts";
+export { iconData, iconNames, iconWeights, type IconName, type IconWeight } from "./components/Icon/icons.ts";
 export { TextField, type TextFieldProps } from "./components/TextField/TextField.tsx";
 export { Select, type SelectProps, type SelectOption } from "./components/Select/Select.tsx";
 export { Checkbox, type CheckboxProps } from "./components/Checkbox/Checkbox.tsx";
@@ -22,10 +22,24 @@ export { Tooltip, TooltipProvider, type TooltipProps } from "./components/Toolti
 export { Skeleton, type SkeletonProps } from "./components/Skeleton/Skeleton.tsx";
 export { ProgressBar, type ProgressBarProps } from "./components/ProgressBar/ProgressBar.tsx";
 
+export { Alert, type AlertProps, type AlertTone } from "./components/Alert/Alert.tsx";
+export { Accordion, type AccordionProps, type AccordionItem } from "./components/Accordion/Accordion.tsx";
+export { SegmentedControl, type SegmentedControlProps, type SegmentOption } from "./components/SegmentedControl/SegmentedControl.tsx";
+export { Textarea, type TextareaProps } from "./components/Textarea/Textarea.tsx";
+export { Divider, type DividerProps } from "./components/Divider/Divider.tsx";
+export { Link, type LinkProps } from "./components/Link/Link.tsx";
+export { Spinner, type SpinnerProps } from "./components/Spinner/Spinner.tsx";
+export { EmptyState, type EmptyStateProps } from "./components/EmptyState/EmptyState.tsx";
+export { Sheet, SheetClose, type SheetProps } from "./components/Sheet/Sheet.tsx";
+export { DropdownMenu, type DropdownMenuProps, type MenuAction } from "./components/DropdownMenu/DropdownMenu.tsx";
+export { Stepper, type StepperProps } from "./components/Stepper/Stepper.tsx";
+
 export { AmountDisplay, type AmountDisplayProps, type AmountDirection } from "./patterns/AmountDisplay/AmountDisplay.tsx";
 export { BalanceHeader, type BalanceHeaderProps } from "./patterns/BalanceHeader/BalanceHeader.tsx";
 export { TransactionRow, transactionSentence, type TransactionRowProps, type TransactionStatus } from "./patterns/TransactionRow/TransactionRow.tsx";
 export { AccountCard, type AccountCardProps, type AccountAction } from "./patterns/AccountCard/AccountCard.tsx";
 export { OTPInput, type OTPInputProps } from "./patterns/OTPInput/OTPInput.tsx";
+export { AmountInput, parseAmount, type AmountInputProps } from "./patterns/AmountInput/AmountInput.tsx";
+export { QuickActions, type QuickActionsProps, type QuickAction } from "./patterns/QuickActions/QuickActions.tsx";
 
 export { formatAmount, formatDate, formatIban, maskIban, spokenAmount, MINUS, type Locale } from "./utils/format.ts";

@@ -7,17 +7,17 @@
 
 .label {
   composes: labelSm from "../../styles/type.module.css";
-  color: var(--lw-color-text-primary);
+  color: var(--lw-text-default);
 }
 
 .optional {
-  color: var(--lw-color-text-secondary);
+  color: var(--lw-text-muted);
   font-weight: var(--lw-type-body-sm-weight);
 }
 
 .hint {
   composes: bodySm from "../../styles/type.module.css";
-  color: var(--lw-color-text-secondary);
+  color: var(--lw-text-muted);
 }
 
 .error {
@@ -25,7 +25,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--lw-space-2xs);
-  color: var(--lw-color-text-danger);
+  color: var(--lw-text-danger);
 }
 
 .errorIcon {

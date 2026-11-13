@@ -9,21 +9,21 @@
   width: var(--lw-size-avatar-md);
   height: var(--lw-size-avatar-md);
   border-radius: var(--lw-radius-lg);
-  background: var(--lw-color-surface-brand);
-  color: var(--lw-color-icon-brand);
+  background: var(--lw-fill-primary-weak);
+  color: var(--lw-icon-primary);
 }
 
 .titles { display: flex; flex-direction: column; min-width: 0; }
-.name { composes: headingXs from "../../styles/type.module.css"; color: var(--lw-color-text-primary); }
-.type { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
+.name { composes: headingXs from "../../styles/type.module.css"; color: var(--lw-text-default); }
+.type { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-text-muted); }
 
 .iban {
   composes: bodySm from "../../styles/type.module.css";
-  color: var(--lw-color-text-secondary);
-  font-variant-numeric: tabular-nums slashed-zero;
+  color: var(--lw-text-muted);
+  font-variant-numeric: tabular-nums;
   letter-spacing: var(--lw-type-caption-tracking);
 }
 
-.footer { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-color-text-secondary); }
+.footer { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-text-muted); }
 .actions { display: flex; flex-wrap: wrap; gap: var(--lw-space-xs); }
 .srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

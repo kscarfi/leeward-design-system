@@ -1,2 +1,2 @@
-/* Inter variable with the optical size axis (opsz 14 to 32). Self-host it in production if you prefer. */
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap");
+/* Plus Jakarta Sans (OFL, display and text) and IBM Plex Mono (OFL, codes). Self-host in production if you prefer. */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap");

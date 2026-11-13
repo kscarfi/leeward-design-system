@@ -4,51 +4,63 @@
   gap: var(--lw-space-xs);
   min-height: var(--lw-size-control-md);
   padding-inline: var(--lw-space-sm);
-  background: var(--lw-color-control-bg);
-  border: var(--lw-size-border-default) solid var(--lw-color-border-default);
+  background: var(--lw-fill-surface-default);
+  border: var(--lw-size-border-default) solid var(--lw-border-default);
   border-radius: var(--lw-radius-control);
   transition: border-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
 }
 
+.sm { min-height: var(--lw-size-control-sm); }
+.sm .input { min-height: var(--lw-size-control-sm); font-size: var(--lw-type-body-sm-size); }
+.lg { min-height: var(--lw-size-control-lg); padding-inline: var(--lw-space-md); }
+.lg .input { min-height: var(--lw-size-control-lg); font-size: var(--lw-type-body-lg-size); }
+
+/* On touch screens every field is at least 44 px tall, whatever its size. */
+@media (pointer: coarse) {
+  .sm, .sm .input { min-height: var(--lw-size-touch-target); }
+  .sm .input { font-size: var(--lw-type-body-md-size); }
+}
+
 .control:hover:not(.disabled) {
-  border-color: var(--lw-color-border-strong);
+  border-color: var(--lw-border-strong);
 }
 
 .control:focus-within {
-  outline: var(--lw-size-focus-ring-width) solid var(--lw-color-border-focus);
+  outline: var(--lw-size-focus-ring-width) solid var(--lw-border-focus);
   outline-offset: var(--lw-size-focus-ring-offset);
 }
 
 .invalid,
 .invalid:hover:not(.disabled) {
-  border-color: var(--lw-color-border-danger);
+  border-color: var(--lw-border-danger);
   border-width: var(--lw-size-border-strong);
 }
 
 .disabled {
-  background: var(--lw-color-action-disabled-bg);
-  border-color: var(--lw-color-border-subtle);
+  background: var(--lw-fill-disabled-default);
+  border-color: var(--lw-border-subtle);
 }
 
 .input {
   composes: bodyMd from "../../styles/type.module.css";
   flex: 1;
   min-width: 0;
-  min-height: var(--lw-size-touch-target);
+  min-height: var(--lw-size-control-md);
   padding: 0;
+  /* 16 px minimum stops iOS from zooming into the field on focus. */
   border: 0;
   background: transparent;
-  color: var(--lw-color-text-primary);
+  color: var(--lw-text-default);
   outline: none;
 }
 
 .input::placeholder {
-  color: var(--lw-color-text-tertiary);
+  color: var(--lw-text-subtle);
   opacity: 1;
 }
 
 .input:disabled {
-  color: var(--lw-color-text-disabled);
+  color: var(--lw-text-subtler);
   cursor: not-allowed;
 }
 
@@ -58,6 +70,6 @@
 
 .affix {
   composes: bodyMd from "../../styles/type.module.css";
-  color: var(--lw-color-text-secondary);
+  color: var(--lw-text-muted);
   font-variant-numeric: tabular-nums;
 }

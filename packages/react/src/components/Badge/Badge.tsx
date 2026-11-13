@@ -10,6 +10,9 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   tone?: BadgeTone;
   /** Status badges show an icon by default so state never depends on color. Pass null to hide it. */
   icon?: IconName | null;
+  /** subtle for lists and tables, solid for counts and strong status. */
+  appearance?: "subtle" | "solid";
+  size?: "sm" | "md";
   children: ReactNode;
 }
 
@@ -21,11 +24,11 @@ const defaultIcon: Record<BadgeTone, IconName | null> = {
   danger: "alert-circle",
 };
 
-export function Badge({ tone = "neutral", icon, className, children, ...rest }: BadgeProps) {
+export function Badge({ tone = "neutral", icon, appearance = "subtle", size = "md", className, children, ...rest }: BadgeProps) {
   const iconName = icon === undefined ? defaultIcon[tone] : icon;
   return (
-    <span className={cx(styles.badge, styles[tone], className)} {...rest}>
-      {iconName && <Icon name={iconName} size="sm" />}
+    <span className={cx(styles.badge, styles[tone], styles[appearance], styles[size], className)} {...rest}>
+      {iconName && <Icon name={iconName} size={size === "sm" ? "xs" : "sm"} weight="bold" />}
       {children}
     </span>
   );

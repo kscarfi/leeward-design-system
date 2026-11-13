@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--lw-layer-overlay);
-  background: var(--lw-color-scrim);
+  background: var(--lw-fill-overlay-scrim);
   animation: fade-in var(--lw-motion-duration-base) var(--lw-motion-easing-enter);
 }
 
@@ -14,15 +14,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--lw-space-md);
-  max-width: var(--lw-size-dialog);
+  max-width: var(--lw-size-dialog-md);
   max-height: calc(100dvh - var(--lw-space-2xl));
   margin-inline: auto;
   padding: var(--lw-space-lg);
   overflow-y: auto;
-  background: var(--lw-color-surface-overlay);
-  color: var(--lw-color-text-primary);
-  border-radius: var(--lw-radius-card);
-  box-shadow: var(--lw-shadow-3);
+  background: var(--lw-fill-surface-overlay);
+  color: var(--lw-text-default);
+  border-radius: var(--lw-radius-dialog);
+  box-shadow: var(--lw-elevation-700);
   transform: translateY(-50%);
   animation: rise-in var(--lw-motion-duration-slow) var(--lw-motion-easing-enter);
 }
@@ -43,7 +43,7 @@
 
 .description {
   composes: bodyMd from "../../styles/type.module.css";
-  color: var(--lw-color-text-secondary);
+  color: var(--lw-text-muted);
 }
 
 .body { display: flex; flex-direction: column; gap: var(--lw-space-md); }
@@ -56,5 +56,30 @@
   padding-top: var(--lw-space-xs);
 }
 
+/* Phones: the dialog becomes a bottom sheet, within thumb reach, with full width actions. */
+@media (max-width: 639px) {
+  .content {
+    inset-inline: 0;
+    top: auto;
+    bottom: 0;
+    max-width: none;
+    max-height: 90dvh;
+    padding-bottom: calc(var(--lw-space-lg) + env(safe-area-inset-bottom));
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    transform: none;
+    animation-name: sheet-in;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+  }
+
+  .footer > * {
+    width: 100%;
+  }
+}
+
+@keyframes sheet-in { from { transform: translateY(100%); } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(calc(-50% + var(--lw-space-xs))); } }

@@ -1,0 +1,43 @@
+.list { display: flex; gap: var(--lw-space-xs); margin: 0; padding: 0; list-style: none; overflow-x: auto; }
+
+.step { display: flex; flex: 1; align-items: center; gap: var(--lw-space-xs); min-width: 0; }
+.step + .step::before {
+  content: "";
+  flex: 0 0 var(--lw-space-md);
+  height: var(--lw-size-border-strong);
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-border-muted);
+}
+.done + .step::before { background: var(--lw-fill-primary-default); }
+
+.marker {
+  composes: labelXs from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--lw-size-icon-lg);
+  height: var(--lw-size-icon-lg);
+  border-radius: var(--lw-radius-pill);
+  border: var(--lw-size-border-strong) solid var(--lw-border-default);
+  color: var(--lw-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.name { composes: labelSm from "../../styles/type.module.css"; color: var(--lw-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.current .marker { border-color: var(--lw-fill-primary-default); background: var(--lw-fill-primary-default); color: var(--lw-fill-primary-on-default); }
+.current .name { color: var(--lw-text-default); }
+.done .marker { border-color: var(--lw-fill-primary-default); background: var(--lw-fill-primary-weak); color: var(--lw-icon-primary-on-subtle); }
+
+/* Phones: only markers, the current step keeps its name. */
+@media (max-width: 479px) {
+  .step:not(.current) .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+
+.compact { display: flex; flex-direction: column; gap: var(--lw-space-xs); }
+.compactText { composes: labelSm from "../../styles/type.module.css"; display: flex; justify-content: space-between; gap: var(--lw-space-sm); color: var(--lw-text-muted); }
+.compactName { color: var(--lw-text-default); }
+.bar { height: var(--lw-space-2xs); border-radius: var(--lw-radius-pill); background: var(--lw-fill-surface-bolder); overflow: hidden; }
+.barFill { display: block; height: 100%; background: var(--lw-fill-primary-default); border-radius: var(--lw-radius-pill); transition: inline-size var(--lw-motion-duration-slow) var(--lw-motion-easing-standard); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

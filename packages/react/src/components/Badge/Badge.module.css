@@ -1,17 +1,25 @@
 .badge {
-  composes: labelSm from "../../styles/type.module.css";
+  composes: badge from "../../styles/type.module.css";
   display: inline-flex;
   align-items: center;
   gap: var(--lw-space-2xs);
-  padding-block: var(--lw-space-3xs);
+  min-height: var(--lw-size-icon-lg);
   padding-inline: var(--lw-space-xs);
   border: var(--lw-size-border-default) solid transparent;
-  border-radius: var(--lw-radius-pill);
+  border-radius: var(--lw-radius-badge);
   white-space: nowrap;
 }
 
-.neutral { background: var(--lw-color-surface-sunken); color: var(--lw-color-text-secondary); border-color: var(--lw-color-border-subtle); }
-.info { background: var(--lw-color-feedback-info-bg); color: var(--lw-color-feedback-info-text); border-color: var(--lw-color-feedback-info-border); }
-.success { background: var(--lw-color-feedback-success-bg); color: var(--lw-color-feedback-success-text); border-color: var(--lw-color-feedback-success-border); }
-.warning { background: var(--lw-color-feedback-warning-bg); color: var(--lw-color-feedback-warning-text); border-color: var(--lw-color-feedback-warning-border); }
-.danger { background: var(--lw-color-feedback-danger-bg); color: var(--lw-color-feedback-danger-text); border-color: var(--lw-color-feedback-danger-border); }
+.sm { min-height: var(--lw-size-icon-md); padding-inline: var(--lw-space-xs-tight); gap: var(--lw-space-3xs); }
+
+.subtle.neutral { background: var(--lw-fill-neutral-weak); color: var(--lw-text-neutral-on-subtle); border-color: var(--lw-border-neutral-subtler); }
+.subtle.info { background: var(--lw-fill-info-weak); color: var(--lw-text-info-on-subtle); border-color: var(--lw-border-info-subtler); }
+.subtle.success { background: var(--lw-fill-success-weak); color: var(--lw-text-success-on-subtle); border-color: var(--lw-border-success-subtler); }
+.subtle.warning { background: var(--lw-fill-warning-weak); color: var(--lw-text-warning-on-subtle); border-color: var(--lw-border-warning-subtler); }
+.subtle.danger { background: var(--lw-fill-danger-weak); color: var(--lw-text-danger-on-subtle); border-color: var(--lw-border-danger-subtler); }
+
+.solid.neutral { background: var(--lw-fill-neutral-default); color: var(--lw-fill-neutral-on-default); }
+.solid.info { background: var(--lw-fill-info-default); color: var(--lw-fill-info-on-default); }
+.solid.success { background: var(--lw-fill-success-default); color: var(--lw-fill-success-on-default); }
+.solid.warning { background: var(--lw-fill-warning-default); color: var(--lw-fill-warning-on-default); }
+.solid.danger { background: var(--lw-fill-danger-default); color: var(--lw-fill-danger-on-default); }

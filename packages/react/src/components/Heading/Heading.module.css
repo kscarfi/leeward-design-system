@@ -1,21 +1,18 @@
-.displayLg { composes: displayLg from "../../styles/type.module.css"; }
-.displayMd { composes: displayMd from "../../styles/type.module.css"; }
-.headingXl { composes: headingXl from "../../styles/type.module.css"; }
-.headingLg { composes: headingLg from "../../styles/type.module.css"; }
-.headingMd { composes: headingMd from "../../styles/type.module.css"; }
-.headingSm { composes: headingSm from "../../styles/type.module.css"; }
-.headingXs { composes: headingXs from "../../styles/type.module.css"; }
+.displayLg { composes: displayLg from "../../styles/type.module.css"; text-wrap: balance; }
+.displayMd { composes: displayMd from "../../styles/type.module.css"; text-wrap: balance; }
+.titleXl { composes: titleXl from "../../styles/type.module.css"; text-wrap: balance; }
+.titleLg { composes: titleLg from "../../styles/type.module.css"; text-wrap: balance; }
+.titleMd { composes: titleMd from "../../styles/type.module.css"; text-wrap: balance; }
+.titleSm { composes: titleSm from "../../styles/type.module.css"; text-wrap: balance; }
+.titleXs { composes: titleXs from "../../styles/type.module.css"; text-wrap: balance; }
+.headingH1 { composes: headingH1 from "../../styles/type.module.css"; text-wrap: balance; }
+.headingH2 { composes: headingH2 from "../../styles/type.module.css"; text-wrap: balance; }
+.headingH3 { composes: headingH3 from "../../styles/type.module.css"; text-wrap: balance; }
+.headingH4 { composes: headingH4 from "../../styles/type.module.css"; text-wrap: balance; }
+.headingH5 { composes: headingH5 from "../../styles/type.module.css"; text-wrap: balance; }
+.headingH6 { composes: headingH6 from "../../styles/type.module.css"; text-wrap: balance; }
 
-.tone-primary { color: var(--lw-color-text-primary); }
-.tone-secondary { color: var(--lw-color-text-secondary); }
-.tone-inverse { color: var(--lw-color-text-inverse); }
-
-.displayLg,
-.displayMd,
-.headingXl,
-.headingLg,
-.headingMd,
-.headingSm,
-.headingXs {
-  text-wrap: balance;
-}
+.tone-default { color: var(--lw-text-default); }
+.tone-muted { color: var(--lw-text-muted); }
+.tone-primary { color: var(--lw-text-primary); }
+.tone-inverse { color: var(--lw-text-inverse); }

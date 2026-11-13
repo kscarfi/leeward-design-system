@@ -6,27 +6,22 @@ import type { Decorator, Preview } from "@storybook/react-vite";
 import { ToastProvider, TooltipProvider } from "@leeward/react";
 
 const withTheme: Decorator = (Story, context) => {
-  const theme = context.globals.theme ?? "light";
-  // Paint the whole page in the chosen theme so screenshots have no stray canvas.
-  if (typeof document !== "undefined") document.documentElement.dataset.theme = theme === "both" ? "light" : theme;
+  const brand = context.globals.brand ?? "leeward";
+  const mode = context.globals.mode ?? "light";
   const layout = context.parameters.layout;
-  const frame = (name: string) => (
-    <div data-theme={name} className={layout === "fullscreen" ? "lw-frame lw-frame-full" : "lw-frame"}>
+  // Paint the whole page in the chosen brand and mode so screenshots have no stray canvas.
+  if (typeof document !== "undefined") {
+    document.documentElement.dataset.brand = brand;
+    document.documentElement.dataset.theme = mode === "both" ? "light" : mode;
+  }
+  const frame = (m: string) => (
+    <div data-brand={brand} data-theme={m} className={layout === "fullscreen" ? "lw-frame lw-frame-full" : "lw-frame"}>
       <Story />
     </div>
   );
-  const content =
-    theme === "both" ? (
-      <div className="lw-split">
-        {frame("light")}
-        {frame("dark")}
-      </div>
-    ) : (
-      frame(theme)
-    );
   return (
     <TooltipProvider>
-      <ToastProvider>{content}</ToastProvider>
+      <ToastProvider>{mode === "both" ? <div className="lw-split">{frame("light")}{frame("dark")}</div> : frame(mode)}</ToastProvider>
     </TooltipProvider>
   );
 };
@@ -34,31 +29,49 @@ const withTheme: Decorator = (Story, context) => {
 const preview: Preview = {
   decorators: [withTheme],
   globalTypes: {
-    theme: {
-      description: "Theme",
+    brand: {
+      description: "Brand",
       toolbar: {
-        title: "Theme",
+        title: "Brand",
+        icon: "paintbrush",
+        items: [
+          { value: "leeward", title: "Leeward" },
+          { value: "business", title: "Leeward Business" },
+          { value: "harbor", title: "Harbor (generated partner)" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    mode: {
+      description: "Mode",
+      toolbar: {
+        title: "Mode",
         icon: "mirror",
         items: [
           { value: "light", title: "Light" },
           { value: "dark", title: "Dark" },
           { value: "both", title: "Side by side" },
-          { value: "harbor", title: "Partner: Harbor" },
-          { value: "harbor-dark", title: "Partner: Harbor dark" },
         ],
         dynamicTitle: true,
       },
     },
   },
-  // CI runs every story test twice: VITE_LW_THEME=light and VITE_LW_THEME=dark.
-  initialGlobals: { theme: import.meta.env.VITE_LW_THEME ?? "light" },
+  // CI runs every story test per brand and mode: VITE_LW_BRAND and VITE_LW_MODE.
+  initialGlobals: { brand: import.meta.env.VITE_LW_BRAND ?? "leeward", mode: import.meta.env.VITE_LW_MODE ?? "light" },
   parameters: {
     layout: "padded",
     // Any axe violation fails the story test in the UI and in CI.
     a11y: { test: "error" },
     controls: { expanded: true, sort: "requiredFirst" },
+    viewport: {
+      options: {
+        mobile: { name: "Mobile 375", styles: { width: "375px", height: "812px" } },
+        tablet: { name: "Tablet 768", styles: { width: "768px", height: "1024px" } },
+        desktop: { name: "Desktop 1280", styles: { width: "1280px", height: "800px" } },
+      },
+    },
     options: {
-      storySort: { order: ["Introduction", "Foundations", "Components", "Patterns", "Screens"] },
+      storySort: { order: ["Introduction", "Foundations", "Components", "Patterns", "Screens", "Themes"] },
     },
   },
   tags: ["autodocs"],

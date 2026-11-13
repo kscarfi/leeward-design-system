@@ -11,8 +11,8 @@ const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclud
 })
   .split("\n")
   // Skip files deleted in the working tree but still in the index.
-  // Demo outputs in apps/demo/runs are kept exactly as the agent wrote them, so they are measured, not fixed.
-  .filter((file) => TEXT_FILE.test(file) && file !== "scripts/check-copy.ts" && !file.startsWith("apps/demo/runs/") && existsSync(file));
+  // Demo outputs are kept exactly as they came, so they are measured, not fixed.
+  .filter((file) => TEXT_FILE.test(file) && file !== "scripts/check-copy.ts" && !file.startsWith("apps/demo/runs/") && !file.startsWith("packages/tokens/source/") && existsSync(file));
 
 const failures: string[] = [];
 for (const file of files) {

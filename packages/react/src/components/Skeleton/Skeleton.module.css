@@ -3,9 +3,9 @@
   width: 100%;
   background: linear-gradient(
     90deg,
-    var(--lw-color-skeleton-base) 0%,
-    var(--lw-color-skeleton-highlight) 50%,
-    var(--lw-color-skeleton-base) 100%
+    var(--lw-fill-skeleton-base) 0%,
+    var(--lw-fill-skeleton-highlight) 50%,
+    var(--lw-fill-skeleton-base) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.6s var(--lw-motion-easing-standard) infinite;
@@ -35,5 +35,5 @@
 
 /* No shimmer for reduced motion: a still placeholder is enough. */
 @media (prefers-reduced-motion: reduce) {
-  .skeleton { animation: none !important; background: var(--lw-color-skeleton-base); }
+  .skeleton { animation: none !important; background: var(--lw-fill-skeleton-base); }
 }

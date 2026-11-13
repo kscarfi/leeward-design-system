@@ -44,7 +44,7 @@ export function BalanceHeader({ label, balance, currency, locale = "en-US", hidd
           onClick={toggle}
         />
       </div>
-      <AmountDisplay value={balance} currency={currency} locale={locale} size="lg" masked={isHidden} />
+      <AmountDisplay value={balance} currency={currency} locale={locale} size="xl" masked={isHidden} />
       {meta && <p className={styles.meta}>{meta}</p>}
       {actions && <div className={styles.actions}>{actions}</div>}
     </section>

@@ -1,17 +1,24 @@
+.bodyLg { composes: bodyLg from "../../styles/type.module.css"; }
 .bodyMd { composes: bodyMd from "../../styles/type.module.css"; }
 .bodySm { composes: bodySm from "../../styles/type.module.css"; }
+.labelLg { composes: labelLg from "../../styles/type.module.css"; }
 .labelMd { composes: labelMd from "../../styles/type.module.css"; }
 .labelSm { composes: labelSm from "../../styles/type.module.css"; }
+.labelXs { composes: labelXs from "../../styles/type.module.css"; }
+.subtitleLg { composes: subtitleLg from "../../styles/type.module.css"; }
+.subtitleMd { composes: subtitleMd from "../../styles/type.module.css"; }
+.subtitleSm { composes: subtitleSm from "../../styles/type.module.css"; }
 .caption { composes: caption from "../../styles/type.module.css"; }
+.code { composes: code from "../../styles/type.module.css"; }
 
-.tone-primary { color: var(--lw-color-text-primary); }
-.tone-secondary { color: var(--lw-color-text-secondary); }
-.tone-tertiary { color: var(--lw-color-text-tertiary); }
-.tone-brand { color: var(--lw-color-text-brand); }
-.tone-success { color: var(--lw-color-text-success); }
-.tone-warning { color: var(--lw-color-text-warning); }
-.tone-danger { color: var(--lw-color-text-danger); }
-.tone-inverse { color: var(--lw-color-text-inverse); }
+.tone-primary { color: var(--lw-text-default); }
+.tone-secondary { color: var(--lw-text-muted); }
+.tone-tertiary { color: var(--lw-text-subtle); }
+.tone-brand { color: var(--lw-text-primary); }
+.tone-success { color: var(--lw-text-success); }
+.tone-warning { color: var(--lw-text-warning); }
+.tone-danger { color: var(--lw-text-danger); }
+.tone-inverse { color: var(--lw-text-inverse); }
 
 .tabular { font-variant-numeric: tabular-nums; }
 

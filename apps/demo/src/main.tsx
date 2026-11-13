@@ -23,6 +23,8 @@ async function host(id: string): Promise<(children: ReactNode) => ReactNode> {
   // Run B gets the app setup that DESIGN.md asks for: fonts, base styles, a theme and the providers.
   await import("@leeward/react/fonts.css");
   await import("@leeward/react/styles.css");
+  // Run B was recorded against v1 token names, so it renders with the v1 compatibility layer.
+  await import("@leeward/tokens/css/compat-v1.css");
   const { ToastProvider, TooltipProvider } = await import("@leeward/react");
   return (children) => (
     <div data-theme="light">

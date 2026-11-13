@@ -10,7 +10,7 @@ export interface AvatarProps {
   src?: string;
   /** Show an icon instead of initials, for example for categories. */
   icon?: IconName;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Set when a visible name sits next to the avatar, so screen readers do not hear it twice. */
   decorative?: boolean;
   className?: string;
@@ -29,7 +29,7 @@ export function Avatar({ name, src, icon, size = "md", decorative = false, class
     <RadixAvatar.Root className={cx(styles.avatar, styles[size], className)} {...a11y}>
       {src && <RadixAvatar.Image src={src} alt="" className={styles.image} />}
       <RadixAvatar.Fallback className={styles.fallback} delayMs={src ? 300 : 0}>
-        {icon ? <Icon name={icon} size={size === "lg" ? "lg" : "md"} /> : initials(name)}
+        {icon ? <Icon name={icon} size={size === "xl" ? "xl" : size === "lg" ? "lg" : size === "xs" ? "sm" : "md"} /> : initials(name)}
       </RadixAvatar.Fallback>
     </RadixAvatar.Root>
   );
