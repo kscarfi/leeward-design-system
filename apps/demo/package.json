@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "vite",
     "compare": "node scripts/compare.ts",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "run-demo": "node scripts/run.ts"
   },
   "dependencies": {
     "@leeward/react": "workspace:*",

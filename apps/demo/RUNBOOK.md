@@ -2,21 +2,24 @@
 
 The point of this demo is honesty. Outputs are saved exactly as the agent wrote them. Nobody edits them to make the comparison look better.
 
-## Run A: without the design system
+## Run both with one command
 
-1. Start a fresh agent session in an empty folder outside this repo, so the agent cannot read Leeward files.
-2. No MCP servers connected. No DESIGN.md.
-3. Paste the prompt from `PROMPT.md` (without the Run B line).
-4. Copy the produced `TransferScreen.tsx` unchanged into `runs/a-without-system/`.
-5. Record in `runs/a-without-system/RUN.md`: agent and model, date, time taken, number of turns, any follow-up messages (target: none).
+The agent is Claude Code (decided by Kemal). The runner gives both runs identical conditions:
 
-## Run B: with the design system
+- a fresh empty folder outside this repo, so the agent cannot read Leeward files
+- the same model and the same prompt text from `PROMPT.md`
+- user settings, plugins and other MCP servers switched off
+- one attempt, no follow-up messages
 
-1. Start a fresh agent session in this repo's `apps/demo` folder.
-2. Connect the MCP server: `claude mcp add leeward -- node "<repo>/packages/mcp-server/src/index.ts"`.
-3. Paste the prompt from `PROMPT.md` including the Run B line.
-4. Copy the produced `TransferScreen.tsx` unchanged into `runs/b-with-system/`.
-5. Record the same facts in `runs/b-with-system/RUN.md`.
+The only difference: Run B gets the Leeward MCP server and a copy of `DESIGN.md` in its folder, and the extra prompt line.
+
+```bash
+pnpm --filter @leeward/demo run-demo
+```
+
+If `claude` is not on your PATH, point to it with `CLAUDE_BIN`. Claude Code must be logged in (`claude`, then `/login`) because headless mode cannot log in by itself.
+
+Each run writes to `runs/<id>/`: `TransferScreen.tsx` unchanged, `transcript.jsonl` with every tool call, and `RUN.md` with model, time, turns and cost.
 
 ## Compare
 
@@ -32,6 +35,5 @@ pnpm --filter @leeward/demo dev
 
 ## Rules
 
-- Same agent, same model, same prompt text for both runs.
 - One attempt per run. If a run fails to compile, that is the result: record it.
 - If a dependency is missing for Run A (for example a CSS framework), install it in `apps/demo` and record that in `RUN.md`. Do not change the code.
