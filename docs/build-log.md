@@ -31,7 +31,7 @@ The evidence for this project. Updated at the end of every task.
 | 2026-11-13 | A Style Dictionary transitive transform ran twice, making every spacing and size token 16 times too small. All tests and the contrast gate still passed. | Looking at the visual regression screenshots | Fixed the transform and added a token output test that compares compiled sizes to the source |
 | 2026-11-13 | Committed twice while a check in the same command had failed, because the command used `;` instead of `&&` | Reading the command output after the commit | Fixed in the next commit each time (copy check, em dash escape) |
 | 2026-11-13 | The validator's money rule flagged "Send ₺250", a button label the guidelines recommend | Its own unit test on clean code | The rule now flags only text that is nothing but an amount |
-| 2026-11-13 | First drafted the MCP server for SDK v1 | Checking the official docs before writing code: v2 is the current stable line | Built on `@modelcontextprotocol/server` 2.4.0 |
+| 2026-11-13 | Started researching the MCP SDK from the v1 docs, the version I knew | The v1 README says v2 is now the current stable line | Built on `@modelcontextprotocol/server` 2.4.0 |
 
 ## Day summaries
 
