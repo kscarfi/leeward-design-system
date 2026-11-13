@@ -21,7 +21,8 @@
     "test:stories": "pnpm --filter @leeward/docs test-storybook",
     "storybook": "pnpm --filter @leeward/docs storybook",
     "build:agent": "node scripts/build-agent-docs.ts",
-    "theme:generate": "node scripts/generate-theme.ts"
+    "theme:generate": "node scripts/generate-theme.ts",
+    "icons:import": "node scripts/import-solar-icons.ts"
   },
   "devDependencies": {
     "@leeward/lint": "workspace:*",
