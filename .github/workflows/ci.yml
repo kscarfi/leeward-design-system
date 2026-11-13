@@ -52,7 +52,7 @@ jobs:
           path: docs/contrast-report.md
 
   stories:
-    name: Story tests and axe (light and dark)
+    name: Story tests and axe (light, dark, partner)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
