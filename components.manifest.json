@@ -1,0 +1,1967 @@
+{
+  "$schema": "./docs/manifest.schema.json",
+  "name": "Leeward Design System",
+  "version": "0.0.0",
+  "package": "@leeward/react",
+  "setup": [
+    "import \"@leeward/react/fonts.css\";",
+    "import \"@leeward/react/styles.css\";",
+    "Set data-theme=\"light\" | \"dark\" | \"auto\" on a root element.",
+    "Wrap the app in <TooltipProvider> and <ToastProvider>."
+  ],
+  "icons": [
+    "arrow-left",
+    "arrow-right",
+    "arrow-up-right",
+    "arrow-down-left",
+    "arrows-left-right",
+    "plus",
+    "minus",
+    "check",
+    "close",
+    "chevron-down",
+    "chevron-up",
+    "chevron-left",
+    "chevron-right",
+    "search",
+    "eye",
+    "eye-off",
+    "info",
+    "alert-circle",
+    "alert-triangle",
+    "check-circle",
+    "clock",
+    "bell",
+    "home",
+    "card",
+    "bank",
+    "wallet",
+    "user",
+    "settings",
+    "lock",
+    "shield",
+    "copy",
+    "receipt",
+    "shopping-bag",
+    "coffee",
+    "transport",
+    "bolt",
+    "more-horizontal",
+    "refresh",
+    "phone",
+    "download",
+    "calendar",
+    "percent",
+    "globe"
+  ],
+  "components": [
+    {
+      "name": "Avatar",
+      "kind": "component",
+      "import": "import { Avatar } from \"@leeward/react\";",
+      "purpose": "Initials, image or category icon for a person or merchant.",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Person or merchant name. Used for initials and as the accessible name."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "icon",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "decorative",
+          "type": "boolean",
+          "required": false,
+          "description": "Set when a visible name sits next to the avatar, so screen readers do not hear it twice."
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "do": [
+        "Set `decorative` when the name is visible next to it."
+      ],
+      "dont": [
+        "Do not use an avatar as the only way to identify a person."
+      ],
+      "accessibility": [
+        "`role=\"img\"` named by `name`, or hidden when decorative.",
+        "Falls back to initials if the image fails."
+      ],
+      "example": "<Avatar name=\"Deniz Yılmaz\" decorative />"
+    },
+    {
+      "name": "Badge",
+      "kind": "component",
+      "import": "import { Badge } from \"@leeward/react\";",
+      "purpose": "Short status label such as Pending, Paid or Declined.",
+      "props": [
+        {
+          "name": "tone",
+          "type": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+          "required": false,
+          "values": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        {
+          "name": "icon",
+          "type": "IconName | null",
+          "required": false,
+          "description": "Status badges show an icon by default so state never depends on color. Pass null to hide it.",
+          "values": [
+            "arrow-left",
+            "arrow-right",
+            "arrow-up-right",
+            "arrow-down-left",
+            "arrows-left-right",
+            "plus",
+            "minus",
+            "check",
+            "close",
+            "chevron-down",
+            "chevron-up",
+            "chevron-left",
+            "chevron-right",
+            "search",
+            "eye",
+            "eye-off",
+            "alert-triangle",
+            "bell",
+            "home",
+            "card",
+            "bank",
+            "wallet",
+            "user",
+            "settings",
+            "lock",
+            "shield",
+            "copy",
+            "receipt",
+            "shopping-bag",
+            "coffee",
+            "transport",
+            "bolt",
+            "more-horizontal",
+            "refresh",
+            "phone",
+            "download",
+            "calendar",
+            "percent",
+            "globe",
+            "info",
+            "check-circle",
+            "clock",
+            "alert-circle"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "HTMLAttributes<HTMLSpanElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "tone": [
+          "neutral",
+          "info",
+          "success",
+          "warning",
+          "danger"
+        ]
+      },
+      "do": [
+        "Keep it to one or two words.",
+        "Status tones add an icon by default."
+      ],
+      "dont": [
+        "Do not use as a button.",
+        "Do not remove the icon on status tones without another non-color signal."
+      ],
+      "accessibility": [
+        "Text is part of the content, so screen readers read it.",
+        "Every tone passes AA against its background."
+      ],
+      "example": "<Badge tone=\"warning\">Pending</Badge>"
+    },
+    {
+      "name": "Button",
+      "kind": "component",
+      "import": "import { Button } from \"@leeward/react\";",
+      "purpose": "Triggers an action. One primary button per screen or section.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"primary\" | \"secondary\" | \"ghost\" | \"danger\"",
+          "required": false,
+          "description": "primary: the one main action on a screen. danger: irreversible actions only.",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "danger"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a spinner, keeps the label for screen readers and blocks repeat clicks."
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "iconStart",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "iconEnd",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "ButtonHTMLAttributes<HTMLButtonElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "variant": [
+          "primary",
+          "secondary",
+          "ghost",
+          "danger"
+        ],
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "do": [
+        "Use primary for the one main action, secondary for alternatives, ghost for low emphasis, danger only for irreversible actions.",
+        "Write the label as the outcome: \"Send ₺250\", \"Freeze card\".",
+        "Use `loading` while the action runs, so the label stays readable and repeat clicks are blocked.",
+        "Use `fullWidth` with `size=\"lg\"` for the final step of a mobile flow."
+      ],
+      "dont": [
+        "Do not use danger for normal payments. Sending money is not an error.",
+        "Do not put two primary buttons next to each other.",
+        "Do not use a Button for navigation to another page: use a link.",
+        "Do not disable a submit button to hide errors. Let people submit and show the error."
+      ],
+      "accessibility": [
+        "Native `<button>` with `type=\"button\"` by default.",
+        "Loading uses `aria-busy` and `aria-disabled`, keeps focus and keeps the accessible name.",
+        "Small size keeps a 44px hit area with an invisible extension.",
+        "Focus ring is 2px with a 2px offset, 3:1 against every surface."
+      ],
+      "example": "<Button variant=\"primary\" iconStart=\"arrow-up-right\" onClick={send}>Send money</Button>"
+    },
+    {
+      "name": "Card",
+      "kind": "component",
+      "import": "import { Card } from \"@leeward/react\";",
+      "purpose": "Surface that groups related content.",
+      "props": [
+        {
+          "name": "as",
+          "type": "\"div\" | \"section\" | \"article\" | \"li\"",
+          "required": false,
+          "values": [
+            "div",
+            "section",
+            "article",
+            "li"
+          ]
+        },
+        {
+          "name": "variant",
+          "type": "\"outlined\" | \"elevated\" | \"filled\"",
+          "required": false,
+          "values": [
+            "outlined",
+            "elevated",
+            "filled"
+          ]
+        },
+        {
+          "name": "padding",
+          "type": "\"none\" | \"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "HTMLAttributes<HTMLElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "variant": [
+          "outlined",
+          "elevated",
+          "filled"
+        ],
+        "padding": [
+          "none",
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "do": [
+        "Use `elevated` for primary objects like accounts, `outlined` for lists, `filled` for quiet grouping.",
+        "Pick `as` for meaning: `section` with a heading, `article` for self-contained items."
+      ],
+      "dont": [
+        "Do not nest elevated cards.",
+        "Do not make a whole card clickable if it contains other buttons."
+      ],
+      "accessibility": [
+        "No interactive behavior of its own."
+      ],
+      "example": "<Card variant=\"elevated\" padding=\"lg\">...</Card>"
+    },
+    {
+      "name": "Checkbox",
+      "kind": "component",
+      "import": "import { Checkbox } from \"@leeward/react\";",
+      "purpose": "A yes or no choice inside a form, or one of many independent choices.",
+      "props": [
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "checked",
+          "type": "boolean | \"indeterminate\"",
+          "required": false
+        },
+        {
+          "name": "defaultChecked",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean | \"indeterminate\") => void",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Write the label as a statement people agree with: \"Save this person as a recipient\"."
+      ],
+      "dont": [
+        "Do not use for settings that apply immediately. Use Switch.",
+        "Do not pre-check consent boxes."
+      ],
+      "accessibility": [
+        "Built on Radix Checkbox with a native-like label.",
+        "20px box with a 44px hit area. Supports indeterminate."
+      ],
+      "example": "<Checkbox label=\"Save this person as a recipient\" onCheckedChange={setSave} />"
+    },
+    {
+      "name": "Chip",
+      "kind": "component",
+      "import": "import { Chip } from \"@leeward/react\";",
+      "purpose": "Filter toggle, for example in a transaction list.",
+      "props": [
+        {
+          "name": "selected",
+          "type": "boolean",
+          "required": false,
+          "description": "Filter chips toggle. The state is exposed with aria-pressed and shown with a check mark."
+        },
+        {
+          "name": "onSelectedChange",
+          "type": "(selected: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "icon",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"onChange\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Group chips in an element with `role=\"group\"` and an `aria-label`."
+      ],
+      "dont": [
+        "Do not use chips as navigation tabs. Use Tabs.",
+        "Do not use for actions that move money."
+      ],
+      "accessibility": [
+        "Toggle button with `aria-pressed`. Selected chips show a check mark, not only color."
+      ],
+      "example": "<Chip selected={selected} onSelectedChange={setSelected}>Money in</Chip>"
+    },
+    {
+      "name": "Dialog",
+      "kind": "component",
+      "import": "import { Dialog } from \"@leeward/react\";",
+      "purpose": "Modal for a decision that needs full attention, such as confirming a transfer or freezing a card.",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "Required. Read when the dialog opens."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "trigger",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Element that opens the dialog, usually a Button."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Buttons for the footer. Put the main action last."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "description": "Label for the close button. Defaults to \"Close\"."
+        },
+        {
+          "name": "hideClose",
+          "type": "boolean",
+          "required": false,
+          "description": "Hide the close button for flows that must end with an explicit choice."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Write `title` as a question: \"Freeze your card?\".",
+        "Put the main action last in `actions`. Use danger only if it cannot be undone."
+      ],
+      "dont": [
+        "Do not open a dialog on page load.",
+        "Do not use for information that could sit on the page."
+      ],
+      "accessibility": [
+        "Traps focus, closes on Escape, returns focus to the trigger.",
+        "Named by `title` and described by `description`."
+      ],
+      "example": "<Dialog title=\"Freeze your card?\" trigger={<Button variant=\"secondary\">Freeze card</Button>} actions={<Button>Freeze card</Button>} />"
+    },
+    {
+      "name": "Heading",
+      "kind": "component",
+      "import": "import { Heading } from \"@leeward/react\";",
+      "purpose": "Section and page headings with a required outline level.",
+      "props": [
+        {
+          "name": "level",
+          "type": "1 | 2 | 3 | 4 | 5 | 6",
+          "required": true,
+          "description": "Document outline level. Required so the page structure is always intentional."
+        },
+        {
+          "name": "size",
+          "type": "\"display-lg\" | \"display-md\" | \"xl\" | \"lg\" | \"md\" | \"sm\" | \"xs\"",
+          "required": false,
+          "description": "Visual size. Defaults from the level, can differ when the design needs it.",
+          "values": [
+            "display-lg",
+            "display-md",
+            "xl",
+            "lg",
+            "md",
+            "sm",
+            "xs"
+          ]
+        },
+        {
+          "name": "tone",
+          "type": "\"primary\" | \"secondary\" | \"inverse\"",
+          "required": false,
+          "values": [
+            "primary",
+            "secondary",
+            "inverse"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "HTMLAttributes<HTMLHeadingElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "size": [
+          "display-lg",
+          "display-md",
+          "xl",
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ],
+        "tone": [
+          "primary",
+          "secondary",
+          "inverse"
+        ]
+      },
+      "do": [
+        "Set `level` for the document outline and `size` for the look. They can differ.",
+        "One `level={1}` per screen."
+      ],
+      "dont": [
+        "Do not skip levels, for example h1 to h3.",
+        "Do not use Heading only to make text big. Use Text or AmountDisplay."
+      ],
+      "accessibility": [
+        "`level` is required so the outline is intentional.",
+        "Large headings use `text-wrap: balance`."
+      ],
+      "example": "<Heading level={2} size=\"sm\">Recent activity</Heading>"
+    },
+    {
+      "name": "Icon",
+      "kind": "component",
+      "import": "import { Icon } from \"@leeward/react\";",
+      "purpose": "Inline SVG icons on a 24px grid with a 1.75 stroke. 43 icons.",
+      "props": [
+        {
+          "name": "name",
+          "type": "IconName",
+          "required": true,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Give a label only when the icon carries meaning on its own. Without one the icon is hidden from assistive tech."
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<SVGProps<SVGSVGElement>, \"children\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "do": [
+        "Pair icons with text for anything important.",
+        "Give `label` only when the icon carries meaning on its own."
+      ],
+      "dont": [
+        "Do not draw new SVGs inline in product code. Add them to the set.",
+        "Do not use an icon as the only signal of state."
+      ],
+      "accessibility": [
+        "Decorative by default (`aria-hidden`).",
+        "With `label` it becomes `role=\"img\"` with that name.",
+        "Uses `currentColor`, so it follows the text tone."
+      ],
+      "example": "<Icon name=\"lock\" label=\"Secured\" />"
+    },
+    {
+      "name": "IconButton",
+      "kind": "component",
+      "import": "import { IconButton } from \"@leeward/react\";",
+      "purpose": "Icon-only button for secondary actions such as close, settings or show balance.",
+      "props": [
+        {
+          "name": "icon",
+          "type": "IconName",
+          "required": true,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Required. Becomes the accessible name. Describe the outcome: \"Close\", \"Show balance\"."
+        },
+        {
+          "name": "variant",
+          "type": "\"ghost\" | \"secondary\" | \"primary\"",
+          "required": false,
+          "values": [
+            "ghost",
+            "secondary",
+            "primary"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md"
+          ]
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"children\" | \"aria-label\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "variant": [
+          "ghost",
+          "secondary",
+          "primary"
+        ],
+        "size": [
+          "sm",
+          "md"
+        ]
+      },
+      "do": [
+        "Give `label` the outcome: \"Close\", \"Show balance\".",
+        "Wrap in Tooltip when the icon is not obvious."
+      ],
+      "dont": [
+        "Do not use for moving money. Send, pay and transfer always need a text Button.",
+        "Do not use an icon without a label."
+      ],
+      "accessibility": [
+        "`label` is required and becomes `aria-label`.",
+        "44 by 44px target at md size, extended hit area at sm.",
+        "Use `aria-pressed` for toggles such as hide balance."
+      ],
+      "example": "<IconButton icon=\"close\" label=\"Close\" onClick={onClose} />"
+    },
+    {
+      "name": "ListItem",
+      "kind": "component",
+      "import": "import { ListItem } from \"@leeward/react\";",
+      "purpose": "Row in a list with title, description, leading and trailing slots. Use inside List.",
+      "props": [
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "leading",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Avatar or icon on the start side."
+        },
+        {
+          "name": "trailing",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Value, badge or control on the end side."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Makes the whole row a link."
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "required": false,
+          "description": "Makes the whole row a button."
+        },
+        {
+          "name": "chevron",
+          "type": "boolean",
+          "required": false,
+          "description": "Show a chevron when the row opens another screen."
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "description": "Overrides the accessible name of the interactive row."
+        },
+        {
+          "name": "linkProps",
+          "type": "AnchorHTMLAttributes<HTMLAnchorElement>",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Use `href` for navigation and `onClick` for actions. The whole row becomes the target.",
+        "Add `chevron` when the row opens another screen."
+      ],
+      "dont": [
+        "Do not put a button inside an interactive row.",
+        "Do not use for transactions. Use TransactionRow."
+      ],
+      "accessibility": [
+        "Renders `li` inside `ul`. Rows are at least 44px tall.",
+        "Interactive rows use a native link or button."
+      ],
+      "example": "<List><ListItem title=\"Security\" description=\"Passcode, Face ID\" href=\"/security\" chevron /></List>"
+    },
+    {
+      "name": "ProgressBar",
+      "kind": "component",
+      "import": "import { ProgressBar } from \"@leeward/react\";",
+      "purpose": "Progress toward a goal or limit.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Visible label, for example \"Monthly spending limit\"."
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "valueText",
+          "type": "string",
+          "required": false,
+          "description": "Text shown on the end side, for example \"₺7.500 of ₺10.000\". Defaults to a percentage."
+        },
+        {
+          "name": "tone",
+          "type": "\"brand\" | \"success\" | \"warning\" | \"danger\"",
+          "required": false,
+          "description": "Pair warning and danger with words in valueText, for example \"90% used\". Color is never the only signal.",
+          "values": [
+            "brand",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      ],
+      "variants": {
+        "tone": [
+          "brand",
+          "success",
+          "warning",
+          "danger"
+        ]
+      },
+      "do": [
+        "Always set `valueText` in words for money: \"₺4.500 of ₺10.000\".",
+        "Use warning and danger with words: \"92% used, ₺800 left\"."
+      ],
+      "dont": [
+        "Do not use for loading. Use Skeleton or a loading Button."
+      ],
+      "accessibility": [
+        "`progressbar` role named by the label, with `aria-valuetext`."
+      ],
+      "example": "<ProgressBar label=\"Holiday fund\" value={4500} max={10000} valueText=\"₺4.500 of ₺10.000\" />"
+    },
+    {
+      "name": "RadioGroup",
+      "kind": "component",
+      "import": "import { RadioGroup } from \"@leeward/react\";",
+      "purpose": "Pick exactly one option from 2 to 5 visible choices.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Group label, read as the question."
+        },
+        {
+          "name": "options",
+          "type": "RadioOption[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": false,
+          "values": [
+            "vertical",
+            "horizontal"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {
+        "orientation": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      "do": [
+        "Write `label` as the question: \"When should it arrive?\".",
+        "Add `description` to explain the consequence of each option."
+      ],
+      "dont": [
+        "Do not use for more than about 5 options.",
+        "Do not leave a group with no default unless the choice must be explicit."
+      ],
+      "accessibility": [
+        "`radiogroup` role named by the label. Arrow keys move between options.",
+        "Descriptions are linked with `aria-describedby`."
+      ],
+      "example": "<RadioGroup label=\"When should it arrive?\" options={options} defaultValue=\"now\" />"
+    },
+    {
+      "name": "Select",
+      "kind": "component",
+      "import": "import { Select } from \"@leeward/react\";",
+      "purpose": "Pick one option from a short list. Built on Radix Select.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "SelectOption[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Use for 5 to 15 options. Use RadioGroup for fewer, a searchable list for more.",
+        "Write a placeholder that asks: \"Choose an account\"."
+      ],
+      "dont": [
+        "Do not use Select for actions.",
+        "Do not hide important differences between options. Use RadioGroup with descriptions."
+      ],
+      "accessibility": [
+        "Trigger is a labelled combobox. Full keyboard support from Radix.",
+        "Options are 44px tall."
+      ],
+      "example": "<Select label=\"Pay from\" options={[{ value: \"everyday\", label: \"Everyday account\" }]} onValueChange={setAccount} />"
+    },
+    {
+      "name": "Skeleton",
+      "kind": "component",
+      "import": "import { Skeleton } from \"@leeward/react\";",
+      "purpose": "Placeholder while content loads.",
+      "props": [
+        {
+          "name": "shape",
+          "type": "\"text\" | \"rect\" | \"circle\"",
+          "required": false,
+          "values": [
+            "text",
+            "rect",
+            "circle"
+          ]
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "required": false,
+          "description": "Any CSS length. Defaults to 100% for text and rect."
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "required": false,
+          "description": "Any CSS length. Text skeletons follow the line height."
+        },
+        {
+          "name": "lines",
+          "type": "number",
+          "required": false,
+          "description": "Number of text lines. The last one is shorter."
+        }
+      ],
+      "variants": {
+        "shape": [
+          "text",
+          "rect",
+          "circle"
+        ]
+      },
+      "do": [
+        "Match the shape of the content that will appear.",
+        "Mark the loading region with `role=\"status\"` and `aria-busy`."
+      ],
+      "dont": [
+        "Do not show skeletons for more than a few seconds without a message."
+      ],
+      "accessibility": [
+        "Hidden from screen readers. No shimmer with reduced motion."
+      ],
+      "example": "<div role=\"status\" aria-busy=\"true\" aria-label=\"Loading transactions\"><Skeleton lines={2} /></div>"
+    },
+    {
+      "name": "Switch",
+      "kind": "component",
+      "import": "import { Switch } from \"@leeward/react\";",
+      "purpose": "A setting that applies immediately, such as online card payments.",
+      "props": [
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": true,
+          "description": "Describe the setting, not the state: \"Card payments online\", not \"On\"."
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "defaultChecked",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Label the setting, not the state: \"Online card payments\"."
+      ],
+      "dont": [
+        "Do not use inside a form that has a submit button. Use Checkbox.",
+        "Do not write \"On\" or \"Off\" as the label."
+      ],
+      "accessibility": [
+        "`switch` role from Radix. Track meets 3:1 against every surface.",
+        "44px wide target."
+      ],
+      "example": "<Switch label=\"Online card payments\" checked={on} onCheckedChange={setOn} />"
+    },
+    {
+      "name": "Tabs",
+      "kind": "component",
+      "import": "import { Tabs } from \"@leeward/react\";",
+      "purpose": "Switch between views of the same object, such as Activity and Statements.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Accessible name for the tab list, for example \"Account views\"."
+        },
+        {
+          "name": "items",
+          "type": "TabItem[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false,
+          "description": "Stretch tabs to fill the width, for mobile segmented views."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Give `label` a name for the tab list.",
+        "Keep labels to one or two words."
+      ],
+      "dont": [
+        "Do not use tabs for steps in a flow.",
+        "Do not hide required form fields in other tabs."
+      ],
+      "accessibility": [
+        "Radix Tabs: arrow keys move between tabs, Tab moves into the panel.",
+        "Active tab uses weight and an underline, not only color."
+      ],
+      "example": "<Tabs label=\"Account views\" items={[{ value: \"activity\", label: \"Activity\", content: <Activity /> }]} />"
+    },
+    {
+      "name": "Text",
+      "kind": "component",
+      "import": "import { Text } from \"@leeward/react\";",
+      "purpose": "Body, label and caption text with token-based type roles and tones.",
+      "props": [
+        {
+          "name": "as",
+          "type": "\"p\" | \"span\" | \"div\" | \"label\" | \"strong\" | \"em\" | \"small\" | \"dt\" | \"dd\" | \"li\"",
+          "required": false,
+          "values": [
+            "p",
+            "span",
+            "div",
+            "label",
+            "strong",
+            "em",
+            "small",
+            "dt",
+            "dd",
+            "li"
+          ]
+        },
+        {
+          "name": "variant",
+          "type": "\"body-md\" | \"body-sm\" | \"label-md\" | \"label-sm\" | \"caption\"",
+          "required": false,
+          "values": [
+            "body-md",
+            "body-sm",
+            "label-md",
+            "label-sm",
+            "caption"
+          ]
+        },
+        {
+          "name": "tone",
+          "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"brand\" | \"success\" | \"warning\" | \"danger\" | \"inverse\"",
+          "required": false,
+          "values": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "brand",
+            "success",
+            "warning",
+            "danger",
+            "inverse"
+          ]
+        },
+        {
+          "name": "tabular",
+          "type": "boolean",
+          "required": false,
+          "description": "Tabular figures, for numbers that line up in columns."
+        },
+        {
+          "name": "truncate",
+          "type": "boolean",
+          "required": false,
+          "description": "Clamp to a number of lines with an ellipsis."
+        },
+        {
+          "name": "htmlFor",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "HTMLAttributes<HTMLElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "variant": [
+          "body-md",
+          "body-sm",
+          "label-md",
+          "label-sm",
+          "caption"
+        ],
+        "tone": [
+          "primary",
+          "secondary",
+          "tertiary",
+          "brand",
+          "success",
+          "warning",
+          "danger",
+          "inverse"
+        ]
+      },
+      "do": [
+        "Use `tabular` for numbers that line up in columns.",
+        "Use tone `secondary` for supporting text and `tertiary` only for hints and captions."
+      ],
+      "dont": [
+        "Do not use tone `success` or `danger` as the only signal of state. Add an icon or words.",
+        "Do not style text with raw font sizes."
+      ],
+      "accessibility": [
+        "Every tone passes WCAG 2.2 AA on every surface in light and dark themes.",
+        "Pick `as` for meaning: `p` for paragraphs, `span` inline, `label` with `htmlFor`."
+      ],
+      "example": "<Text variant=\"body-sm\" tone=\"secondary\">Transfers to other banks take up to one working day.</Text>"
+    },
+    {
+      "name": "TextField",
+      "kind": "component",
+      "import": "import { TextField } from \"@leeward/react\";",
+      "purpose": "Single-line input with label, hint, error, prefix and suffix.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Visible label. Required: placeholders are not labels."
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Error message. Setting it marks the field invalid and links the message to the input."
+        },
+        {
+          "name": "prefix",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Short text or symbol before the value, for example \"₺\"."
+        },
+        {
+          "name": "suffix",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "optional",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "numeric",
+          "type": "boolean",
+          "required": false,
+          "description": "Use tabular figures, for amounts and codes."
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<InputHTMLAttributes<HTMLInputElement>, \"size\" | \"prefix\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Always set a visible `label`.",
+        "Use `hint` for format help before people type, `error` for what went wrong and how to fix it.",
+        "For amounts use `prefix=\"₺\"`, `inputMode=\"decimal\"` and `numeric`."
+      ],
+      "dont": [
+        "Do not use the placeholder as a label.",
+        "Do not write errors that blame: \"Invalid input\". Say what to do: \"This IBAN is too short. Check it and try again.\""
+      ],
+      "accessibility": [
+        "Label is linked with `htmlFor`.",
+        "Hint and error are linked with `aria-describedby`. Error sets `aria-invalid`.",
+        "Errors pair an icon with text and a thicker border, never color alone."
+      ],
+      "example": "<TextField label=\"IBAN\" hint=\"26 characters, starts with TR\" error={error} />"
+    },
+    {
+      "name": "Toast",
+      "kind": "component",
+      "import": "import { Toast } from \"@leeward/react\";",
+      "purpose": "Short confirmation after an action, such as \"Money sent\". Use with ToastProvider and useToast.",
+      "props": [],
+      "variants": {},
+      "do": [
+        "Confirm what happened in plain words.",
+        "Errors stay until dismissed. Other tones hide after 6 seconds."
+      ],
+      "dont": [
+        "Do not put the only way to do something in a toast.",
+        "Do not use toasts for errors inside forms. Show them next to the field."
+      ],
+      "accessibility": [
+        "Radix Toast region with a label. Danger toasts are announced assertively.",
+        "Each tone has an icon and a colored edge, never color alone."
+      ],
+      "example": "const toast = useToast();\ntoast.show({ title: \"Money sent\", description: \"Deniz gets ₺250,00 in a few seconds.\", tone: \"success\" });"
+    },
+    {
+      "name": "Tooltip",
+      "kind": "component",
+      "import": "import { Tooltip } from \"@leeward/react\";",
+      "purpose": "Extra information on hover and focus. Wrap the app in TooltipProvider.",
+      "props": [
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "required": true,
+          "description": "Extra information only. Never put required information or actions in a tooltip."
+        },
+        {
+          "name": "children",
+          "type": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+          "required": true,
+          "description": "A single focusable element."
+        },
+        {
+          "name": "side",
+          "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+          "required": false,
+          "values": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        },
+        {
+          "name": "delayDuration",
+          "type": "number",
+          "required": false
+        }
+      ],
+      "variants": {
+        "side": [
+          "top",
+          "right",
+          "bottom",
+          "left"
+        ]
+      },
+      "do": [
+        "Keep it to one short sentence."
+      ],
+      "dont": [
+        "Do not put required information, fees or actions in a tooltip.",
+        "Do not wrap non-focusable elements."
+      ],
+      "accessibility": [
+        "Shows on keyboard focus, hides on Escape. Content is linked to the trigger."
+      ],
+      "example": "<Tooltip content=\"The fee is the same for every amount.\"><IconButton icon=\"info\" label=\"About the fee\" /></Tooltip>"
+    },
+    {
+      "name": "AccountCard",
+      "kind": "pattern",
+      "import": "import { AccountCard } from \"@leeward/react\";",
+      "purpose": "Account summary with type, masked IBAN, balance and up to three quick actions.",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "For example \"Everyday account\"."
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": true,
+          "description": "For example \"Current account\" or \"Savings\"."
+        },
+        {
+          "name": "iban",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "balance",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "actions",
+          "type": "AccountAction[]",
+          "required": false,
+          "description": "Up to three quick actions."
+        },
+        {
+          "name": "masked",
+          "type": "boolean",
+          "required": false,
+          "description": "Hide the balance digits."
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Extra content under the balance, for example an interest rate."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3 | 4",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Give each action a text label. The first one is primary."
+      ],
+      "dont": [
+        "Do not show the full IBAN on the card. Show it on the details screen.",
+        "Do not use icon-only quick actions."
+      ],
+      "accessibility": [
+        "Article named by account name and type.",
+        "IBAN is masked visually and read as \"IBAN ending in 1 3 2 6\"."
+      ],
+      "example": "<AccountCard name=\"Everyday\" type=\"Current account\" iban={iban} balance={24580.35} currency=\"TRY\" actions={[{ label: \"Send\", icon: \"arrow-up-right\", onClick: send }]} />"
+    },
+    {
+      "name": "AmountDisplay",
+      "kind": "pattern",
+      "import": "import { AmountDisplay } from \"@leeward/react\";",
+      "purpose": "Money amount with locale formatting, tabular figures and a direction that never relies on color.",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": true,
+          "description": "Positive number. Direction decides the sign. Negative values are treated as outgoing."
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "direction",
+          "type": "\"incoming\" | \"outgoing\" | \"neutral\"",
+          "required": false,
+          "description": "incoming: plus sign and teal. outgoing: minus sign and ink, never red. neutral: no sign, for balances.",
+          "values": [
+            "incoming",
+            "outgoing",
+            "neutral"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "pending",
+          "type": "boolean",
+          "required": false,
+          "description": "Not settled yet. Adds a clock icon and a \"Pending\" label."
+        },
+        {
+          "name": "masked",
+          "type": "boolean",
+          "required": false,
+          "description": "Replace digits with dots, for example when the user hides balances."
+        }
+      ],
+      "variants": {
+        "direction": [
+          "incoming",
+          "outgoing",
+          "neutral"
+        ],
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "do": [
+        "Use for every amount and balance.",
+        "Pass a positive `value` and set `direction`.",
+        "Use `pending` for money that has not settled."
+      ],
+      "dont": [
+        "Do not color outgoing amounts red. Outgoing is ink with a minus sign.",
+        "Do not format amounts by hand.",
+        "Do not make fees smaller than the amount they belong to."
+      ],
+      "accessibility": [
+        "Visual text is hidden. Screen readers hear \"Money in: 1,250.00 Turkish lira\".",
+        "Incoming uses a plus sign, outgoing a typographic minus (U+2212)."
+      ],
+      "example": "<AmountDisplay value={1250} currency=\"TRY\" locale=\"tr-TR\" direction=\"incoming\" />"
+    },
+    {
+      "name": "BalanceHeader",
+      "kind": "pattern",
+      "import": "import { BalanceHeader } from \"@leeward/react\";",
+      "purpose": "Account balance with a hide and show control.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "For example \"Available balance\"."
+        },
+        {
+          "name": "balance",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "hidden",
+          "type": "boolean",
+          "required": false,
+          "description": "Controlled hidden state."
+        },
+        {
+          "name": "defaultHidden",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onHiddenChange",
+          "type": "(hidden: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "meta",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Supporting line, for example \"Updated 2 minutes ago\"."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Actions under the balance, usually Buttons with text labels."
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Use once at the top of home or account screens.",
+        "Put Send and Request as text Buttons in `actions`."
+      ],
+      "dont": [
+        "Do not hide the toggle. People check balances in public."
+      ],
+      "accessibility": [
+        "Region named by the label. Toggle uses `aria-pressed` and changes its label.",
+        "Hidden balances read \"Balance hidden\"."
+      ],
+      "example": "<BalanceHeader label=\"Available balance\" balance={24580.35} currency=\"TRY\" locale=\"tr-TR\" />"
+    },
+    {
+      "name": "OTPInput",
+      "kind": "pattern",
+      "import": "import { OTPInput } from \"@leeward/react\";",
+      "purpose": "One-time code entry with paste, SMS autofill and clear errors.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "length",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "onComplete",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "Called once when every digit is filled."
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "autoFocus",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "do": [
+        "Say where the code was sent in `hint`.",
+        "Use `onComplete` to verify automatically."
+      ],
+      "dont": [
+        "Do not split the code into separate inputs.",
+        "Do not clear the code on error. Let people fix one digit."
+      ],
+      "accessibility": [
+        "One real input with `autocomplete=\"one-time-code\"` and `inputMode=\"numeric\"`.",
+        "Spaces and letters are stripped, so pasting \"482 913\" works."
+      ],
+      "example": "<OTPInput label=\"Verification code\" hint=\"We sent a code to •••• 4821\" onComplete={verify} />"
+    },
+    {
+      "name": "TransactionRow",
+      "kind": "pattern",
+      "import": "import { TransactionRow } from \"@leeward/react\";",
+      "purpose": "One transaction: merchant, category, date, amount and status.",
+      "props": [
+        {
+          "name": "merchant",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "date",
+          "type": "Date",
+          "required": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "required": true,
+          "description": "Positive number. Direction decides the sign."
+        },
+        {
+          "name": "direction",
+          "type": "\"incoming\" | \"outgoing\"",
+          "required": true,
+          "values": [
+            "incoming",
+            "outgoing"
+          ]
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "\"completed\" | \"pending\" | \"declined\"",
+          "required": false,
+          "values": [
+            "completed",
+            "pending",
+            "declined"
+          ]
+        },
+        {
+          "name": "icon",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "required": false
+        }
+      ],
+      "variants": {
+        "direction": [
+          "incoming",
+          "outgoing"
+        ],
+        "status": [
+          "completed",
+          "pending",
+          "declined"
+        ]
+      },
+      "do": [
+        "Use inside List or any `ul`.",
+        "Set `status` for pending and declined so a badge appears."
+      ],
+      "dont": [
+        "Do not color the row by direction.",
+        "Do not build transaction rows from ListItem."
+      ],
+      "accessibility": [
+        "The whole row reads as one sentence: merchant, category, date, direction, amount, status.",
+        "The sentence starts with the visible merchant name, so voice control works."
+      ],
+      "example": "<TransactionRow merchant=\"Coffee Lab\" category=\"Eating out\" date={date} amount={85} direction=\"outgoing\" currency=\"TRY\" locale=\"tr-TR\" icon=\"coffee\" />"
+    }
+  ]
+}

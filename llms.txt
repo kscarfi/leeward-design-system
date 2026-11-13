@@ -1,0 +1,21 @@
+# Leeward Design System
+
+> Open-source, AI-ready design system for Leeward, a fictional digital bank. React components, semantic design tokens and rules that keep generated banking screens on-brand and accessible.
+
+Use components from @leeward/react, style only with var(--lw-*) semantic tokens, render money with AmountDisplay, and never use em dashes in copy.
+
+## Docs
+
+- [DESIGN.md](https://github.com/kscarfi/leeward-design-system/blob/main/DESIGN.md): principles, token rules, layout, copy, accessibility, component list
+- [components.manifest.json](https://github.com/kscarfi/leeward-design-system/blob/main/components.manifest.json): every component with props, variants, do and don't rules, accessibility and an example
+- [Contrast report](https://github.com/kscarfi/leeward-design-system/blob/main/docs/contrast-report.md): WCAG 2.2 and APCA results for every token pair
+
+## Tools
+
+- [MCP server](https://github.com/kscarfi/leeward-design-system/tree/main/packages/mcp-server): get_tokens, get_component, search_components, get_guidelines, validate_ui
+- [Tokens](https://github.com/kscarfi/leeward-design-system/tree/main/packages/tokens/dist): CSS variables, typed TS and Figma variables
+
+## Optional
+
+- [Decisions](https://github.com/kscarfi/leeward-design-system/tree/main/docs/decisions): why the system is built this way
+- [Build log](https://github.com/kscarfi/leeward-design-system/blob/main/docs/build-log.md): time spent and AI mistakes

@@ -19,7 +19,8 @@
     "contrast": "node scripts/contrast-report.ts",
     "build:tokens": "pnpm --filter @leeward/tokens build",
     "test:stories": "pnpm --filter @leeward/docs test-storybook",
-    "storybook": "pnpm --filter @leeward/docs storybook"
+    "storybook": "pnpm --filter @leeward/docs storybook",
+    "build:agent": "node scripts/build-agent-docs.ts"
   },
   "devDependencies": {
     "@leeward/lint": "workspace:*",

@@ -1,6 +1,6 @@
 # Icon
 
-Inline SVG icons on a 24px grid with a 1.75 stroke. 44 icons.
+Inline SVG icons on a 24px grid with a 1.75 stroke. 43 icons.
 
 ## Do
 
