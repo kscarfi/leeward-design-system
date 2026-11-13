@@ -1,7 +1,7 @@
 // Fails if any tracked text file contains an em dash (U+2014).
 // Copy rule from PROJECT_BRIEF.md, section 2: never use em dashes.
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const EM_DASH = "—";
 const TEXT_FILE = /\.(md|mdx|txt|ts|tsx|js|mjs|cjs|json|css|yml|yaml|html)$/;
@@ -10,7 +10,8 @@ const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclud
   encoding: "utf8",
 })
   .split("\n")
-  .filter((file) => TEXT_FILE.test(file) && file !== "scripts/check-copy.ts");
+  // Skip files deleted in the working tree but still in the index.
+  .filter((file) => TEXT_FILE.test(file) && file !== "scripts/check-copy.ts" && existsSync(file));
 
 const failures: string[] = [];
 for (const file of files) {
