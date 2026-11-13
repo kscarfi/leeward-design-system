@@ -1,0 +1,11 @@
+{
+  "name": "@leeward/mcp-server",
+  "version": "0.0.0",
+  "private": true,
+  "description": "MCP server that exposes Leeward tokens, components and rules to AI agents.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

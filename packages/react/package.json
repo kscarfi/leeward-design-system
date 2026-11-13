@@ -1,0 +1,11 @@
+{
+  "name": "@leeward/react",
+  "version": "0.0.0",
+  "private": true,
+  "description": "React components and banking patterns for Leeward.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}
