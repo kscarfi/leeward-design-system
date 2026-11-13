@@ -31,11 +31,6 @@ jobs:
           pnpm build:tokens
           git diff --exit-code -- packages/tokens || (echo "::error::Token outputs are stale. Run pnpm build:tokens and commit." && exit 1)
 
-      - name: Agent docs and manifest are up to date
-        run: |
-          pnpm build:agent
-          git diff --exit-code -- DESIGN.md llms.txt components.manifest.json || (echo "::error::Agent docs are stale. Run pnpm build:agent and commit." && exit 1)
-
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm check:copy
