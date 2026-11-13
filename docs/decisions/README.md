@@ -9,3 +9,4 @@ Format: `NNNN-short-title.md` with Status, Context, Decision, Consequences.
 | [0001](0001-token-architecture.md) | Token architecture | Accepted |
 | [0002](0002-monorepo-tooling.md) | Monorepo tooling | Accepted |
 | [0003](0003-color-and-type.md) | Color ramps, dark mode and typography | Accepted |
+| [0004](0004-partner-themes.md) | Partner themes from one seed color | Accepted |

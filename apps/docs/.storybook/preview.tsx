@@ -1,5 +1,6 @@
 import "@leeward/react/fonts.css";
 import "@leeward/react/styles.css";
+import "@leeward/tokens/partners/harbor.css";
 import "./preview.css";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { ToastProvider, TooltipProvider } from "@leeward/react";
@@ -42,6 +43,8 @@ const preview: Preview = {
           { value: "light", title: "Light" },
           { value: "dark", title: "Dark" },
           { value: "both", title: "Side by side" },
+          { value: "harbor", title: "Partner: Harbor" },
+          { value: "harbor-dark", title: "Partner: Harbor dark" },
         ],
         dynamicTitle: true,
       },

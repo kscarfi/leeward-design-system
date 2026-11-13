@@ -23,12 +23,17 @@
     "./palette": "./build/palette.ts",
     "./themes": "./build/themes.ts",
     "./build": "./build/build.ts",
-    "./tokens.json": "./dist/ts/light.json"
+    "./tokens.json": "./dist/ts/light.json",
+    "./partners/*": "./partners/*",
+    "./contrast": "./build/contrast.ts",
+    "./partner": "./build/partner.ts",
+    "./primitives.json": "./src/primitive/color.json"
   },
   "files": [
     "dist",
     "build",
     "src",
-    "themes"
+    "themes",
+    "partners"
   ]
 }

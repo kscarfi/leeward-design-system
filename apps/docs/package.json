@@ -8,7 +8,7 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static --quiet",
-    "test-storybook": "VITE_LW_THEME=light vitest run && VITE_LW_THEME=dark vitest run",
+    "test-storybook": "VITE_LW_THEME=light vitest run && VITE_LW_THEME=dark vitest run && VITE_LW_THEME=harbor vitest run",
     "typecheck": "tsc -p tsconfig.json",
     "test-visual": "playwright test",
     "test-visual:update": "playwright test --update-snapshots"

@@ -2,23 +2,8 @@
 // Writes docs/contrast-report.md and exits 1 if any pair misses WCAG 2.2 AA.
 // Run: pnpm contrast
 import { writeFileSync } from "node:fs";
-import Color from "colorjs.io";
 import { tokens, themes } from "@leeward/tokens";
-import { requiredPairs, type ContrastPair } from "@leeward/tokens/themes";
-
-const AA: Record<ContrastPair["kind"], number> = { text: 4.5, large: 3, ui: 3 };
-// APCA guidance (Lc) for reference only. WCAG 2.2 AA is the pass/fail bar.
-const APCA_GUIDE: Record<ContrastPair["kind"], number> = { text: 60, large: 45, ui: 30 };
-
-export interface PairResult extends ContrastPair {
-  theme: string;
-  fgHex: string;
-  bgHex: string;
-  wcag: number;
-  apca: number;
-  pass: boolean;
-  apcaOk: boolean;
-}
+import { AA, checkPairs, type PairResult } from "@leeward/tokens/contrast";
 
 function hexOf(theme: string, name: string): string {
   const entry = (tokens as Record<string, Record<string, { value: unknown }>>)[theme]?.[`color.${name}`];
@@ -26,32 +11,8 @@ function hexOf(theme: string, name: string): string {
   return String(entry.value);
 }
 
-/** Composite a translucent color over its background before measuring. */
-function opaque(fg: Color, bg: Color): Color {
-  const a = fg.alpha ?? 1;
-  if (a >= 1) return fg;
-  const [r1, g1, b1] = fg.to("srgb").coords;
-  const [r2, g2, b2] = bg.to("srgb").coords;
-  return new Color("srgb", [r1! * a + r2! * (1 - a), g1! * a + g2! * (1 - a), b1! * a + b2! * (1 - a)]);
-}
-
-export function checkTheme(theme: string, pairs = requiredPairs, lookup = (name: string) => hexOf(theme, name)): PairResult[] {
-  return pairs.map((pair) => {
-    const bg = new Color(lookup(pair.bg));
-    const fg = opaque(new Color(lookup(pair.fg)), bg);
-    const wcag = fg.contrast(bg, "WCAG21");
-    const apca = Math.abs(bg.contrast(fg, "APCA"));
-    return {
-      ...pair,
-      theme,
-      fgHex: lookup(pair.fg),
-      bgHex: lookup(pair.bg),
-      wcag,
-      apca,
-      pass: wcag >= AA[pair.kind],
-      apcaOk: apca >= APCA_GUIDE[pair.kind],
-    };
-  });
+export function checkTheme(theme: string): PairResult[] {
+  return checkPairs(theme, (name) => hexOf(theme, name));
 }
 
 function report(results: PairResult[]): string {
