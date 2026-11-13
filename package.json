@@ -15,10 +15,14 @@
     "lint": "pnpm -r --if-present lint",
     "test": "pnpm -r --if-present test",
     "build": "pnpm -r --if-present build",
-    "check:copy": "node scripts/check-copy.ts"
+    "check:copy": "node scripts/check-copy.ts",
+    "contrast": "node scripts/contrast-report.ts",
+    "build:tokens": "pnpm --filter @leeward/tokens build"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
-    "typescript": "7.0.2"
+    "typescript": "6.0.3",
+    "@leeward/tokens": "workspace:*",
+    "colorjs.io": "0.7.1"
   }
 }

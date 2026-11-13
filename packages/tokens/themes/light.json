@@ -1,0 +1,421 @@
+{
+  "color": {
+    "$type": "color",
+    "bg": {
+      "canvas": {
+        "$value": "{color.ink.50}",
+        "$description": "App background behind all surfaces"
+      }
+    },
+    "surface": {
+      "default": {
+        "$value": "{color.white}"
+      },
+      "raised": {
+        "$value": "{color.white}",
+        "$description": "Cards and menus. Pair with an elevation token."
+      },
+      "overlay": {
+        "$value": "{color.white}",
+        "$description": "Dialogs, popovers, toasts"
+      },
+      "sunken": {
+        "$value": "{color.ink.100}"
+      },
+      "inverse": {
+        "$value": "{color.ink.950}"
+      },
+      "hover": {
+        "$value": "{color.ink.100}"
+      },
+      "pressed": {
+        "$value": "{color.ink.200}"
+      },
+      "brand": {
+        "$value": "{color.iris.50}",
+        "$description": "Tinted surface for selected or highlighted items"
+      }
+    },
+    "scrim": {
+      "$value": "#16163a7a",
+      "$description": "Backdrop behind dialogs"
+    },
+    "text": {
+      "primary": {
+        "$value": "{color.ink.950}"
+      },
+      "secondary": {
+        "$value": "{color.ink.600}"
+      },
+      "tertiary": {
+        "$value": "{color.ink.500}",
+        "$description": "Hints, captions, placeholders. Still AA."
+      },
+      "disabled": {
+        "$value": "{color.ink.400}",
+        "$description": "Exempt from contrast rules. Never the only cue."
+      },
+      "inverse": {
+        "$value": "{color.ink.50}"
+      },
+      "link": {
+        "$value": "{color.iris.600}"
+      },
+      "link-hover": {
+        "$value": "{color.iris.700}"
+      },
+      "brand": {
+        "$value": "{color.iris.600}"
+      },
+      "accent": {
+        "$value": "{color.coral.500}",
+        "$description": "Rare emphasis text in the accent hue"
+      },
+      "success": {
+        "$value": "{color.teal.500}"
+      },
+      "warning": {
+        "$value": "{color.warning.500}"
+      },
+      "danger": {
+        "$value": "{color.danger.500}"
+      }
+    },
+    "icon": {
+      "primary": {
+        "$value": "{color.ink.950}"
+      },
+      "secondary": {
+        "$value": "{color.ink.600}"
+      },
+      "brand": {
+        "$value": "{color.iris.600}"
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": "{color.ink.200}",
+        "$description": "Dividers and card outlines. Decorative only."
+      },
+      "default": {
+        "$value": "{color.ink.400}",
+        "$description": "Input and control boundaries. At least 3:1."
+      },
+      "strong": {
+        "$value": "{color.ink.600}"
+      },
+      "focus": {
+        "$value": "{color.iris.600}",
+        "$description": "Focus ring. At least 3:1 against every surface."
+      },
+      "brand": {
+        "$value": "{color.iris.600}"
+      },
+      "danger": {
+        "$value": "{color.danger.500}"
+      }
+    },
+    "action": {
+      "primary": {
+        "bg": {
+          "$value": "{color.iris.600}"
+        },
+        "bg-hover": {
+          "$value": "{color.iris.700}"
+        },
+        "bg-active": {
+          "$value": "{color.iris.800}"
+        },
+        "text": {
+          "$value": "{color.white}"
+        }
+      },
+      "secondary": {
+        "bg": {
+          "$value": "{color.iris.50}"
+        },
+        "bg-hover": {
+          "$value": "{color.iris.100}"
+        },
+        "bg-active": {
+          "$value": "{color.iris.200}"
+        },
+        "text": {
+          "$value": "{color.iris.700}"
+        },
+        "border": {
+          "$value": "{color.iris.200}"
+        }
+      },
+      "ghost": {
+        "bg-hover": {
+          "$value": "{color.iris.50}"
+        },
+        "bg-active": {
+          "$value": "{color.iris.100}"
+        },
+        "text": {
+          "$value": "{color.iris.600}"
+        }
+      },
+      "danger": {
+        "bg": {
+          "$value": "{color.danger.500}"
+        },
+        "bg-hover": {
+          "$value": "{color.danger.600}"
+        },
+        "bg-active": {
+          "$value": "{color.danger.700}"
+        },
+        "text": {
+          "$value": "{color.white}"
+        }
+      },
+      "disabled": {
+        "bg": {
+          "$value": "{color.ink.100}"
+        },
+        "text": {
+          "$value": "{color.ink.400}"
+        }
+      }
+    },
+    "control": {
+      "bg": {
+        "$value": "{color.white}"
+      },
+      "bg-checked": {
+        "$value": "{color.iris.600}"
+      },
+      "fg-checked": {
+        "$value": "{color.white}"
+      },
+      "track": {
+        "$value": "{color.ink.400}"
+      },
+      "thumb": {
+        "$value": "{color.white}"
+      }
+    },
+    "feedback": {
+      "info": {
+        "bg": {
+          "$value": "{color.iris.50}"
+        },
+        "border": {
+          "$value": "{color.iris.200}"
+        },
+        "text": {
+          "$value": "{color.iris.700}"
+        },
+        "icon": {
+          "$value": "{color.iris.600}"
+        }
+      },
+      "success": {
+        "bg": {
+          "$value": "{color.teal.50}"
+        },
+        "border": {
+          "$value": "{color.teal.200}"
+        },
+        "text": {
+          "$value": "{color.teal.700}"
+        },
+        "icon": {
+          "$value": "{color.teal.600}"
+        }
+      },
+      "warning": {
+        "bg": {
+          "$value": "{color.warning.50}"
+        },
+        "border": {
+          "$value": "{color.warning.200}"
+        },
+        "text": {
+          "$value": "{color.warning.700}"
+        },
+        "icon": {
+          "$value": "{color.warning.600}"
+        }
+      },
+      "danger": {
+        "bg": {
+          "$value": "{color.danger.50}"
+        },
+        "border": {
+          "$value": "{color.danger.200}"
+        },
+        "text": {
+          "$value": "{color.danger.700}"
+        },
+        "icon": {
+          "$value": "{color.danger.600}"
+        }
+      }
+    },
+    "amount": {
+      "incoming": {
+        "$value": "{color.teal.500}",
+        "$description": "Money in. Always with a plus sign."
+      },
+      "outgoing": {
+        "$value": "{color.ink.950}",
+        "$description": "Money out. Never red. Always with a minus sign."
+      },
+      "pending": {
+        "$value": "{color.warning.500}",
+        "$description": "Not settled yet. Always with a pending label."
+      }
+    },
+    "accent": {
+      "decorative": {
+        "$value": "{color.coral.400}",
+        "$description": "Illustration and highlights only. Never text or the only signal of state."
+      },
+      "decorative-subtle": {
+        "$value": "{color.coral.100}"
+      }
+    },
+    "skeleton": {
+      "base": {
+        "$value": "{color.ink.100}"
+      },
+      "highlight": {
+        "$value": "{color.ink.50}"
+      }
+    }
+  },
+  "shadow": {
+    "1": {
+      "$value": [
+        {
+          "color": "#16163a0f",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "#16163a0a",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 3,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "2": {
+      "$value": [
+        {
+          "color": "#16163a14",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 12,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -2,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "#16163a0a",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 4,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -1,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "3": {
+      "$value": [
+        {
+          "color": "#16163a1f",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 16,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 32,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -8,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "#16163a0f",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 8,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -2,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "$type": "shadow",
+    "$description": "Three levels. In dark mode depth comes mostly from lighter surfaces."
+  }
+}

@@ -1,0 +1,374 @@
+/* Leeward Design System tokens. Generated, do not edit. */
+
+:root, [data-theme="light"] {
+  --lw-color-bg-canvas: #f6f6fb; /** App background behind all surfaces */
+  --lw-color-surface-default: #ffffff;
+  --lw-color-surface-raised: #ffffff; /** Cards and menus. Pair with an elevation token. */
+  --lw-color-surface-overlay: #ffffff; /** Dialogs, popovers, toasts */
+  --lw-color-surface-sunken: #eeeff4;
+  --lw-color-surface-inverse: #16163a;
+  --lw-color-surface-hover: #eeeff4;
+  --lw-color-surface-pressed: #dddde3;
+  --lw-color-surface-brand: #f5f8ff; /** Tinted surface for selected or highlighted items */
+  --lw-color-scrim: rgba(22, 22, 58, 0.48); /** Backdrop behind dialogs */
+  --lw-color-text-primary: #16163a;
+  --lw-color-text-secondary: #5a5b70;
+  --lw-color-text-tertiary: #6d6f80; /** Hints, captions, placeholders. Still AA. */
+  --lw-color-text-disabled: #8c8d99; /** Exempt from contrast rules. Never the only cue. */
+  --lw-color-text-inverse: #f6f6fb;
+  --lw-color-text-link: #4c3fe0;
+  --lw-color-text-link-hover: #3c2dbb;
+  --lw-color-text-brand: #4c3fe0;
+  --lw-color-text-accent: #c2410c; /** Rare emphasis text in the accent hue */
+  --lw-color-text-success: #08745d;
+  --lw-color-text-warning: #b45309;
+  --lw-color-text-danger: #c8283e;
+  --lw-color-icon-primary: #16163a;
+  --lw-color-icon-secondary: #5a5b70;
+  --lw-color-icon-brand: #4c3fe0;
+  --lw-color-border-subtle: #dddde3; /** Dividers and card outlines. Decorative only. */
+  --lw-color-border-default: #8c8d99; /** Input and control boundaries. At least 3:1. */
+  --lw-color-border-strong: #5a5b70;
+  --lw-color-border-focus: #4c3fe0; /** Focus ring. At least 3:1 against every surface. */
+  --lw-color-border-brand: #4c3fe0;
+  --lw-color-border-danger: #c8283e;
+  --lw-color-action-primary-bg: #4c3fe0;
+  --lw-color-action-primary-bg-hover: #3c2dbb;
+  --lw-color-action-primary-bg-active: #2e1d99;
+  --lw-color-action-primary-text: #ffffff;
+  --lw-color-action-secondary-bg: #f5f8ff;
+  --lw-color-action-secondary-bg-hover: #eaefff;
+  --lw-color-action-secondary-bg-active: #d4dcff;
+  --lw-color-action-secondary-text: #3c2dbb;
+  --lw-color-action-secondary-border: #d4dcff;
+  --lw-color-action-ghost-bg-hover: #f5f8ff;
+  --lw-color-action-ghost-bg-active: #eaefff;
+  --lw-color-action-ghost-text: #4c3fe0;
+  --lw-color-action-danger-bg: #c8283e;
+  --lw-color-action-danger-bg-hover: #b41e35;
+  --lw-color-action-danger-bg-active: #920a25;
+  --lw-color-action-danger-text: #ffffff;
+  --lw-color-action-disabled-bg: #eeeff4;
+  --lw-color-action-disabled-text: #8c8d99;
+  --lw-color-control-bg: #ffffff;
+  --lw-color-control-bg-checked: #4c3fe0;
+  --lw-color-control-fg-checked: #ffffff;
+  --lw-color-control-track: #8c8d99;
+  --lw-color-control-thumb: #ffffff;
+  --lw-color-feedback-info-bg: #f5f8ff;
+  --lw-color-feedback-info-border: #d4dcff;
+  --lw-color-feedback-info-text: #3c2dbb;
+  --lw-color-feedback-info-icon: #4c3fe0;
+  --lw-color-feedback-success-bg: #edfbf6;
+  --lw-color-feedback-success-border: #c8e4da;
+  --lw-color-feedback-success-text: #005340;
+  --lw-color-feedback-success-icon: #006a54;
+  --lw-color-feedback-warning-bg: #fff7ef;
+  --lw-color-feedback-warning-border: #fbd7c4;
+  --lw-color-feedback-warning-text: #7c3100;
+  --lw-color-feedback-warning-icon: #9a4400;
+  --lw-color-feedback-danger-bg: #fff7f6;
+  --lw-color-feedback-danger-border: #ffd4d2;
+  --lw-color-feedback-danger-text: #920a25;
+  --lw-color-feedback-danger-icon: #b41e35;
+  --lw-color-amount-incoming: #08745d; /** Money in. Always with a plus sign. */
+  --lw-color-amount-outgoing: #16163a; /** Money out. Never red. Always with a minus sign. */
+  --lw-color-amount-pending: #b45309; /** Not settled yet. Always with a pending label. */
+  --lw-color-accent-decorative: #ff7a59; /** Illustration and highlights only. Never text or the only signal of state. */
+  --lw-color-accent-decorative-subtle: #ffece3;
+  --lw-color-skeleton-base: #eeeff4;
+  --lw-color-skeleton-highlight: #f6f6fb;
+  --lw-radius-none: 0;
+  --lw-radius-sm: 4px;
+  --lw-radius-md: 8px;
+  --lw-radius-lg: 12px;
+  --lw-radius-xl: 16px;
+  --lw-radius-control: 8px; /** Buttons, inputs, selects */
+  --lw-radius-card: 16px; /** Cards and dialogs */
+  --lw-radius-pill: 9999px;
+  --lw-size-touch-target: 0.171875rem; /** Minimum hit area for any interactive element */
+  --lw-size-control-sm: 0.140625rem;
+  --lw-size-control-md: 0.171875rem;
+  --lw-size-control-lg: 0.203125rem;
+  --lw-size-icon-sm: 0.0625rem;
+  --lw-size-icon-md: 0.078125rem;
+  --lw-size-icon-lg: 0.09375rem;
+  --lw-size-avatar-sm: 0.125rem;
+  --lw-size-avatar-md: 0.15625rem;
+  --lw-size-avatar-lg: 0.21875rem;
+  --lw-size-focus-ring-width: 0.125px;
+  --lw-size-focus-ring-offset: 0.125px;
+  --lw-size-border-default: 0.0625px;
+  --lw-size-border-strong: 0.125px;
+  --lw-size-dialog: 30rem;
+  --lw-size-tooltip-max: 17.5rem;
+  --lw-space-none: 0;
+  --lw-space-3xs: 0.0078125rem;
+  --lw-space-2xs: 0.015625rem;
+  --lw-space-xs: 0.03125rem;
+  --lw-space-sm: 0.046875rem;
+  --lw-space-md: 0.0625rem;
+  --lw-space-lg: 0.09375rem;
+  --lw-space-xl: 0.125rem;
+  --lw-space-2xl: 0.1875rem;
+  --lw-space-3xl: 0.25rem;
+  --lw-layer-base: 0;
+  --lw-layer-raised: 10;
+  --lw-layer-sticky: 100;
+  --lw-layer-overlay: 1000;
+  --lw-layer-toast: 1100;
+  --lw-layer-tooltip: 1200;
+  --lw-motion-duration-instant: 100ms;
+  --lw-motion-duration-fast: 150ms;
+  --lw-motion-duration-base: 200ms;
+  --lw-motion-duration-slow: 300ms;
+  --lw-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --lw-motion-easing-enter: cubic-bezier(0, 0, 0, 1);
+  --lw-motion-easing-exit: cubic-bezier(0.3, 0, 1, 1);
+  --lw-type-display-lg-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-display-lg-size: 3rem;
+  --lw-type-display-lg-line-height: 3.5rem;
+  --lw-type-display-lg-weight: 700;
+  --lw-type-display-lg-tracking: -0.02em;
+  --lw-type-display-md-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-display-md-size: 2.5rem;
+  --lw-type-display-md-line-height: 3rem;
+  --lw-type-display-md-weight: 700;
+  --lw-type-display-md-tracking: -0.02em;
+  --lw-type-heading-xl-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-heading-xl-size: 2rem;
+  --lw-type-heading-xl-line-height: 2.5rem;
+  --lw-type-heading-xl-weight: 600;
+  --lw-type-heading-xl-tracking: -0.02em;
+  --lw-type-heading-lg-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-heading-lg-size: 1.75rem;
+  --lw-type-heading-lg-line-height: 2.25rem;
+  --lw-type-heading-lg-weight: 600;
+  --lw-type-heading-lg-tracking: -0.02em;
+  --lw-type-heading-md-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-heading-md-size: 1.5rem;
+  --lw-type-heading-md-line-height: 2rem;
+  --lw-type-heading-md-weight: 600;
+  --lw-type-heading-md-tracking: -0.01em;
+  --lw-type-heading-sm-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-heading-sm-size: 1.25rem;
+  --lw-type-heading-sm-line-height: 1.75rem;
+  --lw-type-heading-sm-weight: 600;
+  --lw-type-heading-sm-tracking: -0.01em;
+  --lw-type-heading-xs-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-heading-xs-size: 1rem;
+  --lw-type-heading-xs-line-height: 1.5rem;
+  --lw-type-heading-xs-weight: 600;
+  --lw-type-heading-xs-tracking: 0em;
+  --lw-type-body-md-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-body-md-size: 1rem;
+  --lw-type-body-md-line-height: 1.5rem;
+  --lw-type-body-md-weight: 400;
+  --lw-type-body-md-tracking: 0em;
+  --lw-type-body-sm-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-body-sm-size: 0.875rem;
+  --lw-type-body-sm-line-height: 1.25rem;
+  --lw-type-body-sm-weight: 400;
+  --lw-type-body-sm-tracking: 0em;
+  --lw-type-label-md-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-label-md-size: 1rem;
+  --lw-type-label-md-line-height: 1.5rem;
+  --lw-type-label-md-weight: 500;
+  --lw-type-label-md-tracking: 0em;
+  --lw-type-label-sm-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-label-sm-size: 0.875rem;
+  --lw-type-label-sm-line-height: 1.25rem;
+  --lw-type-label-sm-weight: 500;
+  --lw-type-label-sm-tracking: 0em;
+  --lw-type-caption-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-caption-size: 0.75rem;
+  --lw-type-caption-line-height: 1rem;
+  --lw-type-caption-weight: 400;
+  --lw-type-caption-tracking: 0.02em;
+  --lw-type-amount-lg-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-amount-lg-size: 2.5rem;
+  --lw-type-amount-lg-line-height: 3rem;
+  --lw-type-amount-lg-weight: 600;
+  --lw-type-amount-lg-tracking: -0.02em;
+  --lw-type-amount-md-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-amount-md-size: 1.25rem;
+  --lw-type-amount-md-line-height: 1.75rem;
+  --lw-type-amount-md-weight: 600;
+  --lw-type-amount-md-tracking: 0em;
+  --lw-type-amount-sm-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lw-type-amount-sm-size: 1rem;
+  --lw-type-amount-sm-line-height: 1.5rem;
+  --lw-type-amount-sm-weight: 500;
+  --lw-type-amount-sm-tracking: 0em;
+  --lw-shadow-1: 0px 1px 2px 0px #16163a0f, 0px 1px 3px 0px #16163a0a;
+  --lw-shadow-2: 0px 4px 12px -2px #16163a14, 0px 2px 4px -1px #16163a0a;
+  --lw-shadow-3: 0px 16px 32px -8px #16163a1f, 0px 4px 8px -2px #16163a0f;
+}
+
+[data-theme="dark"] {
+  --lw-color-bg-canvas: #11131e; /** App background behind all surfaces */
+  --lw-color-surface-default: #191a29;
+  --lw-color-surface-raised: #202131; /** Cards and menus. Pair with an elevation token. */
+  --lw-color-surface-overlay: #282a3b; /** Dialogs, popovers, toasts */
+  --lw-color-surface-sunken: #11131e;
+  --lw-color-surface-inverse: #f6f6fb;
+  --lw-color-surface-hover: #282a3b;
+  --lw-color-surface-pressed: #3c3e52;
+  --lw-color-surface-brand: #282a3b; /** Tinted surface for selected or highlighted items */
+  --lw-color-scrim: rgba(0, 0, 0, 0.62); /** Backdrop behind dialogs */
+  --lw-color-text-primary: #f6f6fb;
+  --lw-color-text-secondary: #dddde3;
+  --lw-color-text-tertiary: #c0c1c7; /** Hints, captions, placeholders. Still AA. */
+  --lw-color-text-disabled: #6d6f80; /** Exempt from contrast rules. Never the only cue. */
+  --lw-color-text-inverse: #16163a;
+  --lw-color-text-link: #b3bdff;
+  --lw-color-text-link-hover: #d4dcff;
+  --lw-color-text-brand: #b3bdff;
+  --lw-color-text-accent: #ffad95; /** Rare emphasis text in the accent hue */
+  --lw-color-text-success: #a0cabb;
+  --lw-color-text-warning: #ecb699;
+  --lw-color-text-danger: #fcadac;
+  --lw-color-icon-primary: #f6f6fb;
+  --lw-color-icon-secondary: #dddde3;
+  --lw-color-icon-brand: #b3bdff;
+  --lw-color-border-subtle: #3c3e52; /** Dividers and card outlines. Decorative only. */
+  --lw-color-border-default: #8c8d99; /** Input and control boundaries. At least 3:1. */
+  --lw-color-border-strong: #c0c1c7;
+  --lw-color-border-focus: #b3bdff; /** Focus ring. At least 3:1 against every surface. */
+  --lw-color-border-brand: #b3bdff;
+  --lw-color-border-danger: #fcadac;
+  --lw-color-action-primary-bg: #b3bdff;
+  --lw-color-action-primary-bg-hover: #d4dcff;
+  --lw-color-action-primary-bg-active: #eaefff;
+  --lw-color-action-primary-text: #16163a;
+  --lw-color-action-secondary-bg: #282a3b;
+  --lw-color-action-secondary-bg-hover: #3c3e52;
+  --lw-color-action-secondary-bg-active: #3c3e52;
+  --lw-color-action-secondary-text: #d4dcff;
+  --lw-color-action-secondary-border: #3c3e52;
+  --lw-color-action-ghost-bg-hover: #282a3b;
+  --lw-color-action-ghost-bg-active: #3c3e52;
+  --lw-color-action-ghost-text: #b3bdff;
+  --lw-color-action-danger-bg: #fcadac;
+  --lw-color-action-danger-bg-hover: #ffd4d2;
+  --lw-color-action-danger-bg-active: #ffeaea;
+  --lw-color-action-danger-text: #16163a;
+  --lw-color-action-disabled-bg: #282a3b;
+  --lw-color-action-disabled-text: #5a5b70;
+  --lw-color-control-bg: #191a29;
+  --lw-color-control-bg-checked: #b3bdff;
+  --lw-color-control-fg-checked: #16163a;
+  --lw-color-control-track: #8c8d99;
+  --lw-color-control-thumb: #f6f6fb;
+  --lw-color-feedback-info-bg: #282a3b;
+  --lw-color-feedback-info-border: #3c2dbb;
+  --lw-color-feedback-info-text: #d4dcff;
+  --lw-color-feedback-info-icon: #b3bdff;
+  --lw-color-feedback-success-bg: #001f15;
+  --lw-color-feedback-success-border: #003e2f;
+  --lw-color-feedback-success-text: #c8e4da;
+  --lw-color-feedback-success-icon: #a0cabb;
+  --lw-color-feedback-warning-bg: #380800;
+  --lw-color-feedback-warning-border: #622200;
+  --lw-color-feedback-warning-text: #fbd7c4;
+  --lw-color-feedback-warning-icon: #ecb699;
+  --lw-color-feedback-danger-bg: #3f0004;
+  --lw-color-feedback-danger-border: #730018;
+  --lw-color-feedback-danger-text: #ffd4d2;
+  --lw-color-feedback-danger-icon: #fcadac;
+  --lw-color-amount-incoming: #a0cabb; /** Money in. Always with a plus sign. */
+  --lw-color-amount-outgoing: #f6f6fb; /** Money out. Never red. Always with a minus sign. */
+  --lw-color-amount-pending: #ecb699; /** Not settled yet. Always with a pending label. */
+  --lw-color-accent-decorative: #ff7a59; /** Illustration and highlights only. Never text or the only signal of state. */
+  --lw-color-accent-decorative-subtle: #3e0000;
+  --lw-color-skeleton-base: #282a3b;
+  --lw-color-skeleton-highlight: #3c3e52;
+  --lw-shadow-1: 0px 1px 2px 0px #00000052, 0px 1px 3px 0px #00000033;
+  --lw-shadow-2: 0px 4px 12px -2px #0000005c, 0px 2px 4px -1px #00000033;
+  --lw-shadow-3: 0px 16px 32px -8px #0000007a, 0px 4px 8px -2px #00000040;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --lw-color-bg-canvas: #11131e; /** App background behind all surfaces */
+    --lw-color-surface-default: #191a29;
+    --lw-color-surface-raised: #202131; /** Cards and menus. Pair with an elevation token. */
+    --lw-color-surface-overlay: #282a3b; /** Dialogs, popovers, toasts */
+    --lw-color-surface-sunken: #11131e;
+    --lw-color-surface-inverse: #f6f6fb;
+    --lw-color-surface-hover: #282a3b;
+    --lw-color-surface-pressed: #3c3e52;
+    --lw-color-surface-brand: #282a3b; /** Tinted surface for selected or highlighted items */
+    --lw-color-scrim: rgba(0, 0, 0, 0.62); /** Backdrop behind dialogs */
+    --lw-color-text-primary: #f6f6fb;
+    --lw-color-text-secondary: #dddde3;
+    --lw-color-text-tertiary: #c0c1c7; /** Hints, captions, placeholders. Still AA. */
+    --lw-color-text-disabled: #6d6f80; /** Exempt from contrast rules. Never the only cue. */
+    --lw-color-text-inverse: #16163a;
+    --lw-color-text-link: #b3bdff;
+    --lw-color-text-link-hover: #d4dcff;
+    --lw-color-text-brand: #b3bdff;
+    --lw-color-text-accent: #ffad95; /** Rare emphasis text in the accent hue */
+    --lw-color-text-success: #a0cabb;
+    --lw-color-text-warning: #ecb699;
+    --lw-color-text-danger: #fcadac;
+    --lw-color-icon-primary: #f6f6fb;
+    --lw-color-icon-secondary: #dddde3;
+    --lw-color-icon-brand: #b3bdff;
+    --lw-color-border-subtle: #3c3e52; /** Dividers and card outlines. Decorative only. */
+    --lw-color-border-default: #8c8d99; /** Input and control boundaries. At least 3:1. */
+    --lw-color-border-strong: #c0c1c7;
+    --lw-color-border-focus: #b3bdff; /** Focus ring. At least 3:1 against every surface. */
+    --lw-color-border-brand: #b3bdff;
+    --lw-color-border-danger: #fcadac;
+    --lw-color-action-primary-bg: #b3bdff;
+    --lw-color-action-primary-bg-hover: #d4dcff;
+    --lw-color-action-primary-bg-active: #eaefff;
+    --lw-color-action-primary-text: #16163a;
+    --lw-color-action-secondary-bg: #282a3b;
+    --lw-color-action-secondary-bg-hover: #3c3e52;
+    --lw-color-action-secondary-bg-active: #3c3e52;
+    --lw-color-action-secondary-text: #d4dcff;
+    --lw-color-action-secondary-border: #3c3e52;
+    --lw-color-action-ghost-bg-hover: #282a3b;
+    --lw-color-action-ghost-bg-active: #3c3e52;
+    --lw-color-action-ghost-text: #b3bdff;
+    --lw-color-action-danger-bg: #fcadac;
+    --lw-color-action-danger-bg-hover: #ffd4d2;
+    --lw-color-action-danger-bg-active: #ffeaea;
+    --lw-color-action-danger-text: #16163a;
+    --lw-color-action-disabled-bg: #282a3b;
+    --lw-color-action-disabled-text: #5a5b70;
+    --lw-color-control-bg: #191a29;
+    --lw-color-control-bg-checked: #b3bdff;
+    --lw-color-control-fg-checked: #16163a;
+    --lw-color-control-track: #8c8d99;
+    --lw-color-control-thumb: #f6f6fb;
+    --lw-color-feedback-info-bg: #282a3b;
+    --lw-color-feedback-info-border: #3c2dbb;
+    --lw-color-feedback-info-text: #d4dcff;
+    --lw-color-feedback-info-icon: #b3bdff;
+    --lw-color-feedback-success-bg: #001f15;
+    --lw-color-feedback-success-border: #003e2f;
+    --lw-color-feedback-success-text: #c8e4da;
+    --lw-color-feedback-success-icon: #a0cabb;
+    --lw-color-feedback-warning-bg: #380800;
+    --lw-color-feedback-warning-border: #622200;
+    --lw-color-feedback-warning-text: #fbd7c4;
+    --lw-color-feedback-warning-icon: #ecb699;
+    --lw-color-feedback-danger-bg: #3f0004;
+    --lw-color-feedback-danger-border: #730018;
+    --lw-color-feedback-danger-text: #ffd4d2;
+    --lw-color-feedback-danger-icon: #fcadac;
+    --lw-color-amount-incoming: #a0cabb; /** Money in. Always with a plus sign. */
+    --lw-color-amount-outgoing: #f6f6fb; /** Money out. Never red. Always with a minus sign. */
+    --lw-color-amount-pending: #ecb699; /** Not settled yet. Always with a pending label. */
+    --lw-color-accent-decorative: #ff7a59; /** Illustration and highlights only. Never text or the only signal of state. */
+    --lw-color-accent-decorative-subtle: #3e0000;
+    --lw-color-skeleton-base: #282a3b;
+    --lw-color-skeleton-highlight: #3c3e52;
+    --lw-shadow-1: 0px 1px 2px 0px #00000052, 0px 1px 3px 0px #00000033;
+    --lw-shadow-2: 0px 4px 12px -2px #0000005c, 0px 2px 4px -1px #00000033;
+    --lw-shadow-3: 0px 16px 32px -8px #0000007a, 0px 4px 8px -2px #00000040;
+  }
+}

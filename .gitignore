@@ -8,3 +8,6 @@ playwright-report/
 .DS_Store
 .env
 .env.*
+
+# Token outputs are committed so Figma and agents can read them without a build.
+!packages/tokens/dist/

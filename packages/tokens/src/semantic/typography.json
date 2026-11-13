@@ -1,0 +1,270 @@
+{
+  "type": {
+    "$description": "Type roles. Inter with optical sizing: large sizes use the display cut automatically.",
+    "display": {
+      "lg": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.48}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.56}"
+        },
+        "weight": {
+          "$value": "{font.weight.bold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.tight}"
+        }
+      },
+      "md": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.40}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.48}"
+        },
+        "weight": {
+          "$value": "{font.weight.bold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.tight}"
+        }
+      }
+    },
+    "heading": {
+      "xl": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.32}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.40}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.tight}"
+        }
+      },
+      "lg": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.28}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.36}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.tight}"
+        }
+      },
+      "md": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.24}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.32}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.snug}"
+        }
+      },
+      "sm": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.20}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.28}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.snug}"
+        }
+      },
+      "xs": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.16}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.24}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      }
+    },
+    "body": {
+      "md": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.16}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.24}"
+        },
+        "weight": {
+          "$value": "{font.weight.regular}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      },
+      "sm": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.14}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.20}"
+        },
+        "weight": {
+          "$value": "{font.weight.regular}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      }
+    },
+    "label": {
+      "md": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.16}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.24}"
+        },
+        "weight": {
+          "$value": "{font.weight.medium}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      },
+      "sm": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.14}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.20}"
+        },
+        "weight": {
+          "$value": "{font.weight.medium}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      }
+    },
+    "caption": {
+      "family": {
+        "$value": "{font.family.inter}"
+      },
+      "size": {
+        "$value": "{font.size.12}"
+      },
+      "line-height": {
+        "$value": "{font.line-height.16}"
+      },
+      "weight": {
+        "$value": "{font.weight.regular}"
+      },
+      "tracking": {
+        "$value": "{font.tracking.wide}"
+      }
+    },
+    "amount": {
+      "lg": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.40}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.48}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.tight}"
+        }
+      },
+      "md": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.20}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.28}"
+        },
+        "weight": {
+          "$value": "{font.weight.semibold}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      },
+      "sm": {
+        "family": {
+          "$value": "{font.family.inter}"
+        },
+        "size": {
+          "$value": "{font.size.16}"
+        },
+        "line-height": {
+          "$value": "{font.line-height.24}"
+        },
+        "weight": {
+          "$value": "{font.weight.medium}"
+        },
+        "tracking": {
+          "$value": "{font.tracking.normal}"
+        }
+      }
+    }
+  }
+}

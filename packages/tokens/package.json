@@ -6,6 +6,27 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "build": "node build/build.ts",
+    "generate": "node build/generate-primitives.ts",
     "typecheck": "tsc -p tsconfig.json"
-  }
+  },
+  "devDependencies": {
+    "colorjs.io": "0.7.1",
+    "style-dictionary": "5.8.0"
+  },
+  "exports": {
+    ".": "./dist/ts/index.ts",
+    "./css": "./dist/css/tokens.css",
+    "./css/*": "./dist/css/*",
+    "./figma/*": "./dist/figma/*",
+    "./palette": "./build/palette.ts",
+    "./themes": "./build/themes.ts",
+    "./build": "./build/build.ts"
+  },
+  "files": [
+    "dist",
+    "build",
+    "src",
+    "themes"
+  ]
 }

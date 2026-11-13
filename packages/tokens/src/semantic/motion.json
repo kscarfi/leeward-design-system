@@ -1,0 +1,31 @@
+{
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "instant": {
+        "$value": "{duration.100}"
+      },
+      "fast": {
+        "$value": "{duration.150}"
+      },
+      "base": {
+        "$value": "{duration.200}"
+      },
+      "slow": {
+        "$value": "{duration.300}"
+      }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "standard": {
+        "$value": "{easing.standard}"
+      },
+      "enter": {
+        "$value": "{easing.decelerate}"
+      },
+      "exit": {
+        "$value": "{easing.accelerate}"
+      }
+    }
+  }
+}
