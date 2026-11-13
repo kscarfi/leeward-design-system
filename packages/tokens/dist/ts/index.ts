@@ -259,7 +259,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.ink.200"
     },
     "color.surface.brand": {
-      "value": "#f5f8ff",
+      "value": "#f5f9ff",
       "cssVar": "--lw-color-surface-brand",
       "type": "color",
       "description": "Tinted surface for selected or highlighted items",
@@ -428,13 +428,13 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.white"
     },
     "color.action.secondary.bg": {
-      "value": "#f5f8ff",
+      "value": "#f5f9ff",
       "cssVar": "--lw-color-action-secondary-bg",
       "type": "color",
       "ref": "color.iris.50"
     },
     "color.action.secondary.bg-hover": {
-      "value": "#eaefff",
+      "value": "#e9efff",
       "cssVar": "--lw-color-action-secondary-bg-hover",
       "type": "color",
       "ref": "color.iris.100"
@@ -458,13 +458,13 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.iris.200"
     },
     "color.action.ghost.bg-hover": {
-      "value": "#f5f8ff",
+      "value": "#f5f9ff",
       "cssVar": "--lw-color-action-ghost-bg-hover",
       "type": "color",
       "ref": "color.iris.50"
     },
     "color.action.ghost.bg-active": {
-      "value": "#eaefff",
+      "value": "#e9efff",
       "cssVar": "--lw-color-action-ghost-bg-active",
       "type": "color",
       "ref": "color.iris.100"
@@ -542,7 +542,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.white"
     },
     "color.feedback.info.bg": {
-      "value": "#f5f8ff",
+      "value": "#f5f9ff",
       "cssVar": "--lw-color-feedback-info-bg",
       "type": "color",
       "ref": "color.iris.50"
@@ -566,13 +566,13 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.iris.600"
     },
     "color.feedback.success.bg": {
-      "value": "#edfbf6",
+      "value": "#ecfbf6",
       "cssVar": "--lw-color-feedback-success-bg",
       "type": "color",
       "ref": "color.teal.50"
     },
     "color.feedback.success.border": {
-      "value": "#c8e4da",
+      "value": "#c0e6d9",
       "cssVar": "--lw-color-feedback-success-border",
       "type": "color",
       "ref": "color.teal.200"
@@ -590,25 +590,25 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.teal.600"
     },
     "color.feedback.warning.bg": {
-      "value": "#fff7ef",
+      "value": "#fff7f0",
       "cssVar": "--lw-color-feedback-warning-bg",
       "type": "color",
       "ref": "color.warning.50"
     },
     "color.feedback.warning.border": {
-      "value": "#fbd7c4",
+      "value": "#ffd6bd",
       "cssVar": "--lw-color-feedback-warning-border",
       "type": "color",
       "ref": "color.warning.200"
     },
     "color.feedback.warning.text": {
-      "value": "#7c3100",
+      "value": "#783300",
       "cssVar": "--lw-color-feedback-warning-text",
       "type": "color",
       "ref": "color.warning.700"
     },
     "color.feedback.warning.icon": {
-      "value": "#9a4400",
+      "value": "#994500",
       "cssVar": "--lw-color-feedback-warning-icon",
       "type": "color",
       "ref": "color.warning.600"
@@ -734,86 +734,86 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "radius.full"
     },
     "size.touch-target": {
-      "value": "0.171875rem",
+      "value": "2.75rem",
       "cssVar": "--lw-size-touch-target",
       "type": "dimension",
       "description": "Minimum hit area for any interactive element",
       "ref": "size.44"
     },
     "size.control.sm": {
-      "value": "0.140625rem",
+      "value": "2.25rem",
       "cssVar": "--lw-size-control-sm",
       "type": "dimension",
       "ref": "size.36"
     },
     "size.control.md": {
-      "value": "0.171875rem",
+      "value": "2.75rem",
       "cssVar": "--lw-size-control-md",
       "type": "dimension",
       "ref": "size.44"
     },
     "size.control.lg": {
-      "value": "0.203125rem",
+      "value": "3.25rem",
       "cssVar": "--lw-size-control-lg",
       "type": "dimension",
       "ref": "size.52"
     },
     "size.icon.sm": {
-      "value": "0.0625rem",
+      "value": "1rem",
       "cssVar": "--lw-size-icon-sm",
       "type": "dimension",
       "ref": "size.16"
     },
     "size.icon.md": {
-      "value": "0.078125rem",
+      "value": "1.25rem",
       "cssVar": "--lw-size-icon-md",
       "type": "dimension",
       "ref": "size.20"
     },
     "size.icon.lg": {
-      "value": "0.09375rem",
+      "value": "1.5rem",
       "cssVar": "--lw-size-icon-lg",
       "type": "dimension",
       "ref": "size.24"
     },
     "size.avatar.sm": {
-      "value": "0.125rem",
+      "value": "2rem",
       "cssVar": "--lw-size-avatar-sm",
       "type": "dimension",
       "ref": "size.32"
     },
     "size.avatar.md": {
-      "value": "0.15625rem",
+      "value": "2.5rem",
       "cssVar": "--lw-size-avatar-md",
       "type": "dimension",
       "ref": "size.40"
     },
     "size.avatar.lg": {
-      "value": "0.21875rem",
+      "value": "3.5rem",
       "cssVar": "--lw-size-avatar-lg",
       "type": "dimension",
       "ref": "size.56"
     },
     "size.focus-ring.width": {
-      "value": "0.125px",
+      "value": "0.125rem",
       "cssVar": "--lw-size-focus-ring-width",
       "type": "dimension",
       "ref": "size.2"
     },
     "size.focus-ring.offset": {
-      "value": "0.125px",
+      "value": "0.125rem",
       "cssVar": "--lw-size-focus-ring-offset",
       "type": "dimension",
       "ref": "size.2"
     },
     "size.border.default": {
-      "value": "0.0625px",
+      "value": "0.0625rem",
       "cssVar": "--lw-size-border-default",
       "type": "dimension",
       "ref": "size.1"
     },
     "size.border.strong": {
-      "value": "0.125px",
+      "value": "0.125rem",
       "cssVar": "--lw-size-border-strong",
       "type": "dimension",
       "ref": "size.2"
@@ -835,55 +835,55 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "space.0"
     },
     "space.3xs": {
-      "value": "0.0078125rem",
+      "value": "0.125rem",
       "cssVar": "--lw-space-3xs",
       "type": "dimension",
       "ref": "space.0_5"
     },
     "space.2xs": {
-      "value": "0.015625rem",
+      "value": "0.25rem",
       "cssVar": "--lw-space-2xs",
       "type": "dimension",
       "ref": "space.1"
     },
     "space.xs": {
-      "value": "0.03125rem",
+      "value": "0.5rem",
       "cssVar": "--lw-space-xs",
       "type": "dimension",
       "ref": "space.2"
     },
     "space.sm": {
-      "value": "0.046875rem",
+      "value": "0.75rem",
       "cssVar": "--lw-space-sm",
       "type": "dimension",
       "ref": "space.3"
     },
     "space.md": {
-      "value": "0.0625rem",
+      "value": "1rem",
       "cssVar": "--lw-space-md",
       "type": "dimension",
       "ref": "space.4"
     },
     "space.lg": {
-      "value": "0.09375rem",
+      "value": "1.5rem",
       "cssVar": "--lw-space-lg",
       "type": "dimension",
       "ref": "space.6"
     },
     "space.xl": {
-      "value": "0.125rem",
+      "value": "2rem",
       "cssVar": "--lw-space-xl",
       "type": "dimension",
       "ref": "space.8"
     },
     "space.2xl": {
-      "value": "0.1875rem",
+      "value": "3rem",
       "cssVar": "--lw-space-2xl",
       "type": "dimension",
       "ref": "space.12"
     },
     "space.3xl": {
-      "value": "0.25rem",
+      "value": "4rem",
       "cssVar": "--lw-space-3xl",
       "type": "dimension",
       "ref": "space.16"
@@ -1449,7 +1449,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.ink.950"
     },
     "color.text.link": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-text-link",
       "type": "color",
       "ref": "color.iris.300"
@@ -1461,32 +1461,32 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.iris.200"
     },
     "color.text.brand": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-text-brand",
       "type": "color",
       "ref": "color.iris.300"
     },
     "color.text.accent": {
-      "value": "#ffad95",
+      "value": "#ffae95",
       "cssVar": "--lw-color-text-accent",
       "type": "color",
       "description": "Rare emphasis text in the accent hue",
       "ref": "color.coral.300"
     },
     "color.text.success": {
-      "value": "#a0cabb",
+      "value": "#93cdba",
       "cssVar": "--lw-color-text-success",
       "type": "color",
       "ref": "color.teal.300"
     },
     "color.text.warning": {
-      "value": "#ecb699",
+      "value": "#f9b18a",
       "cssVar": "--lw-color-text-warning",
       "type": "color",
       "ref": "color.warning.300"
     },
     "color.text.danger": {
-      "value": "#fcadac",
+      "value": "#ffacab",
       "cssVar": "--lw-color-text-danger",
       "type": "color",
       "ref": "color.danger.300"
@@ -1504,7 +1504,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.ink.200"
     },
     "color.icon.brand": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-icon-brand",
       "type": "color",
       "ref": "color.iris.300"
@@ -1530,26 +1530,26 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.ink.300"
     },
     "color.border.focus": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-border-focus",
       "type": "color",
       "description": "Focus ring. At least 3:1 against every surface.",
       "ref": "color.iris.300"
     },
     "color.border.brand": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-border-brand",
       "type": "color",
       "ref": "color.iris.300"
     },
     "color.border.danger": {
-      "value": "#fcadac",
+      "value": "#ffacab",
       "cssVar": "--lw-color-border-danger",
       "type": "color",
       "ref": "color.danger.300"
     },
     "color.action.primary.bg": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-action-primary-bg",
       "type": "color",
       "ref": "color.iris.300"
@@ -1561,7 +1561,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.iris.200"
     },
     "color.action.primary.bg-active": {
-      "value": "#eaefff",
+      "value": "#e9efff",
       "cssVar": "--lw-color-action-primary-bg-active",
       "type": "color",
       "ref": "color.iris.100"
@@ -1615,13 +1615,13 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.deep.700"
     },
     "color.action.ghost.text": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-action-ghost-text",
       "type": "color",
       "ref": "color.iris.300"
     },
     "color.action.danger.bg": {
-      "value": "#fcadac",
+      "value": "#ffacab",
       "cssVar": "--lw-color-action-danger-bg",
       "type": "color",
       "ref": "color.danger.300"
@@ -1633,7 +1633,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.danger.200"
     },
     "color.action.danger.bg-active": {
-      "value": "#ffeaea",
+      "value": "#ffebe9",
       "cssVar": "--lw-color-action-danger-bg-active",
       "type": "color",
       "ref": "color.danger.100"
@@ -1663,7 +1663,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.deep.900"
     },
     "color.control.bg-checked": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-control-bg-checked",
       "type": "color",
       "ref": "color.iris.300"
@@ -1687,16 +1687,16 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.ink.50"
     },
     "color.feedback.info.bg": {
-      "value": "#282a3b",
+      "value": "#252944",
       "cssVar": "--lw-color-feedback-info-bg",
       "type": "color",
-      "ref": "color.deep.800"
+      "ref": "color.tint.info"
     },
     "color.feedback.info.border": {
-      "value": "#3c2dbb",
+      "value": "#424878",
       "cssVar": "--lw-color-feedback-info-border",
       "type": "color",
-      "ref": "color.iris.700"
+      "ref": "color.tint.info-border"
     },
     "color.feedback.info.text": {
       "value": "#d4dcff",
@@ -1705,70 +1705,70 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.iris.200"
     },
     "color.feedback.info.icon": {
-      "value": "#b3bdff",
+      "value": "#b2beff",
       "cssVar": "--lw-color-feedback-info-icon",
       "type": "color",
       "ref": "color.iris.300"
     },
     "color.feedback.success.bg": {
-      "value": "#001f15",
+      "value": "#083329",
       "cssVar": "--lw-color-feedback-success-bg",
       "type": "color",
-      "ref": "color.teal.950"
+      "ref": "color.tint.success"
     },
     "color.feedback.success.border": {
-      "value": "#003e2f",
+      "value": "#035b48",
       "cssVar": "--lw-color-feedback-success-border",
       "type": "color",
-      "ref": "color.teal.800"
+      "ref": "color.tint.success-border"
     },
     "color.feedback.success.text": {
-      "value": "#c8e4da",
+      "value": "#c0e6d9",
       "cssVar": "--lw-color-feedback-success-text",
       "type": "color",
       "ref": "color.teal.200"
     },
     "color.feedback.success.icon": {
-      "value": "#a0cabb",
+      "value": "#93cdba",
       "cssVar": "--lw-color-feedback-success-icon",
       "type": "color",
       "ref": "color.teal.300"
     },
     "color.feedback.warning.bg": {
-      "value": "#380800",
+      "value": "#3a270b",
       "cssVar": "--lw-color-feedback-warning-bg",
       "type": "color",
-      "ref": "color.warning.950"
+      "ref": "color.tint.warning"
     },
     "color.feedback.warning.border": {
-      "value": "#622200",
+      "value": "#674611",
       "cssVar": "--lw-color-feedback-warning-border",
       "type": "color",
-      "ref": "color.warning.800"
+      "ref": "color.tint.warning-border"
     },
     "color.feedback.warning.text": {
-      "value": "#fbd7c4",
+      "value": "#ffd6bd",
       "cssVar": "--lw-color-feedback-warning-text",
       "type": "color",
       "ref": "color.warning.200"
     },
     "color.feedback.warning.icon": {
-      "value": "#ecb699",
+      "value": "#f9b18a",
       "cssVar": "--lw-color-feedback-warning-icon",
       "type": "color",
       "ref": "color.warning.300"
     },
     "color.feedback.danger.bg": {
-      "value": "#3f0004",
+      "value": "#412121",
       "cssVar": "--lw-color-feedback-danger-bg",
       "type": "color",
-      "ref": "color.danger.950"
+      "ref": "color.tint.danger"
     },
     "color.feedback.danger.border": {
-      "value": "#730018",
+      "value": "#723a3b",
       "cssVar": "--lw-color-feedback-danger-border",
       "type": "color",
-      "ref": "color.danger.800"
+      "ref": "color.tint.danger-border"
     },
     "color.feedback.danger.text": {
       "value": "#ffd4d2",
@@ -1777,13 +1777,13 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.danger.200"
     },
     "color.feedback.danger.icon": {
-      "value": "#fcadac",
+      "value": "#ffacab",
       "cssVar": "--lw-color-feedback-danger-icon",
       "type": "color",
       "ref": "color.danger.300"
     },
     "color.amount.incoming": {
-      "value": "#a0cabb",
+      "value": "#93cdba",
       "cssVar": "--lw-color-amount-incoming",
       "type": "color",
       "description": "Money in. Always with a plus sign.",
@@ -1797,7 +1797,7 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "color.ink.50"
     },
     "color.amount.pending": {
-      "value": "#ecb699",
+      "value": "#f9b18a",
       "cssVar": "--lw-color-amount-pending",
       "type": "color",
       "description": "Not settled yet. Always with a pending label.",
@@ -1879,86 +1879,86 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "radius.full"
     },
     "size.touch-target": {
-      "value": "0.171875rem",
+      "value": "2.75rem",
       "cssVar": "--lw-size-touch-target",
       "type": "dimension",
       "description": "Minimum hit area for any interactive element",
       "ref": "size.44"
     },
     "size.control.sm": {
-      "value": "0.140625rem",
+      "value": "2.25rem",
       "cssVar": "--lw-size-control-sm",
       "type": "dimension",
       "ref": "size.36"
     },
     "size.control.md": {
-      "value": "0.171875rem",
+      "value": "2.75rem",
       "cssVar": "--lw-size-control-md",
       "type": "dimension",
       "ref": "size.44"
     },
     "size.control.lg": {
-      "value": "0.203125rem",
+      "value": "3.25rem",
       "cssVar": "--lw-size-control-lg",
       "type": "dimension",
       "ref": "size.52"
     },
     "size.icon.sm": {
-      "value": "0.0625rem",
+      "value": "1rem",
       "cssVar": "--lw-size-icon-sm",
       "type": "dimension",
       "ref": "size.16"
     },
     "size.icon.md": {
-      "value": "0.078125rem",
+      "value": "1.25rem",
       "cssVar": "--lw-size-icon-md",
       "type": "dimension",
       "ref": "size.20"
     },
     "size.icon.lg": {
-      "value": "0.09375rem",
+      "value": "1.5rem",
       "cssVar": "--lw-size-icon-lg",
       "type": "dimension",
       "ref": "size.24"
     },
     "size.avatar.sm": {
-      "value": "0.125rem",
+      "value": "2rem",
       "cssVar": "--lw-size-avatar-sm",
       "type": "dimension",
       "ref": "size.32"
     },
     "size.avatar.md": {
-      "value": "0.15625rem",
+      "value": "2.5rem",
       "cssVar": "--lw-size-avatar-md",
       "type": "dimension",
       "ref": "size.40"
     },
     "size.avatar.lg": {
-      "value": "0.21875rem",
+      "value": "3.5rem",
       "cssVar": "--lw-size-avatar-lg",
       "type": "dimension",
       "ref": "size.56"
     },
     "size.focus-ring.width": {
-      "value": "0.125px",
+      "value": "0.125rem",
       "cssVar": "--lw-size-focus-ring-width",
       "type": "dimension",
       "ref": "size.2"
     },
     "size.focus-ring.offset": {
-      "value": "0.125px",
+      "value": "0.125rem",
       "cssVar": "--lw-size-focus-ring-offset",
       "type": "dimension",
       "ref": "size.2"
     },
     "size.border.default": {
-      "value": "0.0625px",
+      "value": "0.0625rem",
       "cssVar": "--lw-size-border-default",
       "type": "dimension",
       "ref": "size.1"
     },
     "size.border.strong": {
-      "value": "0.125px",
+      "value": "0.125rem",
       "cssVar": "--lw-size-border-strong",
       "type": "dimension",
       "ref": "size.2"
@@ -1980,55 +1980,55 @@ export const tokens: Record<ThemeName, Record<TokenName, TokenEntry>> = {
       "ref": "space.0"
     },
     "space.3xs": {
-      "value": "0.0078125rem",
+      "value": "0.125rem",
       "cssVar": "--lw-space-3xs",
       "type": "dimension",
       "ref": "space.0_5"
     },
     "space.2xs": {
-      "value": "0.015625rem",
+      "value": "0.25rem",
       "cssVar": "--lw-space-2xs",
       "type": "dimension",
       "ref": "space.1"
     },
     "space.xs": {
-      "value": "0.03125rem",
+      "value": "0.5rem",
       "cssVar": "--lw-space-xs",
       "type": "dimension",
       "ref": "space.2"
     },
     "space.sm": {
-      "value": "0.046875rem",
+      "value": "0.75rem",
       "cssVar": "--lw-space-sm",
       "type": "dimension",
       "ref": "space.3"
     },
     "space.md": {
-      "value": "0.0625rem",
+      "value": "1rem",
       "cssVar": "--lw-space-md",
       "type": "dimension",
       "ref": "space.4"
     },
     "space.lg": {
-      "value": "0.09375rem",
+      "value": "1.5rem",
       "cssVar": "--lw-space-lg",
       "type": "dimension",
       "ref": "space.6"
     },
     "space.xl": {
-      "value": "0.125rem",
+      "value": "2rem",
       "cssVar": "--lw-space-xl",
       "type": "dimension",
       "ref": "space.8"
     },
     "space.2xl": {
-      "value": "0.1875rem",
+      "value": "3rem",
       "cssVar": "--lw-space-2xl",
       "type": "dimension",
       "ref": "space.12"
     },
     "space.3xl": {
-      "value": "0.25rem",
+      "value": "4rem",
       "cssVar": "--lw-space-3xl",
       "type": "dimension",
       "ref": "space.16"

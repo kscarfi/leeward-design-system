@@ -201,10 +201,10 @@
     "feedback": {
       "info": {
         "bg": {
-          "$value": "{color.deep.800}"
+          "$value": "{color.tint.info}"
         },
         "border": {
-          "$value": "{color.iris.700}"
+          "$value": "{color.tint.info-border}"
         },
         "text": {
           "$value": "{color.iris.200}"
@@ -215,10 +215,10 @@
       },
       "success": {
         "bg": {
-          "$value": "{color.teal.950}"
+          "$value": "{color.tint.success}"
         },
         "border": {
-          "$value": "{color.teal.800}"
+          "$value": "{color.tint.success-border}"
         },
         "text": {
           "$value": "{color.teal.200}"
@@ -229,10 +229,10 @@
       },
       "warning": {
         "bg": {
-          "$value": "{color.warning.950}"
+          "$value": "{color.tint.warning}"
         },
         "border": {
-          "$value": "{color.warning.800}"
+          "$value": "{color.tint.warning-border}"
         },
         "text": {
           "$value": "{color.warning.200}"
@@ -243,10 +243,10 @@
       },
       "danger": {
         "bg": {
-          "$value": "{color.danger.950}"
+          "$value": "{color.tint.danger}"
         },
         "border": {
-          "$value": "{color.danger.800}"
+          "$value": "{color.tint.danger-border}"
         },
         "text": {
           "$value": "{color.danger.200}"

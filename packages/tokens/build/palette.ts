@@ -35,6 +35,11 @@ export interface RampSpec {
   seeds: string[];
   /** Neutral ramps keep low chroma in the light half and let it grow toward the dark end. */
   neutral?: boolean;
+  /**
+   * Degrees to rotate hue at the darkest step. Warm hues read redder as they darken,
+   * so amber needs a nudge toward yellow to stay amber in dark mode surfaces.
+   */
+  darkHueShift?: number;
 }
 
 export type Ramp = Record<Step, string>;
@@ -87,8 +92,9 @@ function chromaAt(l: number, anchors: Anchor[], neutral: boolean): number {
   }
   // Vivid ramps: full seed chroma between anchors, tapering toward white and black.
   if (l > lightest.l) {
+    // Hold chroma through the mid tints so light steps stay colorful, then fall off near white.
     const t = (l - lightest.l) / (1 - lightest.l);
-    return lightest.c * (1 - t) ** 0.85 + 0.01 * t;
+    return lightest.c * (1 - t ** 2) + 0.01 * t;
   }
   if (l < darkest.l) {
     const t = (darkest.l - l) / darkest.l;
@@ -98,11 +104,11 @@ function chromaAt(l: number, anchors: Anchor[], neutral: boolean): number {
   return lightest.c + (darkest.c - lightest.c) * t;
 }
 
-function hueAt(l: number, anchors: Anchor[]): number {
+function hueAt(l: number, anchors: Anchor[], darkHueShift = 0): number {
   const sorted = [...anchors].sort((a, b) => b.l - a.l);
-  if (sorted.length === 1 || l >= sorted[0]!.l) return sorted[0]!.h;
   const last = sorted[sorted.length - 1]!;
-  if (l <= last.l) return last.h;
+  if (l < last.l) return (last.h + darkHueShift * ((last.l - l) / last.l) + 360) % 360;
+  if (sorted.length === 1 || l >= sorted[0]!.l) return sorted[0]!.h;
   for (let i = 0; i < sorted.length - 1; i++) {
     const a = sorted[i]!;
     const b = sorted[i + 1]!;
@@ -118,13 +124,13 @@ function hueAt(l: number, anchors: Anchor[]): number {
 }
 
 /** Find the lightness that hits a contrast target, with chroma and hue following the ramp shape. */
-function solveStep(target: number, anchors: Anchor[], neutral: boolean): string {
+function solveStep(target: number, anchors: Anchor[], neutral: boolean, darkHueShift = 0): string {
   let lo = 0;
   let hi = 1;
   let hex = "#000000";
   for (let i = 0; i < 40; i++) {
     const l = (lo + hi) / 2;
-    hex = toHex(l, chromaAt(l, anchors, neutral), hueAt(l, anchors));
+    hex = toHex(l, chromaAt(l, anchors, neutral), hueAt(l, anchors, darkHueShift));
     if (contrastOnWhite(hex) > target) lo = l;
     else hi = l;
   }
@@ -142,7 +148,7 @@ export function generateRamp(spec: RampSpec): Ramp {
   }
   const ramp = {} as Ramp;
   for (const step of STEPS) {
-    ramp[step] = pinned.get(step) ?? solveStep(CONTRAST_TARGETS[step], anchors, spec.neutral ?? false);
+    ramp[step] = pinned.get(step) ?? solveStep(CONTRAST_TARGETS[step], anchors, spec.neutral ?? false, spec.darkHueShift ?? 0);
   }
   return ramp;
 }
@@ -164,4 +170,22 @@ export function generateDeepRamp(hueSeed: string): Record<string, string> {
     "700": [0.37, 0.034],
   };
   return Object.fromEntries(Object.entries(levels).map(([step, [l, c]]) => [step, toHex(l, c, h)]));
+}
+
+/**
+ * Dark mode tinted surfaces for feedback (info, success, warning, danger).
+ * The dark end of a vivid ramp turns muddy brown or maroon, so dark feedback
+ * backgrounds are a low-chroma tint of the deep surface instead.
+ */
+export function generateDarkTints(hues: Record<string, string>, shift: Record<string, number> = {}): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(hues).map(([name, seed]) => {
+      const { h } = oklch(seed);
+      const hue = (h + (shift[name] ?? 0) + 360) % 360;
+      return [
+        [name, toHex(0.29, 0.05, hue)],
+        [`${name}-border`, toHex(0.42, 0.08, hue)],
+      ];
+    }).flat(),
+  );
 }

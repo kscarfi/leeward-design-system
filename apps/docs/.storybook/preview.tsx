@@ -6,6 +6,8 @@ import { ToastProvider, TooltipProvider } from "@leeward/react";
 
 const withTheme: Decorator = (Story, context) => {
   const theme = context.globals.theme ?? "light";
+  // Paint the whole page in the chosen theme so screenshots have no stray canvas.
+  if (typeof document !== "undefined") document.documentElement.dataset.theme = theme === "both" ? "light" : theme;
   const layout = context.parameters.layout;
   const frame = (name: string) => (
     <div data-theme={name} className={layout === "fullscreen" ? "lw-frame lw-frame-full" : "lw-frame"}>

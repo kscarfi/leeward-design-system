@@ -44,22 +44,22 @@
     },
     "iris": {
       "50": {
-        "$value": "#f5f8ff"
+        "$value": "#f5f9ff"
       },
       "100": {
-        "$value": "#eaefff"
+        "$value": "#e9efff"
       },
       "200": {
         "$value": "#d4dcff"
       },
       "300": {
-        "$value": "#b3bdff"
+        "$value": "#b2beff"
       },
       "400": {
-        "$value": "#7a82f6"
+        "$value": "#7a81ff"
       },
       "500": {
-        "$value": "#5c5cea"
+        "$value": "#5c58f7"
       },
       "600": {
         "$value": "#4c3fe0",
@@ -80,16 +80,16 @@
     },
     "coral": {
       "50": {
-        "$value": "#fff6f2"
+        "$value": "#fff6f1"
       },
       "100": {
         "$value": "#ffece3"
       },
       "200": {
-        "$value": "#ffd5c6"
+        "$value": "#ffd4c6"
       },
       "300": {
-        "$value": "#ffad95"
+        "$value": "#ffae95"
       },
       "400": {
         "$value": "#ff7a59",
@@ -117,19 +117,19 @@
     },
     "teal": {
       "50": {
-        "$value": "#edfbf6"
+        "$value": "#ecfbf6"
       },
       "100": {
-        "$value": "#e0f4ed"
+        "$value": "#ddf5ec"
       },
       "200": {
-        "$value": "#c8e4da"
+        "$value": "#c0e6d9"
       },
       "300": {
-        "$value": "#a0cabb"
+        "$value": "#93cdba"
       },
       "400": {
-        "$value": "#579a85"
+        "$value": "#489c84"
       },
       "500": {
         "$value": "#08745d",
@@ -156,16 +156,16 @@
         "$value": "#fff7f6"
       },
       "100": {
-        "$value": "#ffeaea"
+        "$value": "#ffebe9"
       },
       "200": {
         "$value": "#ffd4d2"
       },
       "300": {
-        "$value": "#fcadac"
+        "$value": "#ffacab"
       },
       "400": {
-        "$value": "#e1686c"
+        "$value": "#ef5b65"
       },
       "500": {
         "$value": "#c8283e",
@@ -189,38 +189,38 @@
     },
     "warning": {
       "50": {
-        "$value": "#fff7ef"
+        "$value": "#fff7f0"
       },
       "100": {
-        "$value": "#ffebe0"
+        "$value": "#ffebde"
       },
       "200": {
-        "$value": "#fbd7c4"
+        "$value": "#ffd6bd"
       },
       "300": {
-        "$value": "#ecb699"
+        "$value": "#f9b18a"
       },
       "400": {
-        "$value": "#cb784a"
+        "$value": "#d4743b"
       },
       "500": {
         "$value": "#b45309",
         "$description": "Seed color"
       },
       "600": {
-        "$value": "#9a4400"
+        "$value": "#994500"
       },
       "700": {
-        "$value": "#7c3100"
+        "$value": "#783300"
       },
       "800": {
-        "$value": "#622200"
+        "$value": "#5e2600"
       },
       "900": {
-        "$value": "#4b1400"
+        "$value": "#451a00"
       },
       "950": {
-        "$value": "#380800"
+        "$value": "#311000"
       }
     },
     "deep": {
@@ -240,6 +240,33 @@
         "$value": "#11131e"
       },
       "$description": "Dark mode surfaces. Low chroma, tinted with the Ink hue."
+    },
+    "tint": {
+      "$description": "Dark mode feedback surfaces: a low-chroma tint of the deep surface per tone.",
+      "info": {
+        "$value": "#252944"
+      },
+      "info-border": {
+        "$value": "#424878"
+      },
+      "success": {
+        "$value": "#083329"
+      },
+      "success-border": {
+        "$value": "#035b48"
+      },
+      "warning": {
+        "$value": "#3a270b"
+      },
+      "warning-border": {
+        "$value": "#674611"
+      },
+      "danger": {
+        "$value": "#412121"
+      },
+      "danger-border": {
+        "$value": "#723a3b"
+      }
     }
   }
 }

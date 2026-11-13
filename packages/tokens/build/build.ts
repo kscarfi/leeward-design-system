@@ -33,7 +33,10 @@ StyleDictionary.registerTransform({
   filter: (token) => (token.$type ?? token.type) === "dimension",
   transform: (token) => {
     const raw = token.$value ?? token.value;
-    const { value, unit } = typeof raw === "object" ? raw : { value: parseFloat(raw), unit: "px" };
+    // Transitive transforms run again on references that were already converted,
+    // so a string value that already carries a unit is returned as is.
+    if (typeof raw === "string") return raw;
+    const { value, unit } = raw as { value: number; unit: string };
     if (unit !== "px") return `${value}${unit}`;
     if (value === 0) return "0";
     if (PX_ONLY.test(token.path.join("."))) return `${value}px`;

@@ -51,7 +51,7 @@
     "ref": "color.ink.200"
   },
   "color.surface.brand": {
-    "value": "#f5f8ff",
+    "value": "#f5f9ff",
     "cssVar": "--lw-color-surface-brand",
     "type": "color",
     "description": "Tinted surface for selected or highlighted items",
@@ -220,13 +220,13 @@
     "ref": "color.white"
   },
   "color.action.secondary.bg": {
-    "value": "#f5f8ff",
+    "value": "#f5f9ff",
     "cssVar": "--lw-color-action-secondary-bg",
     "type": "color",
     "ref": "color.iris.50"
   },
   "color.action.secondary.bg-hover": {
-    "value": "#eaefff",
+    "value": "#e9efff",
     "cssVar": "--lw-color-action-secondary-bg-hover",
     "type": "color",
     "ref": "color.iris.100"
@@ -250,13 +250,13 @@
     "ref": "color.iris.200"
   },
   "color.action.ghost.bg-hover": {
-    "value": "#f5f8ff",
+    "value": "#f5f9ff",
     "cssVar": "--lw-color-action-ghost-bg-hover",
     "type": "color",
     "ref": "color.iris.50"
   },
   "color.action.ghost.bg-active": {
-    "value": "#eaefff",
+    "value": "#e9efff",
     "cssVar": "--lw-color-action-ghost-bg-active",
     "type": "color",
     "ref": "color.iris.100"
@@ -334,7 +334,7 @@
     "ref": "color.white"
   },
   "color.feedback.info.bg": {
-    "value": "#f5f8ff",
+    "value": "#f5f9ff",
     "cssVar": "--lw-color-feedback-info-bg",
     "type": "color",
     "ref": "color.iris.50"
@@ -358,13 +358,13 @@
     "ref": "color.iris.600"
   },
   "color.feedback.success.bg": {
-    "value": "#edfbf6",
+    "value": "#ecfbf6",
     "cssVar": "--lw-color-feedback-success-bg",
     "type": "color",
     "ref": "color.teal.50"
   },
   "color.feedback.success.border": {
-    "value": "#c8e4da",
+    "value": "#c0e6d9",
     "cssVar": "--lw-color-feedback-success-border",
     "type": "color",
     "ref": "color.teal.200"
@@ -382,25 +382,25 @@
     "ref": "color.teal.600"
   },
   "color.feedback.warning.bg": {
-    "value": "#fff7ef",
+    "value": "#fff7f0",
     "cssVar": "--lw-color-feedback-warning-bg",
     "type": "color",
     "ref": "color.warning.50"
   },
   "color.feedback.warning.border": {
-    "value": "#fbd7c4",
+    "value": "#ffd6bd",
     "cssVar": "--lw-color-feedback-warning-border",
     "type": "color",
     "ref": "color.warning.200"
   },
   "color.feedback.warning.text": {
-    "value": "#7c3100",
+    "value": "#783300",
     "cssVar": "--lw-color-feedback-warning-text",
     "type": "color",
     "ref": "color.warning.700"
   },
   "color.feedback.warning.icon": {
-    "value": "#9a4400",
+    "value": "#994500",
     "cssVar": "--lw-color-feedback-warning-icon",
     "type": "color",
     "ref": "color.warning.600"
@@ -526,86 +526,86 @@
     "ref": "radius.full"
   },
   "size.touch-target": {
-    "value": "0.171875rem",
+    "value": "2.75rem",
     "cssVar": "--lw-size-touch-target",
     "type": "dimension",
     "description": "Minimum hit area for any interactive element",
     "ref": "size.44"
   },
   "size.control.sm": {
-    "value": "0.140625rem",
+    "value": "2.25rem",
     "cssVar": "--lw-size-control-sm",
     "type": "dimension",
     "ref": "size.36"
   },
   "size.control.md": {
-    "value": "0.171875rem",
+    "value": "2.75rem",
     "cssVar": "--lw-size-control-md",
     "type": "dimension",
     "ref": "size.44"
   },
   "size.control.lg": {
-    "value": "0.203125rem",
+    "value": "3.25rem",
     "cssVar": "--lw-size-control-lg",
     "type": "dimension",
     "ref": "size.52"
   },
   "size.icon.sm": {
-    "value": "0.0625rem",
+    "value": "1rem",
     "cssVar": "--lw-size-icon-sm",
     "type": "dimension",
     "ref": "size.16"
   },
   "size.icon.md": {
-    "value": "0.078125rem",
+    "value": "1.25rem",
     "cssVar": "--lw-size-icon-md",
     "type": "dimension",
     "ref": "size.20"
   },
   "size.icon.lg": {
-    "value": "0.09375rem",
+    "value": "1.5rem",
     "cssVar": "--lw-size-icon-lg",
     "type": "dimension",
     "ref": "size.24"
   },
   "size.avatar.sm": {
-    "value": "0.125rem",
+    "value": "2rem",
     "cssVar": "--lw-size-avatar-sm",
     "type": "dimension",
     "ref": "size.32"
   },
   "size.avatar.md": {
-    "value": "0.15625rem",
+    "value": "2.5rem",
     "cssVar": "--lw-size-avatar-md",
     "type": "dimension",
     "ref": "size.40"
   },
   "size.avatar.lg": {
-    "value": "0.21875rem",
+    "value": "3.5rem",
     "cssVar": "--lw-size-avatar-lg",
     "type": "dimension",
     "ref": "size.56"
   },
   "size.focus-ring.width": {
-    "value": "0.125px",
+    "value": "0.125rem",
     "cssVar": "--lw-size-focus-ring-width",
     "type": "dimension",
     "ref": "size.2"
   },
   "size.focus-ring.offset": {
-    "value": "0.125px",
+    "value": "0.125rem",
     "cssVar": "--lw-size-focus-ring-offset",
     "type": "dimension",
     "ref": "size.2"
   },
   "size.border.default": {
-    "value": "0.0625px",
+    "value": "0.0625rem",
     "cssVar": "--lw-size-border-default",
     "type": "dimension",
     "ref": "size.1"
   },
   "size.border.strong": {
-    "value": "0.125px",
+    "value": "0.125rem",
     "cssVar": "--lw-size-border-strong",
     "type": "dimension",
     "ref": "size.2"
@@ -627,55 +627,55 @@
     "ref": "space.0"
   },
   "space.3xs": {
-    "value": "0.0078125rem",
+    "value": "0.125rem",
     "cssVar": "--lw-space-3xs",
     "type": "dimension",
     "ref": "space.0_5"
   },
   "space.2xs": {
-    "value": "0.015625rem",
+    "value": "0.25rem",
     "cssVar": "--lw-space-2xs",
     "type": "dimension",
     "ref": "space.1"
   },
   "space.xs": {
-    "value": "0.03125rem",
+    "value": "0.5rem",
     "cssVar": "--lw-space-xs",
     "type": "dimension",
     "ref": "space.2"
   },
   "space.sm": {
-    "value": "0.046875rem",
+    "value": "0.75rem",
     "cssVar": "--lw-space-sm",
     "type": "dimension",
     "ref": "space.3"
   },
   "space.md": {
-    "value": "0.0625rem",
+    "value": "1rem",
     "cssVar": "--lw-space-md",
     "type": "dimension",
     "ref": "space.4"
   },
   "space.lg": {
-    "value": "0.09375rem",
+    "value": "1.5rem",
     "cssVar": "--lw-space-lg",
     "type": "dimension",
     "ref": "space.6"
   },
   "space.xl": {
-    "value": "0.125rem",
+    "value": "2rem",
     "cssVar": "--lw-space-xl",
     "type": "dimension",
     "ref": "space.8"
   },
   "space.2xl": {
-    "value": "0.1875rem",
+    "value": "3rem",
     "cssVar": "--lw-space-2xl",
     "type": "dimension",
     "ref": "space.12"
   },
   "space.3xl": {
-    "value": "0.25rem",
+    "value": "4rem",
     "cssVar": "--lw-space-3xl",
     "type": "dimension",
     "ref": "space.16"

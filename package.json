@@ -12,7 +12,7 @@
   },
   "scripts": {
     "typecheck": "pnpm -r --if-present typecheck && tsc -p scripts/tsconfig.json",
-    "lint": "pnpm -r --if-present lint",
+    "lint": "eslint . && stylelint \"packages/**/*.css\" \"apps/**/*.css\"",
     "test": "pnpm -r --if-present test",
     "build": "pnpm -r --if-present build",
     "check:copy": "node scripts/check-copy.ts",
@@ -22,9 +22,14 @@
     "storybook": "pnpm --filter @leeward/docs storybook"
   },
   "devDependencies": {
-    "@types/node": "26.6.6",
-    "typescript": "6.0.3",
+    "@leeward/lint": "workspace:*",
     "@leeward/tokens": "workspace:*",
-    "colorjs.io": "0.7.1"
+    "@types/node": "26.6.6",
+    "colorjs.io": "0.7.1",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "stylelint": "18.0.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2"
   }
 }

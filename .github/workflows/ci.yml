@@ -14,23 +14,77 @@ concurrency:
 
 jobs:
   checks:
-    name: Install, typecheck, copy rules
-    runs-on: ubuntu-latest
+    name: Tokens, types, lint, contrast, unit tests
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
-
       # Reads the pnpm version from "packageManager" in package.json.
       - uses: pnpm/action-setup@v6
-
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm typecheck
+      - name: Tokens are built from source
+        run: |
+          pnpm build:tokens
+          git diff --exit-code -- packages/tokens || (echo "::error::Token outputs are stale. Run pnpm build:tokens and commit." && exit 1)
 
+      - name: Agent docs and manifest are up to date
+        run: |
+          pnpm build:agent
+          git diff --exit-code -- DESIGN.md llms.txt components.manifest.json || (echo "::error::Agent docs are stale. Run pnpm build:agent and commit." && exit 1)
+
+      - run: pnpm typecheck
+      - run: pnpm lint
       - run: pnpm check:copy
 
-      # Day 5 adds: lint, contrast report, unit tests, axe, visual regression.
+      - name: Contrast report (WCAG 2.2 AA gate, APCA reported)
+        run: pnpm contrast
+
+      - run: pnpm test
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: contrast-report
+          path: docs/contrast-report.md
+
+  stories:
+    name: Story tests and axe (light and dark)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @leeward/docs exec playwright install --with-deps chromium
+      - run: pnpm test:stories
+
+  visual:
+    name: Visual regression
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @leeward/docs exec playwright install --with-deps chromium
+      - run: pnpm --filter @leeward/docs build-storybook
+      # Missing baselines are written, not failed, so a new story does not block CI.
+      # The "Update visual baselines" workflow commits them.
+      - run: pnpm --filter @leeward/docs exec playwright test --update-snapshots=missing
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: visual-report
+          path: |
+            apps/docs/playwright-report
+            apps/docs/test-results

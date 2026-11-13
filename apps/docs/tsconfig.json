@@ -4,5 +4,5 @@
     "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true
   },
-  "include": ["src", ".storybook", "vitest.config.ts"]
+  "include": ["src", ".storybook", "vitest.config.ts", "visual", "playwright.config.ts"]
 }

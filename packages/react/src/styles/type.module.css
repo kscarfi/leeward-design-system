@@ -25,6 +25,7 @@
   width: 1px;
   height: 1px;
   padding: 0;
+  /* stylelint-disable-next-line leeward/spacing-scale -- standard visually hidden pattern, not layout spacing */
   margin: -1px;
   overflow: hidden;
   clip-path: inset(50%);

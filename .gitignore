@@ -11,3 +11,7 @@ playwright-report/
 
 # Token outputs are committed so Figma and agents can read them without a build.
 !packages/tokens/dist/
+test-results/
+playwright-report/
+# macOS baselines are for local use only. CI compares against Linux baselines.
+apps/docs/visual/__screenshots__/darwin/

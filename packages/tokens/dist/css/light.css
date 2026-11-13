@@ -7,7 +7,7 @@
   --lw-color-surface-inverse: #16163a;
   --lw-color-surface-hover: #eeeff4;
   --lw-color-surface-pressed: #dddde3;
-  --lw-color-surface-brand: #f5f8ff; /** Tinted surface for selected or highlighted items */
+  --lw-color-surface-brand: #f5f9ff; /** Tinted surface for selected or highlighted items */
   --lw-color-scrim: rgba(22, 22, 58, 0.48); /** Backdrop behind dialogs */
   --lw-color-text-primary: #16163a;
   --lw-color-text-secondary: #5a5b70;
@@ -34,13 +34,13 @@
   --lw-color-action-primary-bg-hover: #3c2dbb;
   --lw-color-action-primary-bg-active: #2e1d99;
   --lw-color-action-primary-text: #ffffff;
-  --lw-color-action-secondary-bg: #f5f8ff;
-  --lw-color-action-secondary-bg-hover: #eaefff;
+  --lw-color-action-secondary-bg: #f5f9ff;
+  --lw-color-action-secondary-bg-hover: #e9efff;
   --lw-color-action-secondary-bg-active: #d4dcff;
   --lw-color-action-secondary-text: #3c2dbb;
   --lw-color-action-secondary-border: #d4dcff;
-  --lw-color-action-ghost-bg-hover: #f5f8ff;
-  --lw-color-action-ghost-bg-active: #eaefff;
+  --lw-color-action-ghost-bg-hover: #f5f9ff;
+  --lw-color-action-ghost-bg-active: #e9efff;
   --lw-color-action-ghost-text: #4c3fe0;
   --lw-color-action-danger-bg: #c8283e;
   --lw-color-action-danger-bg-hover: #b41e35;
@@ -53,18 +53,18 @@
   --lw-color-control-fg-checked: #ffffff;
   --lw-color-control-track: #8c8d99;
   --lw-color-control-thumb: #ffffff;
-  --lw-color-feedback-info-bg: #f5f8ff;
+  --lw-color-feedback-info-bg: #f5f9ff;
   --lw-color-feedback-info-border: #d4dcff;
   --lw-color-feedback-info-text: #3c2dbb;
   --lw-color-feedback-info-icon: #4c3fe0;
-  --lw-color-feedback-success-bg: #edfbf6;
-  --lw-color-feedback-success-border: #c8e4da;
+  --lw-color-feedback-success-bg: #ecfbf6;
+  --lw-color-feedback-success-border: #c0e6d9;
   --lw-color-feedback-success-text: #005340;
   --lw-color-feedback-success-icon: #006a54;
-  --lw-color-feedback-warning-bg: #fff7ef;
-  --lw-color-feedback-warning-border: #fbd7c4;
-  --lw-color-feedback-warning-text: #7c3100;
-  --lw-color-feedback-warning-icon: #9a4400;
+  --lw-color-feedback-warning-bg: #fff7f0;
+  --lw-color-feedback-warning-border: #ffd6bd;
+  --lw-color-feedback-warning-text: #783300;
+  --lw-color-feedback-warning-icon: #994500;
   --lw-color-feedback-danger-bg: #fff7f6;
   --lw-color-feedback-danger-border: #ffd4d2;
   --lw-color-feedback-danger-text: #920a25;
@@ -84,32 +84,32 @@
   --lw-radius-control: 8px; /** Buttons, inputs, selects */
   --lw-radius-card: 16px; /** Cards and dialogs */
   --lw-radius-pill: 9999px;
-  --lw-size-touch-target: 0.171875rem; /** Minimum hit area for any interactive element */
-  --lw-size-control-sm: 0.140625rem;
-  --lw-size-control-md: 0.171875rem;
-  --lw-size-control-lg: 0.203125rem;
-  --lw-size-icon-sm: 0.0625rem;
-  --lw-size-icon-md: 0.078125rem;
-  --lw-size-icon-lg: 0.09375rem;
-  --lw-size-avatar-sm: 0.125rem;
-  --lw-size-avatar-md: 0.15625rem;
-  --lw-size-avatar-lg: 0.21875rem;
-  --lw-size-focus-ring-width: 0.125px;
-  --lw-size-focus-ring-offset: 0.125px;
-  --lw-size-border-default: 0.0625px;
-  --lw-size-border-strong: 0.125px;
+  --lw-size-touch-target: 2.75rem; /** Minimum hit area for any interactive element */
+  --lw-size-control-sm: 2.25rem;
+  --lw-size-control-md: 2.75rem;
+  --lw-size-control-lg: 3.25rem;
+  --lw-size-icon-sm: 1rem;
+  --lw-size-icon-md: 1.25rem;
+  --lw-size-icon-lg: 1.5rem;
+  --lw-size-avatar-sm: 2rem;
+  --lw-size-avatar-md: 2.5rem;
+  --lw-size-avatar-lg: 3.5rem;
+  --lw-size-focus-ring-width: 0.125rem;
+  --lw-size-focus-ring-offset: 0.125rem;
+  --lw-size-border-default: 0.0625rem;
+  --lw-size-border-strong: 0.125rem;
   --lw-size-dialog: 30rem;
   --lw-size-tooltip-max: 17.5rem;
   --lw-space-none: 0;
-  --lw-space-3xs: 0.0078125rem;
-  --lw-space-2xs: 0.015625rem;
-  --lw-space-xs: 0.03125rem;
-  --lw-space-sm: 0.046875rem;
-  --lw-space-md: 0.0625rem;
-  --lw-space-lg: 0.09375rem;
-  --lw-space-xl: 0.125rem;
-  --lw-space-2xl: 0.1875rem;
-  --lw-space-3xl: 0.25rem;
+  --lw-space-3xs: 0.125rem;
+  --lw-space-2xs: 0.25rem;
+  --lw-space-xs: 0.5rem;
+  --lw-space-sm: 0.75rem;
+  --lw-space-md: 1rem;
+  --lw-space-lg: 1.5rem;
+  --lw-space-xl: 2rem;
+  --lw-space-2xl: 3rem;
+  --lw-space-3xl: 4rem;
   --lw-layer-base: 0;
   --lw-layer-raised: 10;
   --lw-layer-sticky: 100;

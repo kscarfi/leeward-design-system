@@ -100,10 +100,10 @@ export function semanticColors(mode: Mode, { brand, accent }: ThemeOptions) {
         thumb: L ? r("white") : ink(50),
       },
       feedback: {
-        info: { bg: L ? b(50) : deep(800), border: L ? b(200) : b(700), text: L ? b(700) : b(200), icon: L ? b(600) : b(300) },
-        success: { bg: L ? r("teal.50") : r("teal.950"), border: L ? r("teal.200") : r("teal.800"), text: L ? r("teal.700") : r("teal.200"), icon: L ? r("teal.600") : r("teal.300") },
-        warning: { bg: L ? r("warning.50") : r("warning.950"), border: L ? r("warning.200") : r("warning.800"), text: L ? r("warning.700") : r("warning.200"), icon: L ? r("warning.600") : r("warning.300") },
-        danger: { bg: L ? r("danger.50") : r("danger.950"), border: L ? r("danger.200") : r("danger.800"), text: L ? r("danger.700") : r("danger.200"), icon: L ? r("danger.600") : r("danger.300") },
+        info: { bg: L ? b(50) : r("tint.info"), border: L ? b(200) : r("tint.info-border"), text: L ? b(700) : b(200), icon: L ? b(600) : b(300) },
+        success: { bg: L ? r("teal.50") : r("tint.success"), border: L ? r("teal.200") : r("tint.success-border"), text: L ? r("teal.700") : r("teal.200"), icon: L ? r("teal.600") : r("teal.300") },
+        warning: { bg: L ? r("warning.50") : r("tint.warning"), border: L ? r("warning.200") : r("tint.warning-border"), text: L ? r("warning.700") : r("warning.200"), icon: L ? r("warning.600") : r("warning.300") },
+        danger: { bg: L ? r("danger.50") : r("tint.danger"), border: L ? r("danger.200") : r("tint.danger-border"), text: L ? r("danger.700") : r("danger.200"), icon: L ? r("danger.600") : r("danger.300") },
       },
       amount: {
         incoming: { ...(L ? r("teal.500") : r("teal.300")), $description: "Money in. Always with a plus sign." },
