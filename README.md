@@ -81,7 +81,7 @@ Claude Code, Figma, ColorsMine, Coverage Report, DesignOps.Tools.
 
 ## Credits
 
-Designed and directed by Kemal Salih Carfi ([kscarfi.com](https://kscarfi.com)). Built with Claude Code.
+Designed and directed by Kemal Salih Carfi ([kscarfi.com](https://kscarfi.com), [LinkedIn](https://www.linkedin.com/in/kemalsalihcarfi/)). Built with Claude Code.
 
 ## License
 
