@@ -88,14 +88,14 @@ export function validateUi(code: string, fileName = "screen.tsx"): ValidationRes
       if (PRIMITIVE.test(name)) add("primitive-token", node, `"${name}" is a primitive token.`, "Use the semantic token for the role, for example --lw-color-action-primary-bg instead of --lw-color-iris-600.");
       else add("unknown-token", node, `Unknown token "${name}".`, "Call get_tokens to list valid names.");
     }
-    if (text.includes("—")) add("em-dash", node, "Em dash in copy.", "Use a comma, colon or period.");
+    if (text.includes("\u2014")) add("em-dash", node, "Em dash in copy.", "Use a comma, colon or period.");
   };
 
   const visit = (node: ts.Node) => {
     if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) checkString(node, node.text);
     if (ts.isTemplateExpression(node)) checkString(node, [node.head.text, ...node.templateSpans.map((s) => s.literal.text)].join(""));
     if (ts.isJsxText(node)) {
-      if (node.text.includes("—")) add("em-dash", node, "Em dash in copy.", "Use a comma, colon or period.");
+      if (node.text.includes("\u2014")) add("em-dash", node, "Em dash in copy.", "Use a comma, colon or period.");
       // A text node that is only an amount, for example "₺12.50" or "-85 TL". Labels such as "Send ₺250" are fine.
       if (/^[+\-\u2212]?\s?[₺$€£]?\s?\d[\d.,]*\s?(TL|TRY|₺)?$/.test(node.text.trim()) && /[₺$€£]|TL|TRY/.test(node.text)) add("hand-formatted-money", node, `Hand-written amount "${node.text.trim()}".`, "Render money with <AmountDisplay> or formatAmount().");
     }
