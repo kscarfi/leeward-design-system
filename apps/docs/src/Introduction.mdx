@@ -112,17 +112,20 @@ All focus styles come from five tokens under elevation: `focus`, `focus-inset`, 
 
 ## Layout and sizes
 
-| Token | Value | Use |
-|---|---|---|
-| `--lw-size-control-xs` | 32 px | Dense desktop tables and toolbars |
-| `--lw-size-control-sm` | 36 px | Inside cards and rows |
-| `--lw-size-control-md` | 44 px | Default for buttons and fields |
-| `--lw-size-control-lg` | 48 px | Main actions on mobile |
-| `--lw-size-control-xl` | 56 px | Last step of a mobile flow |
-| `--lw-size-touch-target` | 44 px | Minimum hit area for anything interactive |
+Every interactive control reads one scale, so a Button, TextField, Select, SegmentedControl and Chip of the same size are exactly the same height and line up side by side. See [Control sizes](?path=/story/foundations-control-sizes--alignment).
 
+| Size | Height token | Height | Compact height | Radius token | Radius | Use |
+|---|---|---|---|---|---|---|
+| xs | `--lw-control-height-xs` | 32 px | 28 px | `--lw-control-radius-xs` | 6 px | Dense desktop tables and toolbars |
+| sm | `--lw-control-height-sm` | 36 px | 32 px | `--lw-control-radius-sm` | 8 px | Inside cards and rows |
+| md | `--lw-control-height-md` | 44 px | 40 px | `--lw-control-radius-md` | 10 px | Default for buttons and fields |
+| lg | `--lw-control-height-lg` | 48 px | 44 px | `--lw-control-radius-lg` | 12 px | Main actions on mobile |
+| xl | `--lw-control-height-xl` | 56 px | 48 px | `--lw-control-radius-xl` | 12 px | Last step of a mobile flow |
+
+- Each component also has its own tokens, such as `--lw-button-height-md` or `--lw-card-radius`. They point at this scale, and every docs page lists them in a Tokens table.
+- Radius is multiplied by the brand's roundness, so Business corners are tighter.
+- `--lw-size-touch-target` (44 px) is the minimum hit area. Smaller controls extend their hit area without growing visually.
 - Spacing follows a 4 px grid: `--lw-space-2xs` (4) to `--lw-space-4xl` (80).
-- Compact brands step control heights down one size; hit areas stay 44 px.
 - Dialogs turn into bottom sheets under 640 px. Display and title type scales smoothly between 360 and 1280 px.
 
 ## Accessibility commitments
@@ -143,6 +146,8 @@ All focus styles come from five tokens under elevation: `focus`, `focus-inset`, 
 - No hype words such as revolutionary, seamless or magic.
 
 ## Use Leeward with an AI agent
+
+Agents should read the [AI agents guide](?path=/docs/guides-ai-agents--docs) (`AGENTS.md`) first: workflow, which component for which need, tokens, sizes, layout, banking, accessibility and copy rules, and a checklist.
 
 1. Clone the repository and run `pnpm install`.
 2. Add the MCP server to Claude Code: `claude mcp add leeward -- node "$PWD/packages/mcp-server/src/index.ts"`.
@@ -165,6 +170,9 @@ All focus styles come from five tokens under elevation: `focus`, `focus-inset`, 
 | Story tests with axe | Any accessibility violation or broken interaction |
 | Visual regression | Unexpected pixel changes in any story |
 | Documentation examples | Any code example in a component page that does not compile |
+| Control sizes | A control whose height does not match its size token, or a size scale that does not increase |
+| Layout | Any story that scrolls sideways on a 360 px screen |
+| Docs coverage and links | A component without docs, stories or tests, a stale token table, or a broken link |
 | Freshness | Tokens or agent docs out of date with their sources |
 
 ## How to read a component page
