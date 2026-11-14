@@ -4,6 +4,7 @@ import { expect } from "storybook/test";
 import primitives from "@leeward/tokens/primitives.json";
 import { tokens, type TokenName } from "@leeward/tokens";
 import { Heading, Text } from "@leeward/react";
+import { Ramp } from "./Ramp.tsx";
 
 const meta = { title: "Foundations/Tokens" } satisfies Meta;
 export default meta;
@@ -18,21 +19,13 @@ const ramps = Object.entries(primitives.color).filter(([k]) => !k.startsWith("$"
 
 export const Palette: Story = {
   render: () => (
-    <div style={{ display: "grid", gap: "var(--lw-space-md)" }}>
-      <Heading level={2} size="h3">Primitive ramps</Heading>
-      <Text tone="secondary">Leeward's primitive ramps. Components never use these directly; brands map them to roles.</Text>
+    <div style={{ display: "grid", gap: "var(--lw-space-xl)" }}>
+      <div style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
+        <Heading level={2} size="h3">Primitive ramps</Heading>
+        <Text tone="secondary">Leeward's primitive ramps, steps 0 to 1000. Components never use these directly; brands map them to roles.</Text>
+      </div>
       {ramps.map(([name, steps]) => (
-        <div key={name} style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
-          <Text variant="label-sm">{name}</Text>
-          <ol aria-label={`${name} ramp`} style={{ display: "grid", gridTemplateColumns: `repeat(${Object.keys(steps).length}, minmax(0, 1fr))`, gap: "var(--lw-space-3xs)", margin: 0, padding: 0, listStyle: "none" }}>
-            {Object.entries(steps).filter(([s]) => !s.startsWith("$")).map(([step, t]) => (
-              <li key={step} style={{ display: "grid", gap: "var(--lw-space-3xs)" }}>
-                <span title={`${name}.${step} ${t.$value}`} style={{ height: "var(--lw-size-control-sm)", background: t.$value, borderRadius: "var(--lw-radius-xs)", boxShadow: "inset 0 0 0 1px var(--lw-border-subtle)" }} />
-                <Text as="span" variant="caption" tone="tertiary">{step}</Text>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <Ramp key={name} name={name} steps={Object.entries(steps).filter(([s]) => !s.startsWith("$")).map(([step, t]) => [step, t.$value])} />
       ))}
     </div>
   ),
@@ -98,37 +91,93 @@ const roles: Array<[string, string, string]> = [
 
 const turkish = "Paranız saniyeler içinde hesabınızda. Ücret: ₺0,00.";
 
+const typeGroups: Array<[string, string]> = [
+  ["display", "Display"],
+  ["title", "Title"],
+  ["subtitle", "Subtitle"],
+  ["heading", "Heading"],
+  ["body", "Body"],
+  ["label", "Label"],
+  ["button", "Button"],
+  ["amount", "Amount"],
+  ["other", "Caption, badge and code"],
+];
+const groupOf = (role: string) => (["caption", "badge", "code"].includes(role) ? "other" : role.split(".")[0]!);
+
+/** "1rem" -> "16", "1.5rem" -> "24", fluid "clamp(1.75rem, ..., 2.25rem)" -> "28 to 36". */
+const px = (value: unknown) => {
+  const v = String(value);
+  const rem = (r: string) => String(Math.round(parseFloat(r) * 16 * 10) / 10);
+  const fluid = v.match(/^clamp\(([\d.]+)rem,.*,\s*([\d.]+)rem\)$/);
+  if (fluid) return `${rem(fluid[1]!)} to ${rem(fluid[2]!)}`;
+  return v.endsWith("rem") ? rem(v) : v.replace("px", "");
+};
+
+function TypeRow({ role, sample, use }: { role: string; sample: string; use: string }) {
+  const v = (k: string) => `var(--lw-type-${role.replace(".", "-")}-${k})`;
+  const size = light[`type.${role}.size` as TokenName]?.value;
+  const line = light[`type.${role}.line-height` as TokenName]?.value;
+  const weight = light[`type.${role}.weight` as TokenName]?.value;
+  const fluid = String(size).startsWith("clamp");
+  return (
+    <li style={{ display: "flex", flexWrap: "wrap", gap: "var(--lw-space-xs) var(--lw-space-lg)", alignItems: "baseline", padding: "var(--lw-space-sm) 0", borderTop: "var(--lw-size-border-default) solid var(--lw-border-muted)" }}>
+      <div style={{ flex: "0 0 200px", display: "grid", gap: "var(--lw-space-3xs)" }}>
+        <Text as="span" variant="label-sm">{role}</Text>
+        <Text as="span" variant="caption" tone="tertiary" tabular>{fluid ? `Fluid ${px(size)} px, line ${px(line)} px` : `${px(size)} / ${px(line)} px`}, weight {String(weight)}</Text>
+        <Text as="span" variant="caption" tone="tertiary">{use}</Text>
+      </div>
+      <span style={{ flex: "1 1 280px", minWidth: 0, overflowWrap: "anywhere", fontFamily: v("family"), fontSize: v("size"), lineHeight: v("line-height"), fontWeight: v("weight"), letterSpacing: v("tracking"), fontVariantNumeric: role.startsWith("amount") ? "tabular-nums" : undefined, color: "var(--lw-text-default)" }}>
+        {sample}
+      </span>
+    </li>
+  );
+}
+
+const families: Array<[string, string, string, string[]]> = [
+  ["Plus Jakarta Sans", "var(--lw-type-body-md-family)", "Display, titles, headings, body, labels, buttons and amounts. Has Turkish letters, the lira sign and tabular figures.", ["400", "500", "600", "700"]],
+  ["IBM Plex Mono", "var(--lw-type-code-family)", "IBANs, references and codes, where every character must be easy to tell apart.", ["400", "500"]],
+];
+
 export const Typography: Story = {
   render: () => (
-    <div style={{ display: "grid", gap: "var(--lw-space-lg)" }}>
-      <div style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
-        <Heading level={2} size="h3">Type roles</Heading>
-        <Text tone="secondary">Plus Jakarta Sans for display and text, IBM Plex Mono for codes. Values come from the current brand. Display, title and large amount roles are fluid between 360 and 1280 px.</Text>
-      </div>
-      {roles.map(([role, sample, use]) => {
-        const v = (k: string) => `var(--lw-type-${role.replace(".", "-")}-${k})`;
-        const t = light[`type.${role}.size` as TokenName];
-        const lh = light[`type.${role}.line-height` as TokenName];
-        const w = light[`type.${role}.weight` as TokenName];
-        return (
-          <div key={role} style={{ display: "grid", gap: "var(--lw-space-2xs)", paddingBottom: "var(--lw-space-md)", borderBottom: "var(--lw-size-border-default) solid var(--lw-border-muted)" }}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--lw-space-xs) var(--lw-space-md)", alignItems: "baseline" }}>
-              <Text as="span" variant="label-sm">type.{role}</Text>
-              <Text as="span" variant="caption" tone="tertiary">{use}</Text>
-              <Text as="span" variant="caption" tone="tertiary">Weight {String(w?.value)}</Text>
-              <Text as="span" variant="caption" tone="tertiary">{String(t?.value).startsWith("clamp") ? "Fluid size" : `Size ${String(t?.value)}, line ${String(lh?.value)}`}</Text>
+    <div style={{ display: "grid", gap: "var(--lw-space-2xl)" }}>
+      <section style={{ display: "grid", gap: "var(--lw-space-md)" }}>
+        <div style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
+          <Heading level={2} size="h3">Font families</Heading>
+          <Text tone="secondary">Two families, loaded once with @leeward/react/fonts.css.</Text>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "var(--lw-space-md)" }}>
+          {families.map(([name, family, use, weights]) => (
+            <div key={name} style={{ display: "grid", gap: "var(--lw-space-sm)", alignContent: "start", padding: "var(--lw-space-lg)", borderRadius: "var(--lw-radius-card)", background: "var(--lw-fill-surface-default)", boxShadow: "inset 0 0 0 var(--lw-size-border-default) var(--lw-border-subtle)" }}>
+              <span aria-hidden="true" style={{ fontFamily: family, fontSize: "var(--lw-type-display-md-size)", lineHeight: "var(--lw-type-display-md-line-height)", fontWeight: "var(--lw-type-display-md-weight)", color: "var(--lw-text-default)" }}>Aa ₺ 0123</span>
+              <Heading level={3} size="h5">{name}</Heading>
+              <Text variant="body-sm" tone="secondary">{use}</Text>
+              <div style={{ display: "flex", gap: "var(--lw-space-md)", flexWrap: "wrap" }}>
+                {weights.map((w) => <span key={w} style={{ fontFamily: family, fontWeight: w, fontSize: "var(--lw-type-body-md-size)", color: "var(--lw-text-default)" }}>{w}</span>)}
+              </div>
             </div>
-            <span style={{ fontFamily: v("family"), fontSize: v("size"), lineHeight: v("line-height"), fontWeight: v("weight"), letterSpacing: v("tracking"), fontVariantNumeric: role.startsWith("amount") ? "tabular-nums" : undefined, color: "var(--lw-text-default)" }}>
-              {sample}
-            </span>
+          ))}
+        </div>
+      </section>
+      <section style={{ display: "grid", gap: "var(--lw-space-lg)" }}>
+        <div style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
+          <Heading level={2} size="h3">Type roles</Heading>
+          <Text tone="secondary">Size and line height in px, for the current brand. Display, title and large amount roles are fluid between 360 and 1280 px. Use them through Heading, Text and the amount patterns, or as --lw-type-[role]-size, -line-height, -weight, -tracking and -family.</Text>
+        </div>
+        {typeGroups.map(([key, label]) => (
+          <div key={key} style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
+            <Heading level={3} size="h6">{label}</Heading>
+            <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+              {roles.filter(([role]) => groupOf(role) === key).map(([role, sample, use]) => <TypeRow key={role} role={role} sample={sample} use={use} />)}
+            </ul>
           </div>
-        );
-      })}
-      <div style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
+        ))}
+      </section>
+      <section style={{ display: "grid", gap: "var(--lw-space-2xs)" }}>
         <Heading level={2} size="h3">Turkish and the lira sign</Heading>
-        <Text tone="secondary">Every role supports Turkish letters and the lira sign. A sample in body.md and amount.md:</Text>
+        <Text tone="secondary">Every role supports Turkish letters and the lira sign.</Text>
         <Text>{turkish}</Text>
-      </div>
+      </section>
     </div>
   ),
 };

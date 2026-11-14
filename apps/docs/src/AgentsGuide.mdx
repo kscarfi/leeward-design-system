@@ -1,6 +1,11 @@
 import { Markdown, Meta } from "@storybook/addon-docs/blocks";
 import agents from "../../../AGENTS.md?raw";
+import { DownloadFile } from "./DownloadFile.tsx";
 
 <Meta title="Guides/AI agents" />
+
+<DownloadFile fileName="AGENTS.md" content={agents} label="Download AGENTS.md" />
+
+Give this file to your agent, or add it to your project and point your agent's instructions file (for example `CLAUDE.md`) to it. The same rules are available live through the MCP server.
 
 <Markdown>{agents}</Markdown>
