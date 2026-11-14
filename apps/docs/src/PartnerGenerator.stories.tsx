@@ -1,9 +1,11 @@
 /* eslint-disable leeward/no-raw-color -- this page takes a raw seed color as input on purpose */
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { useMemo, useState } from "react";
 import { AccountCard, Badge, BalanceHeader, Button, Card, Heading, List, Switch, Text, TextField, TransactionRow } from "@leeward/react";
 import primitives from "@leeward/tokens/primitives.json";
 import { generatePartnerTheme, rampsFromPrimitives } from "@leeward/tokens/partner";
+import { Ramp } from "./Ramp.tsx";
 
 const ramps = rampsFromPrimitives(primitives);
 
@@ -27,9 +29,37 @@ function Preview({ theme, mode }: { theme: string; mode: string }) {
   );
 }
 
+// One click starting points, so the page works even where the native color picker does not.
+const presets: Array<[string, string]> = [
+  ["Teal", "#0E7490"],
+  ["Ocean", "#1D4ED8"],
+  ["Violet", "#7C3AED"],
+  ["Berry", "#BE185D"],
+  ["Coral", "#E11D48"],
+  ["Amber", "#B45309"],
+  ["Forest", "#15803D"],
+  ["Graphite", "#334155"],
+];
+
+/** "0e7490", "#0E7490" and "#0e7" all become "#0e7490". Anything else is not a color yet. */
+function normalizeHex(input: string): string | null {
+  const raw = input.trim().replace(/^#/, "");
+  if (/^[0-9a-f]{3}$/i.test(raw)) return `#${raw.split("").map((c) => c + c).join("")}`.toLowerCase();
+  if (/^[0-9a-f]{6}$/i.test(raw)) return `#${raw}`.toLowerCase();
+  return null;
+}
+
 function Generator() {
-  const [seed, setSeed] = useState("#0E7490");
+  const [input, setInputValue] = useState("#0E7490");
+  // The last valid color. While someone is still typing, the page keeps showing its theme.
+  const [seed, setSeed] = useState("#0e7490");
   const [pin, setPin] = useState(false);
+  const setInput = (value: string) => {
+    setInputValue(value);
+    const hex = normalizeHex(value);
+    if (hex) setSeed(hex);
+  };
+  const valid = normalizeHex(input) !== null;
   const theme = useMemo(() => {
     try {
       return generatePartnerTheme({ name: "live", seed, pinAction: pin, ramps });
@@ -48,10 +78,41 @@ function Generator() {
       <div style={{ display: "flex", gap: "var(--lw-space-md)", alignItems: "flex-end", flexWrap: "wrap" }}>
         <label style={{ display: "grid", gap: "var(--lw-space-2xs)", fontSize: "var(--lw-type-label-sm-size)", fontWeight: "var(--lw-type-label-sm-weight)" }}>
           Seed color
-          <input type="color" value={seed.length === 7 ? seed : "#000000"} onChange={(e) => setSeed(e.target.value)} style={{ width: "var(--lw-size-control-lg)", height: "var(--lw-size-control-md)", border: 0, padding: 0, background: "transparent" }} />
+          <input type="color" value={seed} onChange={(e) => setInput(e.target.value)} style={{ width: "var(--lw-size-control-lg)", height: "var(--lw-size-control-md)", border: 0, padding: 0, background: "transparent" }} />
         </label>
-        <div style={{ width: "200px" }}><TextField label="Hex" value={seed} onChange={(e) => setSeed(e.target.value)} numeric /></div>
+        <div style={{ width: "200px" }}><TextField label="Hex" value={input} onChange={(e) => setInput(e.target.value)} error={valid ? undefined : "Enter 3 or 6 hex digits, for example #0E7490"} numeric /></div>
         <Switch label="Use the exact seed for buttons" checked={pin} onCheckedChange={setPin} />
+      </div>
+      <div role="group" aria-label="Preset colors" style={{ display: "flex", gap: "var(--lw-space-xs)", flexWrap: "wrap" }}>
+        {presets.map(([name, hex]) => {
+          const active = seed === hex.toLowerCase();
+          return (
+            <button
+              key={hex}
+              type="button"
+              aria-pressed={active}
+              onClick={() => setInput(hex)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "var(--lw-space-xs)",
+                height: "var(--lw-size-control-sm)",
+                padding: "0 var(--lw-space-sm) 0 var(--lw-space-xs)",
+                borderRadius: "var(--lw-radius-pill)",
+                border: `var(--lw-size-border-default) solid ${active ? "var(--lw-border-strong)" : "var(--lw-border-default)"}`,
+                background: active ? "var(--lw-fill-surface-bold)" : "var(--lw-fill-surface-default)",
+                color: "var(--lw-text-default)",
+                font: "inherit",
+                fontSize: "var(--lw-type-label-sm-size)",
+                fontWeight: "var(--lw-type-label-sm-weight)",
+                cursor: "pointer",
+              }}
+            >
+              <span aria-hidden="true" style={{ width: "var(--lw-size-icon-md)", height: "var(--lw-size-icon-md)", borderRadius: "var(--lw-radius-pill)", background: hex }} />
+              {name}
+            </button>
+          );
+        })}
       </div>
       {theme ? (
         <>
@@ -59,14 +120,7 @@ function Generator() {
             {theme.failures.length === 0 ? <Badge tone="success">All {theme.results.length} pairs pass AA</Badge> : <Badge tone="danger">{theme.failures.length} pairs fail AA. The theme would not be written.</Badge>}
             <Text variant="body-sm" tone="secondary">Seed pinned at step {theme.seedStep}</Text>
           </div>
-          <ol aria-label="Generated ramp" style={{ display: "grid", gridTemplateColumns: `repeat(${Object.keys(theme.ramp).length}, minmax(0, 1fr))`, gap: "var(--lw-space-3xs)", padding: 0, margin: 0, listStyle: "none" }}>
-            {Object.entries(theme.ramp).map(([step, hex]) => (
-              <li key={step} style={{ display: "grid", gap: "var(--lw-space-3xs)", fontSize: "var(--lw-type-caption-size)", color: "var(--lw-text-muted)" }}>
-                <span style={{ height: "var(--lw-size-control-lg)", background: hex, borderRadius: "var(--lw-radius-sm)", outline: step === String(theme.seedStep) ? "var(--lw-size-border-strong) solid var(--lw-border-strong)" : undefined }} />
-                {step}
-              </li>
-            ))}
-          </ol>
+          <Ramp name="Generated ramp" steps={Object.entries(theme.ramp)} marked={String(theme.seedStep)} />
           {theme.failures.length > 0 && (
             <Card variant="filled">
               <Heading level={2} size="xs">Failing pairs</Heading>
@@ -83,7 +137,7 @@ function Generator() {
           </div>
         </>
       ) : (
-        <Text tone="danger">Enter a valid color, for example #0E7490.</Text>
+        <Text tone="danger">This color could not be turned into a theme. Try another one.</Text>
       )}
     </main>
   );
@@ -91,4 +145,26 @@ function Generator() {
 
 export const Live: Story = {
   render: () => <Generator />,
+};
+
+/** The same page, driven by a test. Hidden from the sidebar so visitors never see it change by itself. */
+export const LiveTest: Story = {
+  tags: ["!dev", "!autodocs"],
+  render: () => <Generator />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const preview = () => canvasElement.querySelector('[data-brand="live"][data-theme="light"]') as HTMLElement;
+    const before = getComputedStyle(preview()).getPropertyValue("--lw-fill-primary-default");
+    // A preset changes the theme.
+    await userEvent.click(canvas.getByRole("button", { name: "Berry" }));
+    await expect(canvas.getByRole("button", { name: "Berry" })).toHaveAttribute("aria-pressed", "true");
+    await waitFor(() => expect(getComputedStyle(preview()).getPropertyValue("--lw-fill-primary-default")).not.toBe(before));
+    // Typing a hex without "#" works, and a half-typed value keeps the last theme on screen.
+    const hex = canvas.getByLabelText("Hex");
+    await userEvent.clear(hex);
+    await userEvent.type(hex, "15803");
+    await expect(preview()).toBeInTheDocument();
+    await userEvent.type(hex, "D");
+    await expect(canvas.getByRole("button", { name: "Forest" })).toHaveAttribute("aria-pressed", "true");
+  },
 };
