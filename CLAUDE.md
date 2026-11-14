@@ -15,7 +15,7 @@ To build screens with the design system, follow `AGENTS.md`.
 7. Verify, do not assume. Check current official docs before configuring any tool.
 8. Copy: clear, short, second person, no em dashes, no hype words. `pnpm check:copy` enforces the em dash rule.
 9. Write an ADR in `docs/decisions/` for any decision someone might later ask "why?" about.
-10. Update `docs/build-log.md` at the end of every task. Never fill in "Estimated time without AI": ask Kemal. Log AI mistakes honestly.
+10. Update `docs/build-log.md` at the end of every task. Log AI mistakes honestly, with how each was caught.
 
 ## Commands
 
