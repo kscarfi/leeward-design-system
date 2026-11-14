@@ -1,6 +1,6 @@
 # Leeward Design System
 
-> Open-source, AI-ready design system for Leeward, a fictional digital bank. React components, semantic design tokens and rules that keep generated banking screens on-brand and accessible.
+> Open-source, AI-ready design system for digital banking, built around the Leeward brand. React components, semantic design tokens and rules that keep generated banking screens on-brand and accessible.
 
 Use components from @leeward/react, style only with var(--lw-*) semantic tokens, render money with AmountDisplay, and never use em dashes in copy.
 

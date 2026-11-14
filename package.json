@@ -2,7 +2,7 @@
   "name": "leeward-design-system",
   "version": "0.0.0",
   "private": true,
-  "description": "An open-source, AI-ready design system for a fictional digital bank.",
+  "description": "An open-source, AI-ready design system for digital banking.",
   "license": "MIT",
   "author": "Kemal Salih Carfi (https://kscarfi.com)",
   "type": "module",

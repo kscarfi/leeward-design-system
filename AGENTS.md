@@ -1,6 +1,6 @@
 # AGENTS.md: building with the Leeward Design System
 
-This guide is for AI agents (Claude Code, Cursor and similar) that design or build Leeward screens. Read it fully before you write code or produce a design. Leeward is a fictional digital bank; its design system is designed and directed by Kemal Salih Carfi.
+This guide is for AI agents (Claude Code, Cursor and similar) that design or build Leeward screens. Read it fully before you write code or produce a design. Leeward is a digital bank concept; its design system is designed and directed by Kemal Salih Carfi.
 
 If something here conflicts with a component's own documentation, the component documentation wins for that component. If a decision is not covered anywhere, choose the calmer, plainer option and say what you assumed.
 
