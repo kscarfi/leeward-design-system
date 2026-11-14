@@ -46,7 +46,7 @@ Leeward answers with three layers:
 Install the packages:
 
 ```bash
-pnpm add @leeward/react @leeward/tokens
+npm install @leeward/react
 ```
 
 Load the fonts and base styles once at the root of the app, pick a brand and a mode, and add the two providers:
@@ -149,8 +149,8 @@ Every interactive control reads one scale, so a Button, TextField, Select, Segme
 
 Agents should read the [AI agents guide](?path=/docs/guides-ai-agents--docs) (`AGENTS.md`) first: workflow, which component for which need, tokens, sizes, layout, banking, accessibility and copy rules, and a checklist.
 
-1. Clone the repository and run `pnpm install`.
-2. Add the MCP server to Claude Code: `claude mcp add leeward -- node "$PWD/packages/mcp-server/src/index.ts"`.
+1. Add the MCP server to Claude Code: `claude mcp add leeward -- npx -y @leeward/mcp-server`.
+2. Install the components in your app: `npm install @leeward/react`.
 3. Ask for a screen and tell the agent to check its code with `validate_ui`.
 
 | Tool | What it returns |

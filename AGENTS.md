@@ -30,6 +30,12 @@ If something here conflicts with a component's own documentation, the component 
 
 ## 3. Setup in an app
 
+```bash
+npm install @leeward/react
+```
+
+`@leeward/react` brings `@leeward/tokens` with it. Then, once at the root:
+
 ```tsx
 import "@leeward/react/fonts.css";
 import "@leeward/react/styles.css";
@@ -205,8 +211,10 @@ When you design in Figma or describe a design:
 ## 14. Using the MCP server
 
 ```bash
-claude mcp add leeward -- node "<repo>/packages/mcp-server/src/index.ts"
+claude mcp add leeward -- npx -y @leeward/mcp-server
 ```
+
+From a clone of the repository: `claude mcp add leeward -- node "<repo>/packages/mcp-server/src/index.ts"`.
 
 | Tool | Use it to |
 |---|---|

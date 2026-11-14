@@ -2,6 +2,7 @@
 // project outside the workspace with plain npm, and checks what a user would do with them:
 // type check and build a React app, use the tokens in Node, run the lint rules, start the MCP server.
 // Run: pnpm smoke:packages
+// With --registry, installs the published versions from npm instead of local tarballs.
 import { execFileSync } from "node:child_process";
 import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -11,6 +12,7 @@ const root = new URL("..", import.meta.url).pathname;
 const work = mkdtempSync(join(tmpdir(), "leeward-smoke-"));
 const packs = join(work, "packs");
 const app = join(work, "app");
+const fromRegistry = process.argv.includes("--registry");
 
 const run = (cmd: string, args: string[], cwd: string) => execFileSync(cmd, args, { cwd, stdio: "inherit", env: { ...process.env, NPM_CONFIG_UPDATE_NOTIFIER: "false" } });
 const runOutput = (cmd: string, args: string[], cwd: string) => {
@@ -23,8 +25,9 @@ const runOutput = (cmd: string, args: string[], cwd: string) => {
 };
 
 try {
-  for (const name of ["tokens", "react", "lint", "mcp-server"]) run("pnpm", ["pack", "--pack-destination", packs], join(root, "packages", name));
-  const tarball = (name: string) => `file:${join(packs, readdirSync(packs).find((f) => f.startsWith(`leeward-${name}-`))!)}`;
+  if (!fromRegistry) for (const name of ["tokens", "react", "lint", "mcp-server"]) run("pnpm", ["pack", "--pack-destination", packs], join(root, "packages", name));
+  const version = (name: string) => JSON.parse(readFileSync(join(root, "packages", name, "package.json"), "utf8")).version as string;
+  const tarball = (name: string) => (fromRegistry ? version(name) : `file:${join(packs, readdirSync(packs).find((f) => f.startsWith(`leeward-${name}-`))!)}`);
 
   cpSync(join(root, "scripts/package-smoke"), app, { recursive: true });
   const pin = (name: string) => JSON.parse(readFileSync(join(root, "node_modules", name, "package.json"), "utf8")).version as string;
@@ -49,7 +52,7 @@ try {
           vite: "8.3.8",
         },
         // The tarball, not the registry, must satisfy @leeward/react's dependency on @leeward/tokens.
-        overrides: { "@leeward/tokens": tarball("tokens") },
+        ...(fromRegistry ? {} : { overrides: { "@leeward/tokens": tarball("tokens") } }),
       },
       null,
       2,
@@ -73,7 +76,7 @@ try {
   console.log("lint: ok (ESLint and Stylelint report every planted problem)");
 
   run("node", ["mcp-test.mjs"], app);
-  console.log("\nAll packages work when installed from their tarballs.");
+  console.log(`\nAll packages work when installed from ${fromRegistry ? "the npm registry" : "their tarballs"}.`);
 } finally {
   if (!process.env.KEEP_SMOKE) rmSync(work, { recursive: true, force: true });
 }

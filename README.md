@@ -63,26 +63,33 @@ Every number here is printed by a script or test runner in this repo.
 | Copy (`pnpm check:copy`) | No em dashes in any tracked text file. |
 | Freshness | CI fails if token outputs or agent docs are out of date with their sources. |
 
+## Packages
+
+| Package | What it is |
+|---|---|
+| [`@leeward/react`](https://www.npmjs.com/package/@leeward/react) | Components and banking patterns, with one `styles.css` |
+| [`@leeward/tokens`](https://www.npmjs.com/package/@leeward/tokens) | CSS variables, typed tokens, Figma variables, partner theme generator |
+| [`@leeward/lint`](https://www.npmjs.com/package/@leeward/lint) | ESLint and Stylelint rules |
+| [`@leeward/mcp-server`](https://www.npmjs.com/package/@leeward/mcp-server) | MCP server for AI agents (`npx -y @leeward/mcp-server`) |
+
+`pnpm smoke:packages` installs the packed packages into a clean project and checks types, build, tokens, lint rules and the MCP server; CI runs it on every push. Add `--registry` to run it against the published versions.
+
 ## Use it with an AI agent (MCP setup in 3 steps)
 
 Agents should read [AGENTS.md](AGENTS.md) first: the full workflow, decision tables, layout, banking and copy rules, and a checklist. Complete screens that compile are in [docs/recipes](docs/recipes).
 
-Requires Node.js 24 or newer.
+Requires Node.js 20.10 or newer.
 
-1. Clone and install:
+1. Add the MCP server to Claude Code:
 
 ```bash
-git clone https://github.com/kscarfi/leeward-design-system.git
+claude mcp add leeward -- npx -y @leeward/mcp-server
 ```
 
-```bash
-cd leeward-design-system && corepack enable pnpm && pnpm install
-```
-
-2. Add the MCP server to Claude Code:
+2. Install the packages in your app:
 
 ```bash
-claude mcp add leeward -- node "$PWD/packages/mcp-server/src/index.ts"
+npm install @leeward/react
 ```
 
 3. Ask for a screen: "Build a money transfer screen with the Leeward design system. Check your code with validate_ui."
