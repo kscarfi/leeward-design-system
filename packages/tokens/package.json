@@ -27,7 +27,8 @@
     "./partners/*": "./partners/*",
     "./contrast": "./build/contrast.ts",
     "./partner": "./build/partner.ts",
-    "./primitives.json": "./src/primitive/color.json"
+    "./primitives.json": "./src/primitive/color.json",
+    "./semantic": "./build/semantic.ts"
   },
   "files": [
     "dist",

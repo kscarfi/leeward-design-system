@@ -103,7 +103,14 @@ async function buildOne(brand: Brand, mode: Mode, isDefault: boolean, adjustment
   const themeFile = `${root}themes/${brand.id}.${mode}.json`;
   const colors = colorFile(brand, mode);
   adjustments[`${brand.id}.${mode}`] = colors.adjustments;
-  const content = { ...colors.tree, ...elevation(mode), ...(mode === "light" ? foundation(brand) : {}) };
+  const parts = [colors.tree, elevation(mode), mode === "light" ? foundation(brand) : {}];
+  // Groups from different sources must never share a top-level name: a spread would silently drop one.
+  const seen = new Map<string, number>();
+  parts.forEach((part, i) => Object.keys(part).filter((k) => !k.startsWith("$")).forEach((k) => {
+    if (seen.has(k)) throw new Error(`Token group "${k}" is defined twice (sources ${seen.get(k)} and ${i}). Rename one of them.`);
+    seen.set(k, i);
+  }));
+  const content = Object.assign({}, ...parts);
   writeFileSync(themeFile, JSON.stringify(content, null, 2) + "\n");
 
   const sd = new StyleDictionary({

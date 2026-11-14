@@ -15,7 +15,7 @@ The semantic mapping starts from Leeward's semantic template. Where a pair misse
 
 ### leeward.light
 
-| Token | Ramp | Template step | Final step | First reason |
+| Token | Ramp | Figma step | Final step | First reason |
 |---|---|---|---|---|
 | `text.subtle` | ink | 500 | 600 | text.subtle on fill.surface.emphasis was 4.26:1, needs 4.5:1 |
 | `text.placeholder` | ink | 400 | 600 | text.placeholder on fill.surface.emphasis was 4.26:1, needs 4.5:1 |
@@ -29,7 +29,7 @@ The semantic mapping starts from Leeward's semantic template. Where a pair misse
 
 ### leeward.dark
 
-| Token | Ramp | Template step | Final step | First reason |
+| Token | Ramp | Figma step | Final step | First reason |
 |---|---|---|---|---|
 | `text.subtle` | ink | 500 | 400 | text.subtle on fill.surface.overlay was 4.32:1, needs 4.5:1 |
 | `text.placeholder` | ink | 600 | 400 | text.placeholder on fill.surface.overlay was 4.32:1, needs 4.5:1 |
@@ -42,7 +42,7 @@ The semantic mapping starts from Leeward's semantic template. Where a pair misse
 
 ### business.light
 
-| Token | Ramp | Template step | Final step | First reason |
+| Token | Ramp | Figma step | Final step | First reason |
 |---|---|---|---|---|
 | `text.subtle` | richBlack | 500 | 600 | text.subtle on fill.surface.emphasis was 4.25:1, needs 4.5:1 |
 | `text.placeholder` | richBlack | 400 | 600 | text.placeholder on fill.surface.emphasis was 4.25:1, needs 4.5:1 |
@@ -59,7 +59,7 @@ The semantic mapping starts from Leeward's semantic template. Where a pair misse
 
 ### business.dark
 
-| Token | Ramp | Template step | Final step | First reason |
+| Token | Ramp | Figma step | Final step | First reason |
 |---|---|---|---|---|
 | `text.subtle` | richBlack | 500 | 400 | text.subtle on fill.surface.overlay was 4.31:1, needs 4.5:1 |
 | `text.placeholder` | richBlack | 600 | 400 | text.placeholder on fill.surface.overlay was 4.31:1, needs 4.5:1 |

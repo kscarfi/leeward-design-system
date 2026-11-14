@@ -23,7 +23,7 @@ export interface Brand {
 const sans = ["Plus Jakarta Sans", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"].map((f) => (f.includes(" ") && !f.startsWith("-") ? `"${f}"` : f)).join(", ");
 const mono = ['"IBM Plex Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"].join(", ");
 
-/** The role mapping of Leeward's semantic template. Used to read its semantic template. */
+/** The role mapping used by Leeward's semantic template. Used to read the semantic template. */
 export const sourceRoles: Record<Role, string> = {
   primary: "lapisBlue",
   secondary: "purpleHaze",

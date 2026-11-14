@@ -17,7 +17,7 @@ export interface ResolvedToken {
   step: string;
   alpha?: number;
   hex: string;
-  /** Reference step before any change, for reporting. */
+  /** Figma step before any change, for reporting. */
   from: string;
 }
 
@@ -48,11 +48,11 @@ function luminance(hex: string): number {
 /**
  * A step that exists in the brand ramp. When the template uses a step the brand ramp does not
  * have (richBlack has 32 steps, most ramps have 14), pick the brand step whose lightness is
- * closest to the source color, so subtle borders and surfaces keep their visual distance.
+ * closest to the template color, so subtle borders and surfaces keep their visual distance.
  */
-function matchStep(brandRamp: Ramp, target: number, templateRamp: Ramp | undefined): string {
+function matchStep(brandRamp: Ramp, target: number, sourceRamp: Ramp | undefined): string {
   if (brandRamp[String(target)]) return String(target);
-  const refHex = templateRamp?.[String(target)];
+  const refHex = sourceRamp?.[String(target)];
   if (!refHex) return snap(brandRamp, target);
   const goal = luminance(refHex);
   let best = "";
@@ -121,14 +121,14 @@ export function requiredPairs(): Pair[] {
   return pairs;
 }
 
-/** Extra Leeward tokens on top of the semantic structure, as references to the template or brand ramps. */
+/** Extra Leeward tokens on top of the Figma structure, as references to the template or brand ramps. */
 /** Extras whose steps are already chosen per mode, so dark mode must not mirror them. */
 const MODE_SPECIFIC = new Set(["fill.surface.canvas", "fill.surface.default", "fill.surface.raised", "fill.surface.overlay", "fill.control.thumb", "fill.overlay.scrim"]);
 
 function extras(brand: Brand, mode: Mode): Record<string, TemplateEntry & { role?: string }> {
   const L = mode === "light";
   return {
-    // Reference fix: white on yellow is 1.5:1. Attention fills carry dark text, like text.attention-on-attention.
+    // Fix: white on yellow is 1.5:1. Attention fills carry dark text, like text.attention-on-attention.
     "fill.attention.on-default": { kind: "ramp", ramp: sourceRoles.attention, step: "1000" },
     "border.focus": { kind: "ramp", ramp: sourceRoles.primary, step: "600" },
     // Leeward surface stack. Light: a soft canvas with white cards. Dark: surfaces get lighter as they rise.
@@ -150,8 +150,8 @@ function extras(brand: Brand, mode: Mode): Record<string, TemplateEntry & { role
 }
 
 /** template: the semantic template (sourceSemantic() in Node, dist/semantic-template.json in the browser). */
-export function resolveSemantic(brand: Brand, mode: Mode, ramps: Record<string, Ramp>, semanticTemplateData: Record<string, TemplateEntry>) {
-  const template = { ...semanticTemplateData, ...extras(brand, mode) } as Record<string, TemplateEntry>;
+export function resolveSemantic(brand: Brand, mode: Mode, ramps: Record<string, Ramp>, sourceTemplate: Record<string, TemplateEntry>) {
+  const template = { ...sourceTemplate, ...extras(brand, mode) } as Record<string, TemplateEntry>;
 
   // Refs become copies of their target, so every token can be resolved and adjusted on its own.
   const concrete = (name: string, seen = new Set<string>()): Extract<TemplateEntry, { kind: "ramp" }> => {
@@ -176,10 +176,10 @@ export function resolveSemantic(brand: Brand, mode: Mode, ramps: Record<string, 
     const base = Number(e.step);
     const mirrored = mode === "dark" && !ramp.endsWith("Alpha") && !FIXED_SWAP[e.ramp] && !MODE_SPECIFIC.has(name);
     const target = mirrored ? 1000 - base : base;
-    // The source ramp for this role, to match lightness when the brand ramp lacks the step.
+    // The Figma ramp for this role, to match lightness when the brand ramp lacks the step.
     const role = rampToRole[e.ramp];
-    const templateRamp = role ? ramps[sourceRoles[role]] : undefined;
-    const step = matchStep(r, target, templateRamp);
+    const sourceRamp = role ? ramps[sourceRoles[role]] : undefined;
+    const step = matchStep(r, target, sourceRamp);
     tokens[name] = { name, ramp, step, from: step, hex: withAlpha(r[step]!, e.alpha), ...(e.alpha !== undefined ? { alpha: e.alpha } : {}) };
   }
 

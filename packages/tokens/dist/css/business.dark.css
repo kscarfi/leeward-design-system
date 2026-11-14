@@ -460,5 +460,5 @@
   --lw-elevation-focus-inset: inset 0 0 0 var(--lw-size-focus-ring-width) var(--lw-border-focus); /** Inside the element, for full-width rows and tabs where an outer ring would be clipped. */
   --lw-elevation-focus-danger: 0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-danger); /** Focus on a field that has an error. */
   --lw-elevation-focus-inverse: 0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-neutral-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-text-inverse); /** Focus on inverse (dark in light mode) surfaces. */
-  --lw-elevation-focus-halo: 0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary); /** Soft halo. Decorative: always combine with a focus ring. */
+  --lw-elevation-focus-halo: 0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary); /** Soft halo from the Figma effect styles. Decorative: always combine with a focus ring. */
 }

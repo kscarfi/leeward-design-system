@@ -6,7 +6,7 @@
 
 ## Context
 
-Kemal asked to bring Leeward to that level: richer palettes, complete tokens, more components, multi-brand, accessible, responsive, a better font than Inter, and Solar icons. Copying from it is allowed because he designed it.
+Kemal asked for a richer system: complete palettes and tokens, more components, multi-brand, accessible, responsive, a better font than Inter, and Solar icons.
 
 ## What the token source contains
 
@@ -16,7 +16,7 @@ Kemal asked to bring Leeward to that level: richer palettes, complete tokens, mo
 
 ## What we measured and fixed
 
-| Issue in the first mapping | Measured | Fix |
+| Issue in the source mapping | Measured | Fix |
 |---|---|---|
 | `text.subtle` on white | 3.8:1 | Resolver moves it one step darker |
 | `text.placeholder` | 2.7:1 | Resolver |
@@ -27,22 +27,23 @@ Kemal asked to bring Leeward to that level: richer palettes, complete tokens, mo
 | Medium and SemiBold text styles | exported at 400 | Weights set to 500 and 600 |
 | 10 and 11 px text | below Leeward's 12 px minimum | Dropped from the scale |
 | No dark mode | | Derived by mirroring steps, then resolved |
-| Averta PE | commercial font | Plus Jakarta Sans (OFL) |
-| Soft 4 px focus rings | below 3:1 | Kept as a halo, with a 2 px 3:1 outline as the real indicator |
+| Commercial display font | | Plus Jakarta Sans (OFL) |
+| Soft 4 px focus rings | below 3:1 | Kept as a halo, with a 3:1 ring as the real indicator |
 
 ## Decision
 
-1. `packages/tokens/source/` holds Leeward's token source. `build/source.ts` reads it; primitives are generated from them.
-2. The semantic template is the 436 semantic colors expressed as role and step. A **brand** picks a ramp per role, a roundness and a density (`build/brands.ts`). Leeward: indigo, violet, slate, blue, teal, pumpkin, yellow, red. Business: its own mapping, compact, tighter radii.
-3. **Dark mode** mirrors each step (600 becomes 400, 50 becomes 975). Leeward's surface stack is explicit so surfaces get lighter as they rise. Soft role fills in dark are a low-ratio OKLab mix of the role color into the dark surface, because the mirrored dark end of vivid ramps reads loud and muddy.
-4. The **contrast resolver** checks 334 required pairs per brand and mode. A failing token moves one ramp step at a time toward more contrast and never returns to a step it left. Every move is listed in `docs/contrast-report.md`. The build fails if a pair still misses AA.
-5. **Typography**: Plus Jakarta Sans for display and text (checked: it has the lira sign, Turkish letters and tabular figures; most OFL candidates lacked the lira sign), IBM Plex Mono for codes. Roles follow Leeward's text styles. Display, title and large amount roles are fluid between 360 and 1280 px.
-6. **Sizes**: control heights xs 32, sm 36, md 44, lg 48, xl 56 (compact brands step down). Every interactive element keeps a 44 px hit area.
-7. **Icons**: Solar (CC BY 4.0), 142 curated icons in linear, bold and duotone, imported by `scripts/import-solar-icons.ts`.
-8. v1 variable names stay available through `dist/css/compat-v1.css` while code migrates.
+1. `packages/tokens/source/` holds Leeward's token source. `build/source.ts` reads them; primitives are generated from them.
+2. The semantic template is the 436 Figma tokens expressed as role and step. A **brand** picks a ramp per role, a roundness and a density (`build/brands.ts`). Leeward: indigo, violet, ink, blue, teal, pumpkin, yellow, red. Business: lapis blue and purple haze, compact, tighter radii.
+3. **Ink**, Leeward's neutral, uses the lightness of every richBlack step with the hue of slate, so subtle borders, hovers and skeletons keep their visual distance in every brand.
+4. **Dark mode** mirrors each step (600 becomes 400, 50 becomes 975). The surface stack is explicit so surfaces get lighter as they rise. Soft role fills in dark are a low-ratio OKLab mix of the role color into the dark surface, because the mirrored dark end of vivid ramps reads loud and muddy.
+5. The **contrast resolver** checks 334 required pairs per brand and mode. A failing token moves one ramp step at a time toward more contrast and never returns to a step it left. Every move is listed in `docs/contrast-report.md`. The build fails if a pair still misses AA.
+6. **Typography**: Plus Jakarta Sans for display and text (checked: it has the lira sign, Turkish letters and tabular figures; most OFL candidates lacked the lira sign), IBM Plex Mono for codes. Display, title and large amount roles are fluid between 360 and 1280 px.
+7. **Sizes**: one control scale, xs 32, sm 36, md 44, lg 48, xl 56 (compact brands step down). Every interactive element keeps a 44 px hit area.
+8. **Icons**: Solar (CC BY 4.0), 142 curated icons in linear, bold and duotone, imported by `scripts/import-solar-icons.ts`.
+9. v1 variable names stay available through `dist/css/compat-v1.css` while code migrates.
 
 ## Consequences
 
-- A designer changing a ramp or a mapping in Figma re-exports, and the whole system, both modes and every brand, rebuilds with contrast guaranteed.
+- A designer changes a ramp or a mapping in Figma, exports again, and every brand and mode rebuilds with contrast guaranteed.
 - New brands cost a few lines. Partner brands are generated from one color and refused if they fail.
-- The resolver means the shipped mapping differs from the template in 8 to 12 tokens per brand and mode (measured on this build). The report says exactly where and why, so the template can be updated to match.
+- The shipped mapping differs from the template in a small number of tokens per brand and mode. The contrast report says exactly where and why, so the template can be updated to match.

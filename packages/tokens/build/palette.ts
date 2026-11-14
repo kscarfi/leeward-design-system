@@ -1,6 +1,6 @@
 // Ramp generation in OKLCH for partner brands (scripts/generate-theme.ts).
 //
-// A ramp has steps 0 to 1000 like Leeward's ramps. Each step is defined by its WCAG 2
+// A ramp has steps 0 to 1000 like the primitive ramps. Each step is defined by its WCAG 2
 // contrast against white. Hue stays constant; chroma tapers toward the light and dark ends
 // and is clamped to the sRGB gamut. The seed is pinned exactly at the nearest step.
 import Color from "colorjs.io";
@@ -8,7 +8,7 @@ import Color from "colorjs.io";
 export const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 975, 1000] as const;
 export type Step = (typeof STEPS)[number];
 
-// Contrast against #FFFFFF per step: the median of the 19 vivid ramps
+// Contrast against #FFFFFF per step: the median of the 19 vivid primitive ramps
 // in Leeward's token source, so generated ramps share the shape of the hand-made ones. Step 0 is white.
 export const CONTRAST_TARGETS: Record<Step, number> = {
   50: 1.09,

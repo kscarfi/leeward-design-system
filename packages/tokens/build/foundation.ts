@@ -42,7 +42,7 @@ export function primitiveFiles() {
     "scale.json": {
       space,
       sizer,
-      // "radii" like the source, so it never collides with the semantic "radius" group.
+      // "radii" like in Figma, so it never collides with the semantic "radius" group.
       radii: radius,
       "border-width": borderWidth,
       "font-size": fontSize,
@@ -76,7 +76,7 @@ interface Role {
   tabular?: boolean;
 }
 
-// Type roles, following Leeward's text styles (sizes from its major second scale),
+// Type roles, following the Figma text styles (sizes from its major second scale),
 // with weights fixed (the export had Medium and SemiBold at 400) and line heights on the 4 px grid.
 const TYPE: Record<string, Role> = {
   "display.lg": { size: 58, mobile: 40, weight: "extrabold", ratio: 1.1, tracking: -0.03, family: "display" },
@@ -122,6 +122,50 @@ const radiusRef = (value: number) => {
   return ref(`radii.${names[nearest]}`);
 };
 
+const sizes = (prefix: string, keys: string[], target: (k: string) => string) => Object.fromEntries(keys.map((k) => [`${prefix}-${k}`, ref(target(k))]));
+
+/**
+ * Component tier: sizing and radius for every component, as references to the control scale and
+ * the semantic tokens. Change a component's look here, without touching its CSS.
+ */
+function componentTokens() {
+  const all = ["xs", "sm", "md", "lg", "xl"];
+  const fields = ["sm", "md", "lg"];
+  return {
+    button: { $type: "dimension", ...sizes("height", all, (k) => `control.height.${k}`), ...sizes("radius", all, (k) => `control.radius.${k}`), ...sizes("padding-x", all, (k) => `control.padding-x.${k}`), ...sizes("gap", all, (k) => `control.gap.${k}`) },
+    "icon-button": { $type: "dimension", ...sizes("size", ["xs", "sm", "md", "lg"], (k) => `control.height.${k}`), radius: ref("radius.pill") },
+    input: { $type: "dimension", $description: "TextField, Select, AmountInput and OTPInput boxes.", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), ...sizes("padding-x", fields, (k) => `control.padding-x.${k}`), "border-width": ref("size.border.default"), "border-width-invalid": ref("size.border.strong") },
+    textarea: { $type: "dimension", "min-height": ref("control.height.xl"), padding: ref("space.sm"), radius: ref("control.radius.md") },
+    segmented: { $type: "dimension", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), inset: ref("space.3xs"), ...sizes("item-radius", fields, (k) => `control.radius.${k === "sm" ? "xs" : k === "md" ? "sm" : "md"}`) },
+    chip: { $type: "dimension", ...sizes("height", ["sm", "md"], (k) => `control.height.${k}`), ...sizes("padding-x", ["sm", "md"], (k) => `control.padding-x.${k}`), radius: ref("radius.pill") },
+    badge: { $type: "dimension", "height-sm": ref("sizer.5xSmall"), "height-md": ref("sizer.4xSmall"), "padding-x-sm": ref("space.xs-tight"), "padding-x-md": ref("space.xs"), radius: ref("radius.pill") },
+    checkbox: { $type: "dimension", size: ref("size.icon.md"), radius: ref("radii.small") },
+    radio: { $type: "dimension", size: ref("size.icon.md"), "dot-size": ref("space.xs") },
+    switch: { $type: "dimension", "track-width": ref("sizer.small"), "track-height": ref("sizer.4xSmall"), "thumb-size": ref("sizer.5xSmall"), inset: ref("space.3xs"), radius: ref("radius.pill") },
+    avatar: { $type: "dimension", ...sizes("size", all, (k) => `size.avatar.${k}`), radius: ref("radius.pill") },
+    card: { $type: "dimension", radius: ref("radius.card"), "padding-sm": ref("space.sm"), "padding-md": ref("space.md"), "padding-lg": ref("space.lg") },
+    dialog: { $type: "dimension", radius: ref("radius.dialog"), padding: ref("space.lg"), "width-sm": ref("size.dialog.sm"), "width-md": ref("size.dialog.md"), "width-lg": ref("size.dialog.lg") },
+    sheet: { $type: "dimension", radius: ref("radius.dialog"), padding: ref("space.lg"), width: ref("size.sheet") },
+    tooltip: { $type: "dimension", radius: ref("radius.md"), "padding-x": ref("space.sm"), "padding-y": ref("space.xs"), "max-width": ref("size.tooltip-max") },
+    toast: { $type: "dimension", radius: ref("radius.lg"), padding: ref("space.sm"), "max-width": ref("size.dialog.md") },
+    alert: { $type: "dimension", radius: ref("radius.lg"), padding: ref("space.md") },
+    menu: { $type: "dimension", radius: ref("radius.lg"), padding: ref("space.2xs"), "item-height": ref("size.touch-target"), "item-radius": ref("radius.md") },
+    "list-item": { $type: "dimension", "min-height": ref("sizer.large"), "padding-x": ref("space.md"), "padding-y": ref("space.sm") },
+    tabs: { $type: "dimension", height: ref("control.height.md"), "indicator-thickness": ref("size.border.strong") },
+    accordion: { $type: "dimension", "trigger-height": ref("control.height.lg"), radius: ref("radius.card") },
+    progress: { $type: "dimension", "height-sm": ref("space.2xs"), "height-md": ref("space.xs"), radius: ref("radius.pill") },
+    skeleton: { $type: "dimension", "radius-text": ref("radius.xs"), "radius-rect": ref("radius.md") },
+    stepper: { $type: "dimension", "marker-size": ref("size.icon.lg") },
+    otp: { $type: "dimension", "box-size": ref("control.height.lg"), radius: ref("control.radius.lg") },
+    "quick-action": { $type: "dimension", "icon-size": ref("size.avatar.lg"), radius: ref("radius.pill") },
+    "empty-state": { $type: "dimension", "art-size": ref("size.avatar.xl") },
+    spinner: { $type: "dimension", "size-sm": ref("size.icon.sm"), "size-md": ref("size.icon.md"), "size-lg": ref("size.icon.xl") },
+    divider: { $type: "dimension", thickness: ref("size.border.default"), gap: ref("space.sm") },
+    // Not "icon": that group holds the icon colors.
+    "icon-size": { $type: "dimension", ...Object.fromEntries(all.map((k) => [k, ref(`size.icon.${k}`)])) },
+  };
+}
+
 /** Non-color semantic tokens for a brand. */
 export function foundation(brand: Brand) {
   const r = brand.roundness;
@@ -143,13 +187,14 @@ export function foundation(brand: Brand) {
   }
 
   // Control heights. Comfortable: xs 32, sm 36, md 44, lg 48, xl 56. Compact moves one step down.
-  const heights = compact ? { xs: "3xSmall", sm: "3xSmall", md: "xSmall", lg: "small", xl: "default" } : { xs: "3xSmall", sm: "2xSmall", md: "small", lg: "default", xl: "large" };
+  // Comfortable: 32, 36, 44, 48, 56. Compact: 28, 32, 40, 44, 48. Every step differs, so sizes keep their hierarchy.
+  const heights = compact ? { xs: null, sm: "3xSmall", md: "xSmall", lg: "small", xl: "default" } : { xs: "3xSmall", sm: "2xSmall", md: "small", lg: "default", xl: "large" };
   const padX = compact ? { xs: "2", sm: "3", md: "3", lg: "4", xl: "5" } : { xs: "2", sm: "3", md: "4", lg: "5", xl: "6" };
 
   return {
     space: {
       $type: "dimension",
-      $description: "Layout spacing. 4 px grid, from Leeward's spacing scale.",
+      $description: "Layout spacing. 4 px grid, from the Figma spacing scale.",
       none: ref("space.0"), px: ref("space.0_25"), "3xs": ref("space.0_5"), "2xs": ref("space.1"), "xs-tight": ref("space.1_5"), xs: ref("space.2"), "sm-tight": ref("space.2_5"),
       sm: ref("space.3"), md: ref("space.4"), "md-loose": ref("space.5"), lg: ref("space.6"), xl: ref("space.8"), "2xl": ref("space.12"), "3xl": ref("space.16"), "4xl": ref("space.20"),
       control: Object.fromEntries(Object.entries(padX).map(([k, v]) => [k, ref(`space.${v}`)])),
@@ -157,7 +202,7 @@ export function foundation(brand: Brand) {
     size: {
       $type: "dimension",
       "touch-target": { ...ref("sizer.small"), $description: "44 px. Minimum hit area for anything interactive on touch screens." },
-      control: Object.fromEntries(Object.entries(heights).map(([k, v]) => [k, ref(`sizer.${v}`)])),
+      control: Object.fromEntries(Object.entries(heights).map(([k, v]) => [k, v ? ref(`sizer.${v}`) : dim(28)])),
       icon: { xs: dim(12), sm: ref("sizer.6xSmall"), md: ref("sizer.5xSmall"), lg: ref("sizer.4xSmall"), xl: ref("sizer.3xSmall") },
       avatar: { xs: ref("sizer.4xSmall"), sm: ref("sizer.3xSmall"), md: ref("sizer.xSmall"), lg: ref("sizer.default"), xl: ref("sizer.2xLarge") },
       "focus-ring": { width: ref("border-width.thick"), offset: ref("border-width.thick"), halo: ref("border-width.thicker") },
@@ -170,8 +215,8 @@ export function foundation(brand: Brand) {
     radius: {
       $type: "dimension",
       none: ref("radii.none"), xs: ref("radii.xSmall"), sm: ref("radii.small"), md: ref("radii.default"), lg: ref("radii.xLarge"), xl: ref("radii.2xLarge"), "2xl": ref("radii.4xLarge"), pill: ref("radii.pill"),
-      control: { ...radiusRef(10 * r), $description: "Buttons, inputs, selects" },
-      "control-sm": radiusRef(8 * r),
+      control: { ...ref("control.radius.md"), $description: "Default control radius (md). Size-specific radii live in control.radius." },
+      "control-sm": ref("control.radius.sm"),
       card: { ...radiusRef(16 * r), $description: "Cards, sheets" },
       dialog: radiusRef(24 * r),
       badge: ref("radii.pill"),
@@ -180,15 +225,23 @@ export function foundation(brand: Brand) {
       duration: { $type: "duration", instant: ref("duration.100"), fast: ref("duration.150"), base: ref("duration.200"), slow: ref("duration.300"), slower: ref("duration.400") },
       easing: { $type: "cubicBezier", standard: ref("easing.standard"), enter: ref("easing.decelerate"), exit: ref("easing.accelerate") },
     },
+    control: {
+      $description: "The one control scale. Buttons, fields, selects and segmented controls of the same size share height, radius and padding, so they line up side by side.",
+      height: { $type: "dimension", xs: ref("size.control.xs"), sm: ref("size.control.sm"), md: ref("size.control.md"), lg: ref("size.control.lg"), xl: ref("size.control.xl") },
+      radius: { $type: "dimension", xs: radiusRef(6 * r), sm: radiusRef(8 * r), md: radiusRef(10 * r), lg: radiusRef(12 * r), xl: radiusRef(12 * r) },
+      "padding-x": { $type: "dimension", xs: ref("space.control.xs"), sm: ref("space.control.sm"), md: ref("space.control.md"), lg: ref("space.control.lg"), xl: ref("space.control.xl") },
+      gap: { $type: "dimension", xs: ref("space.2xs"), sm: ref("space.xs-tight"), md: ref("space.xs"), lg: ref("space.xs"), xl: ref("space.xs") },
+    },
+    ...componentTokens(),
     layer: { $type: "number", base: { $value: 0 }, raised: { $value: 10 }, sticky: { $value: 100 }, overlay: { $value: 1000 }, toast: { $value: 1100 }, tooltip: { $value: 1200 } },
     breakpoint: { $type: "dimension", $description: "Reference only: CSS cannot read variables in media queries.", sm: dim(640), md: dim(768), lg: dim(1024), xl: dim(1280) },
     type,
   };
 }
 
-/** Elevation per mode. Dark mode keeps the light geometry with stronger shadows. */
+/** Elevation per mode. Dark mode keeps the same geometry with stronger shadows. */
 export function elevation(mode: "light" | "dark") {
-  const out: Record<string, unknown> = { $type: "shadow", $description: "Elevation 100 to 800 from Leeward's effect styles, and the focus rings." };
+  const out: Record<string, unknown> = { $type: "shadow", $description: "Elevation 100 to 800 from the Figma effect styles, and the focus rings." };
   for (const [name, f] of Object.entries(focusRings())) out[name] = { $type: "string", $value: f.value, $description: f.description };
   for (const [level, css] of Object.entries(sourceElevation())) {
     out[level] = { $type: "string", $value: mode === "light" ? css : css.replace(/rgba\(0, 0, 0, ([0-9.]+)\)/g, (_m, a) => `rgba(0, 0, 0, ${Math.min(0.6, Number(a) * 3).toFixed(2)})`) };

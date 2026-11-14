@@ -13,6 +13,6 @@ export function focusRings(): Record<string, { value: string; description: strin
     "focus-inset": { value: "inset 0 0 0 var(--lw-size-focus-ring-width) var(--lw-border-focus)", description: "Inside the element, for full-width rows and tabs where an outer ring would be clipped." },
     "focus-danger": { value: `0 0 0 ${gap} var(--lw-fill-surface-default), 0 0 0 ${ring} var(--lw-border-danger)`, description: "Focus on a field that has an error." },
     "focus-inverse": { value: `0 0 0 ${gap} var(--lw-fill-neutral-default), 0 0 0 ${ring} var(--lw-text-inverse)`, description: "Focus on inverse (dark in light mode) surfaces." },
-    "focus-halo": { value: "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)", description: "Soft halo. Decorative: always combine with a focus ring." },
+    "focus-halo": { value: "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)", description: "Soft halo from the Figma effect styles. Decorative: always combine with a focus ring." },
   };
 }

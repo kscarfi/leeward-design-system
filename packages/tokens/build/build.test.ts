@@ -40,3 +40,16 @@ test("no visible text role is under 12px", () => {
     assert.ok(min >= 12, `${name} is ${min}px`);
   }
 });
+
+test("control heights strictly increase and radii never shrink, in every brand", () => {
+  for (const brand of ["leeward", "business"]) {
+    const t = JSON.parse(readFileSync(new URL(`../dist/ts/${brand}.light.json`, import.meta.url), "utf8")) as Record<string, { value: string }>;
+    const sizes = ["xs", "sm", "md", "lg", "xl"];
+    const heights = sizes.map((s) => toPx(t[`control.height.${s}`]!.value));
+    const radii = sizes.map((s) => toPx(t[`control.radius.${s}`]!.value));
+    for (let i = 1; i < sizes.length; i++) {
+      assert.ok(heights[i]! > heights[i - 1]!, `${brand}: control.height.${sizes[i]} (${heights[i]}) must be larger than ${sizes[i - 1]} (${heights[i - 1]})`);
+      assert.ok(radii[i]! >= radii[i - 1]!, `${brand}: control.radius.${sizes[i]} must not be smaller than ${sizes[i - 1]}`);
+    }
+  }
+});

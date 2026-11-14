@@ -42,15 +42,27 @@ export function buildFigmaFiles(outDir: string, brands: Brand[], modes: Mode[]) 
   walk(prim, (path, token, type) => SUPPORTED.has(type) && set(primitives, path, { $type: ftype(type), $value: value(type, token.$value) }));
   writeFileSync(`${outDir}primitives.json`, JSON.stringify(primitives, null, 2) + "\n");
 
-  const resolve = (refText: string): { path: string[]; token: Json; type: string } => {
-    const path = refText.slice(1, -1).split(".");
-    let node: any = prim;
+  const lookup = (tree: Json, path: string[]): { token: Json; type: string } | undefined => {
+    let node: any = tree;
     let type = "";
     for (const k of path) {
+      if (!node || typeof node !== "object") return undefined;
       type = node.$type ?? type;
       node = node[k];
     }
-    return { path, token: node, type: node.$type ?? type };
+    return node && typeof node === "object" && "$value" in node ? { token: node, type: node.$type ?? type } : undefined;
+  };
+
+  // Follow a reference chain (component -> semantic -> primitive) to the primitive it ends on.
+  const resolve = (refText: string, semantic: Json, depth = 0): { path: string[]; token: Json; type: string } => {
+    const path = refText.slice(1, -1).split(".");
+    const inPrim = lookup(prim, path);
+    if (inPrim) return { path, ...inPrim };
+    const inSemantic = lookup(semantic, path);
+    if (!inSemantic || depth > 10) throw new Error(`Figma export: cannot resolve ${refText}`);
+    const next = inSemantic.token.$value;
+    if (typeof next === "string" && next.startsWith("{")) return resolve(next, semantic, depth + 1);
+    return { path, ...inSemantic };
   };
 
   for (const brand of brands) {
@@ -64,7 +76,7 @@ export function buildFigmaFiles(outDir: string, brands: Brand[], modes: Mode[]) 
         const raw = token.$value;
         const entry: Json = { $type: ftype(type) };
         if (typeof raw === "string" && raw.startsWith("{")) {
-          const target = resolve(raw);
+          const target = resolve(raw, tree);
           entry.$value = value(target.type, target.token.$value);
           entry.$extensions = { "com.figma.aliasData": { targetVariableSetName: PRIMITIVE_SET, targetVariableName: target.path.join("/") } };
         } else entry.$value = value(type, raw);

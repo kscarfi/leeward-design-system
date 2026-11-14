@@ -1875,7 +1875,7 @@
       "$value": "0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 32px 64px 0px rgba(0, 0, 0, 0.24)"
     },
     "$type": "shadow",
-    "$description": "Elevation 100 to 800 from Leeward's effect styles, and the focus rings.",
+    "$description": "Elevation 100 to 800 from the Figma effect styles, and the focus rings.",
     "focus": {
       "$type": "string",
       "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-focus)",
@@ -1899,12 +1899,12 @@
     "focus-halo": {
       "$type": "string",
       "$value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
-      "$description": "Soft halo. Decorative: always combine with a focus ring."
+      "$description": "Soft halo from the Figma effect styles. Decorative: always combine with a focus ring."
     }
   },
   "space": {
     "$type": "dimension",
-    "$description": "Layout spacing. 4 px grid, from Leeward's spacing scale.",
+    "$description": "Layout spacing. 4 px grid, from the Figma spacing scale.",
     "none": {
       "$value": "{space.0}"
     },
@@ -1976,7 +1976,10 @@
     },
     "control": {
       "xs": {
-        "$value": "{sizer.3xSmall}"
+        "$value": {
+          "value": 28,
+          "unit": "px"
+        }
       },
       "sm": {
         "$value": "{sizer.3xSmall}"
@@ -2127,11 +2130,11 @@
       "$value": "{radii.pill}"
     },
     "control": {
-      "$value": "{radii.default}",
-      "$description": "Buttons, inputs, selects"
+      "$value": "{control.radius.md}",
+      "$description": "Default control radius (md). Size-specific radii live in control.radius."
     },
     "control-sm": {
-      "$value": "{radii.small}"
+      "$value": "{control.radius.sm}"
     },
     "card": {
       "$value": "{radii.xLarge}",
@@ -2174,6 +2177,553 @@
       "exit": {
         "$value": "{easing.accelerate}"
       }
+    }
+  },
+  "control": {
+    "$description": "The one control scale. Buttons, fields, selects and segmented controls of the same size share height, radius and padding, so they line up side by side.",
+    "height": {
+      "$type": "dimension",
+      "xs": {
+        "$value": "{size.control.xs}"
+      },
+      "sm": {
+        "$value": "{size.control.sm}"
+      },
+      "md": {
+        "$value": "{size.control.md}"
+      },
+      "lg": {
+        "$value": "{size.control.lg}"
+      },
+      "xl": {
+        "$value": "{size.control.xl}"
+      }
+    },
+    "radius": {
+      "$type": "dimension",
+      "xs": {
+        "$value": "{radii.xSmall}"
+      },
+      "sm": {
+        "$value": "{radii.small}"
+      },
+      "md": {
+        "$value": "{radii.default}"
+      },
+      "lg": {
+        "$value": "{radii.default}"
+      },
+      "xl": {
+        "$value": "{radii.default}"
+      }
+    },
+    "padding-x": {
+      "$type": "dimension",
+      "xs": {
+        "$value": "{space.control.xs}"
+      },
+      "sm": {
+        "$value": "{space.control.sm}"
+      },
+      "md": {
+        "$value": "{space.control.md}"
+      },
+      "lg": {
+        "$value": "{space.control.lg}"
+      },
+      "xl": {
+        "$value": "{space.control.xl}"
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "xs": {
+        "$value": "{space.2xs}"
+      },
+      "sm": {
+        "$value": "{space.xs-tight}"
+      },
+      "md": {
+        "$value": "{space.xs}"
+      },
+      "lg": {
+        "$value": "{space.xs}"
+      },
+      "xl": {
+        "$value": "{space.xs}"
+      }
+    }
+  },
+  "button": {
+    "$type": "dimension",
+    "height-xs": {
+      "$value": "{control.height.xs}"
+    },
+    "height-sm": {
+      "$value": "{control.height.sm}"
+    },
+    "height-md": {
+      "$value": "{control.height.md}"
+    },
+    "height-lg": {
+      "$value": "{control.height.lg}"
+    },
+    "height-xl": {
+      "$value": "{control.height.xl}"
+    },
+    "radius-xs": {
+      "$value": "{control.radius.xs}"
+    },
+    "radius-sm": {
+      "$value": "{control.radius.sm}"
+    },
+    "radius-md": {
+      "$value": "{control.radius.md}"
+    },
+    "radius-lg": {
+      "$value": "{control.radius.lg}"
+    },
+    "radius-xl": {
+      "$value": "{control.radius.xl}"
+    },
+    "padding-x-xs": {
+      "$value": "{control.padding-x.xs}"
+    },
+    "padding-x-sm": {
+      "$value": "{control.padding-x.sm}"
+    },
+    "padding-x-md": {
+      "$value": "{control.padding-x.md}"
+    },
+    "padding-x-lg": {
+      "$value": "{control.padding-x.lg}"
+    },
+    "padding-x-xl": {
+      "$value": "{control.padding-x.xl}"
+    },
+    "gap-xs": {
+      "$value": "{control.gap.xs}"
+    },
+    "gap-sm": {
+      "$value": "{control.gap.sm}"
+    },
+    "gap-md": {
+      "$value": "{control.gap.md}"
+    },
+    "gap-lg": {
+      "$value": "{control.gap.lg}"
+    },
+    "gap-xl": {
+      "$value": "{control.gap.xl}"
+    }
+  },
+  "icon-button": {
+    "$type": "dimension",
+    "size-xs": {
+      "$value": "{control.height.xs}"
+    },
+    "size-sm": {
+      "$value": "{control.height.sm}"
+    },
+    "size-md": {
+      "$value": "{control.height.md}"
+    },
+    "size-lg": {
+      "$value": "{control.height.lg}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "input": {
+    "$type": "dimension",
+    "$description": "TextField, Select, AmountInput and OTPInput boxes.",
+    "height-sm": {
+      "$value": "{control.height.sm}"
+    },
+    "height-md": {
+      "$value": "{control.height.md}"
+    },
+    "height-lg": {
+      "$value": "{control.height.lg}"
+    },
+    "radius-sm": {
+      "$value": "{control.radius.sm}"
+    },
+    "radius-md": {
+      "$value": "{control.radius.md}"
+    },
+    "radius-lg": {
+      "$value": "{control.radius.lg}"
+    },
+    "padding-x-sm": {
+      "$value": "{control.padding-x.sm}"
+    },
+    "padding-x-md": {
+      "$value": "{control.padding-x.md}"
+    },
+    "padding-x-lg": {
+      "$value": "{control.padding-x.lg}"
+    },
+    "border-width": {
+      "$value": "{size.border.default}"
+    },
+    "border-width-invalid": {
+      "$value": "{size.border.strong}"
+    }
+  },
+  "textarea": {
+    "$type": "dimension",
+    "min-height": {
+      "$value": "{control.height.xl}"
+    },
+    "padding": {
+      "$value": "{space.sm}"
+    },
+    "radius": {
+      "$value": "{control.radius.md}"
+    }
+  },
+  "segmented": {
+    "$type": "dimension",
+    "height-sm": {
+      "$value": "{control.height.sm}"
+    },
+    "height-md": {
+      "$value": "{control.height.md}"
+    },
+    "height-lg": {
+      "$value": "{control.height.lg}"
+    },
+    "radius-sm": {
+      "$value": "{control.radius.sm}"
+    },
+    "radius-md": {
+      "$value": "{control.radius.md}"
+    },
+    "radius-lg": {
+      "$value": "{control.radius.lg}"
+    },
+    "inset": {
+      "$value": "{space.3xs}"
+    },
+    "item-radius-sm": {
+      "$value": "{control.radius.xs}"
+    },
+    "item-radius-md": {
+      "$value": "{control.radius.sm}"
+    },
+    "item-radius-lg": {
+      "$value": "{control.radius.md}"
+    }
+  },
+  "chip": {
+    "$type": "dimension",
+    "height-sm": {
+      "$value": "{control.height.sm}"
+    },
+    "height-md": {
+      "$value": "{control.height.md}"
+    },
+    "padding-x-sm": {
+      "$value": "{control.padding-x.sm}"
+    },
+    "padding-x-md": {
+      "$value": "{control.padding-x.md}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "badge": {
+    "$type": "dimension",
+    "height-sm": {
+      "$value": "{sizer.5xSmall}"
+    },
+    "height-md": {
+      "$value": "{sizer.4xSmall}"
+    },
+    "padding-x-sm": {
+      "$value": "{space.xs-tight}"
+    },
+    "padding-x-md": {
+      "$value": "{space.xs}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "checkbox": {
+    "$type": "dimension",
+    "size": {
+      "$value": "{size.icon.md}"
+    },
+    "radius": {
+      "$value": "{radii.small}"
+    }
+  },
+  "radio": {
+    "$type": "dimension",
+    "size": {
+      "$value": "{size.icon.md}"
+    },
+    "dot-size": {
+      "$value": "{space.xs}"
+    }
+  },
+  "switch": {
+    "$type": "dimension",
+    "track-width": {
+      "$value": "{sizer.small}"
+    },
+    "track-height": {
+      "$value": "{sizer.4xSmall}"
+    },
+    "thumb-size": {
+      "$value": "{sizer.5xSmall}"
+    },
+    "inset": {
+      "$value": "{space.3xs}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "avatar": {
+    "$type": "dimension",
+    "size-xs": {
+      "$value": "{size.avatar.xs}"
+    },
+    "size-sm": {
+      "$value": "{size.avatar.sm}"
+    },
+    "size-md": {
+      "$value": "{size.avatar.md}"
+    },
+    "size-lg": {
+      "$value": "{size.avatar.lg}"
+    },
+    "size-xl": {
+      "$value": "{size.avatar.xl}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "card": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.card}"
+    },
+    "padding-sm": {
+      "$value": "{space.sm}"
+    },
+    "padding-md": {
+      "$value": "{space.md}"
+    },
+    "padding-lg": {
+      "$value": "{space.lg}"
+    }
+  },
+  "dialog": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.dialog}"
+    },
+    "padding": {
+      "$value": "{space.lg}"
+    },
+    "width-sm": {
+      "$value": "{size.dialog.sm}"
+    },
+    "width-md": {
+      "$value": "{size.dialog.md}"
+    },
+    "width-lg": {
+      "$value": "{size.dialog.lg}"
+    }
+  },
+  "sheet": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.dialog}"
+    },
+    "padding": {
+      "$value": "{space.lg}"
+    },
+    "width": {
+      "$value": "{size.sheet}"
+    }
+  },
+  "tooltip": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.md}"
+    },
+    "padding-x": {
+      "$value": "{space.sm}"
+    },
+    "padding-y": {
+      "$value": "{space.xs}"
+    },
+    "max-width": {
+      "$value": "{size.tooltip-max}"
+    }
+  },
+  "toast": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.lg}"
+    },
+    "padding": {
+      "$value": "{space.sm}"
+    },
+    "max-width": {
+      "$value": "{size.dialog.md}"
+    }
+  },
+  "alert": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.lg}"
+    },
+    "padding": {
+      "$value": "{space.md}"
+    }
+  },
+  "menu": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.lg}"
+    },
+    "padding": {
+      "$value": "{space.2xs}"
+    },
+    "item-height": {
+      "$value": "{size.touch-target}"
+    },
+    "item-radius": {
+      "$value": "{radius.md}"
+    }
+  },
+  "list-item": {
+    "$type": "dimension",
+    "min-height": {
+      "$value": "{sizer.large}"
+    },
+    "padding-x": {
+      "$value": "{space.md}"
+    },
+    "padding-y": {
+      "$value": "{space.sm}"
+    }
+  },
+  "tabs": {
+    "$type": "dimension",
+    "height": {
+      "$value": "{control.height.md}"
+    },
+    "indicator-thickness": {
+      "$value": "{size.border.strong}"
+    }
+  },
+  "accordion": {
+    "$type": "dimension",
+    "trigger-height": {
+      "$value": "{control.height.lg}"
+    },
+    "radius": {
+      "$value": "{radius.card}"
+    }
+  },
+  "progress": {
+    "$type": "dimension",
+    "height-sm": {
+      "$value": "{space.2xs}"
+    },
+    "height-md": {
+      "$value": "{space.xs}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "skeleton": {
+    "$type": "dimension",
+    "radius-text": {
+      "$value": "{radius.xs}"
+    },
+    "radius-rect": {
+      "$value": "{radius.md}"
+    }
+  },
+  "stepper": {
+    "$type": "dimension",
+    "marker-size": {
+      "$value": "{size.icon.lg}"
+    }
+  },
+  "otp": {
+    "$type": "dimension",
+    "box-size": {
+      "$value": "{control.height.lg}"
+    },
+    "radius": {
+      "$value": "{control.radius.lg}"
+    }
+  },
+  "quick-action": {
+    "$type": "dimension",
+    "icon-size": {
+      "$value": "{size.avatar.lg}"
+    },
+    "radius": {
+      "$value": "{radius.pill}"
+    }
+  },
+  "empty-state": {
+    "$type": "dimension",
+    "art-size": {
+      "$value": "{size.avatar.xl}"
+    }
+  },
+  "spinner": {
+    "$type": "dimension",
+    "size-sm": {
+      "$value": "{size.icon.sm}"
+    },
+    "size-md": {
+      "$value": "{size.icon.md}"
+    },
+    "size-lg": {
+      "$value": "{size.icon.xl}"
+    }
+  },
+  "divider": {
+    "$type": "dimension",
+    "thickness": {
+      "$value": "{size.border.default}"
+    },
+    "gap": {
+      "$value": "{space.sm}"
+    }
+  },
+  "icon-size": {
+    "$type": "dimension",
+    "xs": {
+      "$value": "{size.icon.xs}"
+    },
+    "sm": {
+      "$value": "{size.icon.sm}"
+    },
+    "md": {
+      "$value": "{size.icon.md}"
+    },
+    "lg": {
+      "$value": "{size.icon.lg}"
+    },
+    "xl": {
+      "$value": "{size.icon.xl}"
     }
   },
   "layer": {

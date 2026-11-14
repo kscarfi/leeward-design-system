@@ -1875,7 +1875,7 @@
       "$value": "0px 0px 8px 0px rgba(0, 0, 0, 0.60), 0px 32px 64px 0px rgba(0, 0, 0, 0.60)"
     },
     "$type": "shadow",
-    "$description": "Elevation 100 to 800 from Leeward's effect styles, and the focus rings.",
+    "$description": "Elevation 100 to 800 from the Figma effect styles, and the focus rings.",
     "focus": {
       "$type": "string",
       "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-focus)",
@@ -1899,7 +1899,7 @@
     "focus-halo": {
       "$type": "string",
       "$value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
-      "$description": "Soft halo. Decorative: always combine with a focus ring."
+      "$description": "Soft halo from the Figma effect styles. Decorative: always combine with a focus ring."
     }
   }
 }

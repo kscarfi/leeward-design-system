@@ -4,11 +4,15 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { brands, modes, tokens } from "@leeward/tokens";
 import { checkPairs, type PairResult } from "@leeward/tokens/contrast";
+import { requiredPairs } from "@leeward/tokens/semantic";
 
 const adjustments = JSON.parse(readFileSync(new URL("../packages/tokens/dist/adjustments.json", import.meta.url), "utf8")) as Record<string, Array<{ token: string; ramp: string; from: string; to: string; reason: string }>>;
 
 export function checkTheme(brand: (typeof brands)[number], mode: (typeof modes)[number]): PairResult[] {
   const map = tokens[brand][mode] as Record<string, { value: unknown }>;
+  // A required pair whose token is missing is a failure, not something to skip.
+  const missing = requiredPairs().flatMap((p) => [p.fg, p.bg]).filter((n) => !map[n]);
+  if (missing.length) throw new Error(`${brand} ${mode}: tokens used by required pairs are missing: ${[...new Set(missing)].join(", ")}`);
   return checkPairs(`${brand} ${mode}`, (name) => (map[name] ? String(map[name]!.value) : undefined));
 }
 
@@ -34,7 +38,7 @@ function report(results: PairResult[]): string {
   for (const [theme, list] of Object.entries(adjustments)) {
     const final = new Map<string, { ramp: string; from: string; to: string; reason: string }>();
     for (const a of list) final.set(a.token, { ...a, from: final.get(a.token)?.from ?? a.from });
-    lines.push(`### ${theme}`, "", "| Token | Ramp | Template step | Final step | First reason |", "|---|---|---|---|---|");
+    lines.push(`### ${theme}`, "", "| Token | Ramp | Figma step | Final step | First reason |", "|---|---|---|---|---|");
     for (const [token, a] of final) lines.push(`| \`${token}\` | ${a.ramp} | ${a.from} | ${a.to} | ${a.reason} |`);
     lines.push("");
   }

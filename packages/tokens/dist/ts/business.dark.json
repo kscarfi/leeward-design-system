@@ -2711,6 +2711,6 @@
     "value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
     "cssVar": "--lw-elevation-focus-halo",
     "type": "string",
-    "description": "Soft halo. Decorative: always combine with a focus ring."
+    "description": "Soft halo from the Figma effect styles. Decorative: always combine with a focus ring."
   }
 }

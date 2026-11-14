@@ -2855,7 +2855,7 @@
     "value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
     "cssVar": "--lw-elevation-focus-halo",
     "type": "string",
-    "description": "Soft halo. Decorative: always combine with a focus ring."
+    "description": "Soft halo from the Figma effect styles. Decorative: always combine with a focus ring."
   },
   "size.touch-target": {
     "value": "2.75rem",
@@ -3075,14 +3075,14 @@
     "value": "10px",
     "cssVar": "--lw-radius-control",
     "type": "dimension",
-    "description": "Buttons, inputs, selects",
-    "ref": "radii.large"
+    "description": "Default control radius (md). Size-specific radii live in control.radius.",
+    "ref": "control.radius.md"
   },
   "radius.control-sm": {
     "value": "8px",
     "cssVar": "--lw-radius-control-sm",
     "type": "dimension",
-    "ref": "radii.default"
+    "ref": "control.radius.sm"
   },
   "radius.card": {
     "value": "16px",
@@ -3150,6 +3150,888 @@
     "cssVar": "--lw-motion-easing-exit",
     "type": "cubicBezier",
     "ref": "easing.accelerate"
+  },
+  "control.height.xs": {
+    "value": "2rem",
+    "cssVar": "--lw-control-height-xs",
+    "type": "dimension",
+    "ref": "size.control.xs"
+  },
+  "control.height.sm": {
+    "value": "2.25rem",
+    "cssVar": "--lw-control-height-sm",
+    "type": "dimension",
+    "ref": "size.control.sm"
+  },
+  "control.height.md": {
+    "value": "2.75rem",
+    "cssVar": "--lw-control-height-md",
+    "type": "dimension",
+    "ref": "size.control.md"
+  },
+  "control.height.lg": {
+    "value": "3rem",
+    "cssVar": "--lw-control-height-lg",
+    "type": "dimension",
+    "ref": "size.control.lg"
+  },
+  "control.height.xl": {
+    "value": "3.5rem",
+    "cssVar": "--lw-control-height-xl",
+    "type": "dimension",
+    "ref": "size.control.xl"
+  },
+  "control.radius.xs": {
+    "value": "6px",
+    "cssVar": "--lw-control-radius-xs",
+    "type": "dimension",
+    "ref": "radii.small"
+  },
+  "control.radius.sm": {
+    "value": "8px",
+    "cssVar": "--lw-control-radius-sm",
+    "type": "dimension",
+    "ref": "radii.default"
+  },
+  "control.radius.md": {
+    "value": "10px",
+    "cssVar": "--lw-control-radius-md",
+    "type": "dimension",
+    "ref": "radii.large"
+  },
+  "control.radius.lg": {
+    "value": "12px",
+    "cssVar": "--lw-control-radius-lg",
+    "type": "dimension",
+    "ref": "radii.xLarge"
+  },
+  "control.radius.xl": {
+    "value": "12px",
+    "cssVar": "--lw-control-radius-xl",
+    "type": "dimension",
+    "ref": "radii.xLarge"
+  },
+  "control.padding-x.xs": {
+    "value": "0.5rem",
+    "cssVar": "--lw-control-padding-x-xs",
+    "type": "dimension",
+    "ref": "space.control.xs"
+  },
+  "control.padding-x.sm": {
+    "value": "0.75rem",
+    "cssVar": "--lw-control-padding-x-sm",
+    "type": "dimension",
+    "ref": "space.control.sm"
+  },
+  "control.padding-x.md": {
+    "value": "1rem",
+    "cssVar": "--lw-control-padding-x-md",
+    "type": "dimension",
+    "ref": "space.control.md"
+  },
+  "control.padding-x.lg": {
+    "value": "1.25rem",
+    "cssVar": "--lw-control-padding-x-lg",
+    "type": "dimension",
+    "ref": "space.control.lg"
+  },
+  "control.padding-x.xl": {
+    "value": "1.5rem",
+    "cssVar": "--lw-control-padding-x-xl",
+    "type": "dimension",
+    "ref": "space.control.xl"
+  },
+  "control.gap.xs": {
+    "value": "0.25rem",
+    "cssVar": "--lw-control-gap-xs",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "control.gap.sm": {
+    "value": "0.375rem",
+    "cssVar": "--lw-control-gap-sm",
+    "type": "dimension",
+    "ref": "space.xs-tight"
+  },
+  "control.gap.md": {
+    "value": "0.5rem",
+    "cssVar": "--lw-control-gap-md",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "control.gap.lg": {
+    "value": "0.5rem",
+    "cssVar": "--lw-control-gap-lg",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "control.gap.xl": {
+    "value": "0.5rem",
+    "cssVar": "--lw-control-gap-xl",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "button.height-xs": {
+    "value": "2rem",
+    "cssVar": "--lw-button-height-xs",
+    "type": "dimension",
+    "ref": "control.height.xs"
+  },
+  "button.height-sm": {
+    "value": "2.25rem",
+    "cssVar": "--lw-button-height-sm",
+    "type": "dimension",
+    "ref": "control.height.sm"
+  },
+  "button.height-md": {
+    "value": "2.75rem",
+    "cssVar": "--lw-button-height-md",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "button.height-lg": {
+    "value": "3rem",
+    "cssVar": "--lw-button-height-lg",
+    "type": "dimension",
+    "ref": "control.height.lg"
+  },
+  "button.height-xl": {
+    "value": "3.5rem",
+    "cssVar": "--lw-button-height-xl",
+    "type": "dimension",
+    "ref": "control.height.xl"
+  },
+  "button.radius-xs": {
+    "value": "6px",
+    "cssVar": "--lw-button-radius-xs",
+    "type": "dimension",
+    "ref": "control.radius.xs"
+  },
+  "button.radius-sm": {
+    "value": "8px",
+    "cssVar": "--lw-button-radius-sm",
+    "type": "dimension",
+    "ref": "control.radius.sm"
+  },
+  "button.radius-md": {
+    "value": "10px",
+    "cssVar": "--lw-button-radius-md",
+    "type": "dimension",
+    "ref": "control.radius.md"
+  },
+  "button.radius-lg": {
+    "value": "12px",
+    "cssVar": "--lw-button-radius-lg",
+    "type": "dimension",
+    "ref": "control.radius.lg"
+  },
+  "button.radius-xl": {
+    "value": "12px",
+    "cssVar": "--lw-button-radius-xl",
+    "type": "dimension",
+    "ref": "control.radius.xl"
+  },
+  "button.padding-x-xs": {
+    "value": "0.5rem",
+    "cssVar": "--lw-button-padding-x-xs",
+    "type": "dimension",
+    "ref": "control.padding-x.xs"
+  },
+  "button.padding-x-sm": {
+    "value": "0.75rem",
+    "cssVar": "--lw-button-padding-x-sm",
+    "type": "dimension",
+    "ref": "control.padding-x.sm"
+  },
+  "button.padding-x-md": {
+    "value": "1rem",
+    "cssVar": "--lw-button-padding-x-md",
+    "type": "dimension",
+    "ref": "control.padding-x.md"
+  },
+  "button.padding-x-lg": {
+    "value": "1.25rem",
+    "cssVar": "--lw-button-padding-x-lg",
+    "type": "dimension",
+    "ref": "control.padding-x.lg"
+  },
+  "button.padding-x-xl": {
+    "value": "1.5rem",
+    "cssVar": "--lw-button-padding-x-xl",
+    "type": "dimension",
+    "ref": "control.padding-x.xl"
+  },
+  "button.gap-xs": {
+    "value": "0.25rem",
+    "cssVar": "--lw-button-gap-xs",
+    "type": "dimension",
+    "ref": "control.gap.xs"
+  },
+  "button.gap-sm": {
+    "value": "0.375rem",
+    "cssVar": "--lw-button-gap-sm",
+    "type": "dimension",
+    "ref": "control.gap.sm"
+  },
+  "button.gap-md": {
+    "value": "0.5rem",
+    "cssVar": "--lw-button-gap-md",
+    "type": "dimension",
+    "ref": "control.gap.md"
+  },
+  "button.gap-lg": {
+    "value": "0.5rem",
+    "cssVar": "--lw-button-gap-lg",
+    "type": "dimension",
+    "ref": "control.gap.lg"
+  },
+  "button.gap-xl": {
+    "value": "0.5rem",
+    "cssVar": "--lw-button-gap-xl",
+    "type": "dimension",
+    "ref": "control.gap.xl"
+  },
+  "icon-button.size-xs": {
+    "value": "2rem",
+    "cssVar": "--lw-icon-button-size-xs",
+    "type": "dimension",
+    "ref": "control.height.xs"
+  },
+  "icon-button.size-sm": {
+    "value": "2.25rem",
+    "cssVar": "--lw-icon-button-size-sm",
+    "type": "dimension",
+    "ref": "control.height.sm"
+  },
+  "icon-button.size-md": {
+    "value": "2.75rem",
+    "cssVar": "--lw-icon-button-size-md",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "icon-button.size-lg": {
+    "value": "3rem",
+    "cssVar": "--lw-icon-button-size-lg",
+    "type": "dimension",
+    "ref": "control.height.lg"
+  },
+  "icon-button.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-icon-button-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "input.height-sm": {
+    "value": "2.25rem",
+    "cssVar": "--lw-input-height-sm",
+    "type": "dimension",
+    "ref": "control.height.sm"
+  },
+  "input.height-md": {
+    "value": "2.75rem",
+    "cssVar": "--lw-input-height-md",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "input.height-lg": {
+    "value": "3rem",
+    "cssVar": "--lw-input-height-lg",
+    "type": "dimension",
+    "ref": "control.height.lg"
+  },
+  "input.radius-sm": {
+    "value": "8px",
+    "cssVar": "--lw-input-radius-sm",
+    "type": "dimension",
+    "ref": "control.radius.sm"
+  },
+  "input.radius-md": {
+    "value": "10px",
+    "cssVar": "--lw-input-radius-md",
+    "type": "dimension",
+    "ref": "control.radius.md"
+  },
+  "input.radius-lg": {
+    "value": "12px",
+    "cssVar": "--lw-input-radius-lg",
+    "type": "dimension",
+    "ref": "control.radius.lg"
+  },
+  "input.padding-x-sm": {
+    "value": "0.75rem",
+    "cssVar": "--lw-input-padding-x-sm",
+    "type": "dimension",
+    "ref": "control.padding-x.sm"
+  },
+  "input.padding-x-md": {
+    "value": "1rem",
+    "cssVar": "--lw-input-padding-x-md",
+    "type": "dimension",
+    "ref": "control.padding-x.md"
+  },
+  "input.padding-x-lg": {
+    "value": "1.25rem",
+    "cssVar": "--lw-input-padding-x-lg",
+    "type": "dimension",
+    "ref": "control.padding-x.lg"
+  },
+  "input.border-width": {
+    "value": "1px",
+    "cssVar": "--lw-input-border-width",
+    "type": "dimension",
+    "ref": "size.border.default"
+  },
+  "input.border-width-invalid": {
+    "value": "2px",
+    "cssVar": "--lw-input-border-width-invalid",
+    "type": "dimension",
+    "ref": "size.border.strong"
+  },
+  "textarea.min-height": {
+    "value": "3.5rem",
+    "cssVar": "--lw-textarea-min-height",
+    "type": "dimension",
+    "ref": "control.height.xl"
+  },
+  "textarea.padding": {
+    "value": "0.75rem",
+    "cssVar": "--lw-textarea-padding",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "textarea.radius": {
+    "value": "10px",
+    "cssVar": "--lw-textarea-radius",
+    "type": "dimension",
+    "ref": "control.radius.md"
+  },
+  "segmented.height-sm": {
+    "value": "2.25rem",
+    "cssVar": "--lw-segmented-height-sm",
+    "type": "dimension",
+    "ref": "control.height.sm"
+  },
+  "segmented.height-md": {
+    "value": "2.75rem",
+    "cssVar": "--lw-segmented-height-md",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "segmented.height-lg": {
+    "value": "3rem",
+    "cssVar": "--lw-segmented-height-lg",
+    "type": "dimension",
+    "ref": "control.height.lg"
+  },
+  "segmented.radius-sm": {
+    "value": "8px",
+    "cssVar": "--lw-segmented-radius-sm",
+    "type": "dimension",
+    "ref": "control.radius.sm"
+  },
+  "segmented.radius-md": {
+    "value": "10px",
+    "cssVar": "--lw-segmented-radius-md",
+    "type": "dimension",
+    "ref": "control.radius.md"
+  },
+  "segmented.radius-lg": {
+    "value": "12px",
+    "cssVar": "--lw-segmented-radius-lg",
+    "type": "dimension",
+    "ref": "control.radius.lg"
+  },
+  "segmented.inset": {
+    "value": "0.125rem",
+    "cssVar": "--lw-segmented-inset",
+    "type": "dimension",
+    "ref": "space.3xs"
+  },
+  "segmented.item-radius-sm": {
+    "value": "6px",
+    "cssVar": "--lw-segmented-item-radius-sm",
+    "type": "dimension",
+    "ref": "control.radius.xs"
+  },
+  "segmented.item-radius-md": {
+    "value": "8px",
+    "cssVar": "--lw-segmented-item-radius-md",
+    "type": "dimension",
+    "ref": "control.radius.sm"
+  },
+  "segmented.item-radius-lg": {
+    "value": "10px",
+    "cssVar": "--lw-segmented-item-radius-lg",
+    "type": "dimension",
+    "ref": "control.radius.md"
+  },
+  "chip.height-sm": {
+    "value": "2.25rem",
+    "cssVar": "--lw-chip-height-sm",
+    "type": "dimension",
+    "ref": "control.height.sm"
+  },
+  "chip.height-md": {
+    "value": "2.75rem",
+    "cssVar": "--lw-chip-height-md",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "chip.padding-x-sm": {
+    "value": "0.75rem",
+    "cssVar": "--lw-chip-padding-x-sm",
+    "type": "dimension",
+    "ref": "control.padding-x.sm"
+  },
+  "chip.padding-x-md": {
+    "value": "1rem",
+    "cssVar": "--lw-chip-padding-x-md",
+    "type": "dimension",
+    "ref": "control.padding-x.md"
+  },
+  "chip.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-chip-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "badge.height-sm": {
+    "value": "1.25rem",
+    "cssVar": "--lw-badge-height-sm",
+    "type": "dimension",
+    "ref": "sizer.5xSmall"
+  },
+  "badge.height-md": {
+    "value": "1.5rem",
+    "cssVar": "--lw-badge-height-md",
+    "type": "dimension",
+    "ref": "sizer.4xSmall"
+  },
+  "badge.padding-x-sm": {
+    "value": "0.375rem",
+    "cssVar": "--lw-badge-padding-x-sm",
+    "type": "dimension",
+    "ref": "space.xs-tight"
+  },
+  "badge.padding-x-md": {
+    "value": "0.5rem",
+    "cssVar": "--lw-badge-padding-x-md",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "badge.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-badge-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "checkbox.size": {
+    "value": "1.25rem",
+    "cssVar": "--lw-checkbox-size",
+    "type": "dimension",
+    "ref": "size.icon.md"
+  },
+  "checkbox.radius": {
+    "value": "6px",
+    "cssVar": "--lw-checkbox-radius",
+    "type": "dimension",
+    "ref": "radii.small"
+  },
+  "radio.size": {
+    "value": "1.25rem",
+    "cssVar": "--lw-radio-size",
+    "type": "dimension",
+    "ref": "size.icon.md"
+  },
+  "radio.dot-size": {
+    "value": "0.5rem",
+    "cssVar": "--lw-radio-dot-size",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "switch.track-width": {
+    "value": "2.75rem",
+    "cssVar": "--lw-switch-track-width",
+    "type": "dimension",
+    "ref": "sizer.small"
+  },
+  "switch.track-height": {
+    "value": "1.5rem",
+    "cssVar": "--lw-switch-track-height",
+    "type": "dimension",
+    "ref": "sizer.4xSmall"
+  },
+  "switch.thumb-size": {
+    "value": "1.25rem",
+    "cssVar": "--lw-switch-thumb-size",
+    "type": "dimension",
+    "ref": "sizer.5xSmall"
+  },
+  "switch.inset": {
+    "value": "0.125rem",
+    "cssVar": "--lw-switch-inset",
+    "type": "dimension",
+    "ref": "space.3xs"
+  },
+  "switch.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-switch-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "avatar.size-xs": {
+    "value": "1.5rem",
+    "cssVar": "--lw-avatar-size-xs",
+    "type": "dimension",
+    "ref": "size.avatar.xs"
+  },
+  "avatar.size-sm": {
+    "value": "2rem",
+    "cssVar": "--lw-avatar-size-sm",
+    "type": "dimension",
+    "ref": "size.avatar.sm"
+  },
+  "avatar.size-md": {
+    "value": "2.5rem",
+    "cssVar": "--lw-avatar-size-md",
+    "type": "dimension",
+    "ref": "size.avatar.md"
+  },
+  "avatar.size-lg": {
+    "value": "3rem",
+    "cssVar": "--lw-avatar-size-lg",
+    "type": "dimension",
+    "ref": "size.avatar.lg"
+  },
+  "avatar.size-xl": {
+    "value": "4rem",
+    "cssVar": "--lw-avatar-size-xl",
+    "type": "dimension",
+    "ref": "size.avatar.xl"
+  },
+  "avatar.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-avatar-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "card.radius": {
+    "value": "16px",
+    "cssVar": "--lw-card-radius",
+    "type": "dimension",
+    "ref": "radius.card"
+  },
+  "card.padding-sm": {
+    "value": "0.75rem",
+    "cssVar": "--lw-card-padding-sm",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "card.padding-md": {
+    "value": "1rem",
+    "cssVar": "--lw-card-padding-md",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "card.padding-lg": {
+    "value": "1.5rem",
+    "cssVar": "--lw-card-padding-lg",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "dialog.radius": {
+    "value": "24px",
+    "cssVar": "--lw-dialog-radius",
+    "type": "dimension",
+    "ref": "radius.dialog"
+  },
+  "dialog.padding": {
+    "value": "1.5rem",
+    "cssVar": "--lw-dialog-padding",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "dialog.width-sm": {
+    "value": "25rem",
+    "cssVar": "--lw-dialog-width-sm",
+    "type": "dimension",
+    "ref": "size.dialog.sm"
+  },
+  "dialog.width-md": {
+    "value": "32.5rem",
+    "cssVar": "--lw-dialog-width-md",
+    "type": "dimension",
+    "ref": "size.dialog.md"
+  },
+  "dialog.width-lg": {
+    "value": "45rem",
+    "cssVar": "--lw-dialog-width-lg",
+    "type": "dimension",
+    "ref": "size.dialog.lg"
+  },
+  "sheet.radius": {
+    "value": "24px",
+    "cssVar": "--lw-sheet-radius",
+    "type": "dimension",
+    "ref": "radius.dialog"
+  },
+  "sheet.padding": {
+    "value": "1.5rem",
+    "cssVar": "--lw-sheet-padding",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "sheet.width": {
+    "value": "35rem",
+    "cssVar": "--lw-sheet-width",
+    "type": "dimension",
+    "ref": "size.sheet"
+  },
+  "tooltip.radius": {
+    "value": "8px",
+    "cssVar": "--lw-tooltip-radius",
+    "type": "dimension",
+    "ref": "radius.md"
+  },
+  "tooltip.padding-x": {
+    "value": "0.75rem",
+    "cssVar": "--lw-tooltip-padding-x",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "tooltip.padding-y": {
+    "value": "0.5rem",
+    "cssVar": "--lw-tooltip-padding-y",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "tooltip.max-width": {
+    "value": "17.5rem",
+    "cssVar": "--lw-tooltip-max-width",
+    "type": "dimension",
+    "ref": "size.tooltip-max"
+  },
+  "toast.radius": {
+    "value": "12px",
+    "cssVar": "--lw-toast-radius",
+    "type": "dimension",
+    "ref": "radius.lg"
+  },
+  "toast.padding": {
+    "value": "0.75rem",
+    "cssVar": "--lw-toast-padding",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "toast.max-width": {
+    "value": "32.5rem",
+    "cssVar": "--lw-toast-max-width",
+    "type": "dimension",
+    "ref": "size.dialog.md"
+  },
+  "alert.radius": {
+    "value": "12px",
+    "cssVar": "--lw-alert-radius",
+    "type": "dimension",
+    "ref": "radius.lg"
+  },
+  "alert.padding": {
+    "value": "1rem",
+    "cssVar": "--lw-alert-padding",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "menu.radius": {
+    "value": "12px",
+    "cssVar": "--lw-menu-radius",
+    "type": "dimension",
+    "ref": "radius.lg"
+  },
+  "menu.padding": {
+    "value": "0.25rem",
+    "cssVar": "--lw-menu-padding",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "menu.item-height": {
+    "value": "2.75rem",
+    "cssVar": "--lw-menu-item-height",
+    "type": "dimension",
+    "ref": "size.touch-target"
+  },
+  "menu.item-radius": {
+    "value": "8px",
+    "cssVar": "--lw-menu-item-radius",
+    "type": "dimension",
+    "ref": "radius.md"
+  },
+  "list-item.min-height": {
+    "value": "3.5rem",
+    "cssVar": "--lw-list-item-min-height",
+    "type": "dimension",
+    "ref": "sizer.large"
+  },
+  "list-item.padding-x": {
+    "value": "1rem",
+    "cssVar": "--lw-list-item-padding-x",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "list-item.padding-y": {
+    "value": "0.75rem",
+    "cssVar": "--lw-list-item-padding-y",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "tabs.height": {
+    "value": "2.75rem",
+    "cssVar": "--lw-tabs-height",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "tabs.indicator-thickness": {
+    "value": "2px",
+    "cssVar": "--lw-tabs-indicator-thickness",
+    "type": "dimension",
+    "ref": "size.border.strong"
+  },
+  "accordion.trigger-height": {
+    "value": "3rem",
+    "cssVar": "--lw-accordion-trigger-height",
+    "type": "dimension",
+    "ref": "control.height.lg"
+  },
+  "accordion.radius": {
+    "value": "16px",
+    "cssVar": "--lw-accordion-radius",
+    "type": "dimension",
+    "ref": "radius.card"
+  },
+  "progress.height-sm": {
+    "value": "0.25rem",
+    "cssVar": "--lw-progress-height-sm",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "progress.height-md": {
+    "value": "0.5rem",
+    "cssVar": "--lw-progress-height-md",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "progress.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-progress-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "skeleton.radius-text": {
+    "value": "4px",
+    "cssVar": "--lw-skeleton-radius-text",
+    "type": "dimension",
+    "ref": "radius.xs"
+  },
+  "skeleton.radius-rect": {
+    "value": "8px",
+    "cssVar": "--lw-skeleton-radius-rect",
+    "type": "dimension",
+    "ref": "radius.md"
+  },
+  "stepper.marker-size": {
+    "value": "1.5rem",
+    "cssVar": "--lw-stepper-marker-size",
+    "type": "dimension",
+    "ref": "size.icon.lg"
+  },
+  "otp.box-size": {
+    "value": "3rem",
+    "cssVar": "--lw-otp-box-size",
+    "type": "dimension",
+    "ref": "control.height.lg"
+  },
+  "otp.radius": {
+    "value": "12px",
+    "cssVar": "--lw-otp-radius",
+    "type": "dimension",
+    "ref": "control.radius.lg"
+  },
+  "quick-action.icon-size": {
+    "value": "3rem",
+    "cssVar": "--lw-quick-action-icon-size",
+    "type": "dimension",
+    "ref": "size.avatar.lg"
+  },
+  "quick-action.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-quick-action-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "empty-state.art-size": {
+    "value": "4rem",
+    "cssVar": "--lw-empty-state-art-size",
+    "type": "dimension",
+    "ref": "size.avatar.xl"
+  },
+  "spinner.size-sm": {
+    "value": "1rem",
+    "cssVar": "--lw-spinner-size-sm",
+    "type": "dimension",
+    "ref": "size.icon.sm"
+  },
+  "spinner.size-md": {
+    "value": "1.25rem",
+    "cssVar": "--lw-spinner-size-md",
+    "type": "dimension",
+    "ref": "size.icon.md"
+  },
+  "spinner.size-lg": {
+    "value": "2rem",
+    "cssVar": "--lw-spinner-size-lg",
+    "type": "dimension",
+    "ref": "size.icon.xl"
+  },
+  "divider.thickness": {
+    "value": "1px",
+    "cssVar": "--lw-divider-thickness",
+    "type": "dimension",
+    "ref": "size.border.default"
+  },
+  "divider.gap": {
+    "value": "0.75rem",
+    "cssVar": "--lw-divider-gap",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "icon-size.xs": {
+    "value": "0.75rem",
+    "cssVar": "--lw-icon-size-xs",
+    "type": "dimension",
+    "ref": "size.icon.xs"
+  },
+  "icon-size.sm": {
+    "value": "1rem",
+    "cssVar": "--lw-icon-size-sm",
+    "type": "dimension",
+    "ref": "size.icon.sm"
+  },
+  "icon-size.md": {
+    "value": "1.25rem",
+    "cssVar": "--lw-icon-size-md",
+    "type": "dimension",
+    "ref": "size.icon.md"
+  },
+  "icon-size.lg": {
+    "value": "1.5rem",
+    "cssVar": "--lw-icon-size-lg",
+    "type": "dimension",
+    "ref": "size.icon.lg"
+  },
+  "icon-size.xl": {
+    "value": "2rem",
+    "cssVar": "--lw-icon-size-xl",
+    "type": "dimension",
+    "ref": "size.icon.xl"
   },
   "layer.base": {
     "value": 0,

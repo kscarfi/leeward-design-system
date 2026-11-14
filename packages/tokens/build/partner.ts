@@ -8,7 +8,7 @@ import { focusRings } from "./focus.ts";
 import { generateRamp, seedSteps } from "./palette.ts";
 import { resolveSemantic, type Mode } from "./semantic.ts";
 import type { Ramp, TemplateEntry } from "./source.ts";
-import semanticTemplateData from "../dist/semantic-template.json" with { type: "json" };
+import sourceTemplate from "../dist/semantic-template.json" with { type: "json" };
 
 export interface PartnerTheme {
   name: string;
@@ -45,7 +45,7 @@ export function generatePartnerTheme({ name, seed, pinAction = false, ramps, bas
   const results: PairResult[] = [];
   let adjusted = 0;
   for (const mode of ["light", "dark"] as Mode[]) {
-    const resolved = resolveSemantic(brand, mode, allRamps, semanticTemplateData as Record<string, TemplateEntry>);
+    const resolved = resolveSemantic(brand, mode, allRamps, sourceTemplate as Record<string, TemplateEntry>);
     adjusted += resolved.adjustments.length;
     const map: Record<string, string> = Object.fromEntries(Object.values(resolved.tokens).map((t) => [t.name, t.hex]));
     if (pinAction && mode === "light") {
