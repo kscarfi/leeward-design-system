@@ -172,8 +172,8 @@ function clean(svg: string, file: string): string {
   if (/fill="white"/.test(inner)) throw new Error(`${file} draws in white; pick another icon.`);
   return inner
     .replace(/(fill|stroke)="black"/g, '$1="currentColor"')
-    // Two decimals is far below a pixel on a 24 px grid and cuts the file size in half.
-    .replace(/ d="([^"]+)"/g, (_m, d: string) => ` d="${d.replace(/-?\d*\.\d+/g, (n) => String(Math.round(Number(n) * 100) / 100))}"`)
+    // One decimal (0.05 px error at 24 px) is invisible and keeps the icon data small.
+    .replace(/ d="([^"]+)"/g, (_m, d: string) => ` d="${d.replace(/-?\d*\.\d+/g, (n) => String(Math.round(Number(n) * 10) / 10))}"`)
     .replace(/\s*\n\s*/g, "")
     .replace(/\s{2,}/g, " ");
 }
