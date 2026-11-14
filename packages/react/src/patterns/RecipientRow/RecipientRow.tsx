@@ -33,7 +33,7 @@ export function RecipientRow({ name, iban, bank, avatarSrc, favorite, onClick, h
       {...(className ? { className } : {})}
       leading={<Avatar name={name} size="md" decorative {...(avatarSrc ? { src: avatarSrc } : {})} />}
       title={
-        <>
+        <span className={styles.clip}>
           {/* Screen readers get one sentence; the visible name and star are hidden from them. */}
           <span aria-hidden="true">
             {name}
@@ -44,10 +44,10 @@ export function RecipientRow({ name, iban, bank, avatarSrc, favorite, onClick, h
             )}
           </span>
           <span className={styles.srOnly}>{favorite ? `${name}, ${m.favorite}` : name}</span>
-        </>
+        </span>
       }
       description={
-        <>
+        <span className={styles.clip}>
           <span aria-hidden="true">
             {bank ? `${bank} · ` : ""}
             {maskIban(iban)}
@@ -56,7 +56,7 @@ export function RecipientRow({ name, iban, bank, avatarSrc, favorite, onClick, h
             {bank ? `${bank}, ` : ""}
             {m.ibanEnding} {last4.split("").join(" ")}
           </span>
-        </>
+        </span>
       }
       chevron={interactive}
       {...(onClick ? { onClick } : {})}
