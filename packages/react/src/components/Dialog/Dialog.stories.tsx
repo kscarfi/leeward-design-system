@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, screen, userEvent, waitFor, within } from "storybook/test";
+import { expect, screen, userEvent, waitFor, within, fn } from "storybook/test";
 import { Button } from "../Button/Button.tsx";
 import { Text } from "../Text/Text.tsx";
 import { Dialog, DialogClose } from "./Dialog.tsx";
+import docsMd from "./Dialog.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Dialog",
   component: Dialog,
-  args: {
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onOpenChange: fn(),
     title: "Freeze your card?",
     description: "Card payments and cash withdrawals stop until you unfreeze it. Direct debits keep working.",
     trigger: <Button variant="secondary">Freeze card</Button>,

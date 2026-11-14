@@ -2,23 +2,53 @@
 
 One-time code entry with paste, SMS autofill and clear errors.
 
+## When to use
+
+- Confirming a transfer or a login with an SMS code.
+
+## When not to use
+
+- Passwords and PINs that people choose.
+
+## Sizes
+
+| Size | Height | Use it for |
+|---|---|---|
+| Box | 48 px | Six boxes by default, `length` changes it. |
+
+## States
+
+- Empty, partial, complete, error, disabled.
+
+## Content guidelines
+
+- Say where the code was sent in `hint`: "We sent a code to •••• 4821".
+
+## Behavior and responsive
+
+- One real input: paste, autofill and screen readers all work.
+- Spaces and letters are stripped, so "482 913" pasted from an SMS works.
+
 ## Do
 
-- Say where the code was sent in `hint`.
 - Use `onComplete` to verify automatically.
 
 ## Don't
 
 - Do not split the code into separate inputs.
-- Do not clear the code on error. Let people fix one digit.
+- Do not clear the code on error.
 
 ## Accessibility
 
-- One real input with `autocomplete="one-time-code"` and `inputMode="numeric"`.
-- Spaces and letters are stripped, so pasting "482 913" works.
+- `autocomplete="one-time-code"` and `inputMode="numeric"`.
+- The error is linked to the input.
 
 ## Example
 
 ```tsx
-<OTPInput label="Verification code" hint="We sent a code to •••• 4821" onComplete={verify} />
+import { OTPInput } from "@leeward/react";
+
+export function VerifyTransfer() {
+  return <OTPInput label="Verification code" hint="We sent a code to •••• 4821" onComplete={(code) => console.log(code)} />;
+}
 ```

@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { TextField } from "./TextField.tsx";
+import docsMd from "./TextField.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/TextField",
   component: TextField,
-  args: { label: "Recipient name" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onChange: fn(), onFocus: fn(), onBlur: fn(), label: "Recipient name" },
   decorators: [(Story) => <div style={{ maxWidth: "360px" }}><Story /></div>],
 } satisfies Meta<typeof TextField>;
 export default meta;

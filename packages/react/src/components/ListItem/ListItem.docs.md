@@ -1,24 +1,59 @@
 # ListItem
 
-Row in a list with title, description, leading and trailing slots. Use inside List.
+A row in a List with a title, description, leading and trailing content. The whole row can be a link or a button.
+
+## When to use
+
+- Settings, recipients, menus of destinations.
+
+## When not to use
+
+- Transactions: use TransactionRow.
+
+## Anatomy
+
+- Leading (avatar or icon), title, description, trailing (value, badge or control), chevron.
+
+## Sizes
+
+| Size | Height | Use it for |
+|---|---|---|
+| Row | at least 44 px | Grows with content. |
+
+## Content guidelines
+
+- Titles are nouns, descriptions give the current value.
 
 ## Do
 
-- Use `href` for navigation and `onClick` for actions. The whole row becomes the target.
+- Use `href` for navigation and `onClick` for actions.
 - Add `chevron` when the row opens another screen.
 
 ## Don't
 
 - Do not put a button inside an interactive row.
-- Do not use for transactions. Use TransactionRow.
 
 ## Accessibility
 
-- Renders `li` inside `ul`. Rows are at least 44px tall.
-- Interactive rows use a native link or button.
+- Renders `li` inside `ul`.
+- Interactive rows use a real link or button with an inset focus ring.
 
 ## Example
 
 ```tsx
-<List><ListItem title="Security" description="Passcode, Face ID" href="/security" chevron /></List>
+import { Icon, List, ListItem } from "@leeward/react";
+
+export function SettingsList() {
+  return (
+    <List>
+      <ListItem title="Security" description="Passcode, Face ID" leading={<Icon name="shield" />} href="/security" chevron />
+      <ListItem title="Notifications" leading={<Icon name="bell" />} href="/notifications" chevron />
+    </List>
+  );
+}
 ```
+
+## Related
+
+- TransactionRow
+- Card

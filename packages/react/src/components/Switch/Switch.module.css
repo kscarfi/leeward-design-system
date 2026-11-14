@@ -37,7 +37,7 @@
 }
 
 .track[data-state="checked"] { background: var(--lw-fill-primary-default); }
-.track:disabled { background: var(--lw-fill-disabled-default); cursor: not-allowed; }
+.track:disabled { background: var(--lw-fill-disabled-stronger); cursor: not-allowed; }
 
 .thumb {
   display: block;
@@ -55,4 +55,4 @@
   transform: translateX(calc(var(--lw-size-touch-target) - var(--lw-size-icon-md) - var(--lw-space-3xs) * 2));
 }
 
-.track:disabled .thumb { background: var(--lw-text-subtler); box-shadow: none; }
+.track:disabled .thumb { background: var(--lw-fill-surface-default); box-shadow: none; }

@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { Text } from "../Text/Text.tsx";
 import { Tabs } from "./Tabs.tsx";
+import docsMd from "./Tabs.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Tabs",
   component: Tabs,
-  args: {
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onValueChange: fn(),
     label: "Account views",
     items: [
       { value: "activity", label: "Activity", content: <Text>Your last 30 days of payments.</Text> },

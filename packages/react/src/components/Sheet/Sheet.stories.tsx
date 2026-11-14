@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, screen, userEvent, waitFor, within } from "storybook/test";
+import { expect, screen, userEvent, waitFor, within, fn } from "storybook/test";
 import { Button } from "../Button/Button.tsx";
 import { Checkbox } from "../Checkbox/Checkbox.tsx";
 import { Sheet, SheetClose } from "./Sheet.tsx";
+import docsMd from "./Sheet.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Sheet",
   component: Sheet,
-  args: {
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onOpenChange: fn(),
     title: "Filter transactions",
     trigger: <Button variant="outline" iconStart="filter">Filter</Button>,
     children: (

@@ -1,24 +1,71 @@
 # RadioGroup
 
-Pick exactly one option from 2 to 5 visible choices.
+Pick exactly one option from 2 to 5 visible choices, with optional descriptions.
+
+## When to use
+
+- When should it arrive? Which statement format?
+
+## When not to use
+
+- More than about 5 options: use Select.
+- Instant view switches: use SegmentedControl.
+
+## States
+
+- Default, selected, error, disabled options.
+
+## Content guidelines
+
+- Write `label` as the question.
+- Use `description` to explain the consequence of each option.
+
+## Behavior and responsive
+
+- `orientation="horizontal"` for two or three short options, vertical otherwise.
 
 ## Do
 
-- Write `label` as the question: "When should it arrive?".
-- Add `description` to explain the consequence of each option.
+- Set a sensible default when there is one.
 
 ## Don't
 
-- Do not use for more than about 5 options.
-- Do not leave a group with no default unless the choice must be explicit.
+- Do not use for on and off: use Switch.
 
 ## Accessibility
 
-- `radiogroup` role named by the label. Arrow keys move between options.
-- Descriptions are linked with `aria-describedby`.
+- `radiogroup` named by the label.
+- Descriptions linked with `aria-describedby`.
+
+### Keyboard
+
+| Key | Action |
+|---|---|
+| Tab | Moves into the group |
+| Arrow keys | Move between options |
+| Space | Selects the focused option |
 
 ## Example
 
 ```tsx
-<RadioGroup label="When should it arrive?" options={options} defaultValue="now" />
+import { RadioGroup } from "@leeward/react";
+
+export function WhenToSend() {
+  return (
+    <RadioGroup
+      label="When should it arrive?"
+      defaultValue="now"
+      options={[
+        { value: "now", label: "Now", description: "Free, arrives in seconds" },
+        { value: "date", label: "On a date", description: "Choose a day in the next 12 months" },
+      ]}
+    />
+  );
+}
 ```
+
+## Related
+
+- Select
+- SegmentedControl
+- Checkbox

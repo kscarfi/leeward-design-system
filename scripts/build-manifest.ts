@@ -21,9 +21,14 @@ export interface ManifestComponent {
   purpose: string;
   props: ManifestProp[];
   variants: Record<string, string[]>;
+  whenToUse: string[];
+  whenNotToUse: string[];
+  contentGuidelines: string[];
+  sizes: string[];
   do: string[];
   dont: string[];
   accessibility: string[];
+  keyboard: string[];
   example: string;
   related?: string[];
 }
@@ -36,9 +41,22 @@ function parseDocs(md: string) {
     sections[title!.trim().toLowerCase()] = body.join("\n").trim();
   }
   const bullets = (s = "") => s.split("\n").filter((l) => l.startsWith("- ")).map((l) => l.slice(2).trim());
+  const rows = (s = "") => s.split("\n").filter((l) => l.startsWith("| ") && !l.startsWith("| Size") && !l.startsWith("| Key")).map((l) => l.slice(2, -2).split(" | ").join(": "));
   const purpose = head!.split("\n").slice(1).join(" ").trim();
-  const example = (sections.example ?? "").replace(/^```tsx\n?/, "").replace(/\n?```$/, "").trim();
-  return { purpose, do: bullets(sections.do), dont: bullets(sections["don't"]), accessibility: bullets(sections.accessibility), example };
+  const [accessibility, keyboard] = (sections.accessibility ?? "").split("### Keyboard");
+  const example = ((sections.example ?? "").match(/```tsx\n([\s\S]*?)```/)?.[1] ?? "").trim();
+  return {
+    purpose,
+    whenToUse: bullets(sections["when to use"]),
+    whenNotToUse: bullets(sections["when not to use"]),
+    contentGuidelines: bullets(sections["content guidelines"]),
+    sizes: rows(sections.sizes),
+    do: bullets(sections.do),
+    dont: bullets(sections["don't"]),
+    accessibility: bullets(accessibility),
+    keyboard: rows(keyboard),
+    example,
+  };
 }
 
 const program = ts.createProgram({
@@ -110,7 +128,7 @@ export function buildManifest() {
       const base = inherits(file, `${dir}Props`);
       if (base) props.push({ name: "...rest", type: base, required: false, description: "Other native props are passed to the root element." });
       const variants = Object.fromEntries(props.filter((p) => p.values && ["variant", "size", "tone", "direction", "status", "shape", "padding", "orientation", "side"].includes(p.name)).map((p) => [p.name, p.values!]));
-      components.push({ name: dir, kind: kind === "components" ? "component" : "pattern", import: `import { ${dir} } from "@leeward/react";`, purpose: parsed.purpose, props, variants, do: parsed.do, dont: parsed.dont, accessibility: parsed.accessibility, example: parsed.example });
+      components.push({ name: dir, kind: kind === "components" ? "component" : "pattern", import: `import { ${dir} } from "@leeward/react";`, props, variants, ...parsed });
     }
   }
   const pkg = JSON.parse(readFileSync(`${root}packages/react/package.json`, "utf8"));

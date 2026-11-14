@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar } from "./Avatar.tsx";
+import docsMd from "./Avatar.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
+import { iconNames } from "../Icon/icons.ts";
 
 const meta = {
   title: "Components/Avatar",
   component: Avatar,
+  argTypes: { icon: { control: "select", options: iconNames } },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: { name: "Deniz Yılmaz" },
 } satisfies Meta<typeof Avatar>;
 export default meta;

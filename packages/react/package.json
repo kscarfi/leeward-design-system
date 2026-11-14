@@ -39,5 +39,7 @@
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-  }
+  },
+  "author": "Kemal Salih Carfi (https://kscarfi.com)",
+  "homepage": "https://github.com/kscarfi/leeward-design-system"
 }

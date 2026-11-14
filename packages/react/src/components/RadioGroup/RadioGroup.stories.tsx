@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { RadioGroup } from "./RadioGroup.tsx";
+import docsMd from "./RadioGroup.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/RadioGroup",
   component: RadioGroup,
-  args: {
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onValueChange: fn(),
     label: "When should it arrive?",
     options: [
       { value: "now", label: "Now", description: "Free, arrives in seconds" },

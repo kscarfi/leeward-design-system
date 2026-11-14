@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, screen, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button/Button.tsx";
 import { useToast, type ToastOptions } from "./Toast.tsx";
+import docsMd from "./Toast.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 function Demo(props: ToastOptions) {
   const toast = useToast();
@@ -11,6 +13,8 @@ function Demo(props: ToastOptions) {
 const meta = {
   title: "Components/Toast",
   component: Demo,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  argTypes: { tone: { control: "inline-radio", options: ["neutral", "success", "warning", "danger"] } },
   args: { title: "Money sent", tone: "success" },
 } satisfies Meta<typeof Demo>;
 export default meta;

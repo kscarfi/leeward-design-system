@@ -16,7 +16,7 @@
   overflow: hidden;
   background: var(--lw-fill-surface-emphasis);
   border-radius: var(--lw-radius-pill);
-  box-shadow: inset 0 0 0 var(--lw-size-border-default) var(--lw-border-subtle);
+  box-shadow: inset 0 0 0 var(--lw-size-border-default) var(--lw-border-muted);
 }
 
 .indicator {

@@ -14,7 +14,7 @@
 
 .textarea::placeholder { color: var(--lw-text-placeholder); opacity: 1; }
 .textarea:hover:not(:disabled) { border-color: var(--lw-border-strong); }
-.textarea:focus-visible { outline: var(--lw-size-focus-ring-width) solid var(--lw-border-focus); outline-offset: var(--lw-size-focus-ring-offset); }
+.invalid:focus-visible { box-shadow: var(--lw-elevation-focus-danger); }
 .textarea:disabled { background: var(--lw-fill-disabled-default); color: var(--lw-text-subtler); cursor: not-allowed; }
 
 .invalid,

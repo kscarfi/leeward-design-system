@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Text } from "./Text.tsx";
+import docsMd from "./Text.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Text",
   component: Text,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: { children: "Your money arrives in seconds." },
 } satisfies Meta<typeof Text>;
 export default meta;

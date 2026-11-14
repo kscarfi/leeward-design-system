@@ -15,7 +15,7 @@ export function scoreComponent(query: string, c: (typeof manifest.components)[nu
   const hay = {
     name: c.name.toLowerCase(),
     purpose: c.purpose.toLowerCase(),
-    rest: [...c.do, ...c.dont, ...c.accessibility, ...c.props.map((p) => p.name)].join(" ").toLowerCase(),
+    rest: [...c.whenToUse, ...c.do, ...c.dont, ...c.accessibility, ...c.props.map((p) => p.name)].join(" ").toLowerCase(),
   };
   let score = 0;
   for (const w of words) {

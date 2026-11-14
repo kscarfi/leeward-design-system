@@ -4,31 +4,179 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Leeward Design System
 
-An open-source, AI-ready design system for a fictional digital bank.
+**An open-source, AI-ready design system for a fictional digital bank.** Designed and directed by **Kemal Salih Carfi**.
 
-Leeward is not a real company. In sailing, the lee is the side of the ship sheltered from the wind. The interface follows that idea: calm, clear and protected, with every number and fee in plain sight.
+Leeward is not a real company. In sailing, the lee is the side of the ship sheltered from the wind: the calm place you steer toward when the weather turns. Leeward brings that idea to money. However rough the world gets, your money sits on the sheltered side: calm, clear and protected, with every number and fee in plain sight.
+
+*Steady money, whatever the weather.*
+
+## The question this system answers
+
+When an AI agent such as Claude Code or Cursor generates a banking screen, how do you guarantee it is on-brand, accessible and consistent?
+
+Leeward answers with three layers:
+
+1. **Foundations and components** that make the right thing the easy thing.
+2. **Governance** that makes the wrong thing fail in CI: contrast checks, lint rules, accessibility and visual tests.
+3. **An agent layer** that hands the rules to an agent before it writes code: `DESIGN.md`, `llms.txt`, a component manifest and an MCP server.
 
 ## Principles
 
-- **Clear over clever:** labels describe outcomes. No icon-only actions for moving money.
-- **Honest numbers:** amounts use tabular figures. Fees use the same text size as the amount they belong to.
-- **Calm confidence:** restrained motion. Red only for real errors. Outgoing money is never red.
-- **Accessible by default:** WCAG 2.2 AA minimum, APCA reported, 44px touch targets.
+| Principle | What it means | What it changes in the UI |
+|---|---|---|
+| **Clear over clever** | Plain language, no jargon | Labels describe outcomes. No icon-only actions for moving money. |
+| **Honest numbers** | Amounts, fees and rates are never hidden or styled down | Amounts use tabular figures. Fees use the same text size as the amount they belong to. |
+| **Calm confidence** | Money is stressful. The interface is not. | Restrained motion. Red only for real errors. Outgoing money is never red. |
+| **Accessible by default** | Everyone can bank on their own | WCAG 2.2 AA in every brand and mode, APCA reported, 44 px touch targets. |
 
-## Use the theme switcher
+## What is inside
 
-The toolbar has a **Theme** menu: Light, Dark, Side by side, and the generated Harbor partner theme. Every story is checked with axe in light, dark and Harbor in CI.
+| Area | What you get | Where to look |
+|---|---|---|
+| Tokens | 26 primitive color ramps from Leeward's token source, and 711 semantic tokens per brand and mode | [Foundations: Tokens](?path=/docs/foundations-tokens--docs) |
+| Brands and modes | Leeward and Leeward Business, each in light and dark, plus partner brands generated from one color | [Themes: Partner generator](?path=/story/themes-partner-generator--live) |
+| Typography | Plus Jakarta Sans and IBM Plex Mono, 34 type roles, fluid display sizes | [Typography](?path=/story/foundations-tokens--typography) |
+| Icons | 142 Solar icons in linear, bold and duotone | [Icon](?path=/docs/components-icon--docs) |
+| Components | 32 components, from Button to Sheet | Components section in the sidebar |
+| Banking patterns | AmountDisplay, AmountInput, BalanceHeader, QuickActions, TransactionRow, AccountCard, OTPInput | Patterns section in the sidebar |
+| Screens | Home and Transfer, built only from the system | [Screens: Home](?path=/story/screens-home--home) |
 
-## Install
+## Getting started
+
+Install the packages:
 
 ```bash
 pnpm add @leeward/react @leeward/tokens
 ```
 
+Load the fonts and base styles once at the root of the app, pick a brand and a mode, and add the two providers:
+
 ```tsx
 import "@leeward/react/fonts.css";
 import "@leeward/react/styles.css";
-import { Button } from "@leeward/react";
+import { Button, ToastProvider, TooltipProvider } from "@leeward/react";
+
+export function App() {
+  return (
+    <div data-brand="leeward" data-theme="light">
+      <TooltipProvider>
+        <ToastProvider>
+          <Button>Send money</Button>
+        </ToastProvider>
+      </TooltipProvider>
+    </div>
+  );
+}
 ```
 
-Set `data-theme="light"`, `"dark"` or `"auto"` on any container to pick a theme.
+## Brands and modes
+
+| Attribute | Values | Effect |
+|---|---|---|
+| `data-brand` | `leeward` (default), `business`, or a generated partner name | Which ramp plays each role, plus roundness and density |
+| `data-theme` | `light`, `dark`, `auto` | Light or dark semantics. `auto` follows the operating system |
+
+- Attributes work on any element, so two brands or modes can sit side by side on one page.
+- **Leeward**: indigo primary, violet secondary, a cool "ink" neutral, comfortable density.
+- **Leeward Business**: lapis primary and purple haze secondary, compact density, tighter corners.
+- **Partner brands** come from one color: `pnpm theme:generate --name harbor --seed "#0E7490"`. The generator refuses any brand where a required pair misses WCAG 2.2 AA.
+- Use the **Brand** and **Mode** menus in the toolbar above to see every story in every combination.
+
+## How tokens work
+
+Tokens have three tiers. Components only use semantic tokens: primitives are never written to CSS, so they cannot be used by mistake.
+
+| Tier | Example | Who uses it |
+|---|---|---|
+| Primitive | `color.indigo.600`, `space.4`, `radii.xLarge` | Only the semantic tier |
+| Semantic | `--lw-fill-primary-default`, `--lw-text-muted`, `--lw-space-md` | Components, patterns and apps |
+| Component | `--lw-radius-control`, `--lw-size-control-md` | Specific component roles |
+
+Semantic colors follow one scheme: **layer, role, intensity**.
+
+| Part | Values |
+|---|---|
+| Layer | `fill`, `text`, `icon`, `border` |
+| Role | `primary`, `secondary`, `neutral`, `info`, `success`, `warning`, `attention`, `danger` |
+| Intensity | `default`, `emphasis`, `strong`, `subtle`, `subtler`, `subtlest`, `weak`, `on-default` |
+
+So `--lw-fill-success-weak` is a soft success background, `--lw-text-success-on-subtle` is the text on it, and `--lw-fill-primary-on-default` is the text on a primary button.
+
+### The contrast resolver
+
+The mapping starts from Leeward's semantic template. For every brand and mode a resolver checks 334 required pairs, for example body text on every surface or button text on its fill. When a pair misses WCAG 2.2 AA, the token moves one ramp step at a time until it passes. Every move is listed in the contrast report in the repository. The build fails if a pair still misses.
+
+### Focus rings
+
+All focus styles come from five tokens under elevation: `focus`, `focus-inset`, `focus-danger`, `focus-inverse` and `focus-halo`. They are declared again in every brand and mode, so the ring always matches its surface. See them on the [Elevation](?path=/story/foundations-tokens--elevation) page.
+
+## Layout and sizes
+
+| Token | Value | Use |
+|---|---|---|
+| `--lw-size-control-xs` | 32 px | Dense desktop tables and toolbars |
+| `--lw-size-control-sm` | 36 px | Inside cards and rows |
+| `--lw-size-control-md` | 44 px | Default for buttons and fields |
+| `--lw-size-control-lg` | 48 px | Main actions on mobile |
+| `--lw-size-control-xl` | 56 px | Last step of a mobile flow |
+| `--lw-size-touch-target` | 44 px | Minimum hit area for anything interactive |
+
+- Spacing follows a 4 px grid: `--lw-space-2xs` (4) to `--lw-space-4xl` (80).
+- Compact brands step control heights down one size; hit areas stay 44 px.
+- Dialogs turn into bottom sheets under 640 px. Display and title type scales smoothly between 360 and 1280 px.
+
+## Accessibility commitments
+
+- WCAG 2.2 AA is the floor in every brand and mode. Contrast is checked by a script, not by eye.
+- Every story is tested with axe (WCAG 2.0, 2.1 and 2.2, A and AA rules) in six combinations: Leeward, Business and Harbor, each in light and dark.
+- Every interactive element is reachable by keyboard, has a visible focus ring and an accessible name.
+- State never relies on color alone: icons, words, weight or shape go with it.
+- Motion respects reduced motion settings. Focus stays visible in forced colors mode.
+- Text sizes are in rem, so they follow the browser font size. Nothing visible is smaller than 12 px.
+
+## Content guidelines
+
+- Short, direct sentences in the second person: "Your money arrives in seconds."
+- Say what happens, not what the system does.
+- Format money for the locale: `₺1.250,00` in Turkish, `TRY 1,250.00` in English.
+- Never use em dashes. Use commas, colons or periods.
+- No hype words such as revolutionary, seamless or magic.
+
+## Use Leeward with an AI agent
+
+1. Clone the repository and run `pnpm install`.
+2. Add the MCP server to Claude Code: `claude mcp add leeward -- node "$PWD/packages/mcp-server/src/index.ts"`.
+3. Ask for a screen and tell the agent to check its code with `validate_ui`.
+
+| Tool | What it returns |
+|---|---|
+| `get_tokens` | Semantic tokens for a brand, mode and category |
+| `get_component` | Props, variants, sizes, do and don't, accessibility and a compiling example |
+| `search_components` | The right component for a need |
+| `get_guidelines` | Rules for a topic such as amounts, forms or errors |
+| `validate_ui` | Problems in generated code, each with a fix |
+
+## Governance
+
+| Check | What fails the build |
+|---|---|
+| Contrast report | Any required pair under WCAG 2.2 AA in any brand or mode |
+| Stylelint and ESLint | Raw colors, unknown or primitive tokens, spacing or type off the scale, icon-only money actions, red amounts |
+| Story tests with axe | Any accessibility violation or broken interaction |
+| Visual regression | Unexpected pixel changes in any story |
+| Documentation examples | Any code example in a component page that does not compile |
+| Freshness | Tokens or agent docs out of date with their sources |
+
+## How to read a component page
+
+- **Docs**: when to use it, variants, sizes, states, content and accessibility rules, and examples that compile.
+- **Controls**: change every prop live. Icon props offer the full icon list.
+- **Actions**: every callback, such as `onClick` or `onValueChange`, is logged here.
+- **Interactions**: the story's test steps, run in a real browser.
+- **Accessibility**: the axe results for the current brand and mode.
+
+## Credits
+
+Designed and directed by **Kemal Salih Carfi** ([kscarfi.com](https://kscarfi.com), [LinkedIn](https://www.linkedin.com/in/kemalsalihcarfi/)). Built with Claude Code.
+
+Tokens designed by Kemal Salih Carfi. Icons: Solar Icons Set by 480 Design, CC BY 4.0. Fonts: Plus Jakarta Sans and IBM Plex Mono, SIL Open Font License. Code: MIT.

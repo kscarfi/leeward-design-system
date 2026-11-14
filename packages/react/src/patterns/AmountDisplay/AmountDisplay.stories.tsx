@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AmountDisplay } from "./AmountDisplay.tsx";
+import docsMd from "./AmountDisplay.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Patterns/AmountDisplay",
   component: AmountDisplay,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: { value: 1250, currency: "TRY", locale: "tr-TR" },
 } satisfies Meta<typeof AmountDisplay>;
 export default meta;

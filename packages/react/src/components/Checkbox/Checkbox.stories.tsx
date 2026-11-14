@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { Checkbox } from "./Checkbox.tsx";
+import docsMd from "./Checkbox.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Checkbox",
   component: Checkbox,
-  args: { label: "Save this person as a recipient" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onCheckedChange: fn(), label: "Save this person as a recipient" },
 } satisfies Meta<typeof Checkbox>;
 export default meta;
 type Story = StoryObj<typeof meta>;

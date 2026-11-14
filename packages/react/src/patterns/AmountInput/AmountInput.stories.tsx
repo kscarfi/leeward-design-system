@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { AmountInput } from "./AmountInput.tsx";
+import docsMd from "./AmountInput.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Patterns/AmountInput",
   component: AmountInput,
-  args: { label: "Amount", currency: "TRY", locale: "tr-TR", max: 24580.35, hint: "Available: ₺24.580,35" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onValueChange: fn(), label: "Amount", currency: "TRY", locale: "tr-TR", max: 24580.35, hint: "Available: ₺24.580,35" },
   decorators: [(Story) => <div style={{ maxWidth: "360px" }}><Story /></div>],
 } satisfies Meta<typeof AmountInput>;
 export default meta;

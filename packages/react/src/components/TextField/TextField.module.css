@@ -26,9 +26,11 @@
 }
 
 .control:focus-within {
-  outline: var(--lw-size-focus-ring-width) solid var(--lw-border-focus);
-  outline-offset: var(--lw-size-focus-ring-offset);
+  outline: var(--lw-size-focus-ring-width) solid transparent;
+  box-shadow: var(--lw-elevation-focus);
 }
+
+.invalid:focus-within { box-shadow: var(--lw-elevation-focus-danger); }
 
 .invalid,
 .invalid:hover:not(.disabled) {
@@ -52,6 +54,12 @@
   background: transparent;
   color: var(--lw-text-default);
   outline: none;
+}
+
+/* The wrapper draws the ring, so the input itself shows none. */
+.input:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .input::placeholder {

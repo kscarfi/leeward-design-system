@@ -1,12 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { Button } from "./Button.tsx";
+import docsMd from "./Button.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
+import { iconNames } from "../Icon/icons.ts";
 
 const meta = {
   title: "Components/Button",
   component: Button,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: { children: "Send money", onClick: fn() },
-  argTypes: { iconStart: { control: "text" }, iconEnd: { control: "text" } },
+  argTypes: { iconStart: { control: "select", options: iconNames }, iconEnd: { control: "select", options: iconNames }, },
 } satisfies Meta<typeof Button>;
 export default meta;
 type Story = StoryObj<typeof meta>;

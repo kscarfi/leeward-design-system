@@ -20,5 +20,7 @@
     "./eslint": "./src/eslint-plugin.ts",
     "./stylelint": "./src/stylelint-config.ts",
     "./stylelint-plugin": "./src/stylelint-plugin.ts"
-  }
+  },
+  "author": "Kemal Salih Carfi (https://kscarfi.com)",
+  "homepage": "https://github.com/kscarfi/leeward-design-system"
 }

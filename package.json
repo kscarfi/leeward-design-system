@@ -4,7 +4,7 @@
   "private": true,
   "description": "An open-source, AI-ready design system for a fictional digital bank.",
   "license": "MIT",
-  "author": "Kemal Salih Carfi",
+  "author": "Kemal Salih Carfi (https://kscarfi.com)",
   "type": "module",
   "packageManager": "pnpm@12.18.0",
   "engines": {
@@ -22,7 +22,8 @@
     "storybook": "pnpm --filter @leeward/docs storybook",
     "build:agent": "node scripts/build-agent-docs.ts",
     "theme:generate": "node scripts/generate-theme.ts",
-    "icons:import": "node scripts/import-solar-icons.ts"
+    "icons:import": "node scripts/import-solar-icons.ts",
+    "check:examples": "node scripts/check-docs-examples.ts"
   },
   "devDependencies": {
     "@leeward/lint": "workspace:*",
@@ -34,5 +35,6 @@
     "stylelint": "18.0.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.2"
-  }
+  },
+  "homepage": "https://github.com/kscarfi/leeward-design-system"
 }

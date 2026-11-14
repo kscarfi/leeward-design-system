@@ -41,7 +41,7 @@
 
 .box:disabled {
   background: var(--lw-fill-disabled-default);
-  border-color: var(--lw-border-subtle);
+  border-color: var(--lw-fill-disabled-stronger);
   color: var(--lw-text-subtler);
   cursor: not-allowed;
 }

@@ -36,7 +36,7 @@
 
 .radio:hover:not(:disabled) { border-color: var(--lw-border-strong); }
 .radio[data-state="checked"] { border-color: var(--lw-fill-primary-default); }
-.radio:disabled { background: var(--lw-fill-disabled-default); border-color: var(--lw-border-subtle); cursor: not-allowed; }
+.radio:disabled { background: var(--lw-fill-disabled-default); border-color: var(--lw-fill-disabled-stronger); cursor: not-allowed; }
 .invalid { border-color: var(--lw-border-danger); }
 
 .dot {

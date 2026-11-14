@@ -1,11 +1,11 @@
 .root {
-  border: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-radius-card);
   background: var(--lw-fill-surface-default);
   overflow: hidden;
 }
 
-.item + .item { border-top: var(--lw-size-border-default) solid var(--lw-border-subtle); }
+.item + .item { border-top: var(--lw-size-border-default) solid var(--lw-border-muted); }
 .header { margin: 0; }
 
 .trigger {
@@ -25,7 +25,7 @@
 }
 
 .trigger:hover { background: var(--lw-fill-surface-bold); }
-.trigger:focus-visible { outline-offset: calc(var(--lw-size-focus-ring-width) * -1); }
+.trigger:focus-visible { box-shadow: var(--lw-elevation-focus-inset); }
 .trigger[data-disabled] { color: var(--lw-text-subtler); cursor: not-allowed; }
 
 .chevron {

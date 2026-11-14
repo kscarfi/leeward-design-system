@@ -27,7 +27,7 @@
 .trigger:disabled {
   background: var(--lw-fill-disabled-default);
   color: var(--lw-text-subtler);
-  border-color: var(--lw-border-subtle);
+  border-color: var(--lw-border-muted);
   cursor: not-allowed;
 }
 
@@ -36,6 +36,8 @@
   border-color: var(--lw-border-danger);
   border-width: var(--lw-size-border-strong);
 }
+
+.invalid:focus-visible { box-shadow: var(--lw-elevation-focus-danger); }
 
 .placeholder { color: var(--lw-text-subtle); }
 .chevron { display: inline-flex; color: var(--lw-icon-muted); }
@@ -46,7 +48,7 @@
   max-height: var(--radix-select-content-available-height);
   overflow: hidden;
   background: var(--lw-fill-surface-overlay);
-  border: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-radius-lg);
   box-shadow: var(--lw-elevation-400);
 }

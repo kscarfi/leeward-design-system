@@ -4,6 +4,8 @@
 
 Use components from @leeward/react, style only with var(--lw-*) semantic tokens, render money with AmountDisplay, and never use em dashes in copy.
 
+Designed and directed by Kemal Salih Carfi (https://kscarfi.com).
+
 ## Docs
 
 - [DESIGN.md](https://github.com/kscarfi/leeward-design-system/blob/main/DESIGN.md): principles, token rules, layout, copy, accessibility, component list

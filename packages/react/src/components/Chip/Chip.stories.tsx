@@ -1,12 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { Chip } from "./Chip.tsx";
+import docsMd from "./Chip.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
+import { iconNames } from "../Icon/icons.ts";
 
 const meta = {
   title: "Components/Chip",
   component: Chip,
-  args: { children: "Groceries" },
+  argTypes: { icon: { control: "select", options: iconNames } },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onClick: fn(), onSelectedChange: fn(), children: "Groceries" },
 } satisfies Meta<typeof Chip>;
 export default meta;
 type Story = StoryObj<typeof meta>;

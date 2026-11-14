@@ -50,7 +50,8 @@ Every number here is printed by a script or test runner in this repo.
 |---|---|
 | Contrast gate (`pnpm contrast`) | 1,336 required pairs across 2 brands in light and dark, 0 failures against WCAG 2.2 AA. Every resolver change is listed in [docs/contrast-report.md](docs/contrast-report.md). |
 | Partner brands | 120 random seed colors, every one passes all required pairs in light and dark (property test). |
-| Story tests with axe (`pnpm test:stories`) | 176 stories, each run in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,056 runs, 0 axe violations. |
+| Story tests with axe (`pnpm test:stories`) | 177 stories, each run in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,062 runs, 0 axe violations. Every component has interaction tests. |
+| Documentation examples (`pnpm check:examples`) | All 48 code examples in the 39 component pages compile against the real API. |
 | Unit tests (`pnpm test`) | 87 tests: React 65, MCP server 10, lint rules 6, tokens 6. |
 | Visual regression | Every story screenshotted in Leeward light, Leeward dark and Business light with Playwright. |
 | Lint (`pnpm lint`) | No raw colors, only known semantic tokens, spacing and type on scale, no icon-only money actions, no red amounts. |

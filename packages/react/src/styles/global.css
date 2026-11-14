@@ -46,8 +46,11 @@ body {
 }
 
 :focus-visible {
-  outline: var(--lw-size-focus-ring-width) solid var(--lw-border-focus);
+  /* One source for every focus style: the focus ring tokens in elevation.
+     The transparent outline is what Windows High Contrast shows, since it drops box shadows. */
+  outline: var(--lw-size-focus-ring-width) solid transparent;
   outline-offset: var(--lw-size-focus-ring-offset);
+  box-shadow: var(--lw-elevation-focus);
 }
 
 ::selection {

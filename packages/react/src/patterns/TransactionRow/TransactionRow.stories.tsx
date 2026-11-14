@@ -2,13 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, within } from "storybook/test";
 import { Card } from "../../components/Card/Card.tsx";
 import { TransactionRow } from "./TransactionRow.tsx";
+import docsMd from "./TransactionRow.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
+import { iconNames } from "../../components/Icon/icons.ts";
 
 const date = new Date("2026-11-12T10:30:00");
 
 const meta = {
   title: "Patterns/TransactionRow",
   component: TransactionRow,
-  args: { merchant: "Coffee Lab", category: "Eating out", date, amount: 85, direction: "outgoing", currency: "TRY", locale: "tr-TR" },
+  argTypes: { icon: { control: "select", options: iconNames } },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onClick: fn(), merchant: "Coffee Lab", category: "Eating out", date, amount: 85, direction: "outgoing", currency: "TRY", locale: "tr-TR" },
   decorators: [(Story) => <Card padding="none" style={{ maxWidth: "420px" }}><ul style={{ margin: 0, padding: 0 }}><Story /></ul></Card>],
 } satisfies Meta<typeof TransactionRow>;
 export default meta;

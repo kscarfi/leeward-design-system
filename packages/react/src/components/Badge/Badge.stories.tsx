@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "./Badge.tsx";
+import docsMd from "./Badge.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Badge",
   component: Badge,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: { children: "Pending", tone: "warning" },
 } satisfies Meta<typeof Badge>;
 export default meta;

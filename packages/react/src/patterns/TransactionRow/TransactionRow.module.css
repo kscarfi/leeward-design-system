@@ -21,7 +21,7 @@
 
 .button:hover { background: var(--lw-fill-surface-bold); }
 .button:active { background: var(--lw-fill-surface-bolder); }
-.button:focus-visible { outline-offset: calc(var(--lw-size-focus-ring-width) * -1); }
+.button:focus-visible { box-shadow: var(--lw-elevation-focus-inset); }
 
 .visual { display: flex; align-items: center; gap: var(--lw-space-sm); }
 .text { display: flex; flex: 1; flex-direction: column; min-width: 0; }

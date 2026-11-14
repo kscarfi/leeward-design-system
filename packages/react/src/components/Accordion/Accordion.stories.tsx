@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { Accordion } from "./Accordion.tsx";
+import docsMd from "./Accordion.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Accordion",
   component: Accordion,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: {
     items: [
       { value: "fees", title: "What does a transfer cost?", content: "Transfers to Leeward accounts are free. Transfers to other banks cost ₺6,50." },

@@ -17,6 +17,7 @@ The evidence for this project. Updated at the end of every task.
 | 2026-11-13 | Agent layer, partner themes, demo scaffold, README | Manifest from component source and docs, DESIGN.md and llms.txt from one guidelines source, MCP server on SDK v2 with 5 tools and tests, partner theme generator with AA gate and live Storybook page, demo prompt, runbook and comparison script, README with numbers from scripts | | _Kemal to confirm_ | _Kemal_ | Demo runs wait for Kemal's choice of agent |
 | 2026-11-13 | Demo runs | Ran Run A and Run B with Claude Code headless under identical conditions, measured both with axe and validate_ui | Chose Claude Code as the demo agent, logged in to the CLI | _Kemal to confirm_ | _Kemal_ | Run A 333 s, Run B 240 s (from RUN.md) |
 | 2026-11-13 | v2: token source, brands, icons, new components | Built Leeward's token source, built brands x modes with a contrast resolver, dark mode from step mirroring, Plus Jakarta Sans after checking 10 OFL fonts for the lira sign and tabular figures, 142 Solar icons, 12 new components and 2 new patterns, responsive sizes, v1 compatibility layer | Supplied the color and token values and the Solar icon source, asked for multi-brand, accessible, responsive and a better font | _Kemal to confirm_ | _Kemal_ | See ADR 0005 |
+| 2026-11-14 | Docs, focus tokens, visual audit | Wrote full docs for 39 components (when to use, variants, sizes, states, content, keyboard, examples), shown on each Storybook Docs page; examples type-checked in CI; focus rings as tokens; interaction tests and actions for every component; Typography and Introduction rewritten | Asked for complete docs, panels, fixed playgrounds, focus rings in one place and his name everywhere | _Kemal to confirm_ | _Kemal_ | |
 
 ## AI mistakes
 
@@ -43,6 +44,11 @@ The evidence for this project. Updated at the end of every task.
 | 2026-11-13 | The partner generator read the token source files with `node:fs`, so the live Storybook page broke | Story test failed to import | The template is written to `dist/semantic-template.json` and passed in as data |
 | 2026-11-13 | Dark mode alerts used the mirrored dark end of each ramp, which read rust red and loud | Looking at dark screenshots | Soft role fills in dark are an OKLab mix of the role color into the surface |
 | 2026-11-13 | The token rename would have broken any code written against v1, including the recorded demo | Checking Run B's variables against the new token list | Added `compat-v1.css` with every v1 name as an alias |
+| 2026-11-14 | Dividers, skeletons, tab lines and disabled switches were invisible in Leeward light | Kemal saw the Divider playground; a contact sheet of all 177 stories showed the rest | Root cause: richBlack has 32 steps, slate 14, so reference steps like 70 snapped to a step lighter than the canvas. Leeward now uses "ink", a neutral with richBlack's lightness and slate's tint |
+| 2026-11-14 | Focus ring tokens referenced other variables but were declared only once, so dark areas would have drawn light-mode rings | Thinking through how custom properties resolve before shipping | Focus rings are declared in every brand and mode block, partner brands included |
+| 2026-11-14 | TextField showed two focus rings, one on the input and one on its wrapper | Contact sheet review | The input hides its own ring; the wrapper draws the token ring |
+| 2026-11-14 | Typography samples used filler text ("Şimdi öde, ğüşıöç") | Kemal pointed it out | Each role now shows real Leeward copy and its intended use |
+| 2026-11-14 | Three story files did not get their docs and actions because their meta was on one line | ESLint reported unused imports | Fixed by hand, then checked every story file for docs and play functions |
 
 ## Day summaries
 

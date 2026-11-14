@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { Switch } from "./Switch.tsx";
+import docsMd from "./Switch.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Switch",
   component: Switch,
-  args: { label: "Online card payments" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onCheckedChange: fn(), label: "Online card payments" },
   decorators: [(Story) => <div style={{ maxWidth: "400px" }}><Story /></div>],
 } satisfies Meta<typeof Switch>;
 export default meta;

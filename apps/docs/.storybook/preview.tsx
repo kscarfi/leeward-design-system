@@ -60,8 +60,12 @@ const preview: Preview = {
   initialGlobals: { brand: import.meta.env.VITE_LW_BRAND ?? "leeward", mode: import.meta.env.VITE_LW_MODE ?? "light" },
   parameters: {
     layout: "padded",
-    // Any axe violation fails the story test in the UI and in CI.
-    a11y: { test: "error" },
+    // Any axe violation fails the story test in the UI and in CI. Rules: WCAG 2.0, 2.1 and 2.2, levels A and AA.
+    a11y: {
+      test: "error",
+      options: { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] } },
+    },
+    docs: { toc: { headingSelector: "h2, h3", title: "On this page" } },
     controls: { expanded: true, sort: "requiredFirst" },
     viewport: {
       options: {

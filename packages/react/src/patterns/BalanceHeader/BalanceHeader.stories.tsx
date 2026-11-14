@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { Button } from "../../components/Button/Button.tsx";
 import { BalanceHeader } from "./BalanceHeader.tsx";
+import docsMd from "./BalanceHeader.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Patterns/BalanceHeader",
   component: BalanceHeader,
-  args: { label: "Available balance", balance: 24580.35, currency: "TRY", locale: "tr-TR", meta: "Updated 2 minutes ago" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onHiddenChange: fn(), label: "Available balance", balance: 24580.35, currency: "TRY", locale: "tr-TR", meta: "Updated 2 minutes ago" },
 } satisfies Meta<typeof BalanceHeader>;
 export default meta;
 type Story = StoryObj<typeof meta>;

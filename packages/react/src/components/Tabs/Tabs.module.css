@@ -3,7 +3,7 @@
 .list {
   display: flex;
   gap: var(--lw-space-lg);
-  border-bottom: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  border-bottom: var(--lw-size-border-default) solid var(--lw-border-muted);
   overflow-x: auto;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .trigger:hover:not(:disabled) { color: var(--lw-text-default); }
-.trigger:focus-visible { outline-offset: calc(var(--lw-size-focus-ring-width) * -1); }
+.trigger:focus-visible { box-shadow: var(--lw-elevation-focus-inset); }
 
 /* The selected tab uses weight and an underline, not color alone. */
 .trigger[data-state="active"] {
@@ -42,4 +42,4 @@
 }
 
 .trigger:disabled { color: var(--lw-text-subtler); cursor: not-allowed; }
-.panel:focus-visible { outline-offset: var(--lw-size-focus-ring-offset); }
+.panel:focus-visible { box-shadow: var(--lw-elevation-focus); }

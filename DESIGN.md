@@ -4,6 +4,8 @@
 
 Leeward is a fictional digital bank. This file tells people and AI agents how to build Leeward screens that are on-brand, accessible and consistent.
 
+Designed and directed by Kemal Salih Carfi (https://kscarfi.com).
+
 ## Read this first
 
 1. Use components from `@leeward/react`. Do not invent new ones for things listed below.
@@ -170,44 +172,44 @@ Brands and modes swap semantic tokens. Components never change.
 | Component | Kind | Purpose |
 |---|---|---|
 | `Accordion` | component | Expandable sections for fees, FAQs and account details. |
-| `Alert` | component | Inline message on the page: what happened and what to do next. |
-| `Avatar` | component | Initials, image or category icon for a person or merchant. |
-| `Badge` | component | Short status label such as Pending, Paid or Declined. |
-| `Button` | component | Triggers an action. One primary button per screen or section. |
-| `Card` | component | Surface that groups related content. |
-| `Checkbox` | component | A yes or no choice inside a form, or one of many independent choices. |
-| `Chip` | component | Filter toggle, for example in a transaction list. |
-| `Dialog` | component | Modal for a decision that needs full attention, such as confirming a transfer or freezing a card. |
-| `Divider` | component | Separates groups of content. |
+| `Alert` | component | An inline message on the page: what happened and what to do next. |
+| `Avatar` | component | Initials, a photo or a category icon for a person or merchant. |
+| `Badge` | component | A short status or category label such as Pending, Paid or Declined. |
+| `Button` | component | Buttons start an action: send money, confirm a transfer, freeze a card. The label always says what happens next. |
+| `Card` | component | A surface that groups related content, such as an account, a goal or a list. |
+| `Checkbox` | component | A yes or no choice inside a form, or one of several independent choices. |
+| `Chip` | component | A toggle for filters, such as Money in or Money out in a transaction list. |
+| `Dialog` | component | A modal for a decision that needs full attention, such as freezing a card or closing an account. |
+| `Divider` | component | A thin line that separates groups of content on a surface. |
 | `DropdownMenu` | component | Secondary actions for an item, behind a More button. |
 | `EmptyState` | component | Shown when a list or search has nothing to show yet. |
-| `Heading` | component | Section and page headings with a required outline level. |
-| `Icon` | component | Solar icons (480 Design, CC BY 4.0) on a 24 px grid: 142 icons in three weights. Use linear by default, bold for selected or active states, duotone for illustrations and empty states. |
-| `IconButton` | component | Icon-only button for secondary actions such as close, settings or show balance. |
+| `Heading` | component | Page and section headings. `level` sets the document outline, `size` sets the look, so both can be right at the same time. |
+| `Icon` | component | Solar icons by 480 Design (CC BY 4.0) on a 24 px grid: 142 icons in three weights. Icons draw in `currentColor`, so they follow the text tone around them. |
+| `IconButton` | component | An icon-only button for frequent, well-known secondary actions such as close, settings, more or show balance. |
 | `Link` | component | Navigation to another page or site. |
-| `ListItem` | component | Row in a list with title, description, leading and trailing slots. Use inside List. |
-| `ProgressBar` | component | Progress toward a goal or limit. |
-| `RadioGroup` | component | Pick exactly one option from 2 to 5 visible choices. |
-| `SegmentedControl` | component | Pick one view or filter from 2 to 5 short options. |
-| `Select` | component | Pick one option from a short list. Built on Radix Select. |
-| `Sheet` | component | Panel for a task in context, such as filters or transaction details. |
-| `Skeleton` | component | Placeholder while content loads. |
-| `Spinner` | component | Short wait indicator when the shape of the result is unknown. |
-| `Stepper` | component | Shows where people are in a multi-step flow. |
-| `Switch` | component | A setting that applies immediately, such as online card payments. |
-| `Tabs` | component | Switch between views of the same object, such as Activity and Statements. |
-| `Text` | component | Body, label and caption text with token-based type roles and tones. |
-| `TextField` | component | Single-line input with label, hint, error, prefix and suffix. |
-| `Textarea` | component | Multi-line text for payment notes and messages. |
-| `Toast` | component | Short confirmation after an action, such as "Money sent". Use with ToastProvider and useToast. |
-| `Tooltip` | component | Extra information on hover and focus. Wrap the app in TooltipProvider. |
-| `AccountCard` | pattern | Account summary with type, masked IBAN, balance and up to three quick actions. |
-| `AmountDisplay` | pattern | Money amount with locale formatting, tabular figures and a direction that never relies on color. |
-| `AmountInput` | pattern | Money entry with the decimal keypad, locale formatting and a clear limit error. |
-| `BalanceHeader` | pattern | Account balance with a hide and show control. |
+| `ListItem` | component | A row in a List with a title, description, leading and trailing content. The whole row can be a link or a button. |
+| `ProgressBar` | component | Progress toward a goal or limit, such as a savings goal or a daily card limit. |
+| `RadioGroup` | component | Pick exactly one option from 2 to 5 visible choices, with optional descriptions. |
+| `SegmentedControl` | component | Switch between 2 to 5 views or filters of the same content, such as Week, Month and Year. |
+| `Select` | component | Pick one option from a list in a popover. Built on Radix Select. |
+| `Sheet` | component | A panel for a task in context, such as filters or transaction details. |
+| `Skeleton` | component | A placeholder in the shape of content that is loading. |
+| `Spinner` | component | A small wait indicator when the shape of the result is unknown. |
+| `Stepper` | component | Shows where people are in a multi-step flow, such as a transfer. |
+| `Switch` | component | Turns a setting on or off immediately, such as online card payments. |
+| `Tabs` | component | Switch between views of the same object, such as Activity, Statements and Details of an account. |
+| `Text` | component | Body text, labels, subtitles, captions and inline code, using the type roles and text tones of the system. |
+| `TextField` | component | Single-line text input with a visible label, hint, error, and optional prefix or suffix. |
+| `Textarea` | component | Multi-line text for payment notes and messages. It grows with its content. |
+| `Toast` | component | A short confirmation after an action, such as "Money sent". Shown with `useToast` inside `ToastProvider`. |
+| `Tooltip` | component | Extra information on hover and keyboard focus. Wrap the app once in `TooltipProvider`. |
+| `AccountCard` | pattern | An account summary: name, type, masked IBAN, balance and up to three quick actions. |
+| `AmountDisplay` | pattern | Every amount and balance in Leeward: locale formatting, tabular figures and a direction that never relies on color. |
+| `AmountInput` | pattern | Money entry with the decimal keypad on phones, locale formatting on blur and a clear limit error. |
+| `BalanceHeader` | pattern | The account balance at the top of home and account screens, with a hide and show control. |
 | `OTPInput` | pattern | One-time code entry with paste, SMS autofill and clear errors. |
-| `QuickActions` | pattern | Row of shortcuts such as Send, Request, Top up and Pay bills. |
-| `TransactionRow` | pattern | One transaction: merchant, category, date, amount and status. |
+| `QuickActions` | pattern | A row of shortcuts such as Send, Request, Top up and Pay bills. It wraps on narrow screens. |
+| `TransactionRow` | pattern | One transaction: merchant, category, date, amount and status. The row reads as one sentence for screen readers. |
 
 Full props, rules and examples: [`components.manifest.json`](components.manifest.json).
 
@@ -219,44 +221,44 @@ Full props, rules and examples: [`components.manifest.json`](components.manifest
 
 | CSS variable | Light | Dark | Use |
 |---|---|---|---|
-| `--lw-fill-surface-default` | #ffffff | #151d2d |  |
-| `--lw-fill-surface-raised` | #ffffff | #1f293a |  |
-| `--lw-fill-surface-bold` | #f9fafb | #1f293a |  |
-| `--lw-fill-surface-canvas` | #f9fafb | #0b1120 |  |
-| `--lw-fill-surface-overlay` | #ffffff | #293546 |  |
+| `--lw-fill-surface-default` | #ffffff | #101827 |  |
+| `--lw-fill-surface-raised` | #ffffff | #151f2f |  |
+| `--lw-fill-surface-bold` | #f4f5f6 | #151f2f |  |
+| `--lw-fill-surface-canvas` | #f6f7f8 | #0a101f |  |
+| `--lw-fill-surface-overlay` | #ffffff | #222d3e |  |
 | `--lw-fill-primary-default` | #4f46e5 | #818cf8 |  |
-| `--lw-fill-primary-weak` | #eef2ff | #212a4c |  |
+| `--lw-fill-primary-weak` | #eef2ff | #1d2547 |  |
 | `--lw-fill-primary-on-default` | #ffffff | #1e1b4b |  |
-| `--lw-fill-neutral-default` | #293546 | #f3f4f6 |  |
-| `--lw-fill-neutral-weak` | #f9fafb | #232b3b |  |
-| `--lw-fill-neutral-on-default` | #ffffff | #0b1120 |  |
+| `--lw-fill-neutral-default` | #222d3e | #dfe0e2 |  |
+| `--lw-fill-neutral-weak` | #f6f7f8 | #212938 |  |
+| `--lw-fill-neutral-on-default` | #ffffff | #0a101f |  |
 | `--lw-fill-success-default` | #0f766e | #2dd4bf |  |
-| `--lw-fill-success-weak` | #f0fdfa | #1c3641 |  |
+| `--lw-fill-success-weak` | #f0fdfa | #17313c |  |
 | `--lw-fill-success-on-default` | #ffffff | #042f2e |  |
 | `--lw-fill-warning-default` | #c73f07 | #ff9137 |  |
-| `--lw-fill-warning-weak` | #fff7ed | #3b2e32 |  |
+| `--lw-fill-warning-weak` | #fff7ed | #37292d |  |
 | `--lw-fill-warning-on-default` | #ffffff | #451305 |  |
 | `--lw-fill-danger-default` | #dc2626 | #f87171 |  |
-| `--lw-fill-danger-weak` | #fef2f2 | #3a2834 |  |
+| `--lw-fill-danger-weak` | #fef2f2 | #36242f |  |
 | `--lw-fill-danger-on-default` | #ffffff | #450a0a |  |
 | `--lw-fill-accent-default` | #ff6464 | #ed1515 |  |
-| `--lw-text-default` | #293546 | #f3f4f6 |  |
-| `--lw-text-muted` | #4b5563 | #d1d5db |  |
-| `--lw-text-subtle` | #6b7280 | #9ca3af |  |
+| `--lw-text-default` | #222d3e | #dfe0e2 |  |
+| `--lw-text-muted` | #535d6b | #a6aab0 |  |
+| `--lw-text-subtle` | #5f6a78 | #969da9 |  |
 | `--lw-text-inverse` | #ffffff | #0f1113 |  |
-| `--lw-text-placeholder` | #6b7280 | #9ca3af |  |
-| `--lw-text-primary` | #4f46e5 | #a5b4fc |  |
+| `--lw-text-placeholder` | #5f6a78 | #969da9 |  |
+| `--lw-text-primary` | #4f46e5 | #818cf8 |  |
 | `--lw-text-success` | #0f766e | #2dd4bf |  |
 | `--lw-text-warning` | #c73f07 | #ff9137 |  |
-| `--lw-text-danger` | #dc2626 | #fca5a5 |  |
+| `--lw-text-danger` | #dc2626 | #f87171 |  |
 | `--lw-text-link-default` | #2563eb | #60a5fa |  |
-| `--lw-border-default` | #6b7280 | #9ca3af |  |
-| `--lw-border-subtle` | #f9fafb | #1f293a |  |
-| `--lw-border-strong` | #6b7280 | #9ca3af |  |
+| `--lw-border-default` | #7c8391 | #6f7684 |  |
+| `--lw-border-subtle` | #eeeff0 | #1b2637 |  |
+| `--lw-border-strong` | #6f7684 | #89909c |  |
 | `--lw-border-danger` | #dc2626 | #f87171 |  |
 | `--lw-border-focus` | #4f46e5 | #818cf8 |  |
 | `--lw-amount-incoming` | #0f766e | #5eead4 |  |
-| `--lw-amount-outgoing` | #293546 | #f3f4f6 |  |
+| `--lw-amount-outgoing` | #222d3e | #dfe0e2 |  |
 | `--lw-amount-pending` | #c73f07 | #ffba70 |  |
 
 Every token: `get_tokens` in the MCP server, or `packages/tokens/dist/ts/`. Every required pair is checked against WCAG 2.2 AA in [docs/contrast-report.md](docs/contrast-report.md).

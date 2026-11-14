@@ -21,7 +21,7 @@
   padding-inline-start: var(--lw-space-md);
   background: var(--lw-fill-surface-overlay);
   color: var(--lw-text-default);
-  border: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-inline-start-width: var(--lw-space-2xs);
   border-radius: var(--lw-radius-lg);
   box-shadow: var(--lw-elevation-400);

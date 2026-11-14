@@ -17,9 +17,14 @@ export interface ManifestComponent {
   purpose: string;
   props: ManifestProp[];
   variants: Record<string, string[]>;
+  whenToUse: string[];
+  whenNotToUse: string[];
+  contentGuidelines: string[];
+  sizes: string[];
   do: string[];
   dont: string[];
   accessibility: string[];
+  keyboard: string[];
   example: string;
 }
 

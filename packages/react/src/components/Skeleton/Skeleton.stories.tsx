@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Skeleton } from "./Skeleton.tsx";
+import docsMd from "./Skeleton.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Skeleton",
   component: Skeleton,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   decorators: [(Story) => <div style={{ maxWidth: "360px" }}><Story /></div>],
 } satisfies Meta<typeof Skeleton>;
 export default meta;

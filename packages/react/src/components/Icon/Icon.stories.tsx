@@ -1,10 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Icon } from "./Icon.tsx";
 import { iconNames } from "./icons.ts";
+import docsMd from "./Icon.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/Icon",
   component: Icon,
+  argTypes: { name: { control: "select", options: iconNames } },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: { name: "wallet" },
 } satisfies Meta<typeof Icon>;
 export default meta;

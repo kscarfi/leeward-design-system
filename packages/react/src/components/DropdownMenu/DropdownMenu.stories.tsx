@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 import { IconButton } from "../IconButton/IconButton.tsx";
 import { DropdownMenu } from "./DropdownMenu.tsx";
+import docsMd from "./DropdownMenu.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/DropdownMenu",
@@ -15,7 +17,7 @@ const meta = {
       { label: "Close account", icon: "trash", onSelect: fn(), destructive: true },
     ],
   },
-  parameters: { layout: "centered" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } }, layout: "centered" },
 } satisfies Meta<typeof DropdownMenu>;
 export default meta;
 type Story = StoryObj<typeof meta>;

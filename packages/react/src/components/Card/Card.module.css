@@ -7,7 +7,7 @@
   color: var(--lw-text-default);
 }
 
-.outlined { background: var(--lw-fill-surface-default); border: var(--lw-size-border-default) solid var(--lw-border-subtle); }
+.outlined { background: var(--lw-fill-surface-default); border: var(--lw-size-border-default) solid var(--lw-border-muted); }
 .elevated { background: var(--lw-fill-surface-raised); box-shadow: var(--lw-elevation-200); }
 .filled { background: var(--lw-fill-surface-emphasis); }
 

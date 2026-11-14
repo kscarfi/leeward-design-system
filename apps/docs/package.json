@@ -29,8 +29,11 @@
     "playwright": "1.65.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "remark-gfm": "4.0.1",
     "storybook": "10.6.7",
     "vite": "8.3.8",
     "vitest": "5.1.0"
-  }
+  },
+  "author": "Kemal Salih Carfi (https://kscarfi.com)",
+  "homepage": "https://github.com/kscarfi/leeward-design-system"
 }

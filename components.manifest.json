@@ -15,7 +15,6 @@
       "name": "Accordion",
       "kind": "component",
       "import": "import { Accordion } from \"@leeward/react\";",
-      "purpose": "Expandable sections for fees, FAQs and account details.",
       "props": [
         {
           "name": "items",
@@ -45,24 +44,39 @@
         }
       ],
       "variants": {},
+      "purpose": "Expandable sections for fees, FAQs and account details.",
+      "whenToUse": [
+        "Long pages where people need only some sections."
+      ],
+      "whenNotToUse": [
+        "Information people need to make a decision, such as the fee of a transfer."
+      ],
+      "contentGuidelines": [
+        "Write triggers as questions or clear topics."
+      ],
+      "sizes": [
+        "Trigger: 48 px: Full width."
+      ],
       "do": [
-        "Write the trigger as a question or a clear topic.",
-        "Set headingLevel so triggers fit the page outline."
+        "Set `headingLevel` so triggers fit the page outline."
       ],
       "dont": [
-        "Do not hide information people need to make a decision, such as the fee of a transfer."
+        "Do not nest accordions."
       ],
       "accessibility": [
-        "Triggers are buttons inside headings with aria-expanded.",
-        "Arrow keys move between triggers. Behavior from Radix Accordion."
+        "Buttons inside headings with `aria-expanded`.",
+        "Behavior from Radix Accordion."
       ],
-      "example": "<Accordion items={[{ value: \"fees\", title: \"What does a transfer cost?\", content: \"Free between Leeward accounts.\" }]} />"
+      "keyboard": [
+        "Enter or Space: Opens or closes",
+        "Arrow keys: Move between triggers"
+      ],
+      "example": "import { Accordion } from \"@leeward/react\";\n\nexport function FeesFaq() {\n  return <Accordion items={[{ value: \"fees\", title: \"What does a transfer cost?\", content: \"Free between Leeward accounts.\" }]} />;\n}"
     },
     {
       "name": "Alert",
       "kind": "component",
       "import": "import { Alert } from \"@leeward/react\";",
-      "purpose": "Inline message on the page: what happened and what to do next.",
       "props": [
         {
           "name": "tone",
@@ -130,27 +144,37 @@
           "neutral"
         ]
       },
+      "purpose": "An inline message on the page: what happened and what to do next.",
+      "whenToUse": [
+        "Context before an action (info), confirmations that stay on screen (success), limits (warning), failures (danger)."
+      ],
+      "whenNotToUse": [
+        "Field errors: put them on the field.",
+        "Short-lived confirmations: use Toast."
+      ],
+      "contentGuidelines": [
+        "Title says what happened. Text says what to do.",
+        "When nothing moved, say so: \"Nothing left your account.\""
+      ],
+      "sizes": [],
       "do": [
-        "Use info for useful context, success after something completed, warning before a limit, danger when something failed.",
-        "Lead with what happened in the title, then what to do in the text.",
-        "Use live=\"alert\" only for urgent failures."
+        "Offer the fix as an action button."
       ],
       "dont": [
-        "Do not use an Alert for field errors: put the error on the field.",
-        "Do not stack more than one Alert at the top of a screen."
+        "Do not stack several alerts at the top of a screen."
       ],
       "accessibility": [
-        "role=\"status\" by default, role=\"alert\" when urgent.",
-        "Every tone has an icon and text, never color alone.",
+        "`role=\"status\"` by default; `live=\"alert\"` for urgent failures.",
+        "Icon, title and text, never color alone.",
         "The dismiss button is labelled."
       ],
-      "example": "<Alert tone=\"warning\" title=\"You are close to your daily limit\">₺1.500 left today.</Alert>"
+      "keyboard": [],
+      "example": "import { Alert, Button } from \"@leeward/react\";\n\nexport function LimitWarning() {\n  return (\n    <Alert tone=\"warning\" title=\"You are close to your daily limit\" actions={<Button size=\"sm\">Raise limit</Button>}>\n      ₺1.500 left today. Limits reset at midnight.\n    </Alert>\n  );\n}"
     },
     {
       "name": "Avatar",
       "kind": "component",
       "import": "import { Avatar } from \"@leeward/react\";",
-      "purpose": "Initials, image or category icon for a person or merchant.",
       "props": [
         {
           "name": "name",
@@ -197,23 +221,39 @@
           "xl"
         ]
       },
+      "purpose": "Initials, a photo or a category icon for a person or merchant.",
+      "whenToUse": [
+        "Recipients, merchants, account owners."
+      ],
+      "whenNotToUse": [
+        "As the only way to identify someone: show the name too."
+      ],
+      "contentGuidelines": [
+        "Initials come from the first and last word of `name`."
+      ],
+      "sizes": [
+        "`xs`: 24 px: Inline mentions.",
+        "`sm`: 32 px: Dense lists.",
+        "`md`: 40 px: Default, transaction rows.",
+        "`lg`: 48 px: Profile headers.",
+        "`xl`: 64 px: Profile screens."
+      ],
       "do": [
         "Set `decorative` when the name is visible next to it."
       ],
       "dont": [
-        "Do not use an avatar as the only way to identify a person."
+        "Do not rely on color to tell people apart."
       ],
       "accessibility": [
-        "`role=\"img\"` named by `name`, or hidden when decorative.",
-        "Falls back to initials if the image fails."
+        "`role=\"img\"` named by `name`, or hidden when `decorative`."
       ],
-      "example": "<Avatar name=\"Deniz Yılmaz\" decorative />"
+      "keyboard": [],
+      "example": "import { Avatar } from \"@leeward/react\";\n\nexport function Recipient() {\n  return <Avatar name=\"Deniz Yılmaz\" />;\n}"
     },
     {
       "name": "Badge",
       "kind": "component",
       "import": "import { Badge } from \"@leeward/react\";",
-      "purpose": "Short status label such as Pending, Paid or Declined.",
       "props": [
         {
           "name": "tone",
@@ -421,26 +461,39 @@
           "md"
         ]
       },
+      "purpose": "A short status or category label such as Pending, Paid or Declined.",
+      "whenToUse": [
+        "Transaction status, account type, counts."
+      ],
+      "whenNotToUse": [
+        "Actions: badges are not clickable.",
+        "Long text: keep it to one or two words."
+      ],
+      "contentGuidelines": [
+        "Use past or present state words: Paid, Pending, Declined, New."
+      ],
+      "sizes": [
+        "`sm`: 20 px: Inside dense rows.",
+        "`md`: 24 px: Default."
+      ],
       "do": [
-        "Keep it to one or two words.",
-        "Status tones add an icon by default.",
-        "Use appearance=\"solid\" for strong status and counts, subtle for lists."
+        "Keep the icon on status tones."
       ],
       "dont": [
-        "Do not use as a button.",
-        "Do not remove the icon on status tones without another non-color signal."
+        "Do not remove the icon on a status tone without another non-color signal.",
+        "Do not use more than one badge per row when you can avoid it."
       ],
       "accessibility": [
-        "Text is part of the content, so screen readers read it.",
-        "Every tone passes AA against its background."
+        "The text is read as part of the content.",
+        "Every tone and appearance passes AA."
       ],
-      "example": "<Badge tone=\"warning\">Pending</Badge>"
+      "keyboard": [],
+      "example": "import { Badge } from \"@leeward/react\";\n\nexport function PendingBadge() {\n  return <Badge tone=\"warning\">Pending</Badge>;\n}"
     },
     {
       "name": "Button",
       "kind": "component",
       "import": "import { Button } from \"@leeward/react\";",
-      "purpose": "Triggers an action. One primary button per screen or section.",
       "props": [
         {
           "name": "variant",
@@ -518,32 +571,56 @@
           "xl"
         ]
       },
+      "purpose": "Buttons start an action: send money, confirm a transfer, freeze a card. The label always says what happens next.",
+      "whenToUse": [
+        "To start an action on the current screen, such as Send, Save or Confirm.",
+        "To submit a form (`type=\"submit\"`).",
+        "For the single most important action of a screen or section, with `variant=\"primary\"`."
+      ],
+      "whenNotToUse": [
+        "To go to another page: use Link.",
+        "For icon-only actions: use IconButton, and never for moving money.",
+        "For on and off settings: use Switch."
+      ],
+      "contentGuidelines": [
+        "Start with a verb and say the outcome: \"Send ₺250\", \"Freeze card\", \"Download PDF\".",
+        "Use sentence case, two or three words.",
+        "Put the amount in the label of money actions when it helps people check it."
+      ],
+      "sizes": [
+        "`xs`: 32 px (compact 32): Dense tables and toolbars on desktop.",
+        "`sm`: 36 px (compact 32): Inside cards and list rows.",
+        "`md`: 44 px (compact 40): Default for forms and dialogs.",
+        "`lg`: 48 px (compact 44): Main actions on mobile screens.",
+        "`xl`: 56 px (compact 48): The last step of a mobile flow, usually `fullWidth`."
+      ],
       "do": [
-        "Use primary for the one main action, secondary or outline for alternatives, ghost for low emphasis, danger only for irreversible actions.",
-        "Sizes: xs 32, sm 36, md 44 (default), lg 48, xl 56 px. Use xl full width for the last step of a mobile flow.",
-        "Write the label as the outcome: \"Send ₺250\", \"Freeze card\".",
-        "Use `loading` while the action runs, so the label stays readable and repeat clicks are blocked.",
-        "Every size keeps a 44 px hit area on touch screens."
+        "Use one primary button per screen or section.",
+        "Keep the primary action on the right in dialogs and at the bottom on mobile.",
+        "Use `loading` while an action runs."
       ],
       "dont": [
-        "Do not use danger for normal payments. Sending money is not an error.",
+        "Do not use `danger` for normal payments: sending money is not an error.",
         "Do not put two primary buttons next to each other.",
-        "Do not use a Button for navigation to another page: use a link.",
-        "Do not disable a submit button to hide errors. Let people submit and show the error."
+        "Do not disable a submit button to hide errors: let people submit and show what to fix.",
+        "Do not use a button for navigation."
       ],
       "accessibility": [
         "Native `<button>` with `type=\"button\"` by default.",
         "Loading uses `aria-busy` and `aria-disabled`, keeps focus and keeps the accessible name.",
-        "Small size keeps a 44px hit area with an invisible extension.",
-        "Focus ring is 2px with a 2px offset, 3:1 against every surface."
+        "Focus uses the `elevation.focus` ring: 3:1 against every surface.",
+        "Text on every variant passes WCAG 2.2 AA in every brand and mode."
       ],
-      "example": "<Button variant=\"primary\" iconStart=\"arrow-up-right\" onClick={send}>Send money</Button>"
+      "keyboard": [
+        "Tab: Moves focus to the control",
+        "Enter or Space: Activates it"
+      ],
+      "example": "import { Button } from \"@leeward/react\";\n\nexport function SendButton() {\n  return (\n    <Button iconStart=\"send\" onClick={() => console.log(\"send\")}>\n      Send money\n    </Button>\n  );\n}"
     },
     {
       "name": "Card",
       "kind": "component",
       "import": "import { Card } from \"@leeward/react\";",
-      "purpose": "Surface that groups related content.",
       "props": [
         {
           "name": "as",
@@ -602,24 +679,36 @@
           "lg"
         ]
       },
+      "purpose": "A surface that groups related content, such as an account, a goal or a list.",
+      "whenToUse": [
+        "Grouping content that belongs together."
+      ],
+      "whenNotToUse": [
+        "Nesting cards inside cards.",
+        "Making a whole card clickable when it contains other buttons."
+      ],
+      "contentGuidelines": [
+        "Give a card a heading when it is a section."
+      ],
+      "sizes": [
+        "`padding`: none, sm 12, md 16, lg 24 px: Use `none` for cards that hold lists."
+      ],
       "do": [
-        "Use `elevated` for primary objects like accounts, `outlined` for lists, `filled` for quiet grouping.",
-        "Pick `as` for meaning: `section` with a heading, `article` for self-contained items."
+        "Use `as=\"section\"` with a heading, `as=\"article\"` for self-contained items."
       ],
       "dont": [
-        "Do not nest elevated cards.",
-        "Do not make a whole card clickable if it contains other buttons."
+        "Do not use shadows by hand: pick a variant."
       ],
       "accessibility": [
-        "No interactive behavior of its own."
+        "No behavior of its own. The semantic element comes from `as`."
       ],
-      "example": "<Card variant=\"elevated\" padding=\"lg\">...</Card>"
+      "keyboard": [],
+      "example": "import { Card, Heading, Text } from \"@leeward/react\";\n\nexport function SavingsGoal() {\n  return (\n    <Card as=\"section\" variant=\"elevated\" padding=\"lg\" aria-labelledby=\"goal\">\n      <Heading level={2} size=\"h4\" id=\"goal\">Holiday fund</Heading>\n      <Text tone=\"secondary\">You saved ₺4.500 of ₺10.000.</Text>\n    </Card>\n  );\n}"
     },
     {
       "name": "Checkbox",
       "kind": "component",
       "import": "import { Checkbox } from \"@leeward/react\";",
-      "purpose": "A yes or no choice inside a form, or one of many independent choices.",
       "props": [
         {
           "name": "label",
@@ -678,24 +767,39 @@
         }
       ],
       "variants": {},
-      "do": [
+      "purpose": "A yes or no choice inside a form, or one of several independent choices.",
+      "whenToUse": [
+        "Agreeing to terms, choosing several filters, saving a recipient."
+      ],
+      "whenNotToUse": [
+        "Settings that apply immediately: use Switch.",
+        "Choosing one of several options: use RadioGroup."
+      ],
+      "contentGuidelines": [
         "Write the label as a statement people agree with: \"Save this person as a recipient\"."
       ],
+      "sizes": [
+        "Box: 20 px: Always 20 px, with a 44 px hit area."
+      ],
+      "do": [
+        "Let the label toggle the box too."
+      ],
       "dont": [
-        "Do not use for settings that apply immediately. Use Switch.",
         "Do not pre-check consent boxes."
       ],
       "accessibility": [
-        "Built on Radix Checkbox with a native-like label.",
-        "20px box with a 44px hit area. Supports indeterminate."
+        "Built on Radix Checkbox, with a real label.",
+        "Indeterminate is announced as mixed."
       ],
-      "example": "<Checkbox label=\"Save this person as a recipient\" onCheckedChange={setSave} />"
+      "keyboard": [
+        "Space: Toggles"
+      ],
+      "example": "import { Checkbox } from \"@leeward/react\";\n\nexport function SaveRecipient() {\n  return <Checkbox label=\"Save this person as a recipient\" onCheckedChange={(checked) => console.log(checked)} />;\n}"
     },
     {
       "name": "Chip",
       "kind": "component",
       "import": "import { Chip } from \"@leeward/react\";",
-      "purpose": "Filter toggle, for example in a transaction list.",
       "props": [
         {
           "name": "selected",
@@ -727,23 +831,40 @@
         }
       ],
       "variants": {},
+      "purpose": "A toggle for filters, such as Money in or Money out in a transaction list.",
+      "whenToUse": [
+        "Filtering a list on the same screen."
+      ],
+      "whenNotToUse": [
+        "Navigation: use Tabs.",
+        "Actions that move money."
+      ],
+      "contentGuidelines": [
+        "One or two words per chip."
+      ],
+      "sizes": [
+        "Default: 36 px: With a 44 px hit area."
+      ],
       "do": [
         "Group chips in an element with `role=\"group\"` and an `aria-label`."
       ],
       "dont": [
-        "Do not use chips as navigation tabs. Use Tabs.",
-        "Do not use for actions that move money."
+        "Do not use chips as tabs."
       ],
       "accessibility": [
-        "Toggle button with `aria-pressed`. Selected chips show a check mark, not only color."
+        "Toggle button with `aria-pressed`.",
+        "Selected chips show a check mark, not only color."
       ],
-      "example": "<Chip selected={selected} onSelectedChange={setSelected}>Money in</Chip>"
+      "keyboard": [
+        "Tab: Moves between chips",
+        "Enter or Space: Toggles"
+      ],
+      "example": "import { useState } from \"react\";\nimport { Chip } from \"@leeward/react\";\n\nexport function MoneyInFilter() {\n  const [selected, setSelected] = useState(false);\n  return <Chip selected={selected} onSelectedChange={setSelected}>Money in</Chip>;\n}"
     },
     {
       "name": "Dialog",
       "kind": "component",
       "import": "import { Dialog } from \"@leeward/react\";",
-      "purpose": "Modal for a decision that needs full attention, such as confirming a transfer or freezing a card.",
       "props": [
         {
           "name": "title",
@@ -802,25 +923,44 @@
         }
       ],
       "variants": {},
+      "purpose": "A modal for a decision that needs full attention, such as freezing a card or closing an account.",
+      "whenToUse": [
+        "Confirming important or irreversible actions.",
+        "Short tasks that must finish before going on."
+      ],
+      "whenNotToUse": [
+        "Information that could sit on the page.",
+        "Opening on page load."
+      ],
+      "contentGuidelines": [
+        "Title as a question: \"Freeze your card?\".",
+        "Description says the consequence.",
+        "Buttons say the outcome: \"Freeze card\" and \"Keep it active\"."
+      ],
+      "sizes": [
+        "Width: up to 520 px: On phones (under 640 px) it becomes a bottom sheet with full width actions."
+      ],
       "do": [
-        "Write `title` as a question: \"Freeze your card?\".",
-        "Put the main action last in `actions`. Use danger only if it cannot be undone."
+        "Put the main action last.",
+        "Use `danger` only when it cannot be undone."
       ],
       "dont": [
-        "Do not open a dialog on page load.",
-        "Do not use for information that could sit on the page."
+        "Do not stack dialogs."
       ],
       "accessibility": [
         "Traps focus, closes on Escape, returns focus to the trigger.",
-        "Named by `title` and described by `description`."
+        "Named by `title`, described by `description`."
       ],
-      "example": "<Dialog title=\"Freeze your card?\" trigger={<Button variant=\"secondary\">Freeze card</Button>} actions={<Button>Freeze card</Button>} />"
+      "keyboard": [
+        "Escape: Closes",
+        "Tab: Cycles inside the dialog"
+      ],
+      "example": "import { Button, Dialog, DialogClose } from \"@leeward/react\";\n\nexport function FreezeCard() {\n  return (\n    <Dialog\n      title=\"Freeze your card?\"\n      description=\"Card payments stop until you unfreeze it.\"\n      trigger={<Button variant=\"secondary\">Freeze card</Button>}\n      actions={\n        <>\n          <DialogClose asChild><Button variant=\"ghost\">Keep it active</Button></DialogClose>\n          <DialogClose asChild><Button>Freeze card</Button></DialogClose>\n        </>\n      }\n    />\n  );\n}"
     },
     {
       "name": "Divider",
       "kind": "component",
       "import": "import { Divider } from \"@leeward/react\";",
-      "purpose": "Separates groups of content.",
       "props": [
         {
           "name": "orientation",
@@ -850,22 +990,35 @@
           "vertical"
         ]
       },
+      "purpose": "A thin line that separates groups of content on a surface.",
+      "whenToUse": [
+        "Between groups that would otherwise blur together.",
+        "With `label`, for an \"or\" between two options."
+      ],
+      "whenNotToUse": [
+        "When spacing alone separates the groups."
+      ],
+      "contentGuidelines": [
+        "Labels are one short word: \"or\"."
+      ],
+      "sizes": [],
       "do": [
-        "Prefer spacing to dividers. Use a divider when two groups would otherwise blur together."
+        "Place dividers on surfaces such as cards and sheets."
       ],
       "dont": [
         "Do not use a divider as the only signal that sections differ."
       ],
       "accessibility": [
-        "Hidden from screen readers by default. Set decorative={false} when it separates real sections."
+        "Hidden from screen readers by default.",
+        "Set `decorative={false}` to expose a `separator` between real sections."
       ],
-      "example": "<Divider label=\"or\" />"
+      "keyboard": [],
+      "example": "import { Divider } from \"@leeward/react\";\n\nexport function OrDivider() {\n  return <Divider label=\"or\" />;\n}"
     },
     {
       "name": "DropdownMenu",
       "kind": "component",
       "import": "import { DropdownMenu } from \"@leeward/react\";",
-      "purpose": "Secondary actions for an item, behind a More button.",
       "props": [
         {
           "name": "trigger",
@@ -889,23 +1042,41 @@
         }
       ],
       "variants": {},
+      "purpose": "Secondary actions for an item, behind a More button.",
+      "whenToUse": [
+        "Copy IBAN, download statement, freeze card on an account."
+      ],
+      "whenNotToUse": [
+        "The main action: keep it visible.",
+        "Navigation."
+      ],
+      "contentGuidelines": [
+        "Verbs first: Copy IBAN, Download statement.",
+        "Destructive actions name what they destroy: Close account."
+      ],
+      "sizes": [],
       "do": [
-        "Order actions by how often they are used. Destructive actions go last and are separated."
+        "Use an IconButton labelled \"More actions\" as the trigger."
       ],
       "dont": [
-        "Do not hide the main action in a menu.",
-        "Do not use a menu for navigation."
+        "Do not put more than about 7 actions in one menu."
       ],
       "accessibility": [
-        "menu role with menuitems. Arrow keys move, Enter selects, Escape closes. Behavior from Radix."
+        "`menu` and `menuitem` roles from Radix.",
+        "Items are at least 44 px tall."
       ],
-      "example": "<DropdownMenu trigger={<IconButton icon=\"more-vertical\" label=\"More actions\" />} actions={[{ label: \"Copy IBAN\", icon: \"copy\", onSelect: copy }]} />"
+      "keyboard": [
+        "Enter or Space: Opens",
+        "Arrow keys: Move",
+        "Enter: Selects",
+        "Escape: Closes"
+      ],
+      "example": "import { DropdownMenu, IconButton } from \"@leeward/react\";\n\nexport function AccountMenu() {\n  return (\n    <DropdownMenu\n      trigger={<IconButton icon=\"more-vertical\" label=\"More actions\" />}\n      actions={[\n        { label: \"Copy IBAN\", icon: \"copy\", onSelect: () => {} },\n        { label: \"Close account\", icon: \"trash\", onSelect: () => {}, destructive: true },\n      ]}\n    />\n  );\n}"
     },
     {
       "name": "EmptyState",
       "kind": "component",
       "import": "import { EmptyState } from \"@leeward/react\";",
-      "purpose": "Shown when a list or search has nothing to show yet.",
       "props": [
         {
           "name": "icon",
@@ -937,23 +1108,34 @@
         }
       ],
       "variants": {},
+      "purpose": "Shown when a list or search has nothing to show yet.",
+      "whenToUse": [
+        "Empty lists, no search results, first-time screens."
+      ],
+      "whenNotToUse": [
+        "Errors: use Alert."
+      ],
+      "contentGuidelines": [
+        "Title says what is missing: \"No payments yet\".",
+        "Description says what people can do next."
+      ],
+      "sizes": [],
       "do": [
-        "Say what is missing, then what people can do.",
-        "Offer one action when there is a clear next step."
+        "Offer one clear action when there is one."
       ],
       "dont": [
         "Do not blame people for an empty state."
       ],
       "accessibility": [
-        "Real heading at the level you choose. The illustration is decorative."
+        "A real heading at the level you choose. The illustration is decorative."
       ],
-      "example": "<EmptyState icon=\"wallet-money\" title=\"No payments yet\" description=\"Your payments show up here.\" />"
+      "keyboard": [],
+      "example": "import { Button, EmptyState } from \"@leeward/react\";\n\nexport function NoPayments() {\n  return <EmptyState icon=\"wallet-money\" title=\"No payments yet\" description=\"Your payments show up here.\" action={<Button iconStart=\"send\">Send money</Button>} />;\n}"
     },
     {
       "name": "Heading",
       "kind": "component",
       "import": "import { Heading } from \"@leeward/react\";",
-      "purpose": "Section and page headings with a required outline level.",
       "props": [
         {
           "name": "level",
@@ -1038,25 +1220,38 @@
           "inverse"
         ]
       },
+      "purpose": "Page and section headings. `level` sets the document outline, `size` sets the look, so both can be right at the same time.",
+      "whenToUse": [
+        "Page titles, section titles, card titles."
+      ],
+      "whenNotToUse": [
+        "Big numbers: use AmountDisplay.",
+        "Emphasis inside a paragraph: use Text with a label variant."
+      ],
+      "contentGuidelines": [
+        "Use sentence case.",
+        "Say what the section is about: \"Recent activity\", not \"Activity list\"."
+      ],
+      "sizes": [],
       "do": [
-        "Set `level` for the document outline and `size` for the look. They can differ.",
-        "One `level={1}` per screen."
+        "Use one `level={1}` per screen.",
+        "Keep levels in order without skipping."
       ],
       "dont": [
         "Do not skip levels, for example h1 to h3.",
-        "Do not use Heading only to make text big. Use Text or AmountDisplay."
+        "Do not use Heading only to make text bigger."
       ],
       "accessibility": [
-        "`level` is required so the outline is intentional.",
-        "Large headings use `text-wrap: balance`."
+        "`level` is required, so the outline is always intentional.",
+        "Screen reader users navigate by headings: keep them meaningful."
       ],
-      "example": "<Heading level={2} size=\"sm\">Recent activity</Heading>"
+      "keyboard": [],
+      "example": "import { Heading } from \"@leeward/react\";\n\nexport function SectionTitle() {\n  return <Heading level={2} size=\"h3\">Recent activity</Heading>;\n}"
     },
     {
       "name": "Icon",
       "kind": "component",
       "import": "import { Icon } from \"@leeward/react\";",
-      "purpose": "Solar icons (480 Design, CC BY 4.0) on a 24 px grid: 142 icons in three weights. Use linear by default, bold for selected or active states, duotone for illustrations and empty states.",
       "props": [
         {
           "name": "name",
@@ -1109,26 +1304,43 @@
           "xl"
         ]
       },
+      "purpose": "Solar icons by 480 Design (CC BY 4.0) on a 24 px grid: 142 icons in three weights. Icons draw in `currentColor`, so they follow the text tone around them.",
+      "whenToUse": [
+        "Next to labels to help scanning: buttons, list rows, badges.",
+        "As the only content of IconButton, with a label."
+      ],
+      "whenNotToUse": [
+        "As the only signal of state: pair with text.",
+        "Decoration that adds no meaning."
+      ],
+      "contentGuidelines": [
+        "Name icons by meaning: `send`, `card-transfer`, `alert-circle`.",
+        "Add icons with `pnpm icons:import`; do not paste SVG into product code."
+      ],
+      "sizes": [
+        "`xs`: 12 px: Inside small badges.",
+        "`sm`: 16 px: Inside small buttons, chips and captions.",
+        "`md`: 20 px: Default.",
+        "`lg`: 24 px: Navigation and large buttons.",
+        "`xl`: 32 px: Empty states and illustrations."
+      ],
       "do": [
-        "Pair icons with text for anything important.",
-        "Give `label` only when the icon carries meaning on its own."
+        "Give `label` only when the icon means something on its own."
       ],
       "dont": [
-        "Do not draw new SVGs inline in product code. Add them with `pnpm icons:import` (see scripts/import-solar-icons.ts).",
-        "Do not use an icon as the only signal of state."
+        "Do not color icons with raw values: they inherit the text color."
       ],
       "accessibility": [
         "Decorative by default (`aria-hidden`).",
-        "With `label` it becomes `role=\"img\"` with that name.",
-        "Uses `currentColor`, so it follows the text tone."
+        "With `label` it becomes `role=\"img\"` with that name."
       ],
-      "example": "<Icon name=\"lock\" label=\"Secured\" />"
+      "keyboard": [],
+      "example": "import { Icon } from \"@leeward/react\";\n\nexport function Secured() {\n  return <Icon name=\"lock\" label=\"Secured\" />;\n}"
     },
     {
       "name": "IconButton",
       "kind": "component",
       "import": "import { IconButton } from \"@leeward/react\";",
-      "purpose": "Icon-only button for secondary actions such as close, settings or show balance.",
       "props": [
         {
           "name": "icon",
@@ -1185,26 +1397,47 @@
           "lg"
         ]
       },
+      "purpose": "An icon-only button for frequent, well-known secondary actions such as close, settings, more or show balance.",
+      "whenToUse": [
+        "Close, back, more actions, settings, show or hide balance.",
+        "Toolbars where space is short and the icon is universally understood."
+      ],
+      "whenNotToUse": [
+        "Moving money: Send, Pay and Transfer always need a text Button.",
+        "Actions whose icon is not obvious: use Button with a label."
+      ],
+      "contentGuidelines": [
+        "Write `label` as the outcome: \"Close\", \"Show balance\", \"More actions\".",
+        "Add a Tooltip with the same text when the icon may be unclear on desktop."
+      ],
+      "sizes": [
+        "`xs`: 32 px: Inside chips, badges and tight rows.",
+        "`sm`: 36 px: Dialog and sheet headers.",
+        "`md`: 44 px: Default.",
+        "`lg`: 48 px: Main icon actions on mobile."
+      ],
       "do": [
-        "Give `label` the outcome: \"Close\", \"Show balance\".",
-        "Wrap in Tooltip when the icon is not obvious."
+        "Always set `label`.",
+        "Use `aria-pressed` for toggles such as hide balance."
       ],
       "dont": [
-        "Do not use for moving money. Send, pay and transfer always need a text Button.",
-        "Do not use an icon without a label."
+        "Do not use for money movement (lint rule `no-icon-only-money-action`).",
+        "Do not put several unlabeled icon buttons in a row without tooltips."
       ],
       "accessibility": [
         "`label` is required and becomes `aria-label`.",
-        "44 by 44px target at md size, extended hit area at sm.",
-        "Use `aria-pressed` for toggles such as hide balance."
+        "Pressed toggles expose `aria-pressed` and change weight, not only color."
       ],
-      "example": "<IconButton icon=\"close\" label=\"Close\" onClick={onClose} />"
+      "keyboard": [
+        "Tab: Moves focus to the control",
+        "Enter or Space: Activates it"
+      ],
+      "example": "import { IconButton } from \"@leeward/react\";\n\nexport function CloseButton({ onClose }: { onClose: () => void }) {\n  return <IconButton icon=\"close\" label=\"Close\" onClick={onClose} />;\n}"
     },
     {
       "name": "Link",
       "kind": "component",
       "import": "import { Link } from \"@leeward/react\";",
-      "purpose": "Navigation to another page or site.",
       "props": [
         {
           "name": "children",
@@ -1245,24 +1478,37 @@
           "standalone"
         ]
       },
+      "purpose": "Navigation to another page or site.",
+      "whenToUse": [
+        "Going to another screen or a help page."
+      ],
+      "whenNotToUse": [
+        "Actions such as Send or Delete: use Button."
+      ],
+      "contentGuidelines": [
+        "Name the destination: \"See all fees\", not \"Click here\"."
+      ],
+      "sizes": [],
       "do": [
-        "Use inline links inside sentences: they are always underlined.",
-        "Use external for other sites, so people know a new tab opens."
+        "Use inline links sparingly in long text."
       ],
       "dont": [
-        "Do not use a link for actions such as Send or Delete: use Button.",
-        "Do not write \"click here\". Name the destination."
+        "Do not style buttons as links."
       ],
       "accessibility": [
-        "Native anchor. External links add an icon and screen reader text."
+        "Native anchor.",
+        "External links add an icon and the text \"opens in a new tab\" for screen readers."
       ],
-      "example": "<Link href=\"/fees\" variant=\"standalone\">See all fees</Link>"
+      "keyboard": [
+        "Tab: Moves to the link",
+        "Enter: Follows it"
+      ],
+      "example": "import { Link } from \"@leeward/react\";\n\nexport function FeesLink() {\n  return <Link href=\"/fees\" variant=\"standalone\">See all fees</Link>;\n}"
     },
     {
       "name": "ListItem",
       "kind": "component",
       "import": "import { ListItem } from \"@leeward/react\";",
-      "purpose": "Row in a list with title, description, leading and trailing slots. Use inside List.",
       "props": [
         {
           "name": "title",
@@ -1317,25 +1563,37 @@
         }
       ],
       "variants": {},
+      "purpose": "A row in a List with a title, description, leading and trailing content. The whole row can be a link or a button.",
+      "whenToUse": [
+        "Settings, recipients, menus of destinations."
+      ],
+      "whenNotToUse": [
+        "Transactions: use TransactionRow."
+      ],
+      "contentGuidelines": [
+        "Titles are nouns, descriptions give the current value."
+      ],
+      "sizes": [
+        "Row: at least 44 px: Grows with content."
+      ],
       "do": [
-        "Use `href` for navigation and `onClick` for actions. The whole row becomes the target.",
+        "Use `href` for navigation and `onClick` for actions.",
         "Add `chevron` when the row opens another screen."
       ],
       "dont": [
-        "Do not put a button inside an interactive row.",
-        "Do not use for transactions. Use TransactionRow."
+        "Do not put a button inside an interactive row."
       ],
       "accessibility": [
-        "Renders `li` inside `ul`. Rows are at least 44px tall.",
-        "Interactive rows use a native link or button."
+        "Renders `li` inside `ul`.",
+        "Interactive rows use a real link or button with an inset focus ring."
       ],
-      "example": "<List><ListItem title=\"Security\" description=\"Passcode, Face ID\" href=\"/security\" chevron /></List>"
+      "keyboard": [],
+      "example": "import { Icon, List, ListItem } from \"@leeward/react\";\n\nexport function SettingsList() {\n  return (\n    <List>\n      <ListItem title=\"Security\" description=\"Passcode, Face ID\" leading={<Icon name=\"shield\" />} href=\"/security\" chevron />\n      <ListItem title=\"Notifications\" leading={<Icon name=\"bell\" />} href=\"/notifications\" chevron />\n    </List>\n  );\n}"
     },
     {
       "name": "ProgressBar",
       "kind": "component",
       "import": "import { ProgressBar } from \"@leeward/react\";",
-      "purpose": "Progress toward a goal or limit.",
       "props": [
         {
           "name": "label",
@@ -1380,23 +1638,36 @@
           "danger"
         ]
       },
-      "do": [
+      "purpose": "Progress toward a goal or limit, such as a savings goal or a daily card limit.",
+      "whenToUse": [
+        "Goals, limits, profile completion."
+      ],
+      "whenNotToUse": [
+        "Loading: use Skeleton or Spinner."
+      ],
+      "contentGuidelines": [
         "Always set `valueText` in words for money: \"₺4.500 of ₺10.000\".",
-        "Use warning and danger with words: \"92% used, ₺800 left\"."
+        "Pair warning and danger with words: \"92% used, ₺800 left\"."
+      ],
+      "sizes": [
+        "Bar: 8 px: Full width of its container."
+      ],
+      "do": [
+        "Show the numbers, not only the bar."
       ],
       "dont": [
-        "Do not use for loading. Use Skeleton or a loading Button."
+        "Do not rely on the bar color."
       ],
       "accessibility": [
         "`progressbar` role named by the label, with `aria-valuetext`."
       ],
-      "example": "<ProgressBar label=\"Holiday fund\" value={4500} max={10000} valueText=\"₺4.500 of ₺10.000\" />"
+      "keyboard": [],
+      "example": "import { ProgressBar } from \"@leeward/react\";\n\nexport function HolidayFund() {\n  return <ProgressBar label=\"Holiday fund\" value={4500} max={10000} valueText=\"₺4.500 of ₺10.000\" />;\n}"
     },
     {
       "name": "RadioGroup",
       "kind": "component",
       "import": "import { RadioGroup } from \"@leeward/react\";",
-      "purpose": "Pick exactly one option from 2 to 5 visible choices.",
       "props": [
         {
           "name": "label",
@@ -1470,25 +1741,40 @@
           "horizontal"
         ]
       },
+      "purpose": "Pick exactly one option from 2 to 5 visible choices, with optional descriptions.",
+      "whenToUse": [
+        "When should it arrive? Which statement format?"
+      ],
+      "whenNotToUse": [
+        "More than about 5 options: use Select.",
+        "Instant view switches: use SegmentedControl."
+      ],
+      "contentGuidelines": [
+        "Write `label` as the question.",
+        "Use `description` to explain the consequence of each option."
+      ],
+      "sizes": [],
       "do": [
-        "Write `label` as the question: \"When should it arrive?\".",
-        "Add `description` to explain the consequence of each option."
+        "Set a sensible default when there is one."
       ],
       "dont": [
-        "Do not use for more than about 5 options.",
-        "Do not leave a group with no default unless the choice must be explicit."
+        "Do not use for on and off: use Switch."
       ],
       "accessibility": [
-        "`radiogroup` role named by the label. Arrow keys move between options.",
-        "Descriptions are linked with `aria-describedby`."
+        "`radiogroup` named by the label.",
+        "Descriptions linked with `aria-describedby`."
       ],
-      "example": "<RadioGroup label=\"When should it arrive?\" options={options} defaultValue=\"now\" />"
+      "keyboard": [
+        "Tab: Moves into the group",
+        "Arrow keys: Move between options",
+        "Space: Selects the focused option"
+      ],
+      "example": "import { RadioGroup } from \"@leeward/react\";\n\nexport function WhenToSend() {\n  return (\n    <RadioGroup\n      label=\"When should it arrive?\"\n      defaultValue=\"now\"\n      options={[\n        { value: \"now\", label: \"Now\", description: \"Free, arrives in seconds\" },\n        { value: \"date\", label: \"On a date\", description: \"Choose a day in the next 12 months\" },\n      ]}\n    />\n  );\n}"
     },
     {
       "name": "SegmentedControl",
       "kind": "component",
       "import": "import { SegmentedControl } from \"@leeward/react\";",
-      "purpose": "Pick one view or filter from 2 to 5 short options.",
       "props": [
         {
           "name": "label",
@@ -1537,25 +1823,40 @@
           "md"
         ]
       },
+      "purpose": "Switch between 2 to 5 views or filters of the same content, such as Week, Month and Year.",
+      "whenToUse": [
+        "Changing the period of a chart, list or chart view, Now or Later."
+      ],
+      "whenNotToUse": [
+        "Navigation between pages: use Tabs.",
+        "Form choices with descriptions: use RadioGroup."
+      ],
+      "contentGuidelines": [
+        "One word per option when possible."
+      ],
+      "sizes": [
+        "`sm`: 36 px: Above charts and inside cards.",
+        "`md`: 44 px: Default."
+      ],
       "do": [
-        "Keep labels to one word when you can: Week, Month, Year.",
-        "Use fullWidth on phones."
+        "Keep options mutually exclusive."
       ],
       "dont": [
-        "Do not use it for navigation between pages: use Tabs.",
-        "Do not use it for form choices that need a submit: use RadioGroup."
+        "Do not use more than 5 options."
       ],
       "accessibility": [
-        "radiogroup role named by label. Arrow keys move. One option is always selected.",
+        "`radiogroup` named by `label`.",
         "The selected option uses a raised surface and shadow, not color alone."
       ],
-      "example": "<SegmentedControl label=\"Period\" options={[{ value: \"week\", label: \"Week\" }, { value: \"month\", label: \"Month\" }]} />"
+      "keyboard": [
+        "Arrow keys: Move and select"
+      ],
+      "example": "import { SegmentedControl } from \"@leeward/react\";\n\nexport function PeriodPicker() {\n  return (\n    <SegmentedControl\n      label=\"Period\"\n      defaultValue=\"month\"\n      options={[\n        { value: \"week\", label: \"Week\" },\n        { value: \"month\", label: \"Month\" },\n        { value: \"year\", label: \"Year\" },\n      ]}\n    />\n  );\n}"
     },
     {
       "name": "Select",
       "kind": "component",
       "import": "import { Select } from \"@leeward/react\";",
-      "purpose": "Pick one option from a short list. Built on Radix Select.",
       "props": [
         {
           "name": "label",
@@ -1636,25 +1937,46 @@
           "lg"
         ]
       },
+      "purpose": "Pick one option from a list in a popover. Built on Radix Select.",
+      "whenToUse": [
+        "5 to 15 options, such as the account to pay from."
+      ],
+      "whenNotToUse": [
+        "2 to 5 options that people should compare: use RadioGroup.",
+        "Long lists: use a searchable list."
+      ],
+      "contentGuidelines": [
+        "Write the placeholder as a request: \"Choose an account\".",
+        "Keep option labels short and unique."
+      ],
+      "sizes": [
+        "`sm`: 36 px: Dense desktop forms.",
+        "`md`: 44 px: Default.",
+        "`lg`: 48 px: Main choice of a screen."
+      ],
       "do": [
-        "Use for 5 to 15 options. Use RadioGroup for fewer, a searchable list for more.",
-        "Write a placeholder that asks: \"Choose an account\"."
+        "Order options by how often they are used."
       ],
       "dont": [
-        "Do not use Select for actions.",
-        "Do not hide important differences between options. Use RadioGroup with descriptions."
+        "Do not hide important differences between options: use RadioGroup with descriptions.",
+        "Do not use Select for actions: use DropdownMenu."
       ],
       "accessibility": [
-        "Trigger is a labelled combobox. Full keyboard support from Radix.",
-        "Options are 44px tall."
+        "The trigger is a labelled combobox.",
+        "Options are at least 44 px tall."
       ],
-      "example": "<Select label=\"Pay from\" options={[{ value: \"everyday\", label: \"Everyday account\" }]} onValueChange={setAccount} />"
+      "keyboard": [
+        "Enter, Space or Arrow down: Opens the list",
+        "Arrow keys: Move between options",
+        "Enter: Selects",
+        "Escape: Closes"
+      ],
+      "example": "import { Select } from \"@leeward/react\";\n\nexport function PayFrom() {\n  return (\n    <Select\n      label=\"Pay from\"\n      options={[\n        { value: \"everyday\", label: \"Everyday account\" },\n        { value: \"savings\", label: \"Savings\" },\n      ]}\n      onValueChange={(value) => console.log(value)}\n    />\n  );\n}"
     },
     {
       "name": "Sheet",
       "kind": "component",
       "import": "import { Sheet } from \"@leeward/react\";",
-      "purpose": "Panel for a task in context, such as filters or transaction details.",
       "props": [
         {
           "name": "title",
@@ -1718,23 +2040,36 @@
           "end"
         ]
       },
+      "purpose": "A panel for a task in context, such as filters or transaction details.",
+      "whenToUse": [
+        "Filters, details and short forms that keep the page behind in view."
+      ],
+      "whenNotToUse": [
+        "Confirmations: use Dialog."
+      ],
+      "contentGuidelines": [
+        "Title names the task: \"Filter transactions\"."
+      ],
+      "sizes": [],
       "do": [
-        "Use side=\"bottom\" on phones and side=\"end\" for side panels on wide screens.",
-        "Put the main action last in footer."
+        "Put the main action last in `footer`."
       ],
       "dont": [
-        "Do not open a sheet from inside another sheet."
+        "Do not open a sheet from a sheet."
       ],
       "accessibility": [
-        "Modal dialog: traps focus, closes on Escape and returns focus. Named by title."
+        "Modal dialog: traps focus, closes on Escape and returns focus.",
+        "Respects the safe area at the bottom of phones."
       ],
-      "example": "<Sheet title=\"Filter transactions\" trigger={<Button variant=\"outline\">Filter</Button>}>...</Sheet>"
+      "keyboard": [
+        "Escape: Closes"
+      ],
+      "example": "import { Button, Checkbox, Sheet, SheetClose } from \"@leeward/react\";\n\nexport function Filters() {\n  return (\n    <Sheet title=\"Filter transactions\" trigger={<Button variant=\"outline\" iconStart=\"filter\">Filter</Button>} footer={<SheetClose asChild><Button>Show results</Button></SheetClose>}>\n      <Checkbox label=\"Pending only\" />\n    </Sheet>\n  );\n}"
     },
     {
       "name": "Skeleton",
       "kind": "component",
       "import": "import { Skeleton } from \"@leeward/react\";",
-      "purpose": "Placeholder while content loads.",
       "props": [
         {
           "name": "shape",
@@ -1772,23 +2107,34 @@
           "circle"
         ]
       },
+      "purpose": "A placeholder in the shape of content that is loading.",
+      "whenToUse": [
+        "Lists, cards and balances while data loads."
+      ],
+      "whenNotToUse": [
+        "Waits longer than a few seconds without a message.",
+        "Actions: use Button loading."
+      ],
+      "contentGuidelines": [
+        "Match the shape of the content that will appear."
+      ],
+      "sizes": [],
       "do": [
-        "Match the shape of the content that will appear.",
-        "Mark the loading region with `role=\"status\"` and `aria-busy`."
+        "Mark the loading region with `role=\"status\"`, `aria-busy` and a label."
       ],
       "dont": [
-        "Do not show skeletons for more than a few seconds without a message."
+        "Do not show skeletons for content that loads instantly."
       ],
       "accessibility": [
-        "Hidden from screen readers. No shimmer with reduced motion."
+        "Hidden from screen readers: the region announces loading."
       ],
-      "example": "<div role=\"status\" aria-busy=\"true\" aria-label=\"Loading transactions\"><Skeleton lines={2} /></div>"
+      "keyboard": [],
+      "example": "import { Skeleton } from \"@leeward/react\";\n\nexport function LoadingList() {\n  return (\n    <div role=\"status\" aria-busy=\"true\" aria-label=\"Loading transactions\">\n      <Skeleton shape=\"circle\" />\n      <Skeleton lines={2} />\n    </div>\n  );\n}"
     },
     {
       "name": "Spinner",
       "kind": "component",
       "import": "import { Spinner } from \"@leeward/react\";",
-      "purpose": "Short wait indicator when the shape of the result is unknown.",
       "props": [
         {
           "name": "label",
@@ -1814,23 +2160,39 @@
           "lg"
         ]
       },
+      "purpose": "A small wait indicator when the shape of the result is unknown.",
+      "whenToUse": [
+        "Short waits inside a region."
+      ],
+      "whenNotToUse": [
+        "Page content: use Skeleton.",
+        "Inside buttons: use Button `loading`."
+      ],
+      "contentGuidelines": [
+        "Give it a label when it is alone on screen: \"Loading your accounts\"."
+      ],
+      "sizes": [
+        "`sm`: 16 px: Inline.",
+        "`md`: 20 px: Default.",
+        "`lg`: 32 px: Empty regions."
+      ],
       "do": [
-        "Give it a label when it is the only thing on screen."
+        "Use `currentColor` by placing it inside colored text."
       ],
       "dont": [
-        "Do not use for page content: use Skeleton.",
-        "Do not use inside buttons: use Button loading."
+        "Do not show several spinners at once."
       ],
       "accessibility": [
-        "With a label it is a status region. It keeps turning slowly under reduced motion so it never looks frozen."
+        "With `label` it is a status region; without it is decorative.",
+        "With reduced motion it keeps turning slowly so it never looks frozen."
       ],
-      "example": "<Spinner label=\"Loading your accounts\" />"
+      "keyboard": [],
+      "example": "import { Spinner } from \"@leeward/react\";\n\nexport function Loading() {\n  return <Spinner label=\"Loading your accounts\" />;\n}"
     },
     {
       "name": "Stepper",
       "kind": "component",
       "import": "import { Stepper } from \"@leeward/react\";",
-      "purpose": "Shows where people are in a multi-step flow.",
       "props": [
         {
           "name": "steps",
@@ -1866,24 +2228,34 @@
           "compact"
         ]
       },
+      "purpose": "Shows where people are in a multi-step flow, such as a transfer.",
+      "whenToUse": [
+        "Flows of 3 to 5 steps."
+      ],
+      "whenNotToUse": [
+        "Single screens or more than 5 steps."
+      ],
+      "contentGuidelines": [
+        "Short step names: Recipient, Amount, Review, Confirm."
+      ],
+      "sizes": [],
       "do": [
-        "Use short step names.",
-        "Use variant=\"compact\" on phones."
+        "Let people go back with a Back button."
       ],
       "dont": [
-        "Do not use for more than 5 steps.",
         "Do not make steps clickable unless going back is safe."
       ],
       "accessibility": [
-        "nav landmark with an ordered list. The current step has aria-current=\"step\", completed steps say so in text."
+        "`nav` landmark with an ordered list.",
+        "The current step has `aria-current=\"step\"`; completed steps say so in text."
       ],
-      "example": "<Stepper steps={[\"Recipient\", \"Amount\", \"Review\", \"Confirm\"]} current={1} />"
+      "keyboard": [],
+      "example": "import { Stepper } from \"@leeward/react\";\n\nexport function TransferProgress() {\n  return <Stepper steps={[\"Recipient\", \"Amount\", \"Review\", \"Confirm\"]} current={1} label=\"Transfer progress\" />;\n}"
     },
     {
       "name": "Switch",
       "kind": "component",
       "import": "import { Switch } from \"@leeward/react\";",
-      "purpose": "A setting that applies immediately, such as online card payments.",
       "props": [
         {
           "name": "label",
@@ -1928,24 +2300,39 @@
         }
       ],
       "variants": {},
+      "purpose": "Turns a setting on or off immediately, such as online card payments.",
+      "whenToUse": [
+        "Settings that take effect right away."
+      ],
+      "whenNotToUse": [
+        "Choices inside a form with a submit button: use Checkbox."
+      ],
+      "contentGuidelines": [
+        "Label the setting, not the state: \"Online card payments\", not \"On\".",
+        "Use the hint to explain consequences or why it is disabled."
+      ],
+      "sizes": [
+        "Track: 44 by 24 px: Full width is the touch target."
+      ],
       "do": [
-        "Label the setting, not the state: \"Online card payments\"."
+        "Confirm risky changes with a toast or dialog."
       ],
       "dont": [
-        "Do not use inside a form that has a submit button. Use Checkbox.",
-        "Do not write \"On\" or \"Off\" as the label."
+        "Do not use \"On\" and \"Off\" as labels."
       ],
       "accessibility": [
-        "`switch` role from Radix. Track meets 3:1 against every surface.",
-        "44px wide target."
+        "`switch` role from Radix, labelled.",
+        "The track meets 3:1 against every surface."
       ],
-      "example": "<Switch label=\"Online card payments\" checked={on} onCheckedChange={setOn} />"
+      "keyboard": [
+        "Space: Toggles"
+      ],
+      "example": "import { useState } from \"react\";\nimport { Switch } from \"@leeward/react\";\n\nexport function OnlinePayments() {\n  const [on, setOn] = useState(true);\n  return <Switch label=\"Online card payments\" checked={on} onCheckedChange={setOn} />;\n}"
     },
     {
       "name": "Tabs",
       "kind": "component",
       "import": "import { Tabs } from \"@leeward/react\";",
-      "purpose": "Switch between views of the same object, such as Activity and Statements.",
       "props": [
         {
           "name": "label",
@@ -1981,25 +2368,38 @@
         }
       ],
       "variants": {},
+      "purpose": "Switch between views of the same object, such as Activity, Statements and Details of an account.",
+      "whenToUse": [
+        "Two to five sibling views."
+      ],
+      "whenNotToUse": [
+        "Steps of a flow: use Stepper.",
+        "Filters: use SegmentedControl or Chip."
+      ],
+      "contentGuidelines": [
+        "One or two words per tab."
+      ],
+      "sizes": [],
       "do": [
-        "Give `label` a name for the tab list.",
-        "Keep labels to one or two words."
+        "Keep the selected tab when people come back."
       ],
       "dont": [
-        "Do not use tabs for steps in a flow.",
         "Do not hide required form fields in other tabs."
       ],
       "accessibility": [
-        "Radix Tabs: arrow keys move between tabs, Tab moves into the panel.",
-        "Active tab uses weight and an underline, not only color."
+        "Radix Tabs: `tablist`, `tab` and `tabpanel` roles.",
+        "The active tab uses weight and an underline, not only color."
       ],
-      "example": "<Tabs label=\"Account views\" items={[{ value: \"activity\", label: \"Activity\", content: <Activity /> }]} />"
+      "keyboard": [
+        "Arrow keys: Move between tabs",
+        "Tab: Moves into the panel"
+      ],
+      "example": "import { Tabs, Text } from \"@leeward/react\";\n\nexport function AccountViews() {\n  return (\n    <Tabs\n      label=\"Account views\"\n      items={[\n        { value: \"activity\", label: \"Activity\", content: <Text>Last 30 days</Text> },\n        { value: \"details\", label: \"Details\", content: <Text>IBAN and branch</Text> },\n      ]}\n    />\n  );\n}"
     },
     {
       "name": "Text",
       "kind": "component",
       "import": "import { Text } from \"@leeward/react\";",
-      "purpose": "Body, label and caption text with token-based type roles and tones.",
       "props": [
         {
           "name": "as",
@@ -2109,25 +2509,39 @@
           "inverse"
         ]
       },
-      "do": [
+      "purpose": "Body text, labels, subtitles, captions and inline code, using the type roles and text tones of the system.",
+      "whenToUse": [
+        "Paragraphs, labels, helper lines, captions and numbers in lists."
+      ],
+      "whenNotToUse": [
+        "Headings: use Heading so the page outline is correct.",
+        "Amounts: use AmountDisplay so signs and formatting are right."
+      ],
+      "contentGuidelines": [
+        "Keep sentences short and in second person.",
         "Use `tabular` for numbers that line up in columns.",
-        "Use tone `secondary` for supporting text and `tertiary` only for hints and captions."
+        "Never use em dashes in copy: use commas, colons or periods."
+      ],
+      "sizes": [],
+      "do": [
+        "Pick `as` for meaning: `p` for paragraphs, `span` inline, `label` with `htmlFor`.",
+        "Use `secondary` for supporting text and `tertiary` only for hints and captions."
       ],
       "dont": [
-        "Do not use tone `success` or `danger` as the only signal of state. Add an icon or words.",
-        "Do not style text with raw font sizes."
+        "Do not use `success` or `danger` tones as the only signal of state: add an icon or words.",
+        "Do not set font sizes by hand."
       ],
       "accessibility": [
-        "Every tone passes WCAG 2.2 AA on every surface in light and dark themes.",
-        "Pick `as` for meaning: `p` for paragraphs, `span` inline, `label` with `htmlFor`."
+        "Every tone passes WCAG 2.2 AA on every surface in every brand and mode.",
+        "Text follows the browser font size because sizes are in rem."
       ],
-      "example": "<Text variant=\"body-sm\" tone=\"secondary\">Transfers to other banks take up to one working day.</Text>"
+      "keyboard": [],
+      "example": "import { Text } from \"@leeward/react\";\n\nexport function TransferNote() {\n  return <Text variant=\"body-sm\" tone=\"secondary\">Transfers to other banks take up to one working day.</Text>;\n}"
     },
     {
       "name": "TextField",
       "kind": "component",
       "import": "import { TextField } from \"@leeward/react\";",
-      "purpose": "Single-line input with label, hint, error, prefix and suffix.",
       "props": [
         {
           "name": "label",
@@ -2193,28 +2607,47 @@
           "lg"
         ]
       },
+      "purpose": "Single-line text input with a visible label, hint, error, and optional prefix or suffix.",
+      "whenToUse": [
+        "Names, IBANs, references, search, short answers."
+      ],
+      "whenNotToUse": [
+        "Money: use AmountInput.",
+        "One-time codes: use OTPInput.",
+        "Long text: use Textarea."
+      ],
+      "contentGuidelines": [
+        "Labels name the value: \"IBAN\", not \"Enter your IBAN\".",
+        "Hints explain format before people type: \"26 characters, starts with TR\".",
+        "Errors say what is wrong and how to fix it: \"This IBAN is too short. Check it and try again.\""
+      ],
+      "sizes": [
+        "`sm`: 36 px: Dense desktop forms. Grows to 44 px with 16 px text on touch screens.",
+        "`md`: 44 px: Default.",
+        "`lg`: 48 px: Main field of a screen, such as an amount."
+      ],
       "do": [
-        "Always set a visible `label`.",
-        "Sizes: sm 36, md 44 (default), lg 48 px. On touch screens small fields still get 44 px and 16 px text so iOS does not zoom.",
-        "Use `hint` for format help before people type, `error` for what went wrong and how to fix it.",
-        "For amounts use `prefix=\"₺\"`, `inputMode=\"decimal\"` and `numeric`."
+        "Always set a visible label.",
+        "Use the right `inputMode` and `autoComplete`."
       ],
       "dont": [
         "Do not use the placeholder as a label.",
-        "Do not write errors that blame: \"Invalid input\". Say what to do: \"This IBAN is too short. Check it and try again.\""
+        "Do not blame people in errors (\"Invalid input\")."
       ],
       "accessibility": [
-        "Label is linked with `htmlFor`.",
-        "Hint and error are linked with `aria-describedby`. Error sets `aria-invalid`.",
-        "Errors pair an icon with text and a thicker border, never color alone."
+        "Label linked with `htmlFor`.",
+        "Hint and error linked with `aria-describedby`; error sets `aria-invalid`.",
+        "Errors use an icon, text and a thicker border, never color alone."
       ],
-      "example": "<TextField label=\"IBAN\" hint=\"26 characters, starts with TR\" error={error} />"
+      "keyboard": [
+        "Tab: Moves into the field"
+      ],
+      "example": "import { TextField } from \"@leeward/react\";\n\nexport function IbanField({ error }: { error?: string }) {\n  return <TextField label=\"IBAN\" hint=\"26 characters, starts with TR\" autoComplete=\"off\" {...(error ? { error } : {})} />;\n}"
     },
     {
       "name": "Textarea",
       "kind": "component",
       "import": "import { Textarea } from \"@leeward/react\";",
-      "purpose": "Multi-line text for payment notes and messages.",
       "props": [
         {
           "name": "label",
@@ -2250,44 +2683,71 @@
         }
       ],
       "variants": {},
+      "purpose": "Multi-line text for payment notes and messages. It grows with its content.",
+      "whenToUse": [
+        "Payment notes, messages to support, descriptions."
+      ],
+      "whenNotToUse": [
+        "Single-line values: use TextField."
+      ],
+      "contentGuidelines": [
+        "Tell people who sees the text: \"The recipient sees this\".",
+        "Show the limit with `maxLength` and `showCount`."
+      ],
+      "sizes": [],
       "do": [
-        "Show the limit with maxLength and showCount when there is one."
+        "Mark it `optional` when it is."
       ],
       "dont": [
-        "Do not use it for single-line values such as names or IBANs: use TextField."
+        "Do not use it to collect structured data such as addresses."
       ],
       "accessibility": [
         "Visible label, hint and error linked like TextField.",
-        "The counter is announced politely."
+        "The counter is announced politely as people type."
       ],
-      "example": "<Textarea label=\"Payment note\" maxLength={140} showCount optional />"
+      "keyboard": [],
+      "example": "import { Textarea } from \"@leeward/react\";\n\nexport function PaymentNote() {\n  return <Textarea label=\"Payment note\" hint=\"The recipient sees this\" optional maxLength={140} showCount />;\n}"
     },
     {
       "name": "Toast",
       "kind": "component",
       "import": "import { Toast } from \"@leeward/react\";",
-      "purpose": "Short confirmation after an action, such as \"Money sent\". Use with ToastProvider and useToast.",
       "props": [],
       "variants": {},
+      "purpose": "A short confirmation after an action, such as \"Money sent\". Shown with `useToast` inside `ToastProvider`.",
+      "whenToUse": [
+        "Confirming that something finished.",
+        "Offering an undo for a reversible action."
+      ],
+      "whenNotToUse": [
+        "Errors inside forms: show them on the field.",
+        "Anything people must act on: use Alert or Dialog."
+      ],
+      "contentGuidelines": [
+        "Title says what happened in two or three words.",
+        "Description adds one useful detail."
+      ],
+      "sizes": [],
       "do": [
-        "Confirm what happened in plain words.",
-        "Errors stay until dismissed. Other tones hide after 6 seconds."
+        "Wrap the app once in `ToastProvider`."
       ],
       "dont": [
-        "Do not put the only way to do something in a toast.",
-        "Do not use toasts for errors inside forms. Show them next to the field."
+        "Do not put the only way to do something in a toast."
       ],
       "accessibility": [
         "Radix Toast region with a label. Danger toasts are announced assertively.",
         "Each tone has an icon and a colored edge, never color alone."
       ],
-      "example": "const toast = useToast();\ntoast.show({ title: \"Money sent\", description: \"Deniz gets ₺250,00 in a few seconds.\", tone: \"success\" });"
+      "keyboard": [
+        "F8: Moves focus to the toast region",
+        "Escape: Dismisses"
+      ],
+      "example": "import { Button, useToast } from \"@leeward/react\";\n\nexport function SendWithToast() {\n  const toast = useToast();\n  return <Button onClick={() => toast.show({ title: \"Money sent\", description: \"Deniz gets ₺250,00 in a few seconds.\", tone: \"success\" })}>Send</Button>;\n}"
     },
     {
       "name": "Tooltip",
       "kind": "component",
       "import": "import { Tooltip } from \"@leeward/react\";",
-      "purpose": "Extra information on hover and focus. Wrap the app in TooltipProvider.",
       "props": [
         {
           "name": "content",
@@ -2326,23 +2786,39 @@
           "left"
         ]
       },
+      "purpose": "Extra information on hover and keyboard focus. Wrap the app once in `TooltipProvider`.",
+      "whenToUse": [
+        "Naming an icon-only control.",
+        "A short explanation that is nice to have."
+      ],
+      "whenNotToUse": [
+        "Required information, fees or errors.",
+        "Touch-first screens, where hover does not exist: show the text inline."
+      ],
+      "contentGuidelines": [
+        "One short sentence, no actions or links."
+      ],
+      "sizes": [],
       "do": [
-        "Keep it to one short sentence."
+        "Wrap a single focusable element."
       ],
       "dont": [
-        "Do not put required information, fees or actions in a tooltip.",
-        "Do not wrap non-focusable elements."
+        "Do not wrap disabled buttons: they cannot receive focus."
       ],
       "accessibility": [
-        "Shows on keyboard focus, hides on Escape. Content is linked to the trigger."
+        "Shows on focus and hover, hides on Escape.",
+        "Content is linked to the trigger."
       ],
-      "example": "<Tooltip content=\"The fee is the same for every amount.\"><IconButton icon=\"info\" label=\"About the fee\" /></Tooltip>"
+      "keyboard": [
+        "Tab: Focus shows the tooltip",
+        "Escape: Hides it"
+      ],
+      "example": "import { IconButton, Tooltip } from \"@leeward/react\";\n\nexport function FeeInfo() {\n  return (\n    <Tooltip content=\"The fee is the same for every amount.\">\n      <IconButton icon=\"info\" label=\"About the fee\" />\n    </Tooltip>\n  );\n}"
     },
     {
       "name": "AccountCard",
       "kind": "pattern",
       "import": "import { AccountCard } from \"@leeward/react\";",
-      "purpose": "Account summary with type, masked IBAN, balance and up to three quick actions.",
       "props": [
         {
           "name": "name",
@@ -2405,24 +2881,35 @@
         }
       ],
       "variants": {},
+      "purpose": "An account summary: name, type, masked IBAN, balance and up to three quick actions.",
+      "whenToUse": [
+        "Home and accounts screens."
+      ],
+      "whenNotToUse": [
+        "Account details: show the full IBAN on its own screen."
+      ],
+      "contentGuidelines": [
+        "Name is the person's own name for the account: \"Everyday\".",
+        "Action labels are verbs: Send, Add money, Details."
+      ],
+      "sizes": [],
       "do": [
         "Give each action a text label. The first one is primary."
       ],
       "dont": [
-        "Do not show the full IBAN on the card. Show it on the details screen.",
-        "Do not use icon-only quick actions."
+        "Do not show the full IBAN on the card."
       ],
       "accessibility": [
         "Article named by account name and type.",
         "IBAN is masked visually and read as \"IBAN ending in 1 3 2 6\"."
       ],
-      "example": "<AccountCard name=\"Everyday\" type=\"Current account\" iban={iban} balance={24580.35} currency=\"TRY\" actions={[{ label: \"Send\", icon: \"arrow-up-right\", onClick: send }]} />"
+      "keyboard": [],
+      "example": "import { AccountCard } from \"@leeward/react\";\n\nexport function Everyday() {\n  return (\n    <AccountCard\n      name=\"Everyday\"\n      type=\"Current account\"\n      iban=\"TR33 0006 1005 1978 6457 8413 26\"\n      balance={24580.35}\n      currency=\"TRY\"\n      locale=\"tr-TR\"\n      actions={[{ label: \"Send\", icon: \"send\", onClick: () => {} }]}\n    />\n  );\n}"
     },
     {
       "name": "AmountDisplay",
       "kind": "pattern",
       "import": "import { AmountDisplay } from \"@leeward/react\";",
-      "purpose": "Money amount with locale formatting, tabular figures and a direction that never relies on color.",
       "props": [
         {
           "name": "value",
@@ -2493,27 +2980,41 @@
           "xl"
         ]
       },
+      "purpose": "Every amount and balance in Leeward: locale formatting, tabular figures and a direction that never relies on color.",
+      "whenToUse": [
+        "Balances, transaction amounts, fees, totals."
+      ],
+      "whenNotToUse": [
+        "Typing amounts: use AmountInput."
+      ],
+      "contentGuidelines": [
+        "tr-TR with TRY shows ₺1.250,00. en-US with TRY shows TRY 1,250.00. Foreign currencies always use the code.",
+        "Show fees at the same size as the amount they belong to."
+      ],
+      "sizes": [
+        "`sm`: 16 px: Lists.",
+        "`md`: 20 px: Cards and summaries.",
+        "`lg`: 28 to 36 px, fluid: Account cards.",
+        "`xl`: 36 to 51 px, fluid: The hero balance."
+      ],
       "do": [
-        "Use for every amount and balance.",
-        "Pass a positive `value` and set `direction`.",
-        "Use `pending` for money that has not settled."
+        "Pass a positive `value` and set `direction`."
       ],
       "dont": [
-        "Do not color outgoing amounts red. Outgoing is ink with a minus sign.",
-        "Do not format amounts by hand.",
-        "Do not make fees smaller than the amount they belong to."
+        "Do not color outgoing amounts red.",
+        "Do not format amounts by hand or with `toFixed`."
       ],
       "accessibility": [
-        "Visual text is hidden. Screen readers hear \"Money in: 1,250.00 Turkish lira\".",
-        "Incoming uses a plus sign, outgoing a typographic minus (U+2212)."
+        "Screen readers hear one phrase: \"Money in: 1,250.00 Turkish lira\".",
+        "Visual text is hidden from assistive tech to avoid reading symbols."
       ],
-      "example": "<AmountDisplay value={1250} currency=\"TRY\" locale=\"tr-TR\" direction=\"incoming\" />"
+      "keyboard": [],
+      "example": "import { AmountDisplay } from \"@leeward/react\";\n\nexport function Incoming() {\n  return <AmountDisplay value={1250} currency=\"TRY\" locale=\"tr-TR\" direction=\"incoming\" />;\n}"
     },
     {
       "name": "AmountInput",
       "kind": "pattern",
       "import": "import { AmountInput } from \"@leeward/react\";",
-      "purpose": "Money entry with the decimal keypad, locale formatting and a clear limit error.",
       "props": [
         {
           "name": "label",
@@ -2584,24 +3085,37 @@
         }
       ],
       "variants": {},
+      "purpose": "Money entry with the decimal keypad on phones, locale formatting on blur and a clear limit error.",
+      "whenToUse": [
+        "Transfer amounts, top ups, savings deposits."
+      ],
+      "whenNotToUse": [
+        "Non-money numbers: use TextField with `numeric`."
+      ],
+      "contentGuidelines": [
+        "Show the available balance in `hint`.",
+        "Built-in errors explain the limit: \"This is more than you have. You can send up to ₺24.580,35.\""
+      ],
+      "sizes": [
+        "Field: 48 px: Always the large field size."
+      ],
       "do": [
-        "Pass max as the available balance so the error explains the limit.",
-        "Show the available balance in hint."
+        "Pass `max` as the available balance."
       ],
       "dont": [
-        "Do not use a plain TextField for money.",
         "Do not block typing: show the error and let people fix it."
       ],
       "accessibility": [
-        "inputMode=\"decimal\" opens the number keypad. The error is linked to the field. Values use tabular figures."
+        "`inputMode=\"decimal\"` opens the number keypad.",
+        "The error is linked to the field."
       ],
-      "example": "<AmountInput label=\"Amount\" currency=\"TRY\" locale=\"tr-TR\" max={24580.35} hint=\"Available: ₺24.580,35\" />"
+      "keyboard": [],
+      "example": "import { AmountInput } from \"@leeward/react\";\n\nexport function TransferAmount() {\n  return <AmountInput label=\"Amount\" currency=\"TRY\" locale=\"tr-TR\" max={24580.35} hint=\"Available: ₺24.580,35\" onValueChange={(value) => console.log(value)} />;\n}"
     },
     {
       "name": "BalanceHeader",
       "kind": "pattern",
       "import": "import { BalanceHeader } from \"@leeward/react\";",
-      "purpose": "Account balance with a hide and show control.",
       "props": [
         {
           "name": "label",
@@ -2658,24 +3172,35 @@
         }
       ],
       "variants": {},
+      "purpose": "The account balance at the top of home and account screens, with a hide and show control.",
+      "whenToUse": [
+        "Once per screen, at the top."
+      ],
+      "whenNotToUse": [
+        "Lists of balances: use AmountDisplay in rows."
+      ],
+      "contentGuidelines": [
+        "Label says which balance: \"Available balance\".",
+        "Meta says how fresh it is: \"Updated just now\"."
+      ],
+      "sizes": [],
       "do": [
-        "Use once at the top of home or account screens.",
-        "Put Send and Request as text Buttons in `actions`."
+        "Keep the toggle: people check balances in public."
       ],
       "dont": [
-        "Do not hide the toggle. People check balances in public."
+        "Do not hide the label when the balance is hidden."
       ],
       "accessibility": [
-        "Region named by the label. Toggle uses `aria-pressed` and changes its label.",
-        "Hidden balances read \"Balance hidden\"."
+        "Region named by the label.",
+        "The toggle uses `aria-pressed` and changes its label; hidden balances read \"Balance hidden\"."
       ],
-      "example": "<BalanceHeader label=\"Available balance\" balance={24580.35} currency=\"TRY\" locale=\"tr-TR\" />"
+      "keyboard": [],
+      "example": "import { BalanceHeader } from \"@leeward/react\";\n\nexport function HomeBalance() {\n  return <BalanceHeader label=\"Available balance\" balance={24580.35} currency=\"TRY\" locale=\"tr-TR\" meta=\"Updated just now\" />;\n}"
     },
     {
       "name": "OTPInput",
       "kind": "pattern",
       "import": "import { OTPInput } from \"@leeward/react\";",
-      "purpose": "One-time code entry with paste, SMS autofill and clear errors.",
       "props": [
         {
           "name": "label",
@@ -2749,25 +3274,37 @@
         }
       ],
       "variants": {},
+      "purpose": "One-time code entry with paste, SMS autofill and clear errors.",
+      "whenToUse": [
+        "Confirming a transfer or a login with an SMS code."
+      ],
+      "whenNotToUse": [
+        "Passwords and PINs that people choose."
+      ],
+      "contentGuidelines": [
+        "Say where the code was sent in `hint`: \"We sent a code to •••• 4821\"."
+      ],
+      "sizes": [
+        "Box: 48 px: Six boxes by default, `length` changes it."
+      ],
       "do": [
-        "Say where the code was sent in `hint`.",
         "Use `onComplete` to verify automatically."
       ],
       "dont": [
         "Do not split the code into separate inputs.",
-        "Do not clear the code on error. Let people fix one digit."
+        "Do not clear the code on error."
       ],
       "accessibility": [
-        "One real input with `autocomplete=\"one-time-code\"` and `inputMode=\"numeric\"`.",
-        "Spaces and letters are stripped, so pasting \"482 913\" works."
+        "`autocomplete=\"one-time-code\"` and `inputMode=\"numeric\"`.",
+        "The error is linked to the input."
       ],
-      "example": "<OTPInput label=\"Verification code\" hint=\"We sent a code to •••• 4821\" onComplete={verify} />"
+      "keyboard": [],
+      "example": "import { OTPInput } from \"@leeward/react\";\n\nexport function VerifyTransfer() {\n  return <OTPInput label=\"Verification code\" hint=\"We sent a code to •••• 4821\" onComplete={(code) => console.log(code)} />;\n}"
     },
     {
       "name": "QuickActions",
       "kind": "pattern",
       "import": "import { QuickActions } from \"@leeward/react\";",
-      "purpose": "Row of shortcuts such as Send, Request, Top up and Pay bills.",
       "props": [
         {
           "name": "label",
@@ -2782,23 +3319,35 @@
         }
       ],
       "variants": {},
+      "purpose": "A row of shortcuts such as Send, Request, Top up and Pay bills. It wraps on narrow screens.",
+      "whenToUse": [
+        "Home screens, under the balance."
+      ],
+      "whenNotToUse": [
+        "More than four shortcuts on phones."
+      ],
+      "contentGuidelines": [
+        "One or two words per action.",
+        "Use `badge` only for a count that needs attention."
+      ],
+      "sizes": [],
       "do": [
-        "Keep to four actions on phones.",
-        "Use a badge only for a count that needs attention."
+        "Use duotone icons that match the label."
       ],
       "dont": [
         "Do not use icon-only shortcuts: every action has a text label."
       ],
       "accessibility": [
-        "A labelled list of buttons or links. Each target is at least 44 px."
+        "A labelled list of buttons or links.",
+        "Each target is at least 44 px."
       ],
-      "example": "<QuickActions label=\"Quick actions\" actions={[{ label: \"Send\", icon: \"send\", onClick: send }]} />"
+      "keyboard": [],
+      "example": "import { QuickActions } from \"@leeward/react\";\n\nexport function HomeShortcuts() {\n  return (\n    <QuickActions\n      label=\"Quick actions\"\n      actions={[\n        { label: \"Send\", icon: \"send\", onClick: () => {} },\n        { label: \"Request\", icon: \"hand-money\", onClick: () => {} },\n      ]}\n    />\n  );\n}"
     },
     {
       "name": "TransactionRow",
       "kind": "pattern",
       "import": "import { TransactionRow } from \"@leeward/react\";",
-      "purpose": "One transaction: merchant, category, date, amount and status.",
       "props": [
         {
           "name": "merchant",
@@ -2877,19 +3426,30 @@
           "declined"
         ]
       },
+      "purpose": "One transaction: merchant, category, date, amount and status. The row reads as one sentence for screen readers.",
+      "whenToUse": [
+        "Activity lists, statements."
+      ],
+      "whenNotToUse": [
+        "Other kinds of rows: use ListItem."
+      ],
+      "contentGuidelines": [
+        "Merchant names as shown on receipts; categories in plain words."
+      ],
+      "sizes": [],
       "do": [
         "Use inside List or any `ul`.",
-        "Set `status` for pending and declined so a badge appears."
+        "Pass `onClick` to open details."
       ],
       "dont": [
-        "Do not color the row by direction.",
-        "Do not build transaction rows from ListItem."
+        "Do not color the row by direction."
       ],
       "accessibility": [
-        "The whole row reads as one sentence: merchant, category, date, direction, amount, status.",
+        "One sentence: merchant, category, date, direction, amount, status.",
         "The sentence starts with the visible merchant name, so voice control works."
       ],
-      "example": "<TransactionRow merchant=\"Coffee Lab\" category=\"Eating out\" date={date} amount={85} direction=\"outgoing\" currency=\"TRY\" locale=\"tr-TR\" icon=\"coffee\" />"
+      "keyboard": [],
+      "example": "import { List, TransactionRow } from \"@leeward/react\";\n\nexport function Activity() {\n  return (\n    <List>\n      <TransactionRow merchant=\"Coffee Lab\" category=\"Eating out\" date={new Date(\"2026-11-12\")} amount={85} direction=\"outgoing\" currency=\"TRY\" locale=\"tr-TR\" icon=\"coffee\" />\n    </List>\n  );\n}"
     }
   ]
 }

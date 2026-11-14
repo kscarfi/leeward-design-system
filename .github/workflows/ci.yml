@@ -39,6 +39,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm check:copy
+      - name: Documentation examples compile
+        run: pnpm check:examples
 
       - name: Contrast report (WCAG 2.2 AA gate, APCA reported)
         run: pnpm contrast

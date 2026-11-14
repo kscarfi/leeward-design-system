@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, within, fn } from "storybook/test";
 import { SegmentedControl } from "./SegmentedControl.tsx";
+import docsMd from "./SegmentedControl.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Components/SegmentedControl",
   component: SegmentedControl,
-  args: { label: "Period", options: [{ value: "week", label: "Week" }, { value: "month", label: "Month" }, { value: "year", label: "Year" }], defaultValue: "month" },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onValueChange: fn(), label: "Period", options: [{ value: "week", label: "Week" }, { value: "month", label: "Month" }, { value: "year", label: "Year" }], defaultValue: "month" },
 } satisfies Meta<typeof SegmentedControl>;
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,22 +1,47 @@
 # Spinner
 
-Short wait indicator when the shape of the result is unknown.
+A small wait indicator when the shape of the result is unknown.
+
+## When to use
+
+- Short waits inside a region.
+
+## When not to use
+
+- Page content: use Skeleton.
+- Inside buttons: use Button `loading`.
+
+## Sizes
+
+| Size | Height | Use it for |
+|---|---|---|
+| `sm` | 16 px | Inline. |
+| `md` | 20 px | Default. |
+| `lg` | 32 px | Empty regions. |
+
+## Content guidelines
+
+- Give it a label when it is alone on screen: "Loading your accounts".
 
 ## Do
 
-- Give it a label when it is the only thing on screen.
+- Use `currentColor` by placing it inside colored text.
 
 ## Don't
 
-- Do not use for page content: use Skeleton.
-- Do not use inside buttons: use Button loading.
+- Do not show several spinners at once.
 
 ## Accessibility
 
-- With a label it is a status region. It keeps turning slowly under reduced motion so it never looks frozen.
+- With `label` it is a status region; without it is decorative.
+- With reduced motion it keeps turning slowly so it never looks frozen.
 
 ## Example
 
 ```tsx
-<Spinner label="Loading your accounts" />
+import { Spinner } from "@leeward/react";
+
+export function Loading() {
+  return <Spinner label="Loading your accounts" />;
+}
 ```

@@ -39,8 +39,8 @@
 }
 
 .active {
-  outline: var(--lw-size-focus-ring-width) solid var(--lw-border-focus);
-  outline-offset: var(--lw-size-focus-ring-offset);
+  outline: var(--lw-size-focus-ring-width) solid transparent;
+  box-shadow: var(--lw-elevation-focus);
 }
 
 .invalid { border-color: var(--lw-border-danger); border-width: var(--lw-size-border-strong); }

@@ -26,5 +26,7 @@
     ".": "./src/server.ts",
     "./validate": "./src/validate.ts",
     "./guidelines": "./src/guidelines.ts"
-  }
+  },
+  "author": "Kemal Salih Carfi (https://kscarfi.com)",
+  "homepage": "https://github.com/kscarfi/leeward-design-system"
 }

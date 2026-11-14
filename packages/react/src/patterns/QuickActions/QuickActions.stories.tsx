@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { QuickActions } from "./QuickActions.tsx";
+import docsMd from "./QuickActions.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const meta = {
   title: "Patterns/QuickActions",
   component: QuickActions,
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
   args: {
     label: "Quick actions",
     actions: [
@@ -19,4 +22,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvasElement, args }) => {
+    await userEvent.click(within(canvasElement).getByRole("button", { name: "Send" }));
+    await expect(args.actions[0]?.onClick).toHaveBeenCalledOnce();
+  },
+};

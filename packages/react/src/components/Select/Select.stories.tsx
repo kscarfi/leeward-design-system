@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 import { Select } from "./Select.tsx";
+import docsMd from "./Select.docs.md?raw";
+import { docsDescription } from "../../stories/docs.ts";
 
 const options = [
   { value: "everyday", label: "Everyday account" },
@@ -11,13 +14,21 @@ const options = [
 const meta = {
   title: "Components/Select",
   component: Select,
-  args: { label: "Pay from", options },
+  parameters: { docs: { description: { component: docsDescription(docsMd) } } },
+  args: { onValueChange: fn(), label: "Pay from", options },
   decorators: [(Story) => <div style={{ maxWidth: "360px" }}><Story /></div>],
 } satisfies Meta<typeof Select>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvasElement, args }) => {
+    await userEvent.click(within(canvasElement).getByRole("combobox", { name: "Pay from" }));
+    await userEvent.click(await screen.findByRole("option", { name: "Savings" }));
+    await expect(args.onValueChange).toHaveBeenCalledWith("savings");
+    await waitFor(() => expect(screen.queryByRole("listbox")).toBeNull());
+  },
+};
 export const WithValue: Story = { args: { defaultValue: "savings" } };
 export const WithHint: Story = { args: { hint: "Money leaves this account today" } };
 export const WithError: Story = { args: { error: "Choose an account to continue" } };
