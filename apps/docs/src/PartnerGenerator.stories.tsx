@@ -39,7 +39,7 @@ function Generator() {
   }, [seed, pin]);
 
   return (
-    <main style={{ display: "grid", gap: "var(--lw-space-lg)", padding: "var(--lw-space-lg)", maxWidth: "1200px", margin: "0 auto" }}>
+    <main style={{ display: "grid", gap: "var(--lw-space-lg)", padding: "var(--lw-space-lg) var(--lw-space-md)", maxWidth: "var(--lw-size-content-lg)", margin: "0 auto" }}>
       {theme && <style>{theme.css}</style>}
       <header style={{ display: "grid", gap: "var(--lw-space-xs)" }}>
         <Heading level={1} size="lg">Partner theme from one color</Heading>
@@ -59,7 +59,7 @@ function Generator() {
             {theme.failures.length === 0 ? <Badge tone="success">All {theme.results.length} pairs pass AA</Badge> : <Badge tone="danger">{theme.failures.length} pairs fail AA. The theme would not be written.</Badge>}
             <Text variant="body-sm" tone="secondary">Seed pinned at step {theme.seedStep}</Text>
           </div>
-          <ol aria-label="Generated ramp" style={{ display: "grid", gridTemplateColumns: "repeat(11, 1fr)", gap: "var(--lw-space-3xs)", padding: 0, margin: 0, listStyle: "none" }}>
+          <ol aria-label="Generated ramp" style={{ display: "grid", gridTemplateColumns: `repeat(${Object.keys(theme.ramp).length}, minmax(0, 1fr))`, gap: "var(--lw-space-3xs)", padding: 0, margin: 0, listStyle: "none" }}>
             {Object.entries(theme.ramp).map(([step, hex]) => (
               <li key={step} style={{ display: "grid", gap: "var(--lw-space-3xs)", fontSize: "var(--lw-type-caption-size)", color: "var(--lw-text-muted)" }}>
                 <span style={{ height: "var(--lw-size-control-lg)", background: hex, borderRadius: "var(--lw-radius-sm)", outline: step === String(theme.seedStep) ? "var(--lw-size-border-strong) solid var(--lw-border-strong)" : undefined }} />
@@ -77,7 +77,7 @@ function Generator() {
               </ul>
             </Card>
           )}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "var(--lw-space-md)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: "var(--lw-space-md)" }}>
             <Preview theme="light" mode="light" />
             <Preview theme="dark" mode="dark" />
           </div>

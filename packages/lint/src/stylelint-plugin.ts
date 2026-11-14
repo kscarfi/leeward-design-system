@@ -15,6 +15,7 @@ const noRawColor = "leeward/no-raw-color";
 const knownToken = "leeward/known-token";
 const spacingScale = "leeward/spacing-scale";
 const typeScale = "leeward/type-scale";
+const composesSingleClass = "leeward/composes-single-class";
 
 const messages = {
   [noRawColor]: utils.ruleMessages(noRawColor, {
@@ -26,6 +27,9 @@ const messages = {
   }),
   [spacingScale]: utils.ruleMessages(spacingScale, {
     rejected: (prop: string, value: string) => `"${prop}: ${value}" is off the spacing scale. Use var(--lw-space-*) tokens.`,
+  }),
+  [composesSingleClass]: utils.ruleMessages(composesSingleClass, {
+    rejected: (selector: string) => `"composes" in "${selector}". CSS Modules only allow it in a rule with a single class selector, and the build fails otherwise.`,
   }),
   [typeScale]: utils.ruleMessages(typeScale, {
     rejected: (prop: string, value: string) => `"${prop}: ${value}" is off the type scale. Use var(--lw-type-*) tokens.`,
@@ -107,4 +111,18 @@ const typeScaleRule = createPlugin(
   ),
 );
 
-export default [noRawColorRule, knownTokenRule, spacingScaleRule, typeScaleRule];
+const composesSingleClassRule = createPlugin(
+  composesSingleClass,
+  Object.assign(
+    (enabled: boolean) => (root: any, result: any) => {
+      if (!enabled) return;
+      root.walkDecls("composes", (decl: any) => {
+        const selector = String(decl.parent?.selector ?? "");
+        if (!/^\.[A-Za-z_][\w-]*$/.test(selector.trim())) utils.report({ ruleName: composesSingleClass, result, node: decl, message: messages[composesSingleClass].rejected(selector) });
+      });
+    },
+    { ruleName: composesSingleClass, messages: messages[composesSingleClass], meta: meta(composesSingleClass) },
+  ),
+);
+
+export default [noRawColorRule, knownTokenRule, spacingScaleRule, typeScaleRule, composesSingleClassRule];

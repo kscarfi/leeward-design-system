@@ -8,6 +8,6 @@ export default defineConfig({
   fullyParallel: true,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.002, animations: "disabled", caret: "hide" } },
-  use: { baseURL: "http://localhost:6007", ...devices["Desktop Chrome"], viewport: { width: 800, height: 600 } },
-  webServer: { command: "node visual/serve.ts", url: "http://localhost:6007/index.json", reuseExistingServer: !process.env.CI },
+  use: { baseURL: "http://localhost:6017", ...devices["Desktop Chrome"], viewport: { width: 800, height: 600 } },
+  webServer: { command: "node visual/serve.ts", url: "http://localhost:6017/index.json", reuseExistingServer: !process.env.CI },
 });

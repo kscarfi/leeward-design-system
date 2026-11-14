@@ -25,13 +25,19 @@ for (const kind of ["components", "patterns"]) {
     });
   }
 }
+// Screen recipes for people and agents (docs/recipes) compile against the same API.
+for (const file of readdirSync(`${root}docs/recipes`)) {
+  if (!file.endsWith(".tsx")) continue;
+  writeFileSync(`${out}recipe-${file}`, readFileSync(`${root}docs/recipes/${file}`, "utf8"));
+  count++;
+}
 writeFileSync(
   `${out}tsconfig.json`,
   JSON.stringify({ extends: "../../../tsconfig.base.json", compilerOptions: { types: ["vite/client", "node"], allowImportingTsExtensions: true, noUnusedLocals: false }, include: ["*.tsx", "../../../packages/react/src/css-modules.d.ts"] }, null, 2),
 );
 try {
   execFileSync(`${root}node_modules/.bin/tsc`, ["-p", `${out}tsconfig.json`], { stdio: "inherit", cwd: `${root}apps/docs` });
-  console.log(`All ${count} documentation examples compile.`);
+  console.log(`All ${count} documentation examples and recipes compile.`);
 } catch {
   console.error(`Some of the ${count} documentation examples do not compile. Fix the docs.md files above.`);
   process.exit(1);

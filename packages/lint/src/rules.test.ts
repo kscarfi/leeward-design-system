@@ -27,6 +27,11 @@ test("stylelint rejects raw colors, primitives, typos and off-scale values", asy
   assert.deepEqual(rules.sort(), ["leeward/known-token", "leeward/known-token", "leeward/no-raw-color", "leeward/spacing-scale", "leeward/type-scale"]);
 });
 
+test("stylelint rejects composes outside a single class selector", async () => {
+  assert.deepEqual(await cssWarnings('.lg .item { composes: a from "./b.css"; }'), ["leeward/composes-single-class"]);
+  assert.deepEqual(await cssWarnings('.item { composes: a from "./b.css"; }'), []);
+});
+
 test("stylelint allows calc built from tokens", async () => {
   assert.deepEqual(await cssWarnings(".a { margin-top: calc(var(--lw-space-xs) * -1); }"), []);
 });

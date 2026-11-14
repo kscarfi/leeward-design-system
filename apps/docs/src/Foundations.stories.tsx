@@ -150,7 +150,7 @@ export const Elevation: Story = {
     <div style={{ display: "grid", gap: "var(--lw-space-xl)" }}>
       <div style={{ display: "grid", gap: "var(--lw-space-md)" }}>
         <Heading level={2} size="h3">Elevation</Heading>
-        <Text tone="secondary">Eight levels from Leeward's effect styles. In dark mode the same geometry is used with stronger shadows, and surfaces get lighter as they rise.</Text>
+        <Text tone="secondary">Eight levels from the Figma effect styles. In dark mode the same geometry is used with stronger shadows, and surfaces get lighter as they rise.</Text>
         <div style={{ display: "flex", gap: "var(--lw-space-lg)", flexWrap: "wrap" }}>
           {["100", "200", "300", "400", "500", "600", "700", "800"].map((level) => (
             <div key={level} style={{ width: "140px", height: "96px", display: "grid", placeItems: "center", background: "var(--lw-fill-surface-raised)", borderRadius: "var(--lw-radius-card)", boxShadow: `var(--lw-elevation-${level})` }}>

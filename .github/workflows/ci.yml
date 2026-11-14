@@ -41,6 +41,11 @@ jobs:
       - run: pnpm check:copy
       - name: Documentation examples compile
         run: pnpm check:examples
+      - run: pnpm check:docs-tokens
+      - run: pnpm check:coverage
+      - run: pnpm check:links
+      - name: Demo app production build
+        run: pnpm --filter @leeward/demo build
 
       - name: Contrast report (WCAG 2.2 AA gate, APCA reported)
         run: pnpm contrast

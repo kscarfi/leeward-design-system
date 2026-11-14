@@ -20,10 +20,13 @@
     "build:tokens": "pnpm --filter @leeward/tokens build",
     "test:stories": "pnpm --filter @leeward/docs test-storybook",
     "storybook": "pnpm --filter @leeward/docs storybook",
-    "build:agent": "node scripts/build-agent-docs.ts",
+    "build:agent": "node scripts/sync-docs-tokens.ts && node scripts/build-agent-docs.ts",
     "theme:generate": "node scripts/generate-theme.ts",
     "icons:import": "node scripts/import-solar-icons.ts",
-    "check:examples": "node scripts/check-docs-examples.ts"
+    "check:examples": "node scripts/check-docs-examples.ts",
+    "check:links": "node scripts/check-links.ts",
+    "check:coverage": "node scripts/check-coverage.ts",
+    "check:docs-tokens": "node scripts/sync-docs-tokens.ts --check"
   },
   "devDependencies": {
     "@leeward/lint": "workspace:*",

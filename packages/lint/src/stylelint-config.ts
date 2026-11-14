@@ -7,6 +7,7 @@ export default {
     "leeward/known-token": true,
     "leeward/spacing-scale": true,
     "leeward/type-scale": true,
+    "leeward/composes-single-class": true,
     "color-no-invalid-hex": true,
     "declaration-block-no-duplicate-properties": true,
   },

@@ -75,7 +75,7 @@ const preview: Preview = {
       },
     },
     options: {
-      storySort: { order: ["Introduction", "Foundations", "Components", "Patterns", "Screens", "Themes"] },
+      storySort: { order: ["Introduction", "Guides", "Foundations", "Components", "Patterns", "Screens", "Themes"] },
     },
   },
   tags: ["autodocs"],

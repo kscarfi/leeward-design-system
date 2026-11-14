@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
 
 const root = new URL("../storybook-static/", import.meta.url).pathname;
-const port = Number(process.env.PORT ?? 6007);
+const port = Number(process.env.PORT ?? 6017);
 const types: Record<string, string> = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".png": "image/png" };
 
 createServer((req, res) => {
