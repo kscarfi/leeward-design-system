@@ -1,4 +1,4 @@
-:root, [data-brand="leeward"], [data-theme="light"] {
+:root, [data-brand="leeward"], [data-theme="light"]:not([data-brand]), [data-brand="leeward"][data-theme="light"], [data-brand="leeward"] [data-theme="light"]:not([data-brand]) {
   --lw-space-none: 0;
   --lw-space-px: 0.0625rem;
   --lw-space-3xs: 0.125rem;

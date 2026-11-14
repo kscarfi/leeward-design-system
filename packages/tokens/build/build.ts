@@ -15,16 +15,22 @@ const root = fileURLToPath(new URL("..", import.meta.url));
 const dist = `${root}dist/`;
 export const MODES: Mode[] = ["light", "dark"];
 
-/** CSS selectors for a brand and mode. The first brand is the default on :root. */
+/**
+ * CSS selectors for a brand and mode. The first brand is the default on :root.
+ * Rules that reach into descendants skip elements with their own data-brand, so the closest
+ * brand always wins: a partner preview inside a Business page shows the partner colors.
+ */
 export function selectors(brand: Brand, mode: Mode, isDefault: boolean): string {
   const b = `[data-brand="${brand.id}"]`;
-  if (mode === "light") return isDefault ? `:root, ${b}, [data-theme="light"]` : `${b}, ${b}[data-theme="light"], ${b} [data-theme="light"]`;
-  return isDefault ? `[data-theme="dark"], ${b}[data-theme="dark"], ${b} [data-theme="dark"]` : `${b}[data-theme="dark"], ${b} [data-theme="dark"]`;
+  const own = (theme: string) => `[data-theme="${theme}"]:not([data-brand])`;
+  if (mode === "light") return isDefault ? `:root, ${b}, ${own("light")}, ${b}[data-theme="light"], ${b} ${own("light")}` : `${b}, ${b}[data-theme="light"], ${b} ${own("light")}`;
+  return isDefault ? `${own("dark")}, ${b}[data-theme="dark"], ${b} ${own("dark")}` : `${b}[data-theme="dark"], ${b} ${own("dark")}`;
 }
 
 function autoSelectors(brand: Brand, isDefault: boolean): string {
   const b = `[data-brand="${brand.id}"]`;
-  return isDefault ? `[data-theme="auto"], ${b}[data-theme="auto"], ${b} [data-theme="auto"]` : `${b}[data-theme="auto"], ${b} [data-theme="auto"]`;
+  const own = `[data-theme="auto"]:not([data-brand])`;
+  return isDefault ? `${own}, ${b}[data-theme="auto"], ${b} ${own}` : `${b}[data-theme="auto"], ${b} ${own}`;
 }
 
 const PX_ONLY = /(^|\.)(border|border-width|focus-ring|radius|radii|elevation)(\.|$)/;

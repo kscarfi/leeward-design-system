@@ -1,6 +1,6 @@
 /* Partner brand "harbor" generated from #0e7490. Do not edit. */
 
-[data-brand="harbor"], [data-brand="harbor"] [data-theme="light"] {
+[data-brand="harbor"], [data-brand="harbor"][data-theme="light"], [data-brand="harbor"] [data-theme="light"]:not([data-brand]) {
   color-scheme: light;
   --lw-fill-black-alpha-0: #0f111300;
   --lw-fill-black-alpha-50: #0f111308;
@@ -458,7 +458,7 @@
   --lw-elevation-focus-halo: 0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary);
 }
 
-[data-brand="harbor"][data-theme="dark"], [data-brand="harbor"] [data-theme="dark"] {
+[data-brand="harbor"][data-theme="dark"], [data-brand="harbor"] [data-theme="dark"]:not([data-brand]) {
   color-scheme: dark;
   --lw-fill-black-alpha-0: #ffffff00;
   --lw-fill-black-alpha-50: #ffffff08;

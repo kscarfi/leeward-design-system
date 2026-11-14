@@ -1,6 +1,6 @@
 /* Leeward Design System tokens. Generated, do not edit. */
 
-:root, [data-brand="leeward"], [data-theme="light"] {
+:root, [data-brand="leeward"], [data-theme="light"]:not([data-brand]), [data-brand="leeward"][data-theme="light"], [data-brand="leeward"] [data-theme="light"]:not([data-brand]) {
   --lw-space-none: 0;
   --lw-space-px: 0.0625rem;
   --lw-space-3xs: 0.125rem;
@@ -872,7 +872,7 @@
   --lw-type-code-tracking: 0;
 }
 
-[data-theme="dark"], [data-brand="leeward"][data-theme="dark"], [data-brand="leeward"] [data-theme="dark"] {
+[data-theme="dark"]:not([data-brand]), [data-brand="leeward"][data-theme="dark"], [data-brand="leeward"] [data-theme="dark"]:not([data-brand]) {
   --lw-fill-black-alpha-0: rgba(255, 255, 255, 0);
   --lw-fill-black-alpha-50: rgba(255, 255, 255, 0.03);
   --lw-fill-black-alpha-100: rgba(255, 255, 255, 0.08);
@@ -1337,7 +1337,7 @@
   --lw-elevation-focus-halo: 0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary); /** Soft halo from the Figma effect styles. Decorative: always combine with a focus ring. */
 }
 
-[data-brand="business"], [data-brand="business"][data-theme="light"], [data-brand="business"] [data-theme="light"] {
+[data-brand="business"], [data-brand="business"][data-theme="light"], [data-brand="business"] [data-theme="light"]:not([data-brand]) {
   --lw-space-none: 0;
   --lw-space-px: 0.0625rem;
   --lw-space-3xs: 0.125rem;
@@ -2209,7 +2209,7 @@
   --lw-type-code-tracking: 0;
 }
 
-[data-brand="business"][data-theme="dark"], [data-brand="business"] [data-theme="dark"] {
+[data-brand="business"][data-theme="dark"], [data-brand="business"] [data-theme="dark"]:not([data-brand]) {
   --lw-fill-black-alpha-0: rgba(255, 255, 255, 0);
   --lw-fill-black-alpha-50: rgba(255, 255, 255, 0.03);
   --lw-fill-black-alpha-100: rgba(255, 255, 255, 0.08);
@@ -2675,7 +2675,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  [data-theme="auto"], [data-brand="leeward"][data-theme="auto"], [data-brand="leeward"] [data-theme="auto"] {
+  [data-theme="auto"]:not([data-brand]), [data-brand="leeward"][data-theme="auto"], [data-brand="leeward"] [data-theme="auto"]:not([data-brand]) {
     --lw-fill-black-alpha-0: rgba(255, 255, 255, 0);
     --lw-fill-black-alpha-50: rgba(255, 255, 255, 0.03);
     --lw-fill-black-alpha-100: rgba(255, 255, 255, 0.08);
@@ -3140,7 +3140,7 @@
     --lw-elevation-focus-halo: 0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary); /** Soft halo from the Figma effect styles. Decorative: always combine with a focus ring. */
   }
   
-  [data-brand="business"][data-theme="auto"], [data-brand="business"] [data-theme="auto"] {
+  [data-brand="business"][data-theme="auto"], [data-brand="business"] [data-theme="auto"]:not([data-brand]) {
     --lw-fill-black-alpha-0: rgba(255, 255, 255, 0);
     --lw-fill-black-alpha-50: rgba(255, 255, 255, 0.03);
     --lw-fill-black-alpha-100: rgba(255, 255, 255, 0.08);

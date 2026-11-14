@@ -1,4 +1,4 @@
-[data-brand="business"][data-theme="dark"], [data-brand="business"] [data-theme="dark"] {
+[data-brand="business"][data-theme="dark"], [data-brand="business"] [data-theme="dark"]:not([data-brand]) {
   --lw-fill-black-alpha-0: rgba(255, 255, 255, 0);
   --lw-fill-black-alpha-50: rgba(255, 255, 255, 0.03);
   --lw-fill-black-alpha-100: rgba(255, 255, 255, 0.08);

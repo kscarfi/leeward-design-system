@@ -53,3 +53,14 @@ test("control heights strictly increase and radii never shrink, in every brand",
     }
   }
 });
+
+test("a theme rule never reaches into an element that sets its own brand", () => {
+  // Added after a partner preview inside a Business page kept Business colors.
+  for (const file of ["../dist/css/tokens.css", "../partners/harbor.css"]) {
+    const css = readFileSync(new URL(file, import.meta.url), "utf8");
+    const selectors = [...css.matchAll(/^\s*((?::root|\[data-)[^{]*)\{/gm)].flatMap((m) => m[1]!.split(",").map((s) => s.trim()));
+    for (const sel of selectors.filter((s) => /\[data-theme="[a-z]+"\]$/.test(s) || /\s\[data-theme=/.test(s))) {
+      assert.match(sel, /:not\(\[data-brand\]\)$|^\[data-brand="[a-z]+"\]\[data-theme="[a-z]+"\]$/, `${file}: ${sel}`);
+    }
+  }
+});

@@ -53,7 +53,9 @@ export function generatePartnerTheme({ name, seed, pinAction = false, ramps, bas
     }
     values[mode] = map;
     results.push(...checkPairs(`${name}-${mode}`, (n) => map[n]));
-    const sel = mode === "light" ? `[data-brand="${name}"], [data-brand="${name}"] [data-theme="light"]` : `[data-brand="${name}"][data-theme="dark"], [data-brand="${name}"] [data-theme="dark"]`;
+    // Same rules as the core brands (build.ts selectors): the closest data-brand wins.
+    const b = `[data-brand="${name}"]`;
+    const sel = mode === "light" ? `${b}, ${b}[data-theme="light"], ${b} [data-theme="light"]:not([data-brand])` : `${b}[data-theme="dark"], ${b} [data-theme="dark"]:not([data-brand])`;
     const lines = Object.entries(map).map(([path, v]) => `  --lw-${path.replace(/\./g, "-")}: ${v};`);
     // Focus rings reference color variables, so the brand block declares them again.
     for (const [name, f] of Object.entries(focusRings())) lines.push(`  --lw-elevation-${name}: ${f.value};`);
