@@ -4,6 +4,7 @@
 import Color from "colorjs.io";
 import { brands, type Brand } from "./brands.ts";
 import { checkPairs, type PairResult } from "./contrast.ts";
+import { focusRings } from "./focus.ts";
 import { generateRamp, seedSteps } from "./palette.ts";
 import { resolveSemantic, type Mode } from "./semantic.ts";
 import type { Ramp, TemplateEntry } from "./source.ts";
@@ -54,6 +55,8 @@ export function generatePartnerTheme({ name, seed, pinAction = false, ramps, bas
     results.push(...checkPairs(`${name}-${mode}`, (n) => map[n]));
     const sel = mode === "light" ? `[data-brand="${name}"], [data-brand="${name}"] [data-theme="light"]` : `[data-brand="${name}"][data-theme="dark"], [data-brand="${name}"] [data-theme="dark"]`;
     const lines = Object.entries(map).map(([path, v]) => `  --lw-${path.replace(/\./g, "-")}: ${v};`);
+    // Focus rings reference color variables, so the brand block declares them again.
+    for (const [name, f] of Object.entries(focusRings())) lines.push(`  --lw-elevation-${name}: ${f.value};`);
     blocks.push(`${sel} {\n  color-scheme: ${mode};\n${lines.join("\n")}\n}`);
   }
   const css = `/* Partner brand "${name}" generated from ${hex}. Do not edit. */\n\n${blocks.join("\n\n")}\n`;

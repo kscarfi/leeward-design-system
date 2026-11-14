@@ -1,6 +1,7 @@
 // Primitives (from the token source) and the brand foundation: type roles, control sizes,
 // spacing, radii and elevation. Colors live in semantic.ts.
 import type { Brand } from "./brands.ts";
+import { focusRings } from "./focus.ts";
 import { sourceElevation, sourceRamps, sourceScales } from "./source.ts";
 
 const px = (value: number) => ({ value, unit: "px" });
@@ -187,7 +188,8 @@ export function foundation(brand: Brand) {
 
 /** Elevation per mode. Dark mode keeps the light geometry with stronger shadows. */
 export function elevation(mode: "light" | "dark") {
-  const out: Record<string, unknown> = { $type: "shadow", $description: "Elevation 100 to 800 from Leeward's effect styles." };
+  const out: Record<string, unknown> = { $type: "shadow", $description: "Elevation 100 to 800 from Leeward's effect styles, and the focus rings." };
+  for (const [name, f] of Object.entries(focusRings())) out[name] = { $type: "string", $value: f.value, $description: f.description };
   for (const [level, css] of Object.entries(sourceElevation())) {
     out[level] = { $type: "string", $value: mode === "light" ? css : css.replace(/rgba\(0, 0, 0, ([0-9.]+)\)/g, (_m, a) => `rgba(0, 0, 0, ${Math.min(0.6, Number(a) * 3).toFixed(2)})`) };
   }

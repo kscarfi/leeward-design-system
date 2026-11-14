@@ -898,10 +898,10 @@
     "ref": "color.blackAlpha.700"
   },
   "fill.skeleton.base": {
-    "value": "#242628",
+    "value": "#393b3d",
     "cssVar": "--lw-fill-skeleton-base",
     "type": "color",
-    "ref": "color.richBlack.925"
+    "ref": "color.richBlack.850"
   },
   "fill.skeleton.highlight": {
     "value": "#f4f5f6",
@@ -2682,5 +2682,35 @@
     "value": "0px 0px 8px 0px rgba(0, 0, 0, 0.60), 0px 32px 64px 0px rgba(0, 0, 0, 0.60)",
     "cssVar": "--lw-elevation-800",
     "type": "string"
+  },
+  "elevation.focus": {
+    "value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-focus)",
+    "cssVar": "--lw-elevation-focus",
+    "type": "string",
+    "description": "Default focus ring: a surface gap and a 2 px ring, at least 3:1 on every surface."
+  },
+  "elevation.focus-inset": {
+    "value": "inset 0 0 0 var(--lw-size-focus-ring-width) var(--lw-border-focus)",
+    "cssVar": "--lw-elevation-focus-inset",
+    "type": "string",
+    "description": "Inside the element, for full-width rows and tabs where an outer ring would be clipped."
+  },
+  "elevation.focus-danger": {
+    "value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-danger)",
+    "cssVar": "--lw-elevation-focus-danger",
+    "type": "string",
+    "description": "Focus on a field that has an error."
+  },
+  "elevation.focus-inverse": {
+    "value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-neutral-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-text-inverse)",
+    "cssVar": "--lw-elevation-focus-inverse",
+    "type": "string",
+    "description": "Focus on inverse (dark in light mode) surfaces."
+  },
+  "elevation.focus-halo": {
+    "value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
+    "cssVar": "--lw-elevation-focus-halo",
+    "type": "string",
+    "description": "Soft halo. Decorative: always combine with a focus ring."
   }
 }

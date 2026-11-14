@@ -119,47 +119,47 @@
     "surface": {
       "base": {
         "$type": "color",
-        "$value": "{color.slate.1000}"
+        "$value": "{color.ink.1000}"
       },
       "default": {
         "$type": "color",
-        "$value": "{color.slate.975}"
+        "$value": "{color.ink.975}"
       },
       "default-static": {
         "$type": "color",
-        "$value": "{color.slate.1000}"
+        "$value": "{color.ink.1000}"
       },
       "raised": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.950}"
       },
       "emphasis": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.950}"
       },
       "bold": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.950}"
       },
       "bolder": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.925}"
       },
       "boldest": {
         "$type": "color",
-        "$value": "{color.slate.900}"
+        "$value": "{color.ink.925}"
       },
       "strong": {
         "$type": "color",
-        "$value": "{color.slate.900}"
+        "$value": "{color.ink.900}"
       },
       "stronger": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.850}"
       },
       "strongest": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.800}"
       },
       "alpha": {
         "$type": "color",
@@ -167,11 +167,11 @@
       },
       "canvas": {
         "$type": "color",
-        "$value": "{color.slate.1000}"
+        "$value": "{color.ink.1000}"
       },
       "overlay": {
         "$type": "color",
-        "$value": "{color.slate.900}"
+        "$value": "{color.ink.900}"
       }
     },
     "inverse": {
@@ -221,7 +221,7 @@
       },
       "on-default": {
         "$type": "color",
-        "$value": "{color.slate.100}"
+        "$value": "{color.ink.100}"
       },
       "default-alpha": {
         "$type": "color",
@@ -251,15 +251,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#2e376d"
+        "$value": "#2b3369"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#27305b"
+        "$value": "#232b56"
       },
       "weak": {
         "$type": "color",
-        "$value": "#212a4c"
+        "$value": "#1d2547"
       },
       "on-default": {
         "$type": "color",
@@ -297,15 +297,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#3c346f"
+        "$value": "#39316a"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#312e5c"
+        "$value": "#2d2a57"
       },
       "weak": {
         "$type": "color",
-        "$value": "#28294d"
+        "$value": "#242447"
       },
       "on-default": {
         "$type": "color",
@@ -327,23 +327,23 @@
     "neutral": {
       "default": {
         "$type": "color",
-        "$value": "{color.slate.100}"
+        "$value": "{color.ink.100}"
       },
       "emphasis": {
         "$type": "color",
-        "$value": "{color.slate.100}"
+        "$value": "{color.ink.150}"
       },
       "strong": {
         "$type": "color",
-        "$value": "{color.slate.200}"
+        "$value": "{color.ink.200}"
       },
       "subtle": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.850}"
       },
       "subtler": {
         "$type": "color",
-        "$value": "#323a49"
+        "$value": "#333b4b"
       },
       "subtlest": {
         "$type": "color",
@@ -351,11 +351,11 @@
       },
       "weak": {
         "$type": "color",
-        "$value": "#232b3b"
+        "$value": "#212938"
       },
       "on-default": {
         "$type": "color",
-        "$value": "{color.slate.1000}"
+        "$value": "{color.ink.1000}"
       },
       "default-alpha": {
         "$type": "color",
@@ -389,15 +389,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#243f6f"
+        "$value": "#203b6a"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#20355c"
+        "$value": "#1c3157"
       },
       "weak": {
         "$type": "color",
-        "$value": "#1c2e4d"
+        "$value": "#182947"
       },
       "on-default": {
         "$type": "color",
@@ -435,15 +435,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#205056"
+        "$value": "#1c4c52"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#1e414a"
+        "$value": "#1a3d45"
       },
       "weak": {
         "$type": "color",
-        "$value": "#1c3641"
+        "$value": "#17313c"
       },
       "on-default": {
         "$type": "color",
@@ -481,15 +481,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#633d35"
+        "$value": "#5f3931"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#4d3534"
+        "$value": "#48312f"
       },
       "weak": {
         "$type": "color",
-        "$value": "#3b2e32"
+        "$value": "#37292d"
       },
       "on-default": {
         "$type": "color",
@@ -527,15 +527,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#5a503a"
+        "$value": "#564c35"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#454237"
+        "$value": "#413d33"
       },
       "weak": {
         "$type": "color",
-        "$value": "#363635"
+        "$value": "#313230"
       },
       "on-default": {
         "$type": "color",
@@ -573,15 +573,15 @@
       },
       "subtler": {
         "$type": "color",
-        "$value": "#5f323a"
+        "$value": "#5b2e36"
       },
       "subtlest": {
         "$type": "color",
-        "$value": "#4b2d37"
+        "$value": "#462932"
       },
       "weak": {
         "$type": "color",
-        "$value": "#3a2834"
+        "$value": "#36242f"
       },
       "on-default": {
         "$type": "color",
@@ -603,43 +603,43 @@
     "disabled": {
       "default": {
         "$type": "color",
-        "$value": "{color.slate.900}"
+        "$value": "{color.ink.900}"
       },
       "on-default": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.800}"
       },
       "strong": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.850}"
       },
       "on-strong": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.800}"
       },
       "stronger": {
         "$type": "color",
-        "$value": "{color.slate.800}"
+        "$value": "{color.ink.800}"
       },
       "on-stronger": {
         "$type": "color",
-        "$value": "{color.slate.600}"
+        "$value": "{color.ink.650}"
       },
       "subtle": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.950}"
       },
       "on-subtle": {
         "$type": "color",
-        "$value": "{color.slate.900}"
+        "$value": "{color.ink.900}"
       },
       "subtler": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.950}"
       },
       "on-subtler": {
         "$type": "color",
-        "$value": "{color.slate.900}"
+        "$value": "{color.ink.925}"
       },
       "inverse": {
         "$type": "color",
@@ -649,11 +649,11 @@
     "control": {
       "track": {
         "$type": "color",
-        "$value": "{color.slate.400}"
+        "$value": "{color.ink.550}"
       },
       "thumb": {
         "$type": "color",
-        "$value": "{color.slate.50}"
+        "$value": "{color.ink.50}"
       }
     },
     "overlay": {
@@ -665,11 +665,11 @@
     "skeleton": {
       "base": {
         "$type": "color",
-        "$value": "{color.slate.950}"
+        "$value": "{color.ink.850}"
       },
       "highlight": {
         "$type": "color",
-        "$value": "{color.slate.50}"
+        "$value": "{color.ink.50}"
       }
     },
     "accent": {
@@ -686,63 +686,63 @@
   "text": {
     "default": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "muted": {
       "$type": "color",
-      "$value": "{color.slate.300}"
+      "$value": "{color.ink.350}"
     },
     "subtle": {
       "$type": "color",
-      "$value": "{color.slate.400}"
+      "$value": "{color.ink.400}"
     },
     "subtler": {
       "$type": "color",
-      "$value": "{color.slate.400}"
+      "$value": "{color.ink.550}"
     },
     "subtlest": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "disabled-default": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "disabled-on-default": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-strong": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "disabled-on-strong": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-stronger": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-on-stronger": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.650}"
     },
     "disabled-subtle": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "disabled-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "disabled-subtler": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "disabled-on-subtler": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.925}"
     },
     "inverse": {
       "$type": "color",
@@ -758,11 +758,11 @@
     },
     "inverse-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "inverse-on-inverse": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "inverse-disabled": {
       "$type": "color",
@@ -774,7 +774,7 @@
     },
     "placeholder": {
       "$type": "color",
-      "$value": "{color.slate.400}"
+      "$value": "{color.ink.400}"
     },
     "placeholder-inverse": {
       "$type": "color",
@@ -794,7 +794,7 @@
     },
     "primary": {
       "$type": "color",
-      "$value": "{color.indigo.300}"
+      "$value": "{color.indigo.400}"
     },
     "primary-emphasis": {
       "$type": "color",
@@ -850,47 +850,47 @@
     },
     "neutral": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-emphasis": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-strong": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.150}"
     },
     "neutral-muted": {
       "$type": "color",
-      "$value": "{color.slate.500}"
+      "$value": "{color.ink.500}"
     },
     "neutral-subtle": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.650}"
     },
     "neutral-subtler": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "neutral-subtlest": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "neutral-inverse": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "neutral-on-inverse": {
       "$type": "color",
-      "$value": "{color.slate.0}"
+      "$value": "{color.ink.0}"
     },
     "neutral-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-on-neutral": {
       "$type": "color",
-      "$value": "{color.slate.1000}"
+      "$value": "{color.ink.1000}"
     },
     "info": {
       "$type": "color",
@@ -1006,7 +1006,7 @@
     },
     "danger": {
       "$type": "color",
-      "$value": "{color.red.300}"
+      "$value": "{color.red.400}"
     },
     "danger-emphasis": {
       "$type": "color",
@@ -1068,63 +1068,63 @@
   "icon": {
     "default": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "muted": {
       "$type": "color",
-      "$value": "{color.slate.300}"
+      "$value": "{color.ink.350}"
     },
     "subtle": {
       "$type": "color",
-      "$value": "{color.slate.400}"
+      "$value": "{color.ink.500}"
     },
     "subtler": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.600}"
     },
     "subtlest": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "disabled-default": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "disabled-on-default": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-strong": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "disabled-on-strong": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-stronger": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-on-stronger": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.650}"
     },
     "disabled-subtle": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "disabled-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "disabled-subtler": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "disabled-on-subtler": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.925}"
     },
     "inverse": {
       "$type": "color",
@@ -1140,11 +1140,11 @@
     },
     "inverse-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "inverse-on-inverse": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "inverse-disabled": {
       "$type": "color",
@@ -1156,7 +1156,7 @@
     },
     "placeholder": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.600}"
     },
     "placeholder-inverse": {
       "$type": "color",
@@ -1232,47 +1232,47 @@
     },
     "neutral": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-emphasis": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-strong": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.150}"
     },
     "neutral-muted": {
       "$type": "color",
-      "$value": "{color.slate.500}"
+      "$value": "{color.ink.500}"
     },
     "neutral-subtle": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.650}"
     },
     "neutral-subtler": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "neutral-subtlest": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "neutral-inverse": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "neutral-on-inverse": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-on-neutral": {
       "$type": "color",
-      "$value": "{color.slate.1000}"
+      "$value": "{color.ink.1000}"
     },
     "info": {
       "$type": "color",
@@ -1450,75 +1450,75 @@
   "border": {
     "default": {
       "$type": "color",
-      "$value": "{color.slate.400}"
+      "$value": "{color.ink.550}"
     },
     "muted": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "subtle": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.925}"
     },
     "subtler": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "strong": {
       "$type": "color",
-      "$value": "{color.slate.400}"
+      "$value": "{color.ink.450}"
     },
     "stronger": {
       "$type": "color",
-      "$value": "{color.slate.50}"
+      "$value": "{color.ink.70}"
     },
     "disabled-default": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "disabled-on-default": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-strong": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "disabled-on-strong": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-stronger": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.800}"
     },
     "disabled-on-stronger": {
       "$type": "color",
-      "$value": "{color.slate.600}"
+      "$value": "{color.ink.650}"
     },
     "disabled-subtle": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "disabled-on-subtle": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "disabled-subtler": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "disabled-on-subtler": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.925}"
     },
     "surface-base": {
       "$type": "color",
-      "$value": "{color.slate.1000}"
+      "$value": "{color.ink.1000}"
     },
     "surface-default": {
       "$type": "color",
-      "$value": "{color.slate.0}"
+      "$value": "{color.ink.20}"
     },
     "inverse": {
       "$type": "color",
@@ -1614,31 +1614,31 @@
     },
     "neutral": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "neutral-emphasis": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.150}"
     },
     "neutral-strong": {
       "$type": "color",
-      "$value": "{color.slate.200}"
+      "$value": "{color.ink.200}"
     },
     "neutral-subtle": {
       "$type": "color",
-      "$value": "{color.slate.800}"
+      "$value": "{color.ink.850}"
     },
     "neutral-subtler": {
       "$type": "color",
-      "$value": "{color.slate.900}"
+      "$value": "{color.ink.900}"
     },
     "neutral-subtlest": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.925}"
     },
     "neutral-weak": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "info": {
       "$type": "color",
@@ -1788,7 +1788,7 @@
   "focus-ring": {
     "default": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "inverse": {
       "$type": "color",
@@ -1804,7 +1804,7 @@
     },
     "neutral": {
       "$type": "color",
-      "$value": "{color.slate.950}"
+      "$value": "{color.ink.950}"
     },
     "info": {
       "$type": "color",
@@ -1834,7 +1834,7 @@
     },
     "outgoing": {
       "$type": "color",
-      "$value": "{color.slate.100}"
+      "$value": "{color.ink.100}"
     },
     "pending": {
       "$type": "color",
@@ -1875,6 +1875,31 @@
       "$value": "0px 0px 8px 0px rgba(0, 0, 0, 0.60), 0px 32px 64px 0px rgba(0, 0, 0, 0.60)"
     },
     "$type": "shadow",
-    "$description": "Elevation 100 to 800 from Leeward's effect styles."
+    "$description": "Elevation 100 to 800 from Leeward's effect styles, and the focus rings.",
+    "focus": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-focus)",
+      "$description": "Default focus ring: a surface gap and a 2 px ring, at least 3:1 on every surface."
+    },
+    "focus-inset": {
+      "$type": "string",
+      "$value": "inset 0 0 0 var(--lw-size-focus-ring-width) var(--lw-border-focus)",
+      "$description": "Inside the element, for full-width rows and tabs where an outer ring would be clipped."
+    },
+    "focus-danger": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-danger)",
+      "$description": "Focus on a field that has an error."
+    },
+    "focus-inverse": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-neutral-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-text-inverse)",
+      "$description": "Focus on inverse (dark in light mode) surfaces."
+    },
+    "focus-halo": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
+      "$description": "Soft halo. Decorative: always combine with a focus ring."
+    }
   }
 }

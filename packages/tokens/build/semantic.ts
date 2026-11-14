@@ -40,6 +40,33 @@ function snap(ramp: Ramp, step: number): string {
   return String(best);
 }
 
+/** Relative luminance, for matching steps across ramps with different granularity. */
+function luminance(hex: string): number {
+  return new Color(hex).luminance;
+}
+
+/**
+ * A step that exists in the brand ramp. When the template uses a step the brand ramp does not
+ * have (richBlack has 32 steps, most ramps have 14), pick the brand step whose lightness is
+ * closest to the source color, so subtle borders and surfaces keep their visual distance.
+ */
+function matchStep(brandRamp: Ramp, target: number, templateRamp: Ramp | undefined): string {
+  if (brandRamp[String(target)]) return String(target);
+  const refHex = templateRamp?.[String(target)];
+  if (!refHex) return snap(brandRamp, target);
+  const goal = luminance(refHex);
+  let best = "";
+  let bestDiff = Infinity;
+  for (const [step, hex] of Object.entries(brandRamp)) {
+    const d = Math.abs(luminance(hex) - goal);
+    if (d < bestDiff) {
+      bestDiff = d;
+      best = step;
+    }
+  }
+  return best;
+}
+
 function withAlpha(hex: string, alpha?: number): string {
   if (alpha === undefined || alpha >= 1) return hex;
   return hex.slice(0, 7) + Math.round(alpha * 255).toString(16).padStart(2, "0");
@@ -115,7 +142,7 @@ function extras(brand: Brand, mode: Mode): Record<string, TemplateEntry & { role
     "amount.outgoing": { kind: "ref", target: "text.default" },
     "amount.pending": { kind: "ramp", ramp: sourceRoles.warning, step: "700" },
     "fill.overlay.scrim": { kind: "ramp", ramp: "blackAlpha", step: L ? "500" : "700" },
-    "fill.skeleton.base": { kind: "ref", target: "fill.surface.bolder" },
+    "fill.skeleton.base": { kind: "ref", target: "fill.surface.stronger" },
     "fill.skeleton.highlight": { kind: "ref", target: "fill.surface.raised" },
     "fill.accent.default": { kind: "ramp", ramp: `accent:${brand.accent}`, step: "400" },
     "fill.accent.subtle": { kind: "ramp", ramp: `accent:${brand.accent}`, step: "100" },
@@ -149,7 +176,10 @@ export function resolveSemantic(brand: Brand, mode: Mode, ramps: Record<string, 
     const base = Number(e.step);
     const mirrored = mode === "dark" && !ramp.endsWith("Alpha") && !FIXED_SWAP[e.ramp] && !MODE_SPECIFIC.has(name);
     const target = mirrored ? 1000 - base : base;
-    const step = r[String(target)] ? String(target) : snap(r, target);
+    // The source ramp for this role, to match lightness when the brand ramp lacks the step.
+    const role = rampToRole[e.ramp];
+    const templateRamp = role ? ramps[sourceRoles[role]] : undefined;
+    const step = matchStep(r, target, templateRamp);
     tokens[name] = { name, ramp, step, from: step, hex: withAlpha(r[step]!, e.alpha), ...(e.alpha !== undefined ? { alpha: e.alpha } : {}) };
   }
 

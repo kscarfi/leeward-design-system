@@ -2738,17 +2738,17 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.1412,
-            0.149,
-            0.1569
+            0.2235,
+            0.2314,
+            0.2392
           ],
           "alpha": 1,
-          "hex": "#242628"
+          "hex": "#393b3d"
         },
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableSetName": "Leeward Primitives",
-            "targetVariableName": "color/richBlack/925"
+            "targetVariableName": "color/richBlack/850"
           }
         }
       },

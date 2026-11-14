@@ -39,7 +39,7 @@ export const brands: Brand[] = [
   {
     id: "leeward",
     name: "Leeward",
-    roles: { primary: "indigo", secondary: "violet", neutral: "slate", info: "blue", success: "teal", warning: "pumpkin", attention: "yellow", danger: "red" },
+    roles: { primary: "indigo", secondary: "violet", neutral: "ink", info: "blue", success: "teal", warning: "pumpkin", attention: "yellow", danger: "red" },
     accent: "coralRed",
     visited: "violet",
     font: { display: sans, body: sans, mono },

@@ -1,6 +1,7 @@
 // Reads Leeward's token source in source/
 // and turns them into Leeward primitives and a brand-neutral semantic template.
 import { readFileSync } from "node:fs";
+import Color from "colorjs.io";
 
 const dir = new URL("../source/", import.meta.url);
 const read = (file: string) => JSON.parse(readFileSync(new URL(file, dir), "utf8"));
@@ -26,6 +27,24 @@ function hex8(value: { hex: string; alpha?: number }): string {
 
 export type Ramp = Record<string, string>;
 
+/**
+ * Leeward's neutral, "ink": the lightness of every richBlack step (Kemal's tuned 32-step neutral)
+ * with the cool hue and chroma of slate at the nearest step. Brands get the same spacing
+ * between surfaces, hovers and borders, in their own tint.
+ */
+export function tintedNeutral(lightness: Ramp, tint: Ramp): Ramp {
+  const tintSteps = Object.keys(tint).map(Number).sort((a, b) => a - b);
+  const out: Ramp = {};
+  for (const [step, hex] of Object.entries(lightness)) {
+    const n = Number(step);
+    const nearest = tintSteps.reduce((a, b) => (Math.abs(b - n) < Math.abs(a - n) ? b : a));
+    const [l] = new Color(hex).to("oklch").coords;
+    const [, c, h] = new Color(tint[String(nearest)]!).to("oklch").coords;
+    out[step] = n === 0 ? "#ffffff" : new Color("oklch", [l ?? 0, c ?? 0, Number.isNaN(h) ? 0 : (h ?? 0)]).toGamut({ space: "srgb", method: "css" }).to("srgb").toString({ format: "hex", collapse: false });
+  }
+  return out;
+}
+
 /** Every color ramp from the token source, steps 0 to 1000. Alpha ramps keep their alpha as 8-digit hex. */
 export function sourceRamps(): Record<string, Ramp> {
   const colors = read("primitives.tokens.json").color as Json;
@@ -35,6 +54,7 @@ export function sourceRamps(): Record<string, Ramp> {
     ramps[name] = {};
     for (const [step, token] of Object.entries(ramp as Json)) if (!step.startsWith("$")) ramps[name]![step] = hex8((token as Json).$value);
   }
+  if (ramps.richBlack && ramps.slate) ramps.ink = tintedNeutral(ramps.richBlack, ramps.slate);
   return ramps;
 }
 

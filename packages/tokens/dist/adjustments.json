@@ -1,46 +1,102 @@
 {
   "leeward.light": [
     {
+      "token": "text.subtle",
+      "ramp": "ink",
+      "from": "500",
+      "to": "550",
+      "reason": "text.subtle on fill.surface.canvas was 3.55:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtle",
+      "ramp": "ink",
+      "from": "550",
+      "to": "600",
+      "reason": "text.subtle on fill.surface.emphasis was 4.26:1, needs 4.5:1"
+    },
+    {
       "token": "text.placeholder",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "400",
+      "to": "450",
+      "reason": "text.placeholder on fill.surface.canvas was 2.55:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "ink",
+      "from": "450",
       "to": "500",
-      "reason": "text.placeholder on fill.surface.canvas was 2.43:1, needs 4.5:1"
+      "reason": "text.placeholder on fill.surface.default was 3.21:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "ink",
+      "from": "500",
+      "to": "550",
+      "reason": "text.placeholder on fill.surface.raised was 3.81:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "ink",
+      "from": "550",
+      "to": "600",
+      "reason": "text.placeholder on fill.surface.emphasis was 4.26:1, needs 4.5:1"
     },
     {
       "token": "text.subtler",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "400",
-      "to": "500",
-      "reason": "text.subtler on fill.surface.canvas was 2.43:1, needs 3:1"
+      "to": "450",
+      "reason": "text.subtler on fill.surface.canvas was 2.55:1, needs 3:1"
     },
     {
       "token": "border.default",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "200",
+      "to": "250",
+      "reason": "border.default on fill.surface.canvas was 1.43:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "ink",
+      "from": "250",
       "to": "300",
-      "reason": "border.default on fill.surface.canvas was 1.18:1, needs 3:1"
+      "reason": "border.default on fill.surface.default was 1.75:1, needs 3:1"
     },
     {
       "token": "border.default",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "300",
-      "to": "400",
-      "reason": "border.default on fill.surface.default was 1.47:1, needs 3:1"
+      "to": "350",
+      "reason": "border.default on fill.surface.raised was 2.01:1, needs 3:1"
     },
     {
       "token": "border.default",
-      "ramp": "slate",
+      "ramp": "ink",
+      "from": "350",
+      "to": "400",
+      "reason": "border.default on fill.surface.overlay was 2.33:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "ink",
       "from": "400",
+      "to": "450",
+      "reason": "border.default on fill.surface.emphasis was 2.55:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "ink",
+      "from": "450",
       "to": "500",
-      "reason": "border.default on fill.surface.raised was 2.54:1, needs 3:1"
+      "reason": "border.default on fill.surface.bold was 2.94:1, needs 3:1"
     },
     {
       "token": "text.success",
       "ramp": "teal",
       "from": "600",
       "to": "700",
-      "reason": "text.success on fill.surface.canvas was 3.58:1, needs 4.5:1"
+      "reason": "text.success on fill.surface.canvas was 3.49:1, needs 4.5:1"
     },
     {
       "token": "fill.success.default",
@@ -54,7 +110,7 @@
       "ramp": "pumpkin",
       "from": "600",
       "to": "700",
-      "reason": "text.warning on fill.surface.canvas was 3.33:1, needs 4.5:1"
+      "reason": "text.warning on fill.surface.canvas was 3.24:1, needs 4.5:1"
     },
     {
       "token": "fill.warning.default",
@@ -65,89 +121,103 @@
     },
     {
       "token": "fill.control.track",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "400",
+      "to": "450",
+      "reason": "fill.control.track on fill.surface.canvas was 2.55:1, needs 3:1"
+    },
+    {
+      "token": "text.subtler",
+      "ramp": "ink",
+      "from": "450",
       "to": "500",
-      "reason": "fill.control.track on fill.surface.canvas was 2.43:1, needs 3:1"
+      "reason": "text.subtler on fill.surface.canvas was 3.00:1, needs 3:1"
+    },
+    {
+      "token": "fill.control.track",
+      "ramp": "ink",
+      "from": "450",
+      "to": "500",
+      "reason": "fill.control.track on fill.surface.canvas was 3.00:1, needs 3:1"
     }
   ],
   "leeward.dark": [
     {
       "token": "text.subtle",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "500",
+      "to": "450",
+      "reason": "text.subtle on fill.surface.raised was 4.34:1, needs 4.5:1"
+    },
+    {
+      "token": "text.subtle",
+      "ramp": "ink",
+      "from": "450",
       "to": "400",
-      "reason": "text.subtle on fill.surface.canvas was 3.89:1, needs 4.5:1"
+      "reason": "text.subtle on fill.surface.overlay was 4.32:1, needs 4.5:1"
     },
     {
       "token": "text.placeholder",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "600",
-      "to": "500",
-      "reason": "text.placeholder on fill.surface.canvas was 2.49:1, needs 4.5:1"
+      "to": "550",
+      "reason": "text.placeholder on fill.surface.canvas was 3.45:1, needs 4.5:1"
     },
     {
       "token": "text.placeholder",
-      "ramp": "slate",
-      "from": "500",
-      "to": "400",
-      "reason": "text.placeholder on fill.surface.default was 3.49:1, needs 4.5:1"
-    },
-    {
-      "token": "text.subtler",
-      "ramp": "slate",
-      "from": "600",
+      "ramp": "ink",
+      "from": "550",
       "to": "500",
-      "reason": "text.subtler on fill.surface.canvas was 2.49:1, needs 3:1"
+      "reason": "text.placeholder on fill.surface.default was 3.89:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "ink",
+      "from": "500",
+      "to": "450",
+      "reason": "text.placeholder on fill.surface.raised was 4.34:1, needs 4.5:1"
+    },
+    {
+      "token": "text.placeholder",
+      "ramp": "ink",
+      "from": "450",
+      "to": "400",
+      "reason": "text.placeholder on fill.surface.overlay was 4.32:1, needs 4.5:1"
     },
     {
       "token": "text.subtler",
-      "ramp": "slate",
-      "from": "500",
-      "to": "400",
-      "reason": "text.subtler on fill.surface.overlay was 2.57:1, needs 3:1"
-    },
-    {
-      "token": "icon.subtle",
-      "ramp": "slate",
-      "from": "500",
-      "to": "400",
-      "reason": "icon.subtle on fill.surface.overlay was 2.57:1, needs 3:1"
+      "ramp": "ink",
+      "from": "600",
+      "to": "550",
+      "reason": "text.subtler on fill.surface.overlay was 2.52:1, needs 3:1"
     },
     {
       "token": "border.default",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "800",
+      "to": "750",
+      "reason": "border.default on fill.surface.canvas was 1.87:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "ink",
+      "from": "750",
       "to": "700",
-      "reason": "border.default on fill.surface.canvas was 1.66:1, needs 3:1"
+      "reason": "border.default on fill.surface.default was 1.96:1, needs 3:1"
     },
     {
       "token": "border.default",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "700",
+      "to": "650",
+      "reason": "border.default on fill.surface.raised was 2.03:1, needs 3:1"
+    },
+    {
+      "token": "border.default",
+      "ramp": "ink",
+      "from": "650",
       "to": "600",
-      "reason": "border.default on fill.surface.default was 1.64:1, needs 3:1"
-    },
-    {
-      "token": "border.default",
-      "ramp": "slate",
-      "from": "600",
-      "to": "500",
-      "reason": "border.default on fill.surface.raised was 1.93:1, needs 3:1"
-    },
-    {
-      "token": "border.default",
-      "ramp": "slate",
-      "from": "500",
-      "to": "400",
-      "reason": "border.default on fill.surface.overlay was 2.57:1, needs 3:1"
-    },
-    {
-      "token": "text.primary",
-      "ramp": "indigo",
-      "from": "400",
-      "to": "300",
-      "reason": "text.primary on fill.surface.overlay was 4.16:1, needs 4.5:1"
+      "reason": "border.default on fill.surface.overlay was 2.08:1, needs 3:1"
     },
     {
       "token": "fill.attention.default",
@@ -185,25 +255,18 @@
       "reason": "fill.attention.on-default on fill.attention.strong was 1.92:1, needs 4.5:1"
     },
     {
-      "token": "text.danger",
-      "ramp": "red",
-      "from": "400",
-      "to": "300",
-      "reason": "text.danger on fill.surface.overlay was 4.49:1, needs 4.5:1"
-    },
-    {
       "token": "fill.control.track",
-      "ramp": "slate",
+      "ramp": "ink",
       "from": "600",
-      "to": "500",
-      "reason": "fill.control.track on fill.surface.canvas was 2.49:1, needs 3:1"
+      "to": "550",
+      "reason": "fill.control.track on fill.surface.overlay was 2.52:1, needs 3:1"
     },
     {
-      "token": "fill.control.track",
-      "ramp": "slate",
-      "from": "500",
-      "to": "400",
-      "reason": "fill.control.track on fill.surface.overlay was 2.57:1, needs 3:1"
+      "token": "border.default",
+      "ramp": "ink",
+      "from": "600",
+      "to": "550",
+      "reason": "border.default on fill.surface.overlay was 2.52:1, needs 3:1"
     },
     {
       "token": "fill.attention.strong",

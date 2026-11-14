@@ -177,7 +177,7 @@
   --lw-fill-control-track: #818385;
   --lw-fill-control-thumb: #ffffff;
   --lw-fill-overlay-scrim: rgba(15, 17, 19, 0.46);
-  --lw-fill-skeleton-base: #edeff0;
+  --lw-fill-skeleton-base: #d7d9db;
   --lw-fill-skeleton-highlight: #ffffff;
   --lw-fill-accent-default: #6a87fd;
   --lw-fill-accent-subtle: #e0e8ff;
@@ -476,6 +476,11 @@
   --lw-elevation-600: 0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 8px 16px 0px rgba(0, 0, 0, 0.14);
   --lw-elevation-700: 0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 14px 28px 0px rgba(0, 0, 0, 0.24);
   --lw-elevation-800: 0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 32px 64px 0px rgba(0, 0, 0, 0.24);
+  --lw-elevation-focus: 0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-focus); /** Default focus ring: a surface gap and a 2 px ring, at least 3:1 on every surface. */
+  --lw-elevation-focus-inset: inset 0 0 0 var(--lw-size-focus-ring-width) var(--lw-border-focus); /** Inside the element, for full-width rows and tabs where an outer ring would be clipped. */
+  --lw-elevation-focus-danger: 0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-danger); /** Focus on a field that has an error. */
+  --lw-elevation-focus-inverse: 0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-neutral-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-text-inverse); /** Focus on inverse (dark in light mode) surfaces. */
+  --lw-elevation-focus-halo: 0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary); /** Soft halo. Decorative: always combine with a focus ring. */
   --lw-size-touch-target: 2.75rem; /** 44 px. Minimum hit area for anything interactive on touch screens. */
   --lw-size-control-xs: 2rem;
   --lw-size-control-sm: 2rem;

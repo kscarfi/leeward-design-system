@@ -665,7 +665,7 @@
     "skeleton": {
       "base": {
         "$type": "color",
-        "$value": "{color.richBlack.70}"
+        "$value": "{color.richBlack.150}"
       },
       "highlight": {
         "$type": "color",
@@ -1875,7 +1875,32 @@
       "$value": "0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 32px 64px 0px rgba(0, 0, 0, 0.24)"
     },
     "$type": "shadow",
-    "$description": "Elevation 100 to 800 from Leeward's effect styles."
+    "$description": "Elevation 100 to 800 from Leeward's effect styles, and the focus rings.",
+    "focus": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-focus)",
+      "$description": "Default focus ring: a surface gap and a 2 px ring, at least 3:1 on every surface."
+    },
+    "focus-inset": {
+      "$type": "string",
+      "$value": "inset 0 0 0 var(--lw-size-focus-ring-width) var(--lw-border-focus)",
+      "$description": "Inside the element, for full-width rows and tabs where an outer ring would be clipped."
+    },
+    "focus-danger": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-surface-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-border-danger)",
+      "$description": "Focus on a field that has an error."
+    },
+    "focus-inverse": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-offset) var(--lw-fill-neutral-default), 0 0 0 calc(var(--lw-size-focus-ring-offset) + var(--lw-size-focus-ring-width)) var(--lw-text-inverse)",
+      "$description": "Focus on inverse (dark in light mode) surfaces."
+    },
+    "focus-halo": {
+      "$type": "string",
+      "$value": "0 0 0 var(--lw-size-focus-ring-halo) var(--lw-focus-ring-primary)",
+      "$description": "Soft halo. Decorative: always combine with a focus ring."
+    }
   },
   "space": {
     "$type": "dimension",
