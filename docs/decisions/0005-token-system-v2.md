@@ -16,7 +16,7 @@ Kemal asked for a richer system: complete palettes and tokens, more components, 
 
 ## What we measured and fixed
 
-| Issue in the source mapping | Measured | Fix |
+| Issue in the first mapping | Measured | Fix |
 |---|---|---|
 | `text.subtle` on white | 3.8:1 | Resolver moves it one step darker |
 | `text.placeholder` | 2.7:1 | Resolver |
@@ -24,7 +24,7 @@ Kemal asked for a richer system: complete palettes and tokens, more components, 
 | Link (cyan 600) | 3.7:1 | Resolver |
 | Input border (`border.default`) | 1.5:1 | Resolver moves it until 3:1 (WCAG 1.4.11) |
 | `fill.attention.on-default` white on yellow | 1.5:1 | Overridden to dark text, matching `text.attention-on-attention` |
-| Medium and SemiBold text styles | exported at 400 | Weights set to 500 and 600 |
+| Medium and SemiBold text styles | set at 400 | Weights set to 500 and 600 |
 | 10 and 11 px text | below Leeward's 12 px minimum | Dropped from the scale |
 | No dark mode | | Derived by mirroring steps, then resolved |
 | Commercial display font | | Plus Jakarta Sans (OFL) |
@@ -32,8 +32,8 @@ Kemal asked for a richer system: complete palettes and tokens, more components, 
 
 ## Decision
 
-1. `packages/tokens/source/` holds Leeward's token source. `build/source.ts` reads them; primitives are generated from them.
-2. The semantic template is the 436 Figma tokens expressed as role and step. A **brand** picks a ramp per role, a roundness and a density (`build/brands.ts`). Leeward: indigo, violet, ink, blue, teal, pumpkin, yellow, red. Business: lapis blue and purple haze, compact, tighter radii.
+1. `packages/tokens/source/` holds Leeward's token source as JSON: color ramps, numeric scales, elevation and the semantic template. `build/source.ts` reads it; primitives are generated from it.
+2. The semantic template is the 436 semantic colors expressed as role and step. A **brand** picks a ramp per role, a roundness and a density (`build/brands.ts`). Leeward: indigo, violet, ink, blue, teal, pumpkin, yellow, red. Business: lapis blue and purple haze, compact, tighter radii.
 3. **Ink**, Leeward's neutral, uses the lightness of every richBlack step with the hue of slate, so subtle borders, hovers and skeletons keep their visual distance in every brand.
 4. **Dark mode** mirrors each step (600 becomes 400, 50 becomes 975). The surface stack is explicit so surfaces get lighter as they rise. Soft role fills in dark are a low-ratio OKLab mix of the role color into the dark surface, because the mirrored dark end of vivid ramps reads loud and muddy.
 5. The **contrast resolver** checks 334 required pairs per brand and mode. A failing token moves one ramp step at a time toward more contrast and never returns to a step it left. Every move is listed in `docs/contrast-report.md`. The build fails if a pair still misses AA.
@@ -44,6 +44,6 @@ Kemal asked for a richer system: complete palettes and tokens, more components, 
 
 ## Consequences
 
-- A designer changes a ramp or a mapping in Figma, exports again, and every brand and mode rebuilds with contrast guaranteed.
+- A designer changes a ramp or a mapping in `packages/tokens/source/`, and every brand and mode rebuilds with contrast guaranteed.
 - New brands cost a few lines. Partner brands are generated from one color and refused if they fail.
 - The shipped mapping differs from the template in a small number of tokens per brand and mode. The contrast report says exactly where and why, so the template can be updated to match.

@@ -1,0 +1,10 @@
+{
+  "100": "0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.14)",
+  "200": "0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px 0px rgba(0, 0, 0, 0.14)",
+  "300": "0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 3px 6px 0px rgba(0, 0, 0, 0.14)",
+  "400": "0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 4px 8px 0px rgba(0, 0, 0, 0.14)",
+  "500": "0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 6px 12px 0px rgba(0, 0, 0, 0.14)",
+  "600": "0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 8px 16px 0px rgba(0, 0, 0, 0.14)",
+  "700": "0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 14px 28px 0px rgba(0, 0, 0, 0.24)",
+  "800": "0px 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 32px 64px 0px rgba(0, 0, 0, 0.24)"
+}
