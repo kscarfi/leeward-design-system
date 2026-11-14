@@ -1,73 +1,245 @@
+/**
+ * TransferScreen: send Turkish lira to a saved or new recipient.
+ *
+ * Flow: Recipient, Amount, Review, Confirm (SMS one-time code), then a receipt.
+ *
+ * Expects the app root to load the Leeward styles and set the theme:
+ *   import "@leeward/react/fonts.css";
+ *   import "@leeward/react/styles.css";
+ *   <div data-brand="leeward" data-theme="light">...</div>
+ *
+ * Mock data:
+ *   - The one-time code is 123456. Any other code counts as a wrong try (3 tries per code).
+ *   - A valid new IBAN to try: TR33 0006 1005 1978 6457 8413 26.
+ *   - Transfers between Leeward accounts are free. Other banks cost ₺6,50.
+ */
 import {
+  type FormEvent,
+  type ReactNode,
+  type CSSProperties,
   useCallback,
   useEffect,
   useId,
   useMemo,
-  useReducer,
   useRef,
   useState,
-  type CSSProperties,
-  type FormEvent,
-  type ReactNode,
+  useSyncExternalStore,
 } from "react";
 import {
+  Alert,
   AmountDisplay,
+  AmountInput,
   Avatar,
-  Badge,
   Button,
   Card,
+  Checkbox,
+  Divider,
+  EmptyState,
   Heading,
   Icon,
-  IconButton,
+  List,
+  ListItem,
   OTPInput,
-  RadioGroup,
+  SegmentedControl,
+  Skeleton,
+  Stepper,
   Text,
   TextField,
-  formatAmount,
   formatIban,
   maskIban,
-  useToast,
 } from "@leeward/react";
 
-/*
- * Money transfer flow: recipient, amount, review, SMS verification, done.
- *
- * Expects the app root to load "@leeward/react/fonts.css" and
- * "@leeward/react/styles.css", set data-theme, and wrap the tree in
- * <TooltipProvider> and <ToastProvider>.
- */
+/* -------------------------------------------------------------------------- */
+/* Types                                                                      */
+/* -------------------------------------------------------------------------- */
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
+type Recipient = {
+  id: string;
+  name: string;
+  /** Normalized: uppercase, no spaces. */
+  iban: string;
+  bankName: string;
+  isLeeward: boolean;
+};
 
-const LOCALE = "tr-TR" as const;
+type Account = {
+  name: string;
+  iban: string;
+  /** Available balance in kuruş, so money math stays in integers. */
+  balanceKurus: number;
+  /** Masked phone number the SMS code goes to. */
+  maskedPhone: string;
+};
+
+type Step = "recipient" | "amount" | "review" | "verify" | "done";
+
+type RecipientsState =
+  | { status: "loading" }
+  | { status: "error" }
+  | { status: "ready"; recipients: Recipient[] };
+
+type CodeSession = { transferId: string; resendAvailableAt: number };
+
+type ConfirmResult =
+  | { status: "sent"; reference: string; sentAt: number }
+  | { status: "wrong-code"; attemptsLeft: number }
+  | { status: "locked" }
+  | { status: "expired" };
+
+export type TransferScreenProps = {
+  /** Called when the person leaves the flow, from the close button or the receipt. */
+  onClose?: () => void;
+};
+
+/* -------------------------------------------------------------------------- */
+/* Constants and mock data                                                    */
+/* -------------------------------------------------------------------------- */
+
 const CURRENCY = "TRY";
+const LOCALE = "tr-TR";
+const IBAN_LENGTH_TR = 26;
 const LEEWARD_BANK_CODE = "00829";
+const OTHER_BANK_FEE_KURUS = 650;
+const MIN_AMOUNT_KURUS = 100;
+const DESCRIPTION_MAX_LENGTH = 140;
+const CODE_LENGTH = 6;
+const CODE_TTL_MS = 3 * 60 * 1000;
+const RESEND_COOLDOWN_MS = 30 * 1000;
+const MAX_CODE_ATTEMPTS = 3;
 
-const OTP_LENGTH = 6;
-const OTP_MAX_ATTEMPTS = 3;
-const OTP_RESEND_SECONDS = 30;
-const OTP_TTL_SECONDS = 180;
+const STEP_NAMES = ["Recipient", "Amount", "Review", "Confirm"];
+const STEP_INDEX: Record<Exclude<Step, "done">, number> = {
+  recipient: 0,
+  amount: 1,
+  review: 2,
+  verify: 3,
+};
 
-const MIN_AMOUNT_KURUS = 100; // ₺1,00
-const MAX_DESCRIPTION_LENGTH = 140;
+/** Bank codes are digits 5 to 9 of a Turkish IBAN. */
+const BANKS_BY_CODE: Record<string, string> = {
+  [LEEWARD_BANK_CODE]: "Leeward",
+  "00010": "Ziraat Bankası",
+  "00046": "Akbank",
+  "00062": "Garanti BBVA",
+  "00064": "Türkiye İş Bankası",
+  "00067": "Yapı Kredi",
+};
 
-/** FAST transfers to other banks. Free between Leeward accounts. */
-const OTHER_BANK_FEE_KURUS = 650; // ₺6,50
+const MOCK_ACCOUNT: Account = {
+  name: "Main account",
+  iban: "TR120082900000000045712388",
+  balanceKurus: 2_458_035,
+  maskedPhone: "•••• 4821",
+};
 
-// ---------------------------------------------------------------------------
-// IBAN helpers
-// ---------------------------------------------------------------------------
+const MOCK_RECIPIENTS: Recipient[] = [
+  { id: "r1", name: "Deniz Yılmaz", iban: "TR720082900000000011904577", bankName: "Leeward", isLeeward: true },
+  { id: "r2", name: "Ayşe Kaya", iban: "TR330006200001298745630012", bankName: "Garanti BBVA", isLeeward: false },
+  { id: "r3", name: "Mehmet Demir", iban: "TR670006400000883412075566", bankName: "Türkiye İş Bankası", isLeeward: false },
+  { id: "r4", name: "Elif Şahin", iban: "TR130004600007710345982201", bankName: "Akbank", isLeeward: false },
+  { id: "r5", name: "Can Öztürk", iban: "TR740006700000569021347789", bankName: "Yapı Kredi", isLeeward: false },
+];
 
-const TR_IBAN_LENGTH = 26;
+const MOCK_VALID_CODE = "123456";
 
-function normalizeIban(input: string): string {
-  return input.replace(/\s+/g, "").toUpperCase();
+/* -------------------------------------------------------------------------- */
+/* Mock API                                                                   */
+/* -------------------------------------------------------------------------- */
+
+function wait(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new DOMException("Aborted", "AbortError"));
+      return;
+    }
+    const timer = setTimeout(resolve, ms);
+    signal?.addEventListener(
+      "abort",
+      () => {
+        clearTimeout(timer);
+        reject(new DOMException("Aborted", "AbortError"));
+      },
+      { once: true },
+    );
+  });
 }
 
-/** ISO 13616 mod-97 remainder, computed digit by digit to avoid overflow. */
-function ibanRemainder(rearranged: string): number {
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === "AbortError";
+}
+
+type MockCodeSession = {
+  code: string;
+  expiresAt: number;
+  attemptsLeft: number;
+  result?: ConfirmResult;
+};
+
+const mockSessions = new Map<string, MockCodeSession>();
+
+const mockApi = {
+  async fetchRecipients(signal?: AbortSignal): Promise<Recipient[]> {
+    await wait(700, signal);
+    return MOCK_RECIPIENTS.map((recipient) => ({ ...recipient }));
+  },
+
+  /** Sends a new SMS code for a transfer. A new code replaces the old one. */
+  async requestCode(transferId: string, signal?: AbortSignal): Promise<void> {
+    await wait(600, signal);
+    const existing = mockSessions.get(transferId);
+    if (existing?.result?.status === "sent") return;
+    mockSessions.set(transferId, {
+      code: MOCK_VALID_CODE,
+      expiresAt: Date.now() + CODE_TTL_MS,
+      attemptsLeft: MAX_CODE_ATTEMPTS,
+    });
+  },
+
+  /**
+   * Checks the code and sends the money. `transferId` is the idempotency key:
+   * repeating a call for a sent transfer returns the same result and never sends twice.
+   */
+  async confirmTransfer(transferId: string, code: string, signal?: AbortSignal): Promise<ConfirmResult> {
+    await wait(900, signal);
+    const session = mockSessions.get(transferId);
+    if (!session) return { status: "expired" };
+    if (session.result?.status === "sent") return session.result;
+    if (session.attemptsLeft <= 0) return { status: "locked" };
+    if (Date.now() > session.expiresAt) return { status: "expired" };
+
+    if (code !== session.code) {
+      session.attemptsLeft -= 1;
+      return session.attemptsLeft > 0 ? { status: "wrong-code", attemptsLeft: session.attemptsLeft } : { status: "locked" };
+    }
+
+    const result: ConfirmResult = {
+      status: "sent",
+      reference: `LW${transferId.replace(/-/g, "").slice(0, 10).toUpperCase()}`,
+      sentAt: Date.now(),
+    };
+    session.result = result;
+    return result;
+  },
+};
+
+/* -------------------------------------------------------------------------- */
+/* Money and IBAN helpers                                                     */
+/* -------------------------------------------------------------------------- */
+
+const toKurus = (lira: number): number => Math.round(lira * 100);
+const toLira = (kurus: number): number => kurus / 100;
+
+function feeKurusFor(recipient: Recipient): number {
+  return recipient.isLeeward ? 0 : OTHER_BANK_FEE_KURUS;
+}
+
+function normalizeIban(value: string): string {
+  return value.replace(/\s+/g, "").toUpperCase();
+}
+
+/** ISO 13616 mod 97 check: move the first four characters to the end, letters become 10 to 35. */
+function hasValidChecksum(iban: string): boolean {
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
   let remainder = 0;
   for (const char of rearranged) {
     const digits = /[A-Z]/.test(char) ? String(char.charCodeAt(0) - 55) : char;
@@ -75,980 +247,1125 @@ function ibanRemainder(rearranged: string): number {
       remainder = (remainder * 10 + Number(digit)) % 97;
     }
   }
-  return remainder;
+  return remainder === 1;
 }
 
-function isValidIbanChecksum(iban: string): boolean {
-  return ibanRemainder(iban.slice(4) + iban.slice(0, 4)) === 1;
+function validateIban(raw: string, ownIban: string): string | undefined {
+  const iban = normalizeIban(raw);
+  if (iban.length === 0) return "Enter the IBAN of the person you are paying.";
+  if (!iban.startsWith("TR")) return "Turkish IBANs start with TR. Check it and try again.";
+  if (!/^TR\d+$/.test(iban)) return "After TR, an IBAN has only numbers. Check it and try again.";
+  if (iban.length < IBAN_LENGTH_TR) return "This IBAN is too short. Check it and try again.";
+  if (iban.length > IBAN_LENGTH_TR) return "This IBAN is too long. Check it and try again.";
+  if (!hasValidChecksum(iban)) return "This IBAN has a typo somewhere. Check each number and try again.";
+  if (iban === ownIban) return "This is your own account. Enter the IBAN of the person you are paying.";
+  return undefined;
 }
 
-type IbanError = "empty" | "country" | "characters" | "short" | "long" | "checksum";
-
-function validateIban(input: string): IbanError | null {
-  const iban = normalizeIban(input);
-  if (iban.length === 0) return "empty";
-  if (!iban.startsWith("TR")) return "country";
-  if (!/^TR\d+$/.test(iban)) return "characters";
-  if (iban.length < TR_IBAN_LENGTH) return "short";
-  if (iban.length > TR_IBAN_LENGTH) return "long";
-  if (!isValidIbanChecksum(iban)) return "checksum";
-  return null;
+function validateName(raw: string): string | undefined {
+  const name = raw.trim().replace(/\s+/g, " ");
+  if (name.length === 0) return "Enter the full name of the person you are paying.";
+  if (!/^[\p{L}][\p{L}' .-]*$/u.test(name)) return "Use letters only. Check the name and try again.";
+  if (name.split(" ").length < 2) return "Enter their first and last name, as their bank has it.";
+  return undefined;
 }
 
-const IBAN_ERROR_COPY: Record<IbanError, string> = {
-  empty: "Enter the recipient's IBAN.",
-  country: "Leeward sends to Turkish IBANs only. Check that it starts with TR.",
-  characters: "An IBAN has TR followed by numbers only. Check it and try again.",
-  short: "This IBAN is too short. Check it and try again.",
-  long: "This IBAN is too long. Check it and try again.",
-  checksum: "This IBAN doesn't look right. Check each digit and try again.",
-};
-
-/** Bank code sits in characters 5 to 9 of a Turkish IBAN. */
-function bankCodeOf(iban: string): string {
-  return normalizeIban(iban).slice(4, 9);
+function bankFromIban(iban: string): { bankName: string; isLeeward: boolean } {
+  const code = iban.slice(4, 9);
+  return { bankName: BANKS_BY_CODE[code] ?? "Another bank", isLeeward: code === LEEWARD_BANK_CODE };
 }
 
-const BANK_NAMES: Record<string, string> = {
-  [LEEWARD_BANK_CODE]: "Leeward",
-  "00010": "Ziraat Bankası",
-  "00046": "Akbank",
-  "00062": "Garanti BBVA",
-  "00064": "İş Bankası",
-  "00067": "Yapı Kredi",
-  "00111": "QNB",
-};
-
-function bankNameOf(iban: string): string {
-  return BANK_NAMES[bankCodeOf(iban)] ?? "Another bank";
+function createTransferId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  return `t-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function feeFor(iban: string): number {
-  return bankCodeOf(iban) === LEEWARD_BANK_CODE ? 0 : OTHER_BANK_FEE_KURUS;
+function arrivalCopy(recipient: Recipient): string {
+  return recipient.isLeeward ? "In seconds" : "In a few minutes";
 }
 
-// ---------------------------------------------------------------------------
-// Amount helpers. Money is held in integer kuruş to avoid float drift.
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/* Hooks                                                                      */
+/* -------------------------------------------------------------------------- */
 
-const toLira = (kurus: number): number => kurus / 100;
-
-/** Keep digits and separators, and at most two decimals after a comma. */
-function sanitizeAmountInput(raw: string): string {
-  const cleaned = raw.replace(/[^\d.,]/g, "");
-  const commaIndex = cleaned.indexOf(",");
-  if (commaIndex === -1) return cleaned;
-  const whole = cleaned.slice(0, commaIndex);
-  const fraction = cleaned
-    .slice(commaIndex + 1)
-    .replace(/[.,]/g, "")
-    .slice(0, 2);
-  return `${whole},${fraction}`;
+function useMediaQuery(query: string): boolean {
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const media = window.matchMedia(query);
+      media.addEventListener("change", onChange);
+      return () => media.removeEventListener("change", onChange);
+    },
+    [query],
+  );
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
 }
 
-/**
- * Parse Turkish-style input ("1.250,50") into kuruş. A lone dot followed by
- * one or two digits ("1250.5") is read as a decimal point, since that is what
- * people mean when they type it.
- */
-function parseAmountToKurus(input: string): number | null {
-  const value = input.trim();
-  if (value === "") return null;
-
-  let normalized: string;
-  if (value.includes(",")) {
-    normalized = value.replace(/\./g, "").replace(",", ".");
-  } else if (/^\d+\.\d{1,2}$/.test(value)) {
-    normalized = value;
-  } else {
-    normalized = value.replace(/\./g, "");
-  }
-
-  if (!/^\d+(\.\d{0,2})?$/.test(normalized)) return null;
-  const [whole, fraction = ""] = normalized.split(".");
-  const kurus = Number(whole) * 100 + Number(fraction.padEnd(2, "0"));
-  return Number.isSafeInteger(kurus) ? kurus : null;
+/** Current time, ticking every second while `active`. */
+function useNow(active: boolean): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!active) return;
+    setNow(Date.now());
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [active]);
+  return now;
 }
 
-const money = (kurus: number): string => formatAmount(toLira(kurus), CURRENCY, LOCALE);
-
-// ---------------------------------------------------------------------------
-// Mock data and API
-// ---------------------------------------------------------------------------
-
-/** Builds a valid Turkish IBAN from a bank code and account number. */
-function mockIban(bankCode: string, account: string): string {
-  const bban = `${bankCode}0${account}`;
-  const check = 98 - ibanRemainder(`${bban}TR00`);
-  return `TR${String(check).padStart(2, "0")}${bban}`;
-}
-
-interface Recipient {
-  id: string;
-  name: string;
-  iban: string;
-}
-
-interface SourceAccount {
-  name: string;
-  iban: string;
-  balanceKurus: number;
-  dailyLimitKurus: number;
-  sentTodayKurus: number;
-  phoneLast4: string;
-}
-
-const MOCK_ACCOUNT: SourceAccount = {
-  name: "Everyday account",
-  iban: mockIban(LEEWARD_BANK_CODE, "0000012345678901"),
-  balanceKurus: 2_458_035, // ₺24.580,35
-  dailyLimitKurus: 5_000_000, // ₺50.000,00
-  sentTodayKurus: 1_200_000, // ₺12.000,00
-  phoneLast4: "4821",
-};
-
-const MOCK_RECIPIENTS: Recipient[] = [
-  { id: "r1", name: "Deniz Yılmaz", iban: mockIban(LEEWARD_BANK_CODE, "0000098765432100") },
-  { id: "r2", name: "Elif Kaya", iban: mockIban("00062", "0000629384710552") },
-  { id: "r3", name: "Mert Demir", iban: mockIban("00046", "0000461029384756") },
-  { id: "r4", name: "Zeynep Arslan", iban: mockIban("00064", "0000640012938475") },
-];
-
-/** The mock SMS always carries this code. */
-const MOCK_OTP = "123456";
-
-const delay = (ms: number, signal?: AbortSignal) =>
-  new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(resolve, ms);
-    signal?.addEventListener("abort", () => {
-      clearTimeout(timer);
-      reject(new DOMException("Aborted", "AbortError"));
-    });
-  });
-
-interface TransferDraft {
-  recipientName: string;
-  iban: string;
-  amountKurus: number;
-  feeKurus: number;
-  description: string;
-}
-
-interface OtpChallenge {
-  challengeId: string;
-  expiresAt: number;
-}
-
-type VerifyResult =
-  | { ok: true; reference: string }
-  | { ok: false; reason: "wrong-code"; attemptsLeft: number }
-  | { ok: false; reason: "locked" | "expired" };
-
-const mockApi = {
-  async requestOtp(_draft: TransferDraft, signal?: AbortSignal): Promise<OtpChallenge> {
-    await delay(700, signal);
-    return {
-      challengeId: crypto.randomUUID(),
-      expiresAt: Date.now() + OTP_TTL_SECONDS * 1000,
+/** One AbortController per component, aborted on unmount. */
+function useAbortSignal(): () => AbortSignal {
+  const controllers = useRef(new Set<AbortController>());
+  useEffect(() => {
+    const active = controllers.current;
+    return () => {
+      active.forEach((controller) => controller.abort());
+      active.clear();
     };
-  },
-
-  async verifyAndSend(
-    challenge: OtpChallenge,
-    code: string,
-    attemptsUsed: number,
-    signal?: AbortSignal,
-  ): Promise<VerifyResult> {
-    await delay(900, signal);
-    if (Date.now() > challenge.expiresAt) return { ok: false, reason: "expired" };
-    if (code === MOCK_OTP) {
-      return { ok: true, reference: `LW${Date.now().toString(36).toUpperCase()}` };
-    }
-    const attemptsLeft = OTP_MAX_ATTEMPTS - (attemptsUsed + 1);
-    return attemptsLeft > 0
-      ? { ok: false, reason: "wrong-code", attemptsLeft }
-      : { ok: false, reason: "locked" };
-  },
-};
-
-const isAbort = (error: unknown) => error instanceof DOMException && error.name === "AbortError";
-
-// ---------------------------------------------------------------------------
-// Flow state
-// ---------------------------------------------------------------------------
-
-type Step = "recipient" | "amount" | "review" | "verify" | "done";
-
-const STEP_ORDER: Step[] = ["recipient", "amount", "review", "verify"];
-
-const STEP_TITLES: Record<Step, string> = {
-  recipient: "Who are you sending to?",
-  amount: "How much are you sending?",
-  review: "Check your transfer",
-  verify: "Enter your code",
-  done: "Money sent",
-};
-
-const NEW_RECIPIENT = "new";
-
-interface FlowState {
-  step: Step;
-  recipientChoice: string;
-  newName: string;
-  newIban: string;
-  amountInput: string;
-  description: string;
-  challenge: OtpChallenge | null;
-  reference: string | null;
+  }, []);
+  return useCallback(() => {
+    const controller = new AbortController();
+    controllers.current.add(controller);
+    return controller.signal;
+  }, []);
 }
 
-type FlowAction =
-  | { type: "go"; step: Step }
-  | { type: "back" }
-  | { type: "set"; patch: Partial<FlowState> }
-  | { type: "challenge"; challenge: OtpChallenge }
-  | { type: "sent"; reference: string }
-  | { type: "reset" };
-
-const initialState: FlowState = {
-  step: "recipient",
-  recipientChoice: MOCK_RECIPIENTS[0]?.id ?? NEW_RECIPIENT,
-  newName: "",
-  newIban: "",
-  amountInput: "",
-  description: "",
-  challenge: null,
-  reference: null,
-};
-
-function reducer(state: FlowState, action: FlowAction): FlowState {
-  switch (action.type) {
-    case "go":
-      return { ...state, step: action.step };
-    case "back": {
-      const index = STEP_ORDER.indexOf(state.step);
-      if (index <= 0) return state;
-      // Leaving verification throws away the code that was sent.
-      return { ...state, step: STEP_ORDER[index - 1], challenge: null };
-    }
-    case "set":
-      return { ...state, ...action.patch };
-    case "challenge":
-      return { ...state, challenge: action.challenge, step: "verify" };
-    case "sent":
-      return { ...state, reference: action.reference, challenge: null, step: "done" };
-    case "reset":
-      return initialState;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Layout primitives (token-only styles)
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/* Layout                                                                     */
+/* -------------------------------------------------------------------------- */
 
 const styles = {
-  screen: {
-    minHeight: "100dvh",
-    background: "var(--lw-color-bg-canvas)",
-    color: "var(--lw-color-text-primary)",
+  page: {
+    minHeight: "100%",
+    background: "var(--lw-fill-surface-canvas)",
+    color: "var(--lw-text-default)",
   },
   column: {
-    maxWidth: "440px",
-    marginInline: "auto",
-    paddingInline: "var(--lw-space-md)",
-    paddingBlock: "var(--lw-space-md) var(--lw-space-xl)",
     display: "flex",
     flexDirection: "column",
     gap: "var(--lw-space-lg)",
+    maxWidth: "var(--lw-size-content-sm)",
+    marginInline: "auto",
+    paddingBlock: "var(--lw-space-lg) var(--lw-space-xl)",
+    paddingInline: "var(--lw-space-md)",
   },
   header: {
     display: "flex",
     alignItems: "center",
-    gap: "var(--lw-space-xs)",
-    minHeight: "44px",
+    justifyContent: "space-between",
+    gap: "var(--lw-space-sm)",
+    minHeight: "var(--lw-size-control-md)",
   },
-  stack: { display: "flex", flexDirection: "column", gap: "var(--lw-space-lg)" },
-  tight: { display: "flex", flexDirection: "column", gap: "var(--lw-space-sm)" },
-  inline: { display: "flex", alignItems: "center", gap: "var(--lw-space-sm)" },
-  summaryList: { margin: 0, display: "flex", flexDirection: "column", gap: "var(--lw-space-md)" },
+  section: { display: "flex", flexDirection: "column", gap: "var(--lw-space-lg)" },
+  group: { display: "flex", flexDirection: "column", gap: "var(--lw-space-sm)" },
+  actions: { display: "flex", flexDirection: "column", gap: "var(--lw-space-sm)" },
+  summaryList: { display: "flex", flexDirection: "column", gap: "var(--lw-space-sm)", margin: "var(--lw-space-none)" },
   summaryRow: {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "baseline",
+    justifyContent: "space-between",
     gap: "var(--lw-space-md)",
   },
-  summaryValue: { margin: 0, textAlign: "end" },
-  divider: {
-    border: 0,
-    borderBlockStart: "1px solid var(--lw-color-border-subtle)",
-    margin: 0,
-  },
-  alert: {
-    display: "flex",
-    alignItems: "flex-start",
-    gap: "var(--lw-space-xs)",
-    padding: "var(--lw-space-sm) var(--lw-space-md)",
-    borderRadius: "var(--lw-radius-card)",
-    border: "1px solid var(--lw-color-feedback-danger-border)",
-    background: "var(--lw-color-feedback-danger-bg)",
-    color: "var(--lw-color-feedback-danger-text)",
-  },
-  focusTarget: { outline: "none" },
+  summaryValue: { margin: "var(--lw-space-none)", textAlign: "end", overflowWrap: "anywhere" },
+  centered: { display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--lw-space-sm)", textAlign: "center" },
+  skeletonRow: { display: "flex", alignItems: "center", gap: "var(--lw-space-sm)", padding: "var(--lw-space-sm) var(--lw-space-md)" },
+  skeletonText: { flex: 1 },
 } satisfies Record<string, CSSProperties>;
 
-function ErrorNotice({ children }: { children: ReactNode }) {
+const STEP_HEADING_ID = "transfer-step-heading";
+
+/* -------------------------------------------------------------------------- */
+/* Shared pieces                                                              */
+/* -------------------------------------------------------------------------- */
+
+function StepHeading({ children, description }: { children: ReactNode; description?: ReactNode }) {
   return (
-    <div role="alert" style={styles.alert}>
-      <Icon name="alert-circle" size="sm" />
-      <Text as="div" variant="body-sm" tone="danger">
+    <div style={styles.group}>
+      <Heading level={2} size="h3" id={STEP_HEADING_ID} tabIndex={-1}>
+        {children}
+      </Heading>
+      {description ? <Text tone="secondary">{description}</Text> : null}
+    </div>
+  );
+}
+
+function SummaryRow({ label, children, emphasis = false }: { label: string; children: ReactNode; emphasis?: boolean }) {
+  return (
+    <div style={styles.summaryRow}>
+      <Text as="dt" variant={emphasis ? "label-lg" : "body-md"} tone={emphasis ? "primary" : "secondary"}>
+        {label}
+      </Text>
+      <Text as="dd" variant={emphasis ? "label-lg" : "body-md"} style={styles.summaryValue}>
         {children}
       </Text>
     </div>
   );
 }
 
-function SummaryRow({ label, children }: { label: string; children: ReactNode }) {
+function Money({ kurus, direction = "neutral", size = "md" }: { kurus: number; direction?: "outgoing" | "neutral"; size?: "sm" | "md" | "lg" }) {
+  return <AmountDisplay value={toLira(kurus)} currency={CURRENCY} locale={LOCALE} direction={direction} size={size} />;
+}
+
+function FeeValue({ recipient }: { recipient: Recipient }) {
+  const feeKurus = feeKurusFor(recipient);
   return (
-    <div style={styles.summaryRow}>
-      <Text as="dt" variant="body-md" tone="secondary">
-        {label}
-      </Text>
-      <dd style={styles.summaryValue}>{children}</dd>
+    <>
+      <Money kurus={feeKurus} />
+      {feeKurus === 0 ? (
+        <Text as="span" variant="caption" tone="secondary" style={{ display: "block" }}>
+          Free between Leeward accounts
+        </Text>
+      ) : null}
+    </>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Step 1: Recipient                                                          */
+/* -------------------------------------------------------------------------- */
+
+type RecipientMode = "saved" | "new";
+
+type NewRecipientDraft = { name: string; iban: string; save: boolean };
+
+function RecipientStep({
+  recipientsState,
+  onRetry,
+  onChoose,
+  account,
+  draft,
+  onDraftChange,
+}: {
+  recipientsState: RecipientsState;
+  onRetry: () => void;
+  onChoose: (recipient: Recipient, saveAsNew: boolean) => void;
+  account: Account;
+  draft: NewRecipientDraft;
+  onDraftChange: (draft: NewRecipientDraft) => void;
+}) {
+  const [mode, setMode] = useState<RecipientMode>(() => (draft.name || draft.iban ? "new" : "saved"));
+  const [query, setQuery] = useState("");
+  const [touched, setTouched] = useState({ name: false, iban: false });
+  const [submitted, setSubmitted] = useState(false);
+  const fieldId = useId();
+  const nameId = `${fieldId}-name`;
+  const ibanId = `${fieldId}-iban`;
+
+  const nameError = submitted || touched.name ? validateName(draft.name) : undefined;
+  const ibanError = submitted || touched.iban ? validateIban(draft.iban, account.iban) : undefined;
+
+  const filtered = useMemo(() => {
+    if (recipientsState.status !== "ready") return [];
+    const needle = query.trim().toLocaleLowerCase(LOCALE);
+    if (!needle) return recipientsState.recipients;
+    const ibanNeedle = normalizeIban(needle);
+    return recipientsState.recipients.filter(
+      (recipient) =>
+        recipient.name.toLocaleLowerCase(LOCALE).includes(needle) ||
+        recipient.bankName.toLocaleLowerCase(LOCALE).includes(needle) ||
+        (ibanNeedle.length >= 4 && recipient.iban.includes(ibanNeedle)),
+    );
+  }, [recipientsState, query]);
+
+  function handleNewSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitted(true);
+    const nextNameError = validateName(draft.name);
+    const nextIbanError = validateIban(draft.iban, account.iban);
+    if (nextNameError || nextIbanError) {
+      document.getElementById(nextNameError ? nameId : ibanId)?.focus();
+      return;
+    }
+
+    const iban = normalizeIban(draft.iban);
+    const existing = recipientsState.status === "ready" ? recipientsState.recipients.find((r) => r.iban === iban) : undefined;
+    if (existing) {
+      onChoose(existing, false);
+      return;
+    }
+    const name = draft.name.trim().replace(/\s+/g, " ");
+    onChoose({ id: `new-${iban}`, name, iban, ...bankFromIban(iban) }, draft.save);
+  }
+
+  return (
+    <section style={styles.section} aria-labelledby={STEP_HEADING_ID}>
+      <StepHeading>Who are you paying?</StepHeading>
+
+      <SegmentedControl
+        label="Recipient type"
+        value={mode}
+        onValueChange={(value) => setMode(value as RecipientMode)}
+        fullWidth
+        options={[
+          { value: "saved", label: "Saved" },
+          { value: "new", label: "New" },
+        ]}
+      />
+
+      {mode === "saved" ? (
+        <SavedRecipients
+          state={recipientsState}
+          recipients={filtered}
+          query={query}
+          onQueryChange={setQuery}
+          onRetry={onRetry}
+          onChoose={(recipient) => onChoose(recipient, false)}
+          onAddNew={() => setMode("new")}
+        />
+      ) : (
+        <form noValidate onSubmit={handleNewSubmit} style={styles.section}>
+          <div style={styles.group}>
+            <TextField
+              id={nameId}
+              label="Full name"
+              hint="First and last name, as their bank has it"
+              autoComplete="off"
+              autoCapitalize="words"
+              value={draft.name}
+              onChange={(event) => onDraftChange({ ...draft, name: event.target.value })}
+              onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+              {...(nameError ? { error: nameError } : {})}
+            />
+            <TextField
+              id={ibanId}
+              label="IBAN"
+              hint="26 characters, starts with TR"
+              autoComplete="off"
+              autoCapitalize="characters"
+              spellCheck={false}
+              numeric
+              value={draft.iban}
+              onChange={(event) => onDraftChange({ ...draft, iban: event.target.value.toUpperCase() })}
+              onBlur={() => {
+                setTouched((t) => ({ ...t, iban: true }));
+                const iban = normalizeIban(draft.iban);
+                if (iban.length === IBAN_LENGTH_TR) onDraftChange({ ...draft, iban: formatIban(iban) });
+              }}
+              {...(ibanError ? { error: ibanError } : {})}
+            />
+            <Checkbox
+              label="Save this person as a recipient"
+              checked={draft.save}
+              onCheckedChange={(checked) => onDraftChange({ ...draft, save: checked === true })}
+            />
+          </div>
+          <Button type="submit" variant="primary" size="lg" fullWidth>
+            Continue
+          </Button>
+        </form>
+      )}
+    </section>
+  );
+}
+
+function SavedRecipients({
+  state,
+  recipients,
+  query,
+  onQueryChange,
+  onRetry,
+  onChoose,
+  onAddNew,
+}: {
+  state: RecipientsState;
+  recipients: Recipient[];
+  query: string;
+  onQueryChange: (query: string) => void;
+  onRetry: () => void;
+  onChoose: (recipient: Recipient) => void;
+  onAddNew: () => void;
+}) {
+  if (state.status === "loading") {
+    return (
+      <Card variant="outlined" padding="none">
+        <div role="status" aria-busy="true" aria-label="Loading your recipients">
+          {[0, 1, 2].map((row) => (
+            <div key={row} style={styles.skeletonRow}>
+              <Skeleton shape="circle" width="var(--lw-size-avatar-md)" height="var(--lw-size-avatar-md)" />
+              <div style={styles.skeletonText}>
+                <Skeleton lines={2} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  if (state.status === "error") {
+    return (
+      <Alert
+        tone="danger"
+        title="We could not load your recipients"
+        actions={
+          <Button size="sm" variant="secondary" iconStart="refresh" onClick={onRetry}>
+            Try again
+          </Button>
+        }
+      >
+        Check your connection and try again. You can also pay someone new with their IBAN.
+      </Alert>
+    );
+  }
+
+  if (state.recipients.length === 0) {
+    return (
+      <EmptyState
+        icon="users"
+        title="No saved recipients yet"
+        description="Pay someone new with their name and IBAN. You can save them for next time."
+        headingLevel={3}
+        action={
+          <Button variant="secondary" iconStart="user-plus" onClick={onAddNew}>
+            Add a new recipient
+          </Button>
+        }
+      />
+    );
+  }
+
+  return (
+    <div style={styles.group}>
+      <TextField
+        label="Search recipients"
+        type="search"
+        autoComplete="off"
+        value={query}
+        onChange={(event) => onQueryChange(event.target.value)}
+      />
+      {recipients.length === 0 ? (
+        <EmptyState
+          icon="search"
+          title="No recipients match your search"
+          description="Check the spelling, or pay someone new with their IBAN."
+          headingLevel={3}
+          action={
+            <Button variant="secondary" iconStart="user-plus" onClick={onAddNew}>
+              Add a new recipient
+            </Button>
+          }
+        />
+      ) : (
+        <Card variant="outlined" padding="none">
+          <List aria-label="Saved recipients">
+            {recipients.map((recipient) => (
+              <ListItem
+                key={recipient.id}
+                title={recipient.name}
+                description={`${recipient.bankName} · ${maskIban(recipient.iban)}`}
+                leading={<Avatar name={recipient.name} decorative />}
+                onClick={() => onChoose(recipient)}
+                chevron
+              />
+            ))}
+          </List>
+        </Card>
+      )}
     </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Hooks
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/* Step 2: Amount                                                             */
+/* -------------------------------------------------------------------------- */
 
-/** Seconds left until `target`, ticking once a second. */
-function useSecondsUntil(target: number | null): number {
-  const [, setTick] = useState(0);
-
-  useEffect(() => {
-    if (!target) return;
-    const id = window.setInterval(() => {
-      setTick((t) => t + 1);
-      if (Date.now() >= target) window.clearInterval(id);
-    }, 1000);
-    return () => window.clearInterval(id);
-  }, [target]);
-
-  // Computed during render so the value is right on the first frame.
-  return target ? Math.max(0, Math.ceil((target - Date.now()) / 1000)) : 0;
+function amountError(amountKurus: number | null, maxKurus: number, feeKurus: number): ReactNode | undefined {
+  if (amountKurus === null) return "Enter the amount you want to send.";
+  if (amountKurus < MIN_AMOUNT_KURUS) {
+    return (
+      <>
+        The smallest amount you can send is <Money kurus={MIN_AMOUNT_KURUS} size="sm" />.
+      </>
+    );
+  }
+  if (amountKurus > maxKurus) {
+    return (
+      <>
+        This is more than you have. You can send up to <Money kurus={maxKurus} size="sm" />
+        {feeKurus > 0 ? " after the fee." : "."}
+      </>
+    );
+  }
+  return undefined;
 }
 
-/** Aborts in-flight mock requests when the screen unmounts. */
-function useAbortOnUnmount() {
-  const controllers = useRef(new Set<AbortController>());
-  useEffect(() => {
-    const active = controllers.current;
-    return () => active.forEach((c) => c.abort());
-  }, []);
-  return useCallback(() => {
-    const controller = new AbortController();
-    controllers.current.add(controller);
-    return {
-      signal: controller.signal,
-      release: () => controllers.current.delete(controller),
-    };
-  }, []);
+function AmountStep({
+  recipient,
+  account,
+  amount,
+  onAmountChange,
+  description,
+  onDescriptionChange,
+  onChangeRecipient,
+  onContinue,
+}: {
+  recipient: Recipient;
+  account: Account;
+  amount: number | null;
+  onAmountChange: (amount: number | null) => void;
+  description: string;
+  onDescriptionChange: (description: string) => void;
+  onChangeRecipient: () => void;
+  onContinue: () => void;
+}) {
+  const [submitted, setSubmitted] = useState(false);
+  const amountId = useId();
+  const feeKurus = feeKurusFor(recipient);
+  const maxKurus = Math.max(0, account.balanceKurus - feeKurus);
+  const amountKurus = amount === null ? null : toKurus(amount);
+  const error = submitted ? amountError(amountKurus, maxKurus, feeKurus) : undefined;
+  const totalKurus = (amountKurus ?? 0) + feeKurus;
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitted(true);
+    if (amountError(amountKurus, maxKurus, feeKurus)) {
+      document.getElementById(amountId)?.focus();
+      return;
+    }
+    onContinue();
+  }
+
+  return (
+    <section style={styles.section} aria-labelledby={STEP_HEADING_ID}>
+      <StepHeading>How much are you sending?</StepHeading>
+
+      <Card variant="outlined" padding="none">
+        <List aria-label="Recipient">
+          <ListItem
+            title={recipient.name}
+            description={`${recipient.bankName} · ${maskIban(recipient.iban)}`}
+            leading={<Avatar name={recipient.name} decorative />}
+            trailing={
+              <Button size="sm" variant="ghost" onClick={onChangeRecipient} aria-label={`Change recipient, currently ${recipient.name}`}>
+                Change
+              </Button>
+            }
+          />
+        </List>
+      </Card>
+
+      <form noValidate onSubmit={handleSubmit} style={styles.section}>
+        <div style={styles.group}>
+          <AmountInput
+            id={amountId}
+            label="Amount"
+            currency={CURRENCY}
+            locale={LOCALE}
+            value={amount}
+            onValueChange={onAmountChange}
+            min={toLira(MIN_AMOUNT_KURUS)}
+            max={toLira(maxKurus)}
+            hint={
+              <>
+                Available: <Money kurus={account.balanceKurus} size="sm" />
+              </>
+            }
+            {...(error ? { error } : {})}
+          />
+          <TextField
+            label="Description"
+            optional
+            hint="Shown to the recipient on their statement"
+            maxLength={DESCRIPTION_MAX_LENGTH}
+            autoComplete="off"
+            value={description}
+            onChange={(event) => onDescriptionChange(event.target.value)}
+          />
+        </div>
+
+        <Card variant="filled" padding="md">
+          <dl style={styles.summaryList} aria-label="Cost of this transfer">
+            <SummaryRow label="Fee">
+              <FeeValue recipient={recipient} />
+            </SummaryRow>
+            <SummaryRow label="Total from your account" emphasis>
+              <Money kurus={totalKurus} />
+            </SummaryRow>
+          </dl>
+        </Card>
+
+        <Button type="submit" variant="primary" size="lg" fullWidth>
+          Review transfer
+        </Button>
+      </form>
+    </section>
+  );
 }
 
-// ---------------------------------------------------------------------------
-// Screen
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/* Step 3: Review                                                             */
+/* -------------------------------------------------------------------------- */
 
-export default function TransferScreen() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const toast = useToast();
-  const startRequest = useAbortOnUnmount();
-  const formId = useId();
-  const account = MOCK_ACCOUNT;
+function ReviewStep({
+  recipient,
+  account,
+  amountKurus,
+  description,
+  requesting,
+  requestFailed,
+  onConfirm,
+}: {
+  recipient: Recipient;
+  account: Account;
+  amountKurus: number;
+  description: string;
+  requesting: boolean;
+  requestFailed: boolean;
+  onConfirm: () => void;
+}) {
+  const feeKurus = feeKurusFor(recipient);
 
-  // Move focus to the new heading on every step change so screen reader and
-  // keyboard users land at the top of the new content.
+  return (
+    <section style={styles.section} aria-labelledby={STEP_HEADING_ID}>
+      <StepHeading description="Check the details. Money sent to the wrong IBAN can be hard to get back.">
+        Check your transfer
+      </StepHeading>
+
+      <Card as="section" variant="outlined" padding="lg" aria-label="Transfer details">
+        <div style={styles.section}>
+          <dl style={styles.summaryList}>
+            <SummaryRow label="To">{recipient.name}</SummaryRow>
+            <SummaryRow label="IBAN">
+              <Text as="span" variant="code" tabular>
+                {formatIban(recipient.iban)}
+              </Text>
+            </SummaryRow>
+            <SummaryRow label="Bank">{recipient.bankName}</SummaryRow>
+            <SummaryRow label="From">
+              {account.name}, {maskIban(account.iban)}
+            </SummaryRow>
+            {description.trim() ? <SummaryRow label="Description">{description.trim()}</SummaryRow> : null}
+            <SummaryRow label="Arrives">{arrivalCopy(recipient)}</SummaryRow>
+          </dl>
+          <Divider />
+          <dl style={styles.summaryList}>
+            <SummaryRow label="Amount">
+              <Money kurus={amountKurus} />
+            </SummaryRow>
+            <SummaryRow label="Fee">
+              <FeeValue recipient={recipient} />
+            </SummaryRow>
+            <SummaryRow label="Total from your account" emphasis>
+              <Money kurus={amountKurus + feeKurus} direction="outgoing" />
+            </SummaryRow>
+          </dl>
+        </div>
+      </Card>
+
+      {requestFailed ? (
+        <Alert tone="danger" title="We could not send your code">
+          Nothing left your account. Check your connection and try again.
+        </Alert>
+      ) : null}
+
+      <div style={styles.actions}>
+        <Button variant="primary" size="lg" fullWidth iconStart="smartphone" loading={requesting} onClick={onConfirm}>
+          Send code by SMS
+        </Button>
+        <Text variant="body-sm" tone="secondary" style={{ textAlign: "center" }}>
+          We text a 6-digit code to {account.maskedPhone} to confirm it is you.
+        </Text>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Step 4: Verify                                                             */
+/* -------------------------------------------------------------------------- */
+
+function formatCountdown(ms: number): string {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
+function VerifyStep({
+  recipient,
+  account,
+  totalKurus,
+  session,
+  onResend,
+  resending,
+  resendFailed,
+  onConfirm,
+}: {
+  recipient: Recipient;
+  account: Account;
+  totalKurus: number;
+  session: CodeSession;
+  onResend: () => Promise<boolean>;
+  resending: boolean;
+  resendFailed: boolean;
+  onConfirm: (code: string) => Promise<ConfirmResult | "failed">;
+}) {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState<string | undefined>();
+  const [locked, setLocked] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [sendFailed, setSendFailed] = useState(false);
+  const submittingRef = useRef(false);
+  const otpId = useId();
+
+  // Tick only while the resend cooldown runs.
+  const now = useNow(session.resendAvailableAt > Date.now());
+  const resendInMs = session.resendAvailableAt - now;
+
+  async function submit(value: string) {
+    if (submittingRef.current || locked) return;
+    if (value.length < CODE_LENGTH) {
+      setError(`Enter all ${CODE_LENGTH} digits of the code.`);
+      document.getElementById(otpId)?.focus();
+      return;
+    }
+    submittingRef.current = true;
+    setSubmitting(true);
+    setError(undefined);
+    setSendFailed(false);
+    try {
+      const result = await onConfirm(value);
+      if (result === "failed") {
+        setSendFailed(true);
+        return;
+      }
+      switch (result.status) {
+        case "sent":
+          return;
+        case "wrong-code":
+          setError(
+            `This code does not match. Check the SMS and try again. ${result.attemptsLeft} ${
+              result.attemptsLeft === 1 ? "try" : "tries"
+            } left.`,
+          );
+          return;
+        case "expired":
+          setError("This code has expired. Send a new code and try again.");
+          return;
+        case "locked":
+          setLocked(true);
+          return;
+      }
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
+  }
+
+  async function resend() {
+    const ok = await onResend();
+    if (ok) {
+      setCode("");
+      setError(undefined);
+      setLocked(false);
+      setSendFailed(false);
+      document.getElementById(otpId)?.focus();
+    }
+  }
+
+  return (
+    <section style={styles.section} aria-labelledby={STEP_HEADING_ID}>
+      <StepHeading
+        description={
+          <>
+            You are sending <Money kurus={totalKurus} size="sm" /> to {recipient.name}, fee included.
+          </>
+        }
+      >
+        Enter your code
+      </StepHeading>
+
+      <form
+        noValidate
+        style={styles.section}
+        onSubmit={(event) => {
+          event.preventDefault();
+          void submit(code);
+        }}
+      >
+        <OTPInput
+          id={otpId}
+          label="Verification code"
+          length={CODE_LENGTH}
+          locale={LOCALE}
+          hint={`We sent a code to ${account.maskedPhone}. It expires in 3 minutes.`}
+          value={code}
+          onChange={(value) => {
+            setCode(value);
+            if (error) setError(undefined);
+          }}
+          onComplete={(value) => void submit(value)}
+          disabled={locked}
+          autoFocus
+          {...(error ? { error } : {})}
+        />
+
+        {locked ? (
+          <Alert tone="danger" live="alert" title="Too many wrong codes">
+            Nothing left your account. Send a new code to try again.
+          </Alert>
+        ) : null}
+
+        {sendFailed ? (
+          <Alert tone="danger" live="alert" title="We could not send your money">
+            Nothing left your account. Check your connection and try again.
+          </Alert>
+        ) : null}
+
+        {resendFailed ? (
+          <Alert tone="danger" title="We could not send a new code">
+            Check your connection and try again.
+          </Alert>
+        ) : null}
+
+        <div style={styles.actions}>
+          <Button type="submit" variant="primary" size="xl" fullWidth iconStart="send" loading={submitting} disabled={locked}>
+            Confirm and send
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            fullWidth
+            iconStart="refresh"
+            loading={resending}
+            disabled={submitting || resendInMs > 0}
+            onClick={() => void resend()}
+          >
+            {resendInMs > 0 ? `Send a new code in ${formatCountdown(resendInMs)}` : "Send a new code"}
+          </Button>
+        </div>
+      </form>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Done                                                                       */
+/* -------------------------------------------------------------------------- */
+
+function DoneStep({
+  recipient,
+  totalKurus,
+  amountKurus,
+  reference,
+  sentAt,
+  saved,
+  onSendAnother,
+  onClose,
+}: {
+  recipient: Recipient;
+  totalKurus: number;
+  amountKurus: number;
+  reference: string;
+  sentAt: number;
+  saved: boolean;
+  onSendAnother: () => void;
+  onClose?: () => void;
+}) {
+  const sentAtLabel = new Intl.DateTimeFormat(LOCALE, { dateStyle: "long", timeStyle: "short" }).format(sentAt);
+
+  return (
+    <section style={styles.section} aria-labelledby={STEP_HEADING_ID}>
+      <div style={styles.centered}>
+        <Text as="span" tone="success">
+          <Icon name="check-circle" size="xl" weight="bold" />
+        </Text>
+        <Heading level={2} size="h3" id={STEP_HEADING_ID} tabIndex={-1}>
+          Money sent
+        </Heading>
+        <Text tone="secondary">
+          {recipient.name} gets <Money kurus={amountKurus} size="sm" /> {arrivalCopy(recipient).toLocaleLowerCase(LOCALE)}.
+        </Text>
+      </div>
+
+      <Card as="section" variant="outlined" padding="lg" aria-label="Receipt">
+        <dl style={styles.summaryList}>
+          <SummaryRow label="To">{recipient.name}</SummaryRow>
+          <SummaryRow label="Sent">{sentAtLabel}</SummaryRow>
+          <SummaryRow label="Reference">
+            <Text as="span" variant="code">
+              {reference}
+            </Text>
+          </SummaryRow>
+          <SummaryRow label="Total from your account" emphasis>
+            <Money kurus={totalKurus} direction="outgoing" />
+          </SummaryRow>
+        </dl>
+      </Card>
+
+      {saved ? (
+        <Alert tone="success" title="Recipient saved">
+          {recipient.name} is in your saved recipients for next time.
+        </Alert>
+      ) : null}
+
+      <div style={styles.actions}>
+        <Button variant="primary" size="lg" fullWidth iconStart="send" onClick={onSendAnother}>
+          Send another transfer
+        </Button>
+        {onClose ? (
+          <Button variant="secondary" size="lg" fullWidth onClick={onClose}>
+            Done
+          </Button>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Screen                                                                     */
+/* -------------------------------------------------------------------------- */
+
+const EMPTY_DRAFT: NewRecipientDraft = { name: "", iban: "", save: false };
+
+export default function TransferScreen({ onClose }: TransferScreenProps) {
+  const isWide = useMediaQuery("(min-width: 640px)");
+  const nextSignal = useAbortSignal();
+
+  const [account, setAccount] = useState<Account>(MOCK_ACCOUNT);
+  const [recipientsState, setRecipientsState] = useState<RecipientsState>({ status: "loading" });
+
+  const [step, setStep] = useState<Step>("recipient");
+  const [recipient, setRecipient] = useState<Recipient | null>(null);
+  const [saveRecipient, setSaveRecipient] = useState(false);
+  const [draft, setDraft] = useState<NewRecipientDraft>(EMPTY_DRAFT);
+  const [amount, setAmount] = useState<number | null>(null);
+  const [description, setDescription] = useState("");
+
+  const [session, setSession] = useState<CodeSession | null>(null);
+  const [requestingCode, setRequestingCode] = useState(false);
+  const [requestFailed, setRequestFailed] = useState(false);
+  const [receipt, setReceipt] = useState<{ reference: string; sentAt: number; saved: boolean } | null>(null);
+
+  const loadRecipients = useCallback(async () => {
+    setRecipientsState({ status: "loading" });
+    try {
+      const recipients = await mockApi.fetchRecipients(nextSignal());
+      setRecipientsState({ status: "ready", recipients });
+    } catch (error) {
+      if (!isAbortError(error)) setRecipientsState({ status: "error" });
+    }
+  }, [nextSignal]);
+
+  useEffect(() => {
+    void loadRecipients();
+  }, [loadRecipients]);
+
+  // Move focus to the new step heading so keyboard and screen reader users start at the top.
+  // The verify step focuses the code field instead.
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    document.getElementById(`${formId}-title`)?.focus();
-  }, [state.step, formId]);
+    if (step !== "verify") document.getElementById(STEP_HEADING_ID)?.focus();
+  }, [step]);
 
-  // -- Derived values -------------------------------------------------------
+  const amountKurus = amount === null ? 0 : toKurus(amount);
+  const feeKurus = recipient ? feeKurusFor(recipient) : 0;
+  const totalKurus = amountKurus + feeKurus;
 
-  const savedRecipient = MOCK_RECIPIENTS.find((r) => r.id === state.recipientChoice);
-  const isNewRecipient = state.recipientChoice === NEW_RECIPIENT;
-  const recipientName = isNewRecipient ? state.newName.trim() : (savedRecipient?.name ?? "");
-  const recipientIban = isNewRecipient ? normalizeIban(state.newIban) : (savedRecipient?.iban ?? "");
-
-  const amountKurus = parseAmountToKurus(state.amountInput);
-  const feeKurus = recipientIban ? feeFor(recipientIban) : 0;
-  const totalKurus = (amountKurus ?? 0) + feeKurus;
-  const dailyRemainingKurus = Math.max(0, account.dailyLimitKurus - account.sentTodayKurus);
-
-  const draft = useMemo<TransferDraft | null>(
-    () =>
-      amountKurus === null
-        ? null
-        : {
-            recipientName,
-            iban: recipientIban,
-            amountKurus,
-            feeKurus,
-            description: state.description.trim(),
-          },
-    [recipientName, recipientIban, amountKurus, feeKurus, state.description],
-  );
-
-  // -- Step 1: recipient ----------------------------------------------------
-
-  const [recipientTouched, setRecipientTouched] = useState(false);
-
-  const nameError = useMemo(() => {
-    if (!isNewRecipient) return null;
-    const name = state.newName.trim();
-    if (name.length === 0) return "Enter the recipient's full name.";
-    if (name.length < 3 || !/\s/.test(name)) {
-      return "Enter their first and last name, as their bank has it.";
-    }
-    if (!/^[\p{L}][\p{L}\s.'-]*$/u.test(name)) {
-      return "Use letters only. Leave out numbers and symbols.";
-    }
-    return null;
-  }, [isNewRecipient, state.newName]);
-
-  const ibanError = useMemo(() => {
-    if (!isNewRecipient) return null;
-    const error = validateIban(state.newIban);
-    if (error) return IBAN_ERROR_COPY[error];
-    if (normalizeIban(state.newIban) === account.iban) {
-      return "This is your own account. Enter someone else's IBAN.";
-    }
-    return null;
-  }, [isNewRecipient, state.newIban, account.iban]);
-
-  const submitRecipient = (event: FormEvent) => {
-    event.preventDefault();
-    setRecipientTouched(true);
-    if (nameError || ibanError) {
-      // Send focus to the first field that needs fixing.
-      const firstInvalid = nameError ? `${formId}-name` : `${formId}-iban`;
-      document.getElementById(firstInvalid)?.focus();
-      return;
-    }
-    dispatch({ type: "go", step: "amount" });
-  };
-
-  // -- Step 2: amount -------------------------------------------------------
-
-  const [amountTouched, setAmountTouched] = useState(false);
-
-  const amountError = useMemo(() => {
-    if (state.amountInput.trim() === "") return "Enter an amount to send.";
-    if (amountKurus === null) return "Enter the amount in numbers, for example 1.250,00.";
-    if (amountKurus < MIN_AMOUNT_KURUS) return `The smallest amount you can send is ${money(MIN_AMOUNT_KURUS)}.`;
-    if (amountKurus + feeKurus > account.balanceKurus) {
-      return feeKurus > 0
-        ? `You have ${money(account.balanceKurus)}. With the ${money(feeKurus)} fee, the most you can send is ${money(Math.max(0, account.balanceKurus - feeKurus))}.`
-        : `You have ${money(account.balanceKurus)}. Enter a smaller amount.`;
-    }
-    if (amountKurus > dailyRemainingKurus) {
-      return `You can send ${money(dailyRemainingKurus)} more today. Enter a smaller amount or try again tomorrow.`;
-    }
-    return null;
-  }, [state.amountInput, amountKurus, feeKurus, account.balanceKurus, dailyRemainingKurus]);
-
-  const submitAmount = (event: FormEvent) => {
-    event.preventDefault();
-    setAmountTouched(true);
-    if (amountError) {
-      document.getElementById(`${formId}-amount`)?.focus();
-      return;
-    }
-    // Show the amount back in the same format it will be reviewed in.
-    if (amountKurus !== null) {
-      const fixed = (amountKurus / 100).toFixed(2).replace(".", ",");
-      dispatch({ type: "set", patch: { amountInput: fixed } });
-    }
-    dispatch({ type: "go", step: "review" });
-  };
-
-  // -- Step 3: review, sends the code ---------------------------------------
-
-  const [requestingOtp, setRequestingOtp] = useState(false);
-  const [requestError, setRequestError] = useState<string | null>(null);
-  const [resendAt, setResendAt] = useState<number | null>(null);
-
-  const requestOtp = useCallback(async () => {
-    if (!draft || requestingOtp) return;
-    setRequestingOtp(true);
-    setRequestError(null);
-    const { signal, release } = startRequest();
+  async function requestCode(transferId: string): Promise<boolean> {
     try {
-      const challenge = await mockApi.requestOtp(draft, signal);
-      dispatch({ type: "challenge", challenge });
-      setResendAt(Date.now() + OTP_RESEND_SECONDS * 1000);
+      await mockApi.requestCode(transferId, nextSignal());
+      setSession({ transferId, resendAvailableAt: Date.now() + RESEND_COOLDOWN_MS });
+      return true;
     } catch (error) {
-      if (isAbort(error)) return;
-      setRequestError("We couldn't send your code. Check your connection and try again. Nothing left your account.");
-    } finally {
-      release();
-      if (!signal.aborted) setRequestingOtp(false);
+      if (isAbortError(error)) return false;
+      throw error;
     }
-  }, [draft, requestingOtp, startRequest]);
+  }
 
-  // -- Step 4: verify -------------------------------------------------------
-
-  const [code, setCode] = useState("");
-  const [attemptsUsed, setAttemptsUsed] = useState(0);
-  const [verifying, setVerifying] = useState(false);
-  const [codeError, setCodeError] = useState<string | null>(null);
-  const [locked, setLocked] = useState(false);
-  const submittingRef = useRef(false);
-
-  const resendIn = useSecondsUntil(state.step === "verify" ? resendAt : null);
-  const expiresIn = useSecondsUntil(state.step === "verify" ? (state.challenge?.expiresAt ?? null) : null);
-  const expired = state.step === "verify" && state.challenge !== null && expiresIn === 0;
-
-  const resetVerification = () => {
-    setCode("");
-    setAttemptsUsed(0);
-    setCodeError(null);
-    setLocked(false);
-  };
-
-  const verify = async (value: string) => {
-    // A ref guards against a double send from onComplete plus a button press.
-    if (!state.challenge || !draft || submittingRef.current || locked) return;
-    if (value.length !== OTP_LENGTH) {
-      setCodeError(`Enter all ${OTP_LENGTH} digits of the code we sent you.`);
-      return;
-    }
-    if (expired) {
-      setCodeError("This code has expired. Send a new code to continue. Nothing left your account.");
-      return;
-    }
-
-    submittingRef.current = true;
-    setVerifying(true);
-    setCodeError(null);
-    const { signal, release } = startRequest();
+  async function handleReviewConfirm() {
+    if (requestingCode) return;
+    setRequestingCode(true);
+    setRequestFailed(false);
     try {
-      const result = await mockApi.verifyAndSend(state.challenge, value, attemptsUsed, signal);
-      if (result.ok) {
-        dispatch({ type: "sent", reference: result.reference });
-        toast.show({
-          title: "Money sent",
-          description: `${draft.recipientName} gets ${money(draft.amountKurus)} ${
-            draft.feeKurus === 0 ? "in a few seconds" : "within a few minutes"
-          }.`,
-          tone: "success",
-        });
-        return;
-      }
-      if (result.reason === "wrong-code") {
-        setAttemptsUsed((n) => n + 1);
-        setCodeError(
-          `That code doesn't match. Check the SMS and try again. You have ${result.attemptsLeft} ${
-            result.attemptsLeft === 1 ? "try" : "tries"
-          } left.`,
-        );
-      } else if (result.reason === "locked") {
-        setAttemptsUsed(OTP_MAX_ATTEMPTS);
-        setLocked(true);
-        setCodeError("That code didn't match 3 times, so we stopped this transfer. Send a new code to try again. Nothing left your account.");
-      } else {
-        setCodeError("This code has expired. Send a new code to continue. Nothing left your account.");
-      }
-    } catch (error) {
-      if (isAbort(error)) return;
-      setCodeError("We couldn't confirm your transfer. Check your connection and try again. Nothing left your account.");
+      // A new transfer id per review keeps a stale code from confirming changed details.
+      if (await requestCode(createTransferId())) setStep("verify");
+    } catch {
+      setRequestFailed(true);
     } finally {
-      release();
-      submittingRef.current = false;
-      if (!signal.aborted) setVerifying(false);
+      setRequestingCode(false);
     }
-  };
+  }
 
-  const resendCode = async () => {
-    resetVerification();
-    await requestOtp();
-  };
+  const [resending, setResending] = useState(false);
+  const [resendFailed, setResendFailed] = useState(false);
 
-  // -- Navigation -----------------------------------------------------------
+  async function handleResend(): Promise<boolean> {
+    if (!session || resending) return false;
+    setResending(true);
+    setResendFailed(false);
+    try {
+      return await requestCode(session.transferId);
+    } catch {
+      setResendFailed(true);
+      return false;
+    } finally {
+      setResending(false);
+    }
+  }
 
-  const goBack = () => {
-    if (state.step === "verify") resetVerification();
-    setRequestError(null);
-    dispatch({ type: "back" });
-  };
+  async function handleConfirm(code: string): Promise<ConfirmResult | "failed"> {
+    if (!session || !recipient) return "failed";
+    try {
+      const result = await mockApi.confirmTransfer(session.transferId, code, nextSignal());
+      if (result.status === "sent") {
+        const saved = saveRecipient && recipient.id.startsWith("new-");
+        if (saved && recipientsState.status === "ready") {
+          setRecipientsState({
+            status: "ready",
+            recipients: [{ ...recipient, id: `saved-${recipient.iban}` }, ...recipientsState.recipients],
+          });
+        }
+        setAccount((current) => ({ ...current, balanceKurus: current.balanceKurus - totalKurus }));
+        setReceipt({ reference: result.reference, sentAt: result.sentAt, saved });
+        setSession(null);
+        setStep("done");
+      }
+      return result;
+    } catch {
+      // Aborts and network failures both mean nothing was sent.
+      return "failed";
+    }
+  }
 
-  const startOver = () => {
-    resetVerification();
-    setRecipientTouched(false);
-    setAmountTouched(false);
-    setRequestError(null);
-    setResendAt(null);
-    dispatch({ type: "reset" });
-  };
+  function goBack() {
+    switch (step) {
+      case "amount":
+        setStep("recipient");
+        break;
+      case "review":
+        setRequestFailed(false);
+        setStep("amount");
+        break;
+      case "verify":
+        // Leaving the code step voids the code: details may change before the next try.
+        setSession(null);
+        setResendFailed(false);
+        setStep("review");
+        break;
+      default:
+        break;
+    }
+  }
 
-  const stepIndex = STEP_ORDER.indexOf(state.step);
-  const canGoBack = stepIndex > 0 && !verifying && !requestingOtp;
+  function startOver() {
+    setRecipient(null);
+    setSaveRecipient(false);
+    setDraft(EMPTY_DRAFT);
+    setAmount(null);
+    setDescription("");
+    setReceipt(null);
+    setStep("recipient");
+  }
 
-  // -- Render ---------------------------------------------------------------
-
-  const recipientOptions = [
-    ...MOCK_RECIPIENTS.map((r) => ({
-      value: r.id,
-      label: r.name,
-      description: `${bankNameOf(r.iban)}, ${maskIban(r.iban)}`,
-    })),
-    { value: NEW_RECIPIENT, label: "Someone new", description: "Enter their name and IBAN" },
-  ];
+  const canGoBack = step === "amount" || step === "review" || step === "verify";
 
   return (
-    <main style={styles.screen} aria-labelledby={`${formId}-title`}>
+    <main style={styles.page}>
       <div style={styles.column}>
         <header style={styles.header}>
-          {canGoBack && <IconButton icon="arrow-left" label="Back" onClick={goBack} />}
-          {state.step !== "done" && (
-            <Text variant="label-sm" tone="secondary">
-              Step {stepIndex + 1} of {STEP_ORDER.length}
-            </Text>
+          {canGoBack ? (
+            <Button variant="ghost" iconStart="arrow-left" onClick={goBack}>
+              Back
+            </Button>
+          ) : (
+            <span />
           )}
+          {onClose && step !== "done" ? (
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          ) : null}
         </header>
 
-        <Heading
-          level={1}
-          size="lg"
-          id={`${formId}-title`}
-          tabIndex={-1}
-          style={styles.focusTarget}
-        >
-          {STEP_TITLES[state.step]}
+        <Heading level={1} size="title-md">
+          Send money
         </Heading>
 
-        {/* Step 1: recipient */}
-        {state.step === "recipient" && (
-          <form noValidate onSubmit={submitRecipient} style={styles.stack}>
-            <RadioGroup
-              label="Choose a recipient"
-              name="recipient"
-              options={recipientOptions}
-              value={state.recipientChoice}
-              onValueChange={(value) => {
-                setRecipientTouched(false);
-                dispatch({ type: "set", patch: { recipientChoice: value } });
-              }}
-            />
+        {step !== "done" ? (
+          <Stepper
+            steps={STEP_NAMES}
+            current={STEP_INDEX[step]}
+            variant={isWide ? "full" : "compact"}
+            label="Transfer progress"
+          />
+        ) : null}
 
-            {isNewRecipient && (
-              <div style={styles.tight}>
-                <TextField
-                  id={`${formId}-name`}
-                  label="Full name"
-                  hint="As it appears on their bank account"
-                  autoComplete="off"
-                  autoCapitalize="words"
-                  maxLength={70}
-                  value={state.newName}
-                  onChange={(e) => dispatch({ type: "set", patch: { newName: e.target.value } })}
-                  error={recipientTouched ? nameError : undefined}
-                />
-                <TextField
-                  id={`${formId}-iban`}
-                  label="IBAN"
-                  hint="26 characters, starts with TR"
-                  autoComplete="off"
-                  autoCapitalize="characters"
-                  spellCheck={false}
-                  numeric
-                  maxLength={34}
-                  value={state.newIban}
-                  onChange={(e) =>
-                    dispatch({ type: "set", patch: { newIban: e.target.value.toUpperCase() } })
-                  }
-                  error={recipientTouched ? ibanError : undefined}
-                />
-              </div>
-            )}
-
-            <Button type="submit" variant="primary" size="lg" fullWidth iconEnd="arrow-right">
-              Continue
-            </Button>
-          </form>
-        )}
-
-        {/* Step 2: amount */}
-        {state.step === "amount" && (
-          <form noValidate onSubmit={submitAmount} style={styles.stack}>
-            <Card variant="outlined" padding="md">
-              <div style={styles.inline}>
-                <Avatar name={recipientName} decorative />
-                <div>
-                  <Text as="p" variant="label-md">
-                    {recipientName}
-                  </Text>
-                  <Text as="p" variant="body-sm" tone="secondary">
-                    {bankNameOf(recipientIban)}, {maskIban(recipientIban)}
-                  </Text>
-                </div>
-              </div>
-            </Card>
-
-            <div style={styles.tight}>
-              <TextField
-                id={`${formId}-amount`}
-                label="Amount"
-                prefix="₺"
-                inputMode="decimal"
-                numeric
-                autoComplete="off"
-                autoFocus
-                value={state.amountInput}
-                onChange={(e) =>
-                  dispatch({ type: "set", patch: { amountInput: sanitizeAmountInput(e.target.value) } })
-                }
-                hint={
-                  <>
-                    You have {money(account.balanceKurus)} in your {account.name}. You can send{" "}
-                    {money(dailyRemainingKurus)} more today.
-                  </>
-                }
-                error={amountTouched ? amountError : undefined}
-              />
-
-              <Text as="p" variant="body-md" tone="secondary">
-                {feeKurus === 0 ? (
-                  <>Fee: {money(0)}. Transfers to Leeward accounts are free and arrive in seconds.</>
-                ) : (
-                  <>
-                    Fee: {money(feeKurus)}. Transfers to {bankNameOf(recipientIban)} go by FAST and
-                    usually arrive within minutes.
-                  </>
-                )}
-              </Text>
-            </div>
-
-            <TextField
-              label="Description"
-              optional
-              hint="The recipient sees this on their statement"
-              maxLength={MAX_DESCRIPTION_LENGTH}
-              value={state.description}
-              onChange={(e) => dispatch({ type: "set", patch: { description: e.target.value } })}
-            />
-
-            <Button type="submit" variant="primary" size="lg" fullWidth iconEnd="arrow-right">
-              Review transfer
-            </Button>
-          </form>
-        )}
-
-        {/* Step 3: review */}
-        {state.step === "review" && draft && (
-          <div style={styles.stack}>
-            <Card as="section" variant="elevated" padding="lg" aria-labelledby={`${formId}-to`}>
-              <div style={styles.stack}>
-                <div style={styles.inline}>
-                  <Avatar name={draft.recipientName} size="lg" decorative />
-                  <div>
-                    <Heading level={2} size="sm" id={`${formId}-to`}>
-                      {draft.recipientName}
-                    </Heading>
-                    <Text as="p" variant="body-sm" tone="secondary">
-                      {bankNameOf(draft.iban)}
-                    </Text>
-                  </div>
-                </div>
-
-                <dl style={styles.summaryList}>
-                  <SummaryRow label="IBAN">
-                    <Text as="span" variant="body-md" tabular>
-                      {formatIban(draft.iban)}
-                    </Text>
-                  </SummaryRow>
-                  {draft.description && (
-                    <SummaryRow label="Description">
-                      <Text as="span" variant="body-md">
-                        {draft.description}
-                      </Text>
-                    </SummaryRow>
-                  )}
-                  <hr style={styles.divider} />
-                  <SummaryRow label="Amount">
-                    <AmountDisplay value={toLira(draft.amountKurus)} currency={CURRENCY} locale={LOCALE} direction="neutral" size="md" />
-                  </SummaryRow>
-                  <SummaryRow label="Fee">
-                    <AmountDisplay value={toLira(draft.feeKurus)} currency={CURRENCY} locale={LOCALE} direction="neutral" size="md" />
-                  </SummaryRow>
-                  <hr style={styles.divider} />
-                  <SummaryRow label="Total from your account">
-                    <AmountDisplay value={toLira(totalKurus)} currency={CURRENCY} locale={LOCALE} direction="outgoing" size="md" />
-                  </SummaryRow>
-                </dl>
-              </div>
-            </Card>
-
-            <div style={styles.inline}>
-              <Icon name="clock" size="sm" />
-              <Text as="p" variant="body-sm" tone="secondary">
-                {draft.feeKurus === 0
-                  ? "Your money arrives in seconds."
-                  : "Your money usually arrives within minutes."}
-              </Text>
-            </div>
-
-            {requestError && <ErrorNotice>{requestError}</ErrorNotice>}
-
-            <div style={styles.tight}>
-              <Text as="p" variant="body-sm" tone="secondary">
-                Next, we'll text a {OTP_LENGTH}-digit code to •••• {account.phoneLast4} to confirm it's you.
-              </Text>
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
-                iconStart="arrow-up-right"
-                loading={requestingOtp}
-                onClick={() => void requestOtp()}
-              >
-                {`Send ${money(draft.amountKurus)}`}
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: verify */}
-        {state.step === "verify" && draft && (
-          <form
-            noValidate
-            style={styles.stack}
-            onSubmit={(e) => {
-              e.preventDefault();
-              void verify(code);
+        {step === "recipient" ? (
+          <RecipientStep
+            recipientsState={recipientsState}
+            onRetry={() => void loadRecipients()}
+            account={account}
+            draft={draft}
+            onDraftChange={setDraft}
+            onChoose={(chosen, save) => {
+              setRecipient(chosen);
+              setSaveRecipient(save);
+              setStep("amount");
             }}
-          >
-            <Text as="p" variant="body-md" tone="secondary">
-              To send {money(draft.amountKurus)} to {draft.recipientName}, enter the code we texted
-              you. {money(totalKurus)} leaves your account in total.
-            </Text>
+          />
+        ) : null}
 
-            <OTPInput
-              label="Verification code"
-              length={OTP_LENGTH}
-              locale={LOCALE}
-              name="otp"
-              autoFocus
-              value={code}
-              onChange={(value) => {
-                setCode(value);
-                if (codeError && !locked) setCodeError(null);
-              }}
-              onComplete={(value) => void verify(value)}
-              disabled={verifying || locked}
-              hint={
-                expired
-                  ? "This code has expired."
-                  : `We sent a code to •••• ${account.phoneLast4}. It works for ${Math.floor(expiresIn / 60)}:${String(expiresIn % 60).padStart(2, "0")} more.`
-              }
-              error={codeError ?? undefined}
-            />
+        {step === "amount" && recipient ? (
+          <AmountStep
+            recipient={recipient}
+            account={account}
+            amount={amount}
+            onAmountChange={setAmount}
+            description={description}
+            onDescriptionChange={setDescription}
+            onChangeRecipient={() => setStep("recipient")}
+            onContinue={() => setStep("review")}
+          />
+        ) : null}
 
-            <div style={styles.inline}>
-              {attemptsUsed > 0 && !locked && (
-                <Badge tone="warning">
-                  {`${OTP_MAX_ATTEMPTS - attemptsUsed} of ${OTP_MAX_ATTEMPTS} tries left`}
-                </Badge>
-              )}
-            </div>
+        {step === "review" && recipient ? (
+          <ReviewStep
+            recipient={recipient}
+            account={account}
+            amountKurus={amountKurus}
+            description={description}
+            requesting={requestingCode}
+            requestFailed={requestFailed}
+            onConfirm={() => void handleReviewConfirm()}
+          />
+        ) : null}
 
-            <div style={styles.tight}>
-              {locked || expired ? (
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  iconStart="refresh"
-                  loading={requestingOtp}
-                  onClick={() => void resendCode()}
-                >
-                  Send a new code
-                </Button>
-              ) : (
-                <>
-                  <Button type="submit" variant="primary" size="lg" fullWidth iconStart="lock" loading={verifying}>
-                    {`Confirm and send ${money(draft.amountKurus)}`}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    fullWidth
-                    disabled={resendIn > 0 || verifying}
-                    loading={requestingOtp}
-                    onClick={() => void resendCode()}
-                  >
-                    {resendIn > 0 ? `Send a new code in ${resendIn}s` : "Send a new code"}
-                  </Button>
-                </>
-              )}
-              {requestError && <ErrorNotice>{requestError}</ErrorNotice>}
-            </div>
-          </form>
-        )}
+        {step === "verify" && recipient && session ? (
+          <VerifyStep
+            key={session.transferId}
+            recipient={recipient}
+            account={account}
+            totalKurus={totalKurus}
+            session={session}
+            onResend={handleResend}
+            resending={resending}
+            resendFailed={resendFailed}
+            onConfirm={handleConfirm}
+          />
+        ) : null}
 
-        {/* Done */}
-        {state.step === "done" && draft && (
-          <div style={styles.stack}>
-            <Card as="section" variant="elevated" padding="lg" aria-labelledby={`${formId}-receipt`}>
-              <div style={styles.stack}>
-                <div style={styles.inline}>
-                  <Badge tone="success">Sent</Badge>
-                  <Text as="p" variant="body-md">
-                    {draft.recipientName} gets {money(draft.amountKurus)}{" "}
-                    {draft.feeKurus === 0 ? "in a few seconds." : "within a few minutes."}
-                  </Text>
-                </div>
-                <Heading level={2} size="xs" id={`${formId}-receipt`}>
-                  Receipt
-                </Heading>
-                <dl style={styles.summaryList}>
-                  <SummaryRow label="To">
-                    <Text as="span" variant="body-md">
-                      {draft.recipientName}
-                    </Text>
-                  </SummaryRow>
-                  <SummaryRow label="IBAN">
-                    <Text as="span" variant="body-md" tabular>
-                      {maskIban(draft.iban)}
-                    </Text>
-                  </SummaryRow>
-                  <SummaryRow label="Amount">
-                    <AmountDisplay value={toLira(draft.amountKurus)} currency={CURRENCY} locale={LOCALE} direction="neutral" size="md" />
-                  </SummaryRow>
-                  <SummaryRow label="Fee">
-                    <AmountDisplay value={toLira(draft.feeKurus)} currency={CURRENCY} locale={LOCALE} direction="neutral" size="md" />
-                  </SummaryRow>
-                  <SummaryRow label="Total from your account">
-                    <AmountDisplay value={toLira(totalKurus)} currency={CURRENCY} locale={LOCALE} direction="outgoing" size="md" />
-                  </SummaryRow>
-                  <SummaryRow label="Reference">
-                    <Text as="span" variant="body-md" tabular>
-                      {state.reference}
-                    </Text>
-                  </SummaryRow>
-                </dl>
-              </div>
-            </Card>
-
-            <Button variant="primary" size="lg" fullWidth onClick={startOver}>
-              Make another transfer
-            </Button>
-          </div>
-        )}
+        {step === "done" && recipient && receipt ? (
+          <DoneStep
+            recipient={recipient}
+            amountKurus={amountKurus}
+            totalKurus={totalKurus}
+            reference={receipt.reference}
+            sentAt={receipt.sentAt}
+            saved={receipt.saved}
+            onSendAnother={startOver}
+            {...(onClose ? { onClose } : {})}
+          />
+        ) : null}
       </div>
     </main>
   );

@@ -1,369 +1,481 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import type { ChangeEvent, FormEvent, ReactNode } from "react";
+/**
+ * Leeward — money transfer screen.
+ *
+ * Flow: recipient → amount → review → SMS one-time code → receipt.
+ *
+ * Everything the screen needs from the backend goes through `transferApi`
+ * below, which is a mock with realistic latency and failure modes. Replace its
+ * implementation with real calls; the component only depends on its shape.
+ *
+ * Mock behaviour worth knowing when testing:
+ *   - The valid one-time code is 123456. Three wrong codes cancel the transfer.
+ *   - Codes expire after 3 minutes; a new one can be requested after 30 seconds.
+ *   - Transfers to Leeward accounts are free; other banks cost a flat fee.
+ *   - Money is handled as integer kuruş (1 TRY = 100 kuruş) throughout.
+ */
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import type { ButtonHTMLAttributes, ChangeEvent, FormEvent, ReactNode, RefObject } from 'react';
 
-/* ============================================================================
- * Types
- * ========================================================================== */
+// ---------------------------------------------------------------------------
+// Domain types
+// ---------------------------------------------------------------------------
 
-/** Money is always held as an integer number of kuruş (1 TRY = 100 kuruş). */
+/** Integer number of kuruş. Never use floating-point lira for arithmetic. */
 type Kurus = number;
 
-type Step = "recipient" | "amount" | "review" | "otp" | "done";
+interface Account {
+  id: string;
+  name: string;
+  iban: string;
+  availableKurus: Kurus;
+}
 
 interface Recipient {
   id: string;
   name: string;
-  /** Normalised IBAN: uppercase, no spaces. */
   iban: string;
 }
 
-interface SourceAccount {
-  name: string;
-  ibanLast4: string;
-  balance: Kurus;
-}
+type RecipientChoice =
+  | { kind: 'saved'; recipient: Recipient }
+  | { kind: 'new'; name: string; iban: string; save: boolean };
 
 interface Quote {
   quoteId: string;
-  amount: Kurus;
-  fee: Kurus;
-  total: Kurus;
+  amountKurus: Kurus;
+  feeKurus: Kurus;
+  totalKurus: Kurus;
 }
 
-interface OtpChallenge {
-  challengeId: string;
-  phoneMasked: string;
-  expiresAt: number;
+interface PendingTransfer {
+  transferId: string;
+  maskedPhone: string;
+  otpExpiresAt: number;
   resendAvailableAt: number;
 }
 
-type ConfirmResult =
-  | { status: "success"; reference: string; completedAt: string }
-  | { status: "invalid_code"; attemptsRemaining: number }
-  | { status: "expired" }
-  | { status: "locked" };
-
 interface Receipt {
   reference: string;
-  completedAt: string;
-  recipient: Recipient;
-  quote: Quote;
+  completedAt: number;
+  recipientName: string;
+  recipientIban: string;
+  amountKurus: Kurus;
+  feeKurus: Kurus;
+  totalKurus: Kurus;
 }
 
-type Async<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "ready"; data: T }
-  | { status: "error"; message: string };
+type ApiErrorCode =
+  | 'NETWORK'
+  | 'INSUFFICIENT_FUNDS'
+  | 'LIMIT_EXCEEDED'
+  | 'QUOTE_EXPIRED'
+  | 'OTP_INVALID'
+  | 'OTP_EXPIRED'
+  | 'OTP_LOCKED'
+  | 'RESEND_TOO_SOON';
 
-/* ============================================================================
- * Configuration & mock data
- * ========================================================================== */
+class ApiError extends Error {
+  readonly code: ApiErrorCode;
 
-const LEEWARD_BANK_CODE = "00999";
-const MIN_TRANSFER: Kurus = 100; // ₺1,00
-const MAX_TRANSFER: Kurus = 5_000_000; // ₺50.000,00
-const OTP_LENGTH = 6;
-const OTP_TTL_MS = 180_000;
-const OTP_RESEND_COOLDOWN_MS = 30_000;
-const OTP_MAX_ATTEMPTS = 3;
+  constructor(code: ApiErrorCode, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.code = code;
+  }
+}
 
-/** Demo only: the mock SMS gateway always "sends" this code. */
-const IS_DEMO = true;
-const DEMO_OTP = "123456";
+// ---------------------------------------------------------------------------
+// Money & IBAN helpers
+// ---------------------------------------------------------------------------
 
-const NEW_RECIPIENT = "__new__";
-
-const SOURCE_ACCOUNT: SourceAccount = {
-  name: "Everyday Account",
-  ibanLast4: "4021",
-  balance: 2_435_075, // ₺24.350,75
-};
-
-const SAVED_RECIPIENTS: readonly Recipient[] = [
-  { id: "r1", name: "Ayşe Yılmaz", iban: "TR870099900000012345678901" },
-  { id: "r2", name: "Mehmet Demir", iban: "TR540006200000629876543210" },
-  { id: "r3", name: "Zeynep Kaya", iban: "TR770001000000104455667788" },
-  { id: "r4", name: "Can Öztürk", iban: "TR440004600000461122334455" },
-];
-
-const BANKS: Readonly<Record<string, string>> = {
-  [LEEWARD_BANK_CODE]: "Leeward",
-  "00010": "Ziraat Bankası",
-  "00012": "Halkbank",
-  "00015": "VakıfBank",
-  "00046": "Akbank",
-  "00062": "Garanti BBVA",
-  "00064": "İş Bankası",
-  "00067": "Yapı Kredi",
-  "00111": "QNB",
-};
-
-/* ============================================================================
- * Formatting & validation helpers
- * ========================================================================== */
-
-const currencyFormatter = new Intl.NumberFormat("tr-TR", {
-  style: "currency",
-  currency: "TRY",
+const currencyFormatter = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' });
+const plainAmountFormatter = new Intl.NumberFormat('tr-TR', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
+const dateTimeFormatter = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 
-const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-  dateStyle: "medium",
-  timeStyle: "short",
-  timeZone: "Europe/Istanbul",
-});
-
-function formatTry(amount: Kurus): string {
-  return currencyFormatter.format(amount / 100);
+function formatTry(kurus: Kurus): string {
+  return currencyFormatter.format(kurus / 100);
 }
 
-function formatCountdown(ms: number): string {
-  const total = Math.max(0, Math.ceil(ms / 1000));
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${String(s).padStart(2, "0")}`;
+/** Amount without the currency sign, for putting back into the input: "1.234,50". */
+function formatAmountInput(kurus: Kurus): string {
+  return plainAmountFormatter.format(kurus / 100);
 }
+
+const MAX_INTEGER_DIGITS = 12;
+
+/**
+ * Parses an amount typed in Turkish notation into kuruş.
+ *
+ * Accepts "1234", "1234,5", "1.234,56" and, because people paste from other
+ * sources, "1234.56". A dot followed by exactly three-digit groups is treated
+ * as a thousands separator ("1.500" is 1500), as Turkish users expect.
+ * Returns null when the input is not a valid amount.
+ */
+function parseTryAmount(input: string): Kurus | null {
+  const s = input.replace(/[\s₺]/g, '');
+  if (s === '') return null;
+
+  let intPart: string;
+  let fracPart = '';
+
+  if (s.includes(',')) {
+    const parts = s.split(',');
+    if (parts.length !== 2) return null;
+    [intPart, fracPart] = parts;
+    if (intPart.includes('.')) {
+      if (!/^\d{1,3}(\.\d{3})+$/.test(intPart)) return null;
+      intPart = intPart.replace(/\./g, '');
+    }
+  } else if (s.includes('.')) {
+    if (/^\d{1,3}(\.\d{3})+$/.test(s)) {
+      intPart = s.replace(/\./g, '');
+    } else if (/^\d+\.\d{1,2}$/.test(s)) {
+      [intPart, fracPart] = s.split('.');
+    } else {
+      return null;
+    }
+  } else {
+    intPart = s;
+  }
+
+  if (!/^\d*$/.test(intPart) || !/^\d{0,2}$/.test(fracPart)) return null;
+  if (intPart === '' && fracPart === '') return null;
+  if (intPart.replace(/^0+/, '').length > MAX_INTEGER_DIGITS) return null;
+
+  return Number(intPart || '0') * 100 + Number(fracPart.padEnd(2, '0'));
+}
+
+const TR_IBAN_LENGTH = 26;
 
 function normalizeIban(raw: string): string {
-  return raw.replace(/\s+/g, "").toUpperCase();
+  return raw.replace(/[^0-9A-Za-z]/g, '').toUpperCase();
 }
 
+/** "TR330006100519786457841326" → "TR33 0006 1005 1978 6457 8413 26" */
 function formatIban(raw: string): string {
-  return normalizeIban(raw).replace(/(.{4})(?=.)/g, "$1 ");
+  return normalizeIban(raw).replace(/(.{4})(?=.)/g, '$1 ');
 }
 
-function bankCodeOf(iban: string): string {
-  return iban.slice(4, 9);
-}
-
-function bankNameOf(iban: string): string {
-  return BANKS[bankCodeOf(iban)] ?? "Other bank";
-}
-
+/** "TR33 0006 …41326" style masking for compact display. */
 function maskIban(iban: string): string {
-  return `•••• ${iban.slice(-4)}`;
+  const n = normalizeIban(iban);
+  return `${n.slice(0, 4)} •••• ${n.slice(-4)}`;
 }
 
-function initialsOf(name: string): string {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]!.toLocaleUpperCase("tr-TR"))
-    .join("");
-}
-
-/** ISO 13616 mod-97 check, restricted to Turkish IBANs (domestic TRY transfers). */
-function validateIban(raw: string): string | null {
-  const iban = normalizeIban(raw);
-  if (iban === "") return "Enter the recipient's IBAN.";
-  if (!iban.startsWith("TR")) return "Only Turkish IBANs (starting with TR) are supported.";
-  if (!/^TR\d{24}$/.test(iban)) return "A Turkish IBAN is TR followed by 24 digits.";
-  if (iban[9] !== "0") return "This IBAN isn't valid. Please check it and try again.";
-
+function ibanMod97(iban: string): number {
   const rearranged = iban.slice(4) + iban.slice(0, 4);
   let remainder = 0;
   for (const ch of rearranged) {
     const digits = /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch;
     for (const d of digits) remainder = (remainder * 10 + Number(d)) % 97;
   }
-  return remainder === 1 ? null : "This IBAN isn't valid. Please check it for typos.";
+  return remainder;
 }
 
-function normalizeName(raw: string): string {
-  return raw.trim().replace(/\s+/g, " ");
-}
-
-function validateName(raw: string): string | null {
-  const name = normalizeName(raw);
-  if (name === "") return "Enter the recipient's full name.";
-  if (name.length < 3) return "Enter the recipient's full name.";
-  if (name.length > 70) return "Name must be 70 characters or fewer.";
-  if (!/^\p{L}[\p{L} .'-]*$/u.test(name)) return "Name can only contain letters, spaces, apostrophes, dots and hyphens.";
+/** Returns a user-facing error message, or null when the IBAN is valid. */
+function validateTrIban(raw: string): string | null {
+  const iban = normalizeIban(raw);
+  if (iban === '') return 'Enter the recipient’s IBAN.';
+  if (!iban.startsWith('TR')) return 'Enter a Turkish IBAN. It starts with TR.';
+  if (!/^TR\d{24}$/.test(iban)) return 'A Turkish IBAN is TR followed by 24 digits.';
+  if (ibanMod97(iban) !== 1) return 'This IBAN isn’t valid. Check it for typos.';
   return null;
 }
 
-type AmountParse =
-  | { ok: true; amount: Kurus }
-  | { ok: false; reason: "empty" | "format" | "decimals" | "too_large" };
-
-function countChar(s: string, c: string): number {
-  return s.split(c).length - 1;
+/** Turkish IBAN layout: TR kk BBBBB R AAAAAAAAAAAAAAAA — bank code is digits 5–9. */
+function bankCodeOf(iban: string): string {
+  return normalizeIban(iban).slice(4, 9);
 }
 
-/**
- * Parses user input into kuruş without floating-point arithmetic.
- * Follows Turkish conventions ("1.250,50") but tolerates "1250.50":
- * - with both separators, the last one is the decimal separator;
- * - a single dot followed by exactly three digits is a thousands separator ("1.000" = 1000);
- * - repeated separators of one kind are thousands separators.
- */
-function parseTryAmount(input: string): AmountParse {
-  const s = input.replace(/[\s ₺]/g, "").replace(/(TL|TRY)$/i, "");
-  if (s === "") return { ok: false, reason: "empty" };
-  if (!/^[\d.,]+$/.test(s) || !/\d/.test(s)) return { ok: false, reason: "format" };
-
-  const lastDot = s.lastIndexOf(".");
-  const lastComma = s.lastIndexOf(",");
-  let decimalSep: "." | "," | null = null;
-
-  if (lastDot >= 0 && lastComma >= 0) {
-    decimalSep = lastDot > lastComma ? "." : ",";
-  } else if (lastComma >= 0) {
-    decimalSep = countChar(s, ",") === 1 ? "," : null;
-  } else if (lastDot >= 0) {
-    const digitsAfter = s.length - lastDot - 1;
-    decimalSep = countChar(s, ".") === 1 && digitsAfter !== 3 ? "." : null;
-  }
-
-  let intPart = s;
-  let fracPart = "";
-  if (decimalSep) {
-    const i = s.lastIndexOf(decimalSep);
-    intPart = s.slice(0, i);
-    fracPart = s.slice(i + 1);
-  }
-  if (/[.,]/.test(fracPart)) return { ok: false, reason: "format" };
-  if (fracPart.length > 2) return { ok: false, reason: "decimals" };
-
-  if (/[.,]/.test(intPart)) {
-    const groupSep = intPart.includes(".") ? "." : ",";
-    const escaped = groupSep === "." ? "\\." : ",";
-    if (!new RegExp(`^\\d{1,3}(${escaped}\\d{3})+$`).test(intPart)) return { ok: false, reason: "format" };
-    intPart = intPart.split(groupSep).join("");
-  }
-
-  const intDigits = intPart.replace(/^0+(?=\d)/, "") || "0";
-  if (intDigits.length > 9) return { ok: false, reason: "too_large" };
-
-  return { ok: true, amount: Number(intDigits) * 100 + Number(fracPart.padEnd(2, "0")) };
+function validateRecipientName(raw: string): string | null {
+  const name = raw.trim().replace(/\s+/g, ' ');
+  if (name === '') return 'Enter the recipient’s full name.';
+  if (name.length < 3) return 'Enter the recipient’s full name as it appears on their account.';
+  if (name.length > 70) return 'Names can be up to 70 characters.';
+  if (!/^\p{L}[\p{L}\p{M} .'-]*$/u.test(name)) return 'Use letters only. Spaces, dots, apostrophes and hyphens are fine.';
+  return null;
 }
 
-function validateAmount(input: string, balance: Kurus): { amount: Kurus | null; error: string | null } {
-  const parsed = parseTryAmount(input);
-  if (!parsed.ok) {
-    const messages: Record<typeof parsed.reason, string> = {
-      empty: "Enter an amount.",
-      format: "Enter a valid amount, for example 1.250,50.",
-      decimals: "Amounts can have at most 2 decimal places.",
-      too_large: `The maximum per transfer is ${formatTry(MAX_TRANSFER)}.`,
+// ---------------------------------------------------------------------------
+// Mock backend
+// ---------------------------------------------------------------------------
+
+const LEEWARD_BANK_CODE = '00999';
+
+const BANK_NAMES: Record<string, string> = {
+  [LEEWARD_BANK_CODE]: 'Leeward',
+  '00901': 'Anchor Bank',
+  '00902': 'Harbor Bank',
+  '00903': 'Meridian Bank',
+};
+
+function bankNameOf(iban: string): string {
+  return BANK_NAMES[bankCodeOf(iban)] ?? 'Other bank';
+}
+
+/** Builds a valid Turkish IBAN from a 22-digit BBAN, so mock data passes validation. */
+function mockIban(bban: string): string {
+  const check = 98 - ibanMod97(`TR00${bban}`);
+  return `TR${String(check).padStart(2, '0')}${bban}`;
+}
+
+const MOCK_ACCOUNT: Account = {
+  id: 'acc_main',
+  name: 'Everyday account',
+  iban: mockIban('0099900000000004815162'),
+  availableKurus: 4_825_075,
+};
+
+const MOCK_RECIPIENTS: Recipient[] = [
+  { id: 'rcp_1', name: 'Ayşe Yılmaz', iban: mockIban('0099900000000002718281') },
+  { id: 'rcp_2', name: 'Mehmet Demir', iban: mockIban('0090100000000003141592') },
+  { id: 'rcp_3', name: 'Zeynep Kaya', iban: mockIban('0090200000000001123581') },
+  { id: 'rcp_4', name: 'Can Öztürk', iban: mockIban('0090300000000006022140') },
+];
+
+const FEE_SCHEDULE = {
+  /** Flat fee for transfers to other banks. Leeward-to-Leeward is free. */
+  externalFlatKurus: 650,
+  perTransferLimitKurus: 25_000_000,
+  minimumKurus: 1,
+} as const;
+
+const OTP_TTL_MS = 3 * 60_000;
+const OTP_RESEND_COOLDOWN_MS = 30_000;
+const OTP_MAX_ATTEMPTS = 3;
+const MOCK_VALID_OTP = '123456';
+const OTP_LENGTH = 6;
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+function randomId(prefix: string): string {
+  const raw =
+    typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+  return `${prefix}_${raw.replace(/-/g, '').slice(0, 16)}`;
+}
+
+interface MockTransferRecord {
+  quote: Quote;
+  recipientName: string;
+  recipientIban: string;
+  saveRecipient: boolean;
+  attemptsLeft: number;
+  otpExpiresAt: number;
+  resendAvailableAt: number;
+  status: 'awaiting_otp' | 'completed' | 'cancelled';
+}
+
+const mockState = {
+  account: { ...MOCK_ACCOUNT },
+  recipients: [...MOCK_RECIPIENTS],
+  quotes: new Map<string, { quote: Quote; iban: string; expiresAt: number }>(),
+  transfers: new Map<string, MockTransferRecord>(),
+  /** idempotency key → transferId, so a retried "send code" never creates two transfers. */
+  idempotency: new Map<string, string>(),
+};
+
+function maskedPhone(): string {
+  return '+90 5•• ••• •• 47';
+}
+
+const transferApi = {
+  async getAccount(): Promise<Account> {
+    await sleep(350);
+    return { ...mockState.account };
+  },
+
+  async listRecipients(): Promise<Recipient[]> {
+    await sleep(450);
+    return [...mockState.recipients];
+  },
+
+  async getQuote(input: { iban: string; amountKurus: Kurus }): Promise<Quote> {
+    await sleep(500);
+    const { amountKurus } = input;
+    if (amountKurus > FEE_SCHEDULE.perTransferLimitKurus) {
+      throw new ApiError(
+        'LIMIT_EXCEEDED',
+        `The most you can send in one transfer is ${formatTry(FEE_SCHEDULE.perTransferLimitKurus)}.`,
+      );
+    }
+    const feeKurus = bankCodeOf(input.iban) === LEEWARD_BANK_CODE ? 0 : FEE_SCHEDULE.externalFlatKurus;
+    const quote: Quote = {
+      quoteId: randomId('qt'),
+      amountKurus,
+      feeKurus,
+      totalKurus: amountKurus + feeKurus,
     };
-    return { amount: null, error: messages[parsed.reason] };
-  }
-  const { amount } = parsed;
-  if (amount < MIN_TRANSFER) return { amount, error: `The minimum transfer is ${formatTry(MIN_TRANSFER)}.` };
-  if (amount > MAX_TRANSFER) return { amount, error: `The maximum per transfer is ${formatTry(MAX_TRANSFER)}.` };
-  if (amount > balance) return { amount, error: `This is more than your available balance of ${formatTry(balance)}.` };
-  return { amount, error: null };
-}
+    if (quote.totalKurus > mockState.account.availableKurus) {
+      throw new ApiError(
+        'INSUFFICIENT_FUNDS',
+        `With the ${formatTry(feeKurus)} fee this comes to ${formatTry(quote.totalKurus)}, which is more than your available balance of ${formatTry(mockState.account.availableKurus)}.`,
+      );
+    }
+    mockState.quotes.set(quote.quoteId, { quote, iban: input.iban, expiresAt: Date.now() + 10 * 60_000 });
+    return quote;
+  },
 
-function randomId(): string {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
-}
+  /** Reserves the transfer and sends the one-time code by SMS. */
+  async initiateTransfer(input: {
+    quoteId: string;
+    idempotencyKey: string;
+    recipientName: string;
+    recipientIban: string;
+    saveRecipient: boolean;
+  }): Promise<PendingTransfer> {
+    await sleep(700);
+    const existingId = mockState.idempotency.get(input.idempotencyKey);
+    const existing = existingId ? mockState.transfers.get(existingId) : undefined;
+    if (existingId && existing && existing.status === 'awaiting_otp') {
+      return {
+        transferId: existingId,
+        maskedPhone: maskedPhone(),
+        otpExpiresAt: existing.otpExpiresAt,
+        resendAvailableAt: existing.resendAvailableAt,
+      };
+    }
+    const stored = mockState.quotes.get(input.quoteId);
+    if (!stored || stored.expiresAt < Date.now()) {
+      throw new ApiError('QUOTE_EXPIRED', 'This quote has expired. Review the transfer again.');
+    }
+    const now = Date.now();
+    const transferId = randomId('trf');
+    const record: MockTransferRecord = {
+      quote: stored.quote,
+      recipientName: input.recipientName,
+      recipientIban: input.recipientIban,
+      saveRecipient: input.saveRecipient,
+      attemptsLeft: OTP_MAX_ATTEMPTS,
+      otpExpiresAt: now + OTP_TTL_MS,
+      resendAvailableAt: now + OTP_RESEND_COOLDOWN_MS,
+      status: 'awaiting_otp',
+    };
+    mockState.transfers.set(transferId, record);
+    mockState.idempotency.set(input.idempotencyKey, transferId);
+    return {
+      transferId,
+      maskedPhone: maskedPhone(),
+      otpExpiresAt: record.otpExpiresAt,
+      resendAvailableAt: record.resendAvailableAt,
+    };
+  },
 
-/* ============================================================================
- * Mock API (stands in for the banking backend)
- * ========================================================================== */
+  async resendOtp(transferId: string): Promise<Pick<PendingTransfer, 'otpExpiresAt' | 'resendAvailableAt'>> {
+    await sleep(500);
+    const record = mockState.transfers.get(transferId);
+    if (!record || record.status !== 'awaiting_otp') {
+      throw new ApiError('OTP_LOCKED', 'This transfer is no longer active.');
+    }
+    const now = Date.now();
+    if (now < record.resendAvailableAt) {
+      throw new ApiError('RESEND_TOO_SOON', 'Please wait a moment before requesting a new code.');
+    }
+    record.otpExpiresAt = now + OTP_TTL_MS;
+    record.resendAvailableAt = now + OTP_RESEND_COOLDOWN_MS;
+    record.attemptsLeft = OTP_MAX_ATTEMPTS;
+    return { otpExpiresAt: record.otpExpiresAt, resendAvailableAt: record.resendAvailableAt };
+  },
 
-class ApiError extends Error {}
+  async confirmTransfer(transferId: string, code: string): Promise<Receipt> {
+    await sleep(800);
+    const record = mockState.transfers.get(transferId);
+    if (!record || record.status !== 'awaiting_otp') {
+      throw new ApiError('OTP_LOCKED', 'This transfer is no longer active.');
+    }
+    if (Date.now() > record.otpExpiresAt) {
+      throw new ApiError('OTP_EXPIRED', 'This code has expired. Request a new one.');
+    }
+    if (code !== MOCK_VALID_OTP) {
+      record.attemptsLeft -= 1;
+      if (record.attemptsLeft <= 0) {
+        record.status = 'cancelled';
+        throw new ApiError('OTP_LOCKED', 'Too many incorrect codes. For your security, this transfer was cancelled.');
+      }
+      throw new ApiError(
+        'OTP_INVALID',
+        `That code isn’t right. ${record.attemptsLeft} ${record.attemptsLeft === 1 ? 'attempt' : 'attempts'} left.`,
+      );
+    }
+    record.status = 'completed';
+    mockState.account.availableKurus -= record.quote.totalKurus;
+    if (record.saveRecipient && !mockState.recipients.some((r) => r.iban === record.recipientIban)) {
+      mockState.recipients.push({ id: randomId('rcp'), name: record.recipientName, iban: record.recipientIban });
+    }
+    return {
+      reference: transferId.toUpperCase().replace('TRF_', 'LW-').slice(0, 15),
+      completedAt: Date.now(),
+      recipientName: record.recipientName,
+      recipientIban: record.recipientIban,
+      amountKurus: record.quote.amountKurus,
+      feeKurus: record.quote.feeKurus,
+      totalKurus: record.quote.totalKurus,
+    };
+  },
+
+  async cancelTransfer(transferId: string): Promise<void> {
+    await sleep(200);
+    const record = mockState.transfers.get(transferId);
+    if (record && record.status === 'awaiting_otp') record.status = 'cancelled';
+  },
+};
 
 function errorMessage(error: unknown): string {
-  return error instanceof ApiError ? error.message : "Something went wrong. Please try again.";
+  if (error instanceof ApiError) return error.message;
+  return 'Something went wrong on our side. Please try again.';
 }
 
-const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+// ---------------------------------------------------------------------------
+// Hooks
+// ---------------------------------------------------------------------------
 
-const api = (() => {
-  const quotes = new Map<string, Quote & { iban: string }>();
-  const challenges = new Map<
-    string,
-    { quoteId: string; code: string; expiresAt: number; resendAvailableAt: number; attempts: number; active: boolean }
-  >();
-  const completed = new Map<string, ConfirmResult>();
+type AsyncState<T> =
+  | { status: 'loading' }
+  | { status: 'error'; error: unknown }
+  | { status: 'success'; data: T };
 
-  /** Fee schedule: free between Leeward accounts, tiered FAST/EFT fee otherwise. */
-  function feeFor(iban: string, amount: Kurus): Kurus {
-    if (bankCodeOf(iban) === LEEWARD_BANK_CODE) return 0;
-    return amount <= 1_000_000 ? 525 : 1275; // ₺5,25 up to ₺10.000, then ₺12,75
-  }
+/** Runs `load` on mount and on `reload()`, ignoring responses that arrive after a newer request. */
+function useAsync<T>(load: () => Promise<T>): [AsyncState<T>, () => void] {
+  const [state, setState] = useState<AsyncState<T>>({ status: 'loading' });
+  const [attempt, setAttempt] = useState(0);
+  const loadRef = useRef(load);
+  loadRef.current = load;
 
-  return {
-    async getQuote(input: { iban: string; amount: Kurus }): Promise<Quote> {
-      await wait(600);
-      if (validateIban(input.iban) !== null) throw new ApiError("The recipient's IBAN is not valid.");
-      if (input.amount < MIN_TRANSFER || input.amount > MAX_TRANSFER) {
-        throw new ApiError("This amount is outside your transfer limits.");
-      }
-      const fee = feeFor(input.iban, input.amount);
-      const quote: Quote = { quoteId: randomId(), amount: input.amount, fee, total: input.amount + fee };
-      quotes.set(quote.quoteId, { ...quote, iban: input.iban });
-      return quote;
-    },
+  useEffect(() => {
+    let active = true;
+    setState({ status: 'loading' });
+    loadRef.current().then(
+      (data) => active && setState({ status: 'success', data }),
+      (error: unknown) => active && setState({ status: 'error', error }),
+    );
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
 
-    async requestOtp(quoteId: string): Promise<OtpChallenge> {
-      await wait(700);
-      if (!quotes.has(quoteId)) throw new ApiError("This transfer has expired. Please start again.");
-      const now = Date.now();
-      for (const c of challenges.values()) {
-        if (c.quoteId !== quoteId || !c.active) continue;
-        const locked = c.attempts >= OTP_MAX_ATTEMPTS;
-        if (!locked && now < c.resendAvailableAt) throw new ApiError("Please wait before requesting another code.");
-        c.active = false;
-      }
-      const challenge = {
-        quoteId,
-        code: DEMO_OTP,
-        expiresAt: now + OTP_TTL_MS,
-        resendAvailableAt: now + OTP_RESEND_COOLDOWN_MS,
-        attempts: 0,
-        active: true,
-      };
-      const challengeId = randomId();
-      challenges.set(challengeId, challenge);
-      return {
-        challengeId,
-        phoneMasked: "+90 5•• ••• •• 47",
-        expiresAt: challenge.expiresAt,
-        resendAvailableAt: challenge.resendAvailableAt,
-      };
-    },
+  const reload = useCallback(() => setAttempt((n) => n + 1), []);
+  return [state, reload];
+}
 
-    async confirmTransfer(input: { challengeId: string; code: string; idempotencyKey: string }): Promise<ConfirmResult> {
-      await wait(900);
-      const previous = completed.get(input.idempotencyKey);
-      if (previous) return previous;
+/** Current time, re-rendering every second while `enabled`. */
+function useNow(enabled: boolean): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!enabled) return;
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [enabled]);
+  return now;
+}
 
-      const c = challenges.get(input.challengeId);
-      if (!c || !c.active || Date.now() >= c.expiresAt) return { status: "expired" };
-      if (c.attempts >= OTP_MAX_ATTEMPTS) return { status: "locked" };
-      if (input.code !== c.code) {
-        c.attempts += 1;
-        const attemptsRemaining = OTP_MAX_ATTEMPTS - c.attempts;
-        return attemptsRemaining > 0 ? { status: "invalid_code", attemptsRemaining } : { status: "locked" };
-      }
-
-      c.active = false;
-      const result: ConfirmResult = {
-        status: "success",
-        reference: `LW${Date.now().toString().slice(-8)}${Math.floor(Math.random() * 90 + 10)}`,
-        completedAt: new Date().toISOString(),
-      };
-      completed.set(input.idempotencyKey, result);
-      return result;
-    },
-  };
-})();
-
-/* ============================================================================
- * Hooks
- * ========================================================================== */
-
-function useIsMounted() {
-  const mounted = useRef(false);
+/** Guards async callbacks from setting state after the component has gone. */
+function useMountedRef() {
+  const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -373,1011 +485,1237 @@ function useIsMounted() {
   return mounted;
 }
 
-function useNow(active: boolean, intervalMs = 1000): number {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    if (!active) return;
-    setNow(Date.now());
-    const id = setInterval(() => setNow(Date.now()), intervalMs);
-    return () => clearInterval(id);
-  }, [active, intervalMs]);
-  return now;
+function formatCountdown(ms: number): string {
+  const total = Math.max(0, Math.ceil(ms / 1000));
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-/* ============================================================================
- * Screen
- * ========================================================================== */
+// ---------------------------------------------------------------------------
+// Presentational primitives
+// ---------------------------------------------------------------------------
 
-const STEP_TITLES: Record<Exclude<Step, "done">, string> = {
-  recipient: "Who are you sending to?",
-  amount: "How much?",
-  review: "Review transfer",
-  otp: "Confirm with SMS code",
-};
-const STEP_ORDER: Exclude<Step, "done">[] = ["recipient", "amount", "review", "otp"];
-
-export default function TransferScreen() {
-  // Remounting the flow with a fresh key is the simplest way to guarantee a clean reset.
-  const [session, setSession] = useState(0);
+function Spinner({ label }: { label?: string }) {
   return (
-    <div className="lw-transfer">
-      <style>{styles}</style>
-      <TransferFlow key={session} onRestart={() => setSession((s) => s + 1)} />
+    <span className="lw-spinner" role={label ? 'status' : undefined} aria-label={label}>
+      <span aria-hidden="true" />
+    </span>
+  );
+}
+
+function Button({
+  variant = 'primary',
+  busy = false,
+  children,
+  disabled,
+  ...rest
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'link'; busy?: boolean }) {
+  return (
+    <button
+      {...rest}
+      className={`lw-btn lw-btn--${variant}`}
+      disabled={disabled || busy}
+      aria-busy={busy || undefined}
+      type={rest.type ?? 'button'}
+    >
+      {busy && <Spinner />}
+      <span>{children}</span>
+    </button>
+  );
+}
+
+function Alert({ tone = 'error', children }: { tone?: 'error' | 'info'; children: ReactNode }) {
+  return (
+    <div className={`lw-alert lw-alert--${tone}`} role={tone === 'error' ? 'alert' : 'status'}>
+      {children}
     </div>
   );
 }
 
-function TransferFlow({ onRestart }: { onRestart: () => void }) {
-  const mounted = useIsMounted();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isFirstRender = useRef(true);
-
-  const [step, setStep] = useState<Step>("recipient");
-
-  // Recipient
-  const [selection, setSelection] = useState<string | null>(null);
-  const [newName, setNewName] = useState("");
-  const [newIban, setNewIban] = useState("");
-  const [touched, setTouched] = useState({ name: false, iban: false, recipientSubmitted: false, amount: false });
-
-  // Amount
-  const [amountInput, setAmountInput] = useState("");
-
-  // Review
-  const [quote, setQuote] = useState<Async<Quote>>({ status: "idle" });
-  const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
-  const quoteRequestId = useRef(0);
-  const [sendingCode, setSendingCode] = useState(false);
-  const [sendCodeError, setSendCodeError] = useState<string | null>(null);
-
-  // OTP
-  const [challenge, setChallenge] = useState<OtpChallenge | null>(null);
-  const [otpCode, setOtpCode] = useState("");
-  const [otpError, setOtpError] = useState<string | null>(null);
-  const [otpLocked, setOtpLocked] = useState(false);
-  const [verifying, setVerifying] = useState(false);
-  const verifyingRef = useRef(false);
-  const [resending, setResending] = useState(false);
-  const now = useNow(step === "otp");
-
-  // Done
-  const [receipt, setReceipt] = useState<Receipt | null>(null);
-
-  // Move focus to the new step's heading so screen-reader and keyboard users keep their place.
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    containerRef.current?.querySelector<HTMLElement>("[data-step-heading]")?.focus();
-  }, [step]);
-
-  const nameError = validateName(newName);
-  const ibanError = validateIban(newIban);
-
-  const recipient: Recipient | null = useMemo(() => {
-    if (selection === NEW_RECIPIENT) {
-      if (nameError || ibanError) return null;
-      return { id: NEW_RECIPIENT, name: normalizeName(newName), iban: normalizeIban(newIban) };
-    }
-    return SAVED_RECIPIENTS.find((r) => r.id === selection) ?? null;
-  }, [selection, newName, newIban, nameError, ibanError]);
-
-  const amountCheck = validateAmount(amountInput, SOURCE_ACCOUNT.balance);
-
-  const loadQuote = useCallback(
-    async (to: Recipient, amount: Kurus) => {
-      const requestId = ++quoteRequestId.current;
-      setQuote({ status: "loading" });
-      setSendCodeError(null);
-      try {
-        const data = await api.getQuote({ iban: to.iban, amount });
-        if (!mounted.current || requestId !== quoteRequestId.current) return;
-        setQuote({ status: "ready", data });
-        setIdempotencyKey(randomId());
-      } catch (error) {
-        if (!mounted.current || requestId !== quoteRequestId.current) return;
-        setQuote({ status: "error", message: errorMessage(error) });
-      }
-    },
-    [mounted],
+function FieldError({ id, message }: { id: string; message: string | null }) {
+  if (!message) return null;
+  return (
+    <p id={id} className="lw-field-error">
+      {message}
+    </p>
   );
+}
 
-  function goBack() {
-    if (step === "amount") setStep("recipient");
-    else if (step === "review") {
-      quoteRequestId.current += 1; // discard any in-flight quote
-      setQuote({ status: "idle" });
-      setChallenge(null);
-      setOtpError(null);
-      setOtpLocked(false);
-      setStep("amount");
-    } else if (step === "otp") {
-      // Keep the challenge: the code already sent stays usable if the person comes straight back.
-      if (verifyingRef.current) return;
-      setOtpCode("");
-      setStep("review");
+function Avatar({ name }: { name: string }) {
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toLocaleUpperCase('tr-TR'))
+    .join('');
+  return (
+    <span className="lw-avatar" aria-hidden="true">
+      {initials}
+    </span>
+  );
+}
+
+function StepHeading({ children, headingRef }: { children: ReactNode; headingRef: RefObject<HTMLHeadingElement | null> }) {
+  return (
+    <h2 className="lw-step-title" ref={headingRef} tabIndex={-1}>
+      {children}
+    </h2>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Step 1 — recipient
+// ---------------------------------------------------------------------------
+
+interface RecipientStepProps {
+  initial: RecipientChoice | null;
+  recipients: AsyncState<Recipient[]>;
+  onReloadRecipients: () => void;
+  ownIban: string | null;
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onContinue: (choice: RecipientChoice) => void;
+}
+
+function RecipientStep({ initial, recipients, onReloadRecipients, ownIban, headingRef, onContinue }: RecipientStepProps) {
+  const ids = useId();
+  const [mode, setMode] = useState<'saved' | 'new'>(initial?.kind ?? 'saved');
+  const [selectedId, setSelectedId] = useState<string | null>(
+    initial?.kind === 'saved' ? initial.recipient.id : null,
+  );
+  const [name, setName] = useState(initial?.kind === 'new' ? initial.name : '');
+  const [iban, setIban] = useState(initial?.kind === 'new' ? formatIban(initial.iban) : '');
+  const [save, setSave] = useState(initial?.kind === 'new' ? initial.save : true);
+  const [touched, setTouched] = useState({ name: false, iban: false });
+  const [submitted, setSubmitted] = useState(false);
+
+  const ibanInputRef = useRef<HTMLInputElement>(null);
+  const pendingCaret = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    if (pendingCaret.current !== null && ibanInputRef.current) {
+      ibanInputRef.current.setSelectionRange(pendingCaret.current, pendingCaret.current);
+      pendingCaret.current = null;
     }
-  }
+  }, [iban]);
 
-  function submitRecipient(event: FormEvent) {
-    event.preventDefault();
-    setTouched((t) => ({ ...t, recipientSubmitted: true, name: true, iban: true }));
-    if (selection === NEW_RECIPIENT && !ibanError) setNewIban(formatIban(newIban));
-    if (recipient) setStep("amount");
-  }
+  const savedList = recipients.status === 'success' ? recipients.data : [];
+  const hasSaved = savedList.length > 0;
+  const effectiveMode = recipients.status === 'success' && !hasSaved ? 'new' : mode;
 
-  function submitAmount(event: FormEvent) {
-    event.preventDefault();
-    setTouched((t) => ({ ...t, amount: true }));
-    if (!recipient || amountCheck.error || amountCheck.amount === null) return;
-    setStep("review");
-    void loadQuote(recipient, amountCheck.amount);
+  let ibanError = validateTrIban(iban);
+  if (!ibanError && ownIban && normalizeIban(iban) === normalizeIban(ownIban)) {
+    ibanError = 'This is your own account. Choose a different recipient.';
   }
+  const nameError = validateRecipientName(name);
+  const matchingSaved = !ibanError ? savedList.find((r) => r.iban === normalizeIban(iban)) : undefined;
 
-  async function sendCode() {
-    if (quote.status !== "ready" || sendingCode) return;
-    if (challenge && !otpLocked && Date.now() < challenge.expiresAt) {
-      setStep("otp");
+  const showNameError = (touched.name || submitted) && nameError;
+  const showIbanError = (touched.iban || submitted) && ibanError;
+  const savedError = submitted && effectiveMode === 'saved' && !selectedId ? 'Choose who you’re sending money to.' : null;
+
+  function handleIbanChange(e: ChangeEvent<HTMLInputElement>) {
+    const input = e.target;
+    const caret = input.selectionStart ?? input.value.length;
+    // Keep the caret after the same number of significant characters once spaces are re-inserted.
+    const significantBeforeCaret = normalizeIban(input.value.slice(0, caret)).length;
+    const normalized = normalizeIban(input.value).slice(0, TR_IBAN_LENGTH);
+    const formatted = formatIban(normalized);
+    let newCaret = 0;
+    let seen = 0;
+    while (newCaret < formatted.length && seen < significantBeforeCaret) {
+      if (formatted[newCaret] !== ' ') seen += 1;
+      newCaret += 1;
+    }
+    if (formatted === iban) {
+      // No state change means no re-render, so restore the caret React is about to lose.
+      input.value = formatted;
+      input.setSelectionRange(newCaret, newCaret);
       return;
     }
-    setSendingCode(true);
-    setSendCodeError(null);
+    pendingCaret.current = newCaret;
+    setIban(formatted);
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setSubmitted(true);
+    if (effectiveMode === 'saved') {
+      const recipient = savedList.find((r) => r.id === selectedId);
+      if (recipient) onContinue({ kind: 'saved', recipient });
+      return;
+    }
+    if (nameError || ibanError) {
+      // Move focus to the first invalid field so keyboard and screen reader users land on the problem.
+      const firstInvalid = nameError ? `${ids}-name` : `${ids}-iban`;
+      document.getElementById(firstInvalid)?.focus();
+      return;
+    }
+    if (matchingSaved) {
+      onContinue({ kind: 'saved', recipient: matchingSaved });
+      return;
+    }
+    onContinue({
+      kind: 'new',
+      name: name.trim().replace(/\s+/g, ' '),
+      iban: normalizeIban(iban),
+      save,
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="lw-step">
+      <StepHeading headingRef={headingRef}>Who are you sending to?</StepHeading>
+
+      {(recipients.status !== 'success' || hasSaved) && (
+        <div className="lw-segmented" role="group" aria-label="Recipient type">
+          <button
+            type="button"
+            aria-pressed={effectiveMode === 'saved'}
+            className="lw-segmented__option"
+            onClick={() => setMode('saved')}
+          >
+            Saved recipients
+          </button>
+          <button
+            type="button"
+            aria-pressed={effectiveMode === 'new'}
+            className="lw-segmented__option"
+            onClick={() => setMode('new')}
+          >
+            New recipient
+          </button>
+        </div>
+      )}
+
+      {effectiveMode === 'saved' && (
+        <>
+          {recipients.status === 'loading' && (
+            <div className="lw-list-skeleton" aria-busy="true" aria-label="Loading saved recipients">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="lw-skeleton-row" />
+              ))}
+            </div>
+          )}
+          {recipients.status === 'error' && (
+            <Alert>
+              <p>We couldn’t load your saved recipients.</p>
+              <Button variant="link" onClick={onReloadRecipients}>
+                Try again
+              </Button>
+            </Alert>
+          )}
+          {recipients.status === 'success' && (
+            <fieldset className="lw-fieldset" aria-describedby={savedError ? `${ids}-saved-error` : undefined}>
+              <legend className="lw-visually-hidden">Saved recipients</legend>
+              <ul className="lw-recipient-list">
+                {savedList.map((r) => (
+                  <li key={r.id}>
+                    <label className="lw-recipient" data-selected={selectedId === r.id || undefined}>
+                      <input
+                        type="radio"
+                        name={`${ids}-recipient`}
+                        value={r.id}
+                        checked={selectedId === r.id}
+                        onChange={() => setSelectedId(r.id)}
+                        className="lw-visually-hidden"
+                      />
+                      <Avatar name={r.name} />
+                      <span className="lw-recipient__text">
+                        <span className="lw-recipient__name">{r.name}</span>
+                        <span className="lw-recipient__meta">
+                          {bankNameOf(r.iban)} · <span aria-label={`IBAN ending ${r.iban.slice(-4)}`}>{maskIban(r.iban)}</span>
+                        </span>
+                      </span>
+                      <span className="lw-radio-dot" aria-hidden="true" />
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <FieldError id={`${ids}-saved-error`} message={savedError} />
+            </fieldset>
+          )}
+        </>
+      )}
+
+      {effectiveMode === 'new' && (
+        <div className="lw-fields">
+          <div className="lw-field">
+            <label htmlFor={`${ids}-name`} className="lw-label">
+              Full name
+            </label>
+            <input
+              id={`${ids}-name`}
+              className="lw-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+              autoComplete="name"
+              autoCapitalize="words"
+              spellCheck={false}
+              maxLength={70}
+              aria-invalid={showNameError ? true : undefined}
+              aria-describedby={`${ids}-name-hint ${showNameError ? `${ids}-name-error` : ''}`}
+            />
+            <p id={`${ids}-name-hint`} className="lw-hint">
+              As it appears on their bank account.
+            </p>
+            <FieldError id={`${ids}-name-error`} message={showNameError ? nameError : null} />
+          </div>
+
+          <div className="lw-field">
+            <label htmlFor={`${ids}-iban`} className="lw-label">
+              IBAN
+            </label>
+            <input
+              id={`${ids}-iban`}
+              ref={ibanInputRef}
+              className="lw-input lw-input--mono"
+              value={iban}
+              onChange={handleIbanChange}
+              onBlur={() => setTouched((t) => ({ ...t, iban: true }))}
+              placeholder="TR00 0000 0000 0000 0000 0000 00"
+              autoComplete="off"
+              autoCapitalize="characters"
+              autoCorrect="off"
+              spellCheck={false}
+              inputMode="text"
+              aria-invalid={showIbanError ? true : undefined}
+              aria-describedby={showIbanError ? `${ids}-iban-error` : `${ids}-iban-hint`}
+            />
+            {!showIbanError && (
+              <p id={`${ids}-iban-hint`} className="lw-hint">
+                {!ibanError ? `${bankNameOf(iban)} account` : 'TR followed by 24 digits.'}
+              </p>
+            )}
+            <FieldError id={`${ids}-iban-error`} message={showIbanError ? ibanError : null} />
+          </div>
+
+          {matchingSaved ? (
+            <Alert tone="info">This IBAN belongs to {matchingSaved.name}, who is already in your saved recipients.</Alert>
+          ) : (
+            <label className="lw-checkbox">
+              <input type="checkbox" checked={save} onChange={(e) => setSave(e.target.checked)} />
+              <span>Save this recipient for next time</span>
+            </label>
+          )}
+        </div>
+      )}
+
+      <div className="lw-actions">
+        <Button type="submit" disabled={effectiveMode === 'saved' && recipients.status !== 'success'}>
+          Continue
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Step 2 — amount
+// ---------------------------------------------------------------------------
+
+interface AmountStepProps {
+  recipientName: string;
+  account: AsyncState<Account>;
+  onReloadAccount: () => void;
+  initialAmount: Kurus | null;
+  initialDescription: string;
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onBack: () => void;
+  onContinue: (amountKurus: Kurus, description: string) => void;
+}
+
+const DESCRIPTION_MAX = 140;
+
+function AmountStep({
+  recipientName,
+  account,
+  onReloadAccount,
+  initialAmount,
+  initialDescription,
+  headingRef,
+  onBack,
+  onContinue,
+}: AmountStepProps) {
+  const ids = useId();
+  const [text, setText] = useState(initialAmount !== null ? formatAmountInput(initialAmount) : '');
+  const [description, setDescription] = useState(initialDescription);
+  const [touched, setTouched] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const available = account.status === 'success' ? account.data.availableKurus : null;
+  const parsed = parseTryAmount(text);
+
+  let error: string | null = null;
+  if (text.trim() === '') error = 'Enter an amount.';
+  else if (parsed === null) error = 'Enter an amount like 1.250,00.';
+  else if (parsed < FEE_SCHEDULE.minimumKurus) error = 'The amount must be more than ₺0,00.';
+  else if (parsed > FEE_SCHEDULE.perTransferLimitKurus)
+    error = `The most you can send in one transfer is ${formatTry(FEE_SCHEDULE.perTransferLimitKurus)}.`;
+  else if (available !== null && parsed > available)
+    error = `That’s more than your available balance of ${formatTry(available)}.`;
+
+  const showError = (touched || submitted) && error;
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setSubmitted(true);
+    if (error || parsed === null || account.status !== 'success') {
+      document.getElementById(`${ids}-amount`)?.focus();
+      return;
+    }
+    onContinue(parsed, description.trim());
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="lw-step">
+      <StepHeading headingRef={headingRef}>How much are you sending to {recipientName}?</StepHeading>
+
+      <div className="lw-field">
+        <label htmlFor={`${ids}-amount`} className="lw-label">
+          Amount
+        </label>
+        <div className="lw-amount" data-invalid={showError ? true : undefined}>
+          <span className="lw-amount__symbol" aria-hidden="true">
+            ₺
+          </span>
+          <input
+            id={`${ids}-amount`}
+            className="lw-amount__input"
+            value={text}
+            onChange={(e) => setText(e.target.value.replace(/[^\d.,]/g, ''))}
+            onBlur={() => {
+              setTouched(true);
+              if (parsed !== null) setText(formatAmountInput(parsed));
+            }}
+            inputMode="decimal"
+            autoComplete="off"
+            placeholder="0,00"
+            aria-invalid={showError ? true : undefined}
+            aria-describedby={`${ids}-balance ${showError ? `${ids}-amount-error` : ''}`}
+          />
+          <span className="lw-amount__code" aria-hidden="true">
+            TRY
+          </span>
+        </div>
+        <FieldError id={`${ids}-amount-error`} message={showError ? error : null} />
+        <p id={`${ids}-balance`} className="lw-hint">
+          {account.status === 'loading' && 'Checking your balance…'}
+          {account.status === 'success' && (
+            <>
+              From {account.data.name} · {formatTry(account.data.availableKurus)} available
+            </>
+          )}
+        </p>
+        {account.status === 'error' && (
+          <Alert>
+            <p>We couldn’t load your balance.</p>
+            <Button variant="link" onClick={onReloadAccount}>
+              Try again
+            </Button>
+          </Alert>
+        )}
+      </div>
+
+      <div className="lw-field">
+        <label htmlFor={`${ids}-desc`} className="lw-label">
+          Description <span className="lw-optional">(optional)</span>
+        </label>
+        <input
+          id={`${ids}-desc`}
+          className="lw-input"
+          value={description}
+          onChange={(e) => setDescription(e.target.value.slice(0, DESCRIPTION_MAX))}
+          maxLength={DESCRIPTION_MAX}
+          placeholder="e.g. Rent for November"
+          aria-describedby={`${ids}-desc-count`}
+        />
+        <p id={`${ids}-desc-count`} className="lw-hint lw-hint--end">
+          {description.length}/{DESCRIPTION_MAX}
+        </p>
+      </div>
+
+      <div className="lw-actions">
+        <Button variant="secondary" onClick={onBack}>
+          Back
+        </Button>
+        <Button type="submit" disabled={account.status !== 'success'}>
+          Review transfer
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Step 3 — review
+// ---------------------------------------------------------------------------
+
+interface ReviewStepProps {
+  account: Account;
+  recipientName: string;
+  recipientIban: string;
+  isNewRecipient: boolean;
+  amountKurus: Kurus;
+  description: string;
+  notice: string | null;
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onEditRecipient: () => void;
+  onEditAmount: () => void;
+  onCodeSent: (pending: PendingTransfer, quote: Quote) => void;
+  onInitiate: (quoteId: string, idempotencyKey: string) => Promise<PendingTransfer>;
+}
+
+function ReviewStep({
+  account,
+  recipientName,
+  recipientIban,
+  isNewRecipient,
+  amountKurus,
+  description,
+  notice,
+  headingRef,
+  onEditRecipient,
+  onEditAmount,
+  onCodeSent,
+  onInitiate,
+}: ReviewStepProps) {
+  const mounted = useMountedRef();
+  // One key per review: retrying "Send code" after a timeout can't create a second transfer.
+  const [idempotencyKey] = useState(() => randomId('idem'));
+  const [quoteState, reloadQuote] = useAsync(() => transferApi.getQuote({ iban: recipientIban, amountKurus }));
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+
+  async function handleSend() {
+    if (quoteState.status !== 'success' || sending) return;
+    setSending(true);
+    setSendError(null);
     try {
-      const next = await api.requestOtp(quote.data.quoteId);
+      const pending = await onInitiate(quoteState.data.quoteId, idempotencyKey);
+      if (mounted.current) onCodeSent(pending, quoteState.data);
+    } catch (err) {
       if (!mounted.current) return;
-      setChallenge(next);
-      setOtpCode("");
-      setOtpError(null);
-      setOtpLocked(false);
-      setStep("otp");
-    } catch (error) {
-      if (mounted.current) setSendCodeError(errorMessage(error));
-    } finally {
-      if (mounted.current) setSendingCode(false);
+      setSending(false);
+      if (err instanceof ApiError && err.code === 'QUOTE_EXPIRED') reloadQuote();
+      setSendError(errorMessage(err));
     }
   }
 
-  async function resendCode() {
-    if (quote.status !== "ready" || resending || verifyingRef.current) return;
-    setResending(true);
-    setOtpError(null);
+  const quoteError = quoteState.status === 'error' ? quoteState.error : null;
+  const fundsProblem =
+    quoteError instanceof ApiError && (quoteError.code === 'INSUFFICIENT_FUNDS' || quoteError.code === 'LIMIT_EXCEEDED');
+
+  return (
+    <div className="lw-step">
+      <StepHeading headingRef={headingRef}>Check your transfer</StepHeading>
+
+      {notice && <Alert>{notice}</Alert>}
+
+      <section className="lw-summary" aria-label="Recipient">
+        <div className="lw-summary__head">
+          <h3 className="lw-summary__title">To</h3>
+          <Button variant="link" onClick={onEditRecipient} disabled={sending} aria-label="Change recipient">
+            Change
+          </Button>
+        </div>
+        <div className="lw-summary__party">
+          <Avatar name={recipientName} />
+          <div>
+            <p className="lw-summary__name">
+              {recipientName}
+              {isNewRecipient && <span className="lw-badge">New</span>}
+            </p>
+            <p className="lw-summary__meta lw-mono">{formatIban(recipientIban)}</p>
+            <p className="lw-summary__meta">{bankNameOf(recipientIban)}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="lw-summary" aria-label="Amount">
+        <div className="lw-summary__head">
+          <h3 className="lw-summary__title">Amount</h3>
+          <Button variant="link" onClick={onEditAmount} disabled={sending} aria-label="Change amount">
+            Change
+          </Button>
+        </div>
+        <dl className="lw-rows">
+          <div className="lw-row">
+            <dt>They receive</dt>
+            <dd>{formatTry(amountKurus)}</dd>
+          </div>
+          <div className="lw-row">
+            <dt>Transfer fee</dt>
+            <dd aria-live="polite">
+              {quoteState.status === 'loading' && <span className="lw-skeleton-text" aria-label="Calculating fee" />}
+              {quoteState.status === 'success' &&
+                (quoteState.data.feeKurus === 0 ? 'Free' : formatTry(quoteState.data.feeKurus))}
+              {quoteState.status === 'error' && '—'}
+            </dd>
+          </div>
+          <div className="lw-row lw-row--total">
+            <dt>Total from your account</dt>
+            <dd aria-live="polite">
+              {quoteState.status === 'loading' && <span className="lw-skeleton-text" aria-label="Calculating total" />}
+              {quoteState.status === 'success' && formatTry(quoteState.data.totalKurus)}
+              {quoteState.status === 'error' && '—'}
+            </dd>
+          </div>
+        </dl>
+        <p className="lw-summary__meta">
+          From {account.name} · <span className="lw-mono">{maskIban(account.iban)}</span>
+        </p>
+        {description && (
+          <p className="lw-summary__meta">
+            Description: <span className="lw-quote">{description}</span>
+          </p>
+        )}
+      </section>
+
+      {quoteState.status === 'error' && (
+        <Alert>
+          <p>{fundsProblem ? errorMessage(quoteError) : 'We couldn’t calculate the fee for this transfer.'}</p>
+          {fundsProblem ? (
+            <Button variant="link" onClick={onEditAmount}>
+              Change amount
+            </Button>
+          ) : (
+            <Button variant="link" onClick={reloadQuote}>
+              Try again
+            </Button>
+          )}
+        </Alert>
+      )}
+
+      {sendError && <Alert>{sendError}</Alert>}
+
+      <p className="lw-fineprint">
+        We’ll text a 6-digit code to your registered phone number to confirm. Transfers to other banks usually
+        arrive within minutes.
+      </p>
+
+      <div className="lw-actions">
+        <Button variant="secondary" onClick={onEditAmount} disabled={sending}>
+          Back
+        </Button>
+        <Button onClick={handleSend} busy={sending} disabled={quoteState.status !== 'success'}>
+          {sending ? 'Sending code…' : 'Send confirmation code'}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Step 4 — one-time code
+// ---------------------------------------------------------------------------
+
+interface OtpStepProps {
+  pending: PendingTransfer;
+  totalKurus: Kurus;
+  recipientName: string;
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onPendingChange: (pending: PendingTransfer) => void;
+  onConfirmed: (receipt: Receipt) => void;
+  onCancelled: (reason: string | null) => void;
+}
+
+function OtpStep({
+  pending,
+  totalKurus,
+  recipientName,
+  headingRef,
+  onPendingChange,
+  onConfirmed,
+  onCancelled,
+}: OtpStepProps) {
+  const ids = useId();
+  const mounted = useMountedRef();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const now = useNow(true);
+  const [code, setCode] = useState('');
+  const [verifying, setVerifying] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+
+  const expiresIn = pending.otpExpiresAt - now;
+  const resendIn = pending.resendAvailableAt - now;
+  const expired = expiresIn <= 0;
+  const busy = verifying || resending || cancelling;
+
+  async function verify(value: string) {
+    if (busy || value.length !== OTP_LENGTH || expired) return;
+    setVerifying(true);
+    setError(null);
+    setInfo(null);
     try {
-      const next = await api.requestOtp(quote.data.quoteId);
+      const receipt = await transferApi.confirmTransfer(pending.transferId, value);
+      if (mounted.current) onConfirmed(receipt);
+    } catch (err) {
       if (!mounted.current) return;
-      setChallenge(next);
-      setOtpCode("");
-      setOtpLocked(false);
-    } catch (error) {
-      if (mounted.current) setOtpError(errorMessage(error));
+      setVerifying(false);
+      if (err instanceof ApiError && err.code === 'OTP_LOCKED') {
+        onCancelled(err.message);
+        return;
+      }
+      setError(errorMessage(err));
+      setCode('');
+      // Focus after the input is re-enabled on the next render.
+      requestAnimationFrame(() => inputRef.current?.focus());
+    }
+  }
+
+  async function resend() {
+    if (busy || resendIn > 0) return;
+    setResending(true);
+    setError(null);
+    setInfo(null);
+    try {
+      const next = await transferApi.resendOtp(pending.transferId);
+      if (!mounted.current) return;
+      onPendingChange({ ...pending, ...next });
+      setCode('');
+      setInfo(`We’ve sent a new code to ${pending.maskedPhone}.`);
+      requestAnimationFrame(() => inputRef.current?.focus());
+    } catch (err) {
+      if (!mounted.current) return;
+      if (err instanceof ApiError && err.code === 'OTP_LOCKED') {
+        onCancelled(err.message);
+        return;
+      }
+      setError(errorMessage(err));
     } finally {
       if (mounted.current) setResending(false);
     }
   }
 
-  async function verify(code: string) {
-    if (!challenge || !recipient || quote.status !== "ready" || !idempotencyKey) return;
-    if (verifyingRef.current || code.length !== OTP_LENGTH || otpLocked || now >= challenge.expiresAt) return;
-
-    verifyingRef.current = true;
-    setVerifying(true);
-    setOtpError(null);
+  async function cancel() {
+    if (busy) return;
+    setCancelling(true);
     try {
-      const result = await api.confirmTransfer({ challengeId: challenge.challengeId, code, idempotencyKey });
-      if (!mounted.current) return;
-      switch (result.status) {
-        case "success":
-          setReceipt({ reference: result.reference, completedAt: result.completedAt, recipient, quote: quote.data });
-          setStep("done");
-          break;
-        case "invalid_code":
-          setOtpCode("");
-          setOtpError(
-            `That code isn't right. You have ${result.attemptsRemaining} ${
-              result.attemptsRemaining === 1 ? "attempt" : "attempts"
-            } left.`,
-          );
-          break;
-        case "expired":
-          setOtpError("This code has expired. Request a new one to continue.");
-          setChallenge((c) => (c ? { ...c, expiresAt: 0 } : c));
-          break;
-        case "locked":
-          setOtpCode("");
-          setOtpLocked(true);
-          setOtpError("Too many incorrect attempts. Request a new code to continue.");
-          break;
-      }
-    } catch (error) {
-      // The idempotency key makes it safe to retry: the transfer can never be executed twice.
-      if (mounted.current) setOtpError(errorMessage(error));
-    } finally {
-      verifyingRef.current = false;
-      if (mounted.current) setVerifying(false);
+      await transferApi.cancelTransfer(pending.transferId);
+    } catch {
+      // The pending transfer expires on its own if this fails; never trap the user on this step.
     }
+    if (mounted.current) onCancelled(null);
   }
 
-  function onOtpChange(event: ChangeEvent<HTMLInputElement>) {
-    const digits = event.target.value.replace(/\D/g, "").slice(0, OTP_LENGTH);
-    setOtpCode(digits);
-    if (otpError && !otpLocked) setOtpError(null);
-    if (digits.length === OTP_LENGTH) void verify(digits);
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, OTP_LENGTH);
+    setCode(digits);
+    if (error) setError(null);
+    // Submit automatically when the last digit arrives (typed, pasted or autofilled from SMS).
+    if (digits.length === OTP_LENGTH && code.length !== OTP_LENGTH) void verify(digits);
   }
 
-  const stepIndex = step === "done" ? STEP_ORDER.length : STEP_ORDER.indexOf(step);
-  const canGoBack = step === "amount" || step === "review" || (step === "otp" && !verifying);
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (code.length !== OTP_LENGTH) {
+      setError(`Enter all ${OTP_LENGTH} digits of the code.`);
+      inputRef.current?.focus();
+      return;
+    }
+    void verify(code);
+  }
 
   return (
-    <div className="lw-card" ref={containerRef}>
-      {step !== "done" && (
-        <header className="lw-header">
-          <div className="lw-header-row">
-            {canGoBack ? (
-              <button type="button" className="lw-icon-button" onClick={goBack} aria-label="Back">
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-            ) : (
-              <span className="lw-icon-spacer" aria-hidden="true" />
-            )}
-            <span className="lw-eyebrow">Send money</span>
-            <span className="lw-step-count">
-              Step {stepIndex + 1} of {STEP_ORDER.length}
-            </span>
-          </div>
-          <div className="lw-progress" aria-hidden="true">
-            <div className="lw-progress-bar" style={{ width: `${((stepIndex + 1) / STEP_ORDER.length) * 100}%` }} />
-          </div>
-          <h1 className="lw-title" tabIndex={-1} data-step-heading>
-            {STEP_TITLES[step]}
-          </h1>
-        </header>
-      )}
-
-      {step === "recipient" && (
-        <RecipientStep
-          selection={selection}
-          onSelect={(id) => {
-            setSelection(id);
-            setTouched((t) => ({ ...t, recipientSubmitted: false }));
-          }}
-          name={newName}
-          iban={newIban}
-          onNameChange={setNewName}
-          onIbanChange={(value) => setNewIban(value.toUpperCase().replace(/[^A-Z0-9 ]/g, ""))}
-          onNameBlur={() => setTouched((t) => ({ ...t, name: true }))}
-          onIbanBlur={() => {
-            setTouched((t) => ({ ...t, iban: true }));
-            if (newIban.trim()) setNewIban(formatIban(newIban));
-          }}
-          nameError={touched.name ? nameError : null}
-          ibanError={touched.iban ? ibanError : null}
-          selectionError={touched.recipientSubmitted && selection === null ? "Choose a recipient or add a new one." : null}
-          onSubmit={submitRecipient}
-        />
-      )}
-
-      {step === "amount" && recipient && (
-        <AmountStep
-          recipient={recipient}
-          value={amountInput}
-          onChange={setAmountInput}
-          onBlur={() => setTouched((t) => ({ ...t, amount: true }))}
-          preview={amountCheck.amount}
-          error={touched.amount ? amountCheck.error : null}
-          onSubmit={submitAmount}
-        />
-      )}
-
-      {step === "review" && recipient && (
-        <ReviewStep
-          recipient={recipient}
-          quote={quote}
-          onRetry={() => amountCheck.amount !== null && void loadQuote(recipient, amountCheck.amount)}
-          onChangeAmount={goBack}
-          onConfirm={sendCode}
-          sending={sendingCode}
-          error={sendCodeError}
-        />
-      )}
-
-      {step === "otp" && challenge && quote.status === "ready" && (
-        <OtpStep
-          challenge={challenge}
-          total={quote.data.total}
-          code={otpCode}
-          onChange={onOtpChange}
-          onSubmit={(event) => {
-            event.preventDefault();
-            void verify(otpCode);
-          }}
-          onResend={resendCode}
-          now={now}
-          verifying={verifying}
-          resending={resending}
-          locked={otpLocked}
-          error={otpError}
-        />
-      )}
-
-      {step === "done" && receipt && <SuccessStep receipt={receipt} onRestart={onRestart} />}
-    </div>
-  );
-}
-
-/* ============================================================================
- * Step 1 — Recipient
- * ========================================================================== */
-
-function RecipientStep(props: {
-  selection: string | null;
-  onSelect: (id: string) => void;
-  name: string;
-  iban: string;
-  onNameChange: (value: string) => void;
-  onIbanChange: (value: string) => void;
-  onNameBlur: () => void;
-  onIbanBlur: () => void;
-  nameError: string | null;
-  ibanError: string | null;
-  selectionError: string | null;
-  onSubmit: (event: FormEvent) => void;
-}) {
-  const groupName = useId();
-  const errorId = useId();
-  const isNew = props.selection === NEW_RECIPIENT;
-  const detectedBank = isNew && validateIban(props.iban) === null ? bankNameOf(normalizeIban(props.iban)) : null;
-
-  return (
-    <form className="lw-body" onSubmit={props.onSubmit} noValidate>
-      <fieldset className="lw-fieldset" aria-describedby={props.selectionError ? errorId : undefined}>
-        <legend className="lw-label">Saved recipients</legend>
-        <div className="lw-options">
-          {SAVED_RECIPIENTS.map((r) => (
-            <label key={r.id} className="lw-option">
-              <input
-                type="radio"
-                name={groupName}
-                value={r.id}
-                checked={props.selection === r.id}
-                onChange={() => props.onSelect(r.id)}
-              />
-              <span className="lw-avatar" aria-hidden="true">
-                {initialsOf(r.name)}
-              </span>
-              <span className="lw-option-text">
-                <span className="lw-option-title">{r.name}</span>
-                <span className="lw-option-sub">
-                  {bankNameOf(r.iban)} · <span aria-label={`IBAN ending ${r.iban.slice(-4)}`}>{maskIban(r.iban)}</span>
-                </span>
-              </span>
-            </label>
-          ))}
-          <label className="lw-option">
-            <input
-              type="radio"
-              name={groupName}
-              value={NEW_RECIPIENT}
-              checked={isNew}
-              onChange={() => props.onSelect(NEW_RECIPIENT)}
-            />
-            <span className="lw-avatar lw-avatar-new" aria-hidden="true">
-              +
-            </span>
-            <span className="lw-option-text">
-              <span className="lw-option-title">New recipient</span>
-              <span className="lw-option-sub">Send to any Turkish IBAN</span>
-            </span>
-          </label>
-        </div>
-      </fieldset>
-
-      {props.selectionError && (
-        <p id={errorId} className="lw-error" role="alert">
-          {props.selectionError}
-        </p>
-      )}
-
-      {isNew && (
-        <div className="lw-new-recipient">
-          <Field label="Full name" hint="As it appears on the recipient's account" error={props.nameError}>
-            {(fieldProps) => (
-              <input
-                {...fieldProps}
-                className="lw-input"
-                type="text"
-                autoComplete="name"
-                autoCapitalize="words"
-                spellCheck={false}
-                maxLength={70}
-                value={props.name}
-                onChange={(e) => props.onNameChange(e.target.value)}
-                onBlur={props.onNameBlur}
-              />
-            )}
-          </Field>
-          <Field label="IBAN" hint={detectedBank ? `Bank: ${detectedBank}` : "TR followed by 24 digits"} error={props.ibanError}>
-            {(fieldProps) => (
-              <input
-                {...fieldProps}
-                className="lw-input lw-mono"
-                type="text"
-                inputMode="text"
-                autoComplete="off"
-                autoCapitalize="characters"
-                spellCheck={false}
-                maxLength={40}
-                placeholder="TR00 0000 0000 0000 0000 0000 00"
-                value={props.iban}
-                onChange={(e) => props.onIbanChange(e.target.value)}
-                onBlur={props.onIbanBlur}
-              />
-            )}
-          </Field>
-        </div>
-      )}
-
-      <div className="lw-actions">
-        <button type="submit" className="lw-button lw-button-primary">
-          Continue
-        </button>
-      </div>
-    </form>
-  );
-}
-
-/* ============================================================================
- * Step 2 — Amount
- * ========================================================================== */
-
-function AmountStep(props: {
-  recipient: Recipient;
-  value: string;
-  onChange: (value: string) => void;
-  onBlur: () => void;
-  preview: Kurus | null;
-  error: string | null;
-  onSubmit: (event: FormEvent) => void;
-}) {
-  const inputId = useId();
-  const hintId = useId();
-  const errorId = useId();
-
-  return (
-    <form className="lw-body" onSubmit={props.onSubmit} noValidate>
-      <RecipientSummary recipient={props.recipient} />
-
-      <div className="lw-amount-field">
-        <label htmlFor={inputId} className="lw-label">
-          Amount (TRY)
-        </label>
-        <div className={`lw-amount-wrap${props.error ? " lw-invalid" : ""}`}>
-          <span className="lw-currency" aria-hidden="true">
-            ₺
-          </span>
-          <input
-            id={inputId}
-            className="lw-amount-input"
-            type="text"
-            inputMode="decimal"
-            autoComplete="off"
-            placeholder="0,00"
-            maxLength={16}
-            value={props.value}
-            onChange={(e) => props.onChange(e.target.value.replace(/[^\d.,]/g, ""))}
-            onBlur={props.onBlur}
-            aria-invalid={props.error ? true : undefined}
-            aria-describedby={`${hintId}${props.error ? ` ${errorId}` : ""}`}
-          />
-        </div>
-        <p id={hintId} className="lw-hint" aria-live="polite">
-          {props.preview !== null && props.value.trim() !== "" ? (
-            <>
-              You're sending <strong>{formatTry(props.preview)}</strong> ·{" "}
-            </>
-          ) : null}
-          Available: {formatTry(SOURCE_ACCOUNT.balance)}
-        </p>
-        {props.error && (
-          <p id={errorId} className="lw-error" role="alert">
-            {props.error}
-          </p>
-        )}
-      </div>
-
-      <p className="lw-note">
-        Fees are shown before you confirm. Transfers to other Leeward customers are free.
+    <form onSubmit={handleSubmit} noValidate className="lw-step">
+      <StepHeading headingRef={headingRef}>Enter your confirmation code</StepHeading>
+      <p className="lw-lede">
+        We sent a 6-digit code to <strong className="lw-nowrap">{pending.maskedPhone}</strong>. Entering it sends{' '}
+        <strong>{formatTry(totalKurus)}</strong> to {recipientName}.
       </p>
 
-      <div className="lw-actions">
-        <button type="submit" className="lw-button lw-button-primary">
-          Review transfer
-        </button>
-      </div>
-    </form>
-  );
-}
-
-/* ============================================================================
- * Step 3 — Review
- * ========================================================================== */
-
-function ReviewStep(props: {
-  recipient: Recipient;
-  quote: Async<Quote>;
-  onRetry: () => void;
-  onChangeAmount: () => void;
-  onConfirm: () => void;
-  sending: boolean;
-  error: string | null;
-}) {
-  const { recipient, quote } = props;
-  const isInternal = bankCodeOf(recipient.iban) === LEEWARD_BANK_CODE;
-  const insufficient = quote.status === "ready" && quote.data.total > SOURCE_ACCOUNT.balance;
-
-  return (
-    <div className="lw-body">
-      <dl className="lw-summary">
-        <SummaryRow label="To">
-          <span className="lw-strong">{recipient.name}</span>
-          <span className="lw-sub">{bankNameOf(recipient.iban)}</span>
-          <span className="lw-sub lw-mono">{formatIban(recipient.iban)}</span>
-        </SummaryRow>
-        <SummaryRow label="From">
-          <span className="lw-strong">{SOURCE_ACCOUNT.name}</span>
-          <span className="lw-sub">Leeward · •••• {SOURCE_ACCOUNT.ibanLast4}</span>
-        </SummaryRow>
-      </dl>
-
-      <div className="lw-breakdown" aria-busy={quote.status === "loading"}>
-        {quote.status === "loading" && (
-          <p className="lw-loading" role="status">
-            <Spinner /> Calculating fee…
-          </p>
-        )}
-
-        {quote.status === "error" && (
-          <div className="lw-banner lw-banner-error" role="alert">
-            <p>{quote.message}</p>
-            <button type="button" className="lw-link-button" onClick={props.onRetry}>
-              Try again
-            </button>
-          </div>
-        )}
-
-        {quote.status === "ready" && (
-          <dl className="lw-summary lw-summary-money">
-            <SummaryRow label="Amount">{formatTry(quote.data.amount)}</SummaryRow>
-            <SummaryRow label="Fee">{quote.data.fee === 0 ? "Free" : formatTry(quote.data.fee)}</SummaryRow>
-            <SummaryRow label="Total from your account" emphasis>
-              {formatTry(quote.data.total)}
-            </SummaryRow>
-            {!insufficient && (
-              <SummaryRow label="Balance after">{formatTry(SOURCE_ACCOUNT.balance - quote.data.total)}</SummaryRow>
-            )}
-          </dl>
-        )}
-      </div>
-
-      {insufficient && quote.status === "ready" && (
-        <div className="lw-banner lw-banner-error" role="alert">
-          <p>
-            With the {formatTry(quote.data.fee)} fee, this transfer is more than your available balance of{" "}
-            {formatTry(SOURCE_ACCOUNT.balance)}.
-          </p>
-          <button type="button" className="lw-link-button" onClick={props.onChangeAmount}>
-            Change amount
-          </button>
-        </div>
-      )}
-
-      <p className="lw-note">
-        {isInternal
-          ? "Transfers between Leeward accounts arrive instantly."
-          : "Sent via FAST. Most transfers arrive within seconds, 24/7."}{" "}
-        Check the details carefully — transfers can't be cancelled once sent.
-      </p>
-
-      {props.error && (
-        <p className="lw-error" role="alert">
-          {props.error}
-        </p>
-      )}
-
-      <div className="lw-actions">
-        <button
-          type="button"
-          className="lw-button lw-button-primary"
-          onClick={props.onConfirm}
-          disabled={quote.status !== "ready" || insufficient || props.sending}
-        >
-          {props.sending ? (
-            <>
-              <Spinner /> Sending code…
-            </>
-          ) : (
-            "Confirm and send code"
-          )}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* ============================================================================
- * Step 4 — One-time code
- * ========================================================================== */
-
-function OtpStep(props: {
-  challenge: OtpChallenge;
-  total: Kurus;
-  code: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (event: FormEvent) => void;
-  onResend: () => void;
-  now: number;
-  verifying: boolean;
-  resending: boolean;
-  locked: boolean;
-  error: string | null;
-}) {
-  const inputId = useId();
-  const hintId = useId();
-  const errorId = useId();
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const expiresIn = props.challenge.expiresAt - props.now;
-  const resendIn = props.challenge.resendAvailableAt - props.now;
-  const expired = expiresIn <= 0;
-  const blocked = expired || props.locked;
-  const canResend = (resendIn <= 0 || blocked) && !props.resending && !props.verifying;
-
-  // Refocus the code input whenever a fresh code is issued or a wrong one is cleared.
-  useEffect(() => {
-    if (!blocked) inputRef.current?.focus({ preventScroll: true });
-  }, [props.challenge.challengeId, props.error, blocked]);
-
-  const errorText = props.error ?? (expired ? "This code has expired. Request a new one to continue." : null);
-
-  return (
-    <form className="lw-body" onSubmit={props.onSubmit} noValidate>
-      <p className="lw-lead">
-        We sent a {OTP_LENGTH}-digit code to <strong className="lw-nowrap">{props.challenge.phoneMasked}</strong>.
-        Enter it to send <strong className="lw-nowrap">{formatTry(props.total)}</strong>.
-      </p>
-
-      <div>
-        <label htmlFor={inputId} className="lw-label">
-          One-time code
+      <div className="lw-field">
+        <label htmlFor={`${ids}-otp`} className="lw-label">
+          Confirmation code
         </label>
         <input
+          id={`${ids}-otp`}
           ref={inputRef}
-          id={inputId}
-          className={`lw-input lw-otp${errorText ? " lw-invalid" : ""}`}
-          type="text"
+          className="lw-input lw-otp"
+          value={code}
+          onChange={handleChange}
           inputMode="numeric"
           autoComplete="one-time-code"
-          pattern="[0-9]*"
+          pattern="\d{6}"
           maxLength={OTP_LENGTH}
-          placeholder={"•".repeat(OTP_LENGTH)}
-          value={props.code}
-          onChange={props.onChange}
-          disabled={props.verifying || blocked}
-          aria-invalid={errorText ? true : undefined}
-          aria-describedby={`${hintId}${errorText ? ` ${errorId}` : ""}`}
+          autoFocus
+          disabled={verifying || cancelling || expired}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={`${ids}-otp-status ${error ? `${ids}-otp-error` : ''}`}
         />
-        <p id={hintId} className="lw-hint">
-          {expired ? "Code expired" : `Code expires in ${formatCountdown(expiresIn)}`}
-          {IS_DEMO && <span className="lw-demo"> · Demo code: {DEMO_OTP}</span>}
+        <FieldError id={`${ids}-otp-error`} message={error} />
+        <p id={`${ids}-otp-status`} className="lw-hint">
+          {expired ? 'This code has expired.' : <>Code expires in {formatCountdown(expiresIn)}</>}
         </p>
-        {errorText && (
-          <p id={errorId} className="lw-error" role="alert">
-            {errorText}
-          </p>
+      </div>
+
+      {info && <Alert tone="info">{info}</Alert>}
+      {expired && <Alert>Your code has expired. Request a new one to continue.</Alert>}
+
+      <div className="lw-resend">
+        {resendIn > 0 ? (
+          <span className="lw-hint">Didn’t get it? You can request a new code in {formatCountdown(resendIn)}.</span>
+        ) : (
+          <Button variant="link" onClick={resend} busy={resending} disabled={verifying || cancelling}>
+            Send a new code
+          </Button>
         )}
       </div>
 
-      <p className="lw-note">
-        Leeward will never call you to ask for this code. Don't share it with anyone.
-      </p>
-
       <div className="lw-actions">
-        <button
-          type="submit"
-          className="lw-button lw-button-primary"
-          disabled={props.verifying || blocked || props.code.length !== OTP_LENGTH}
-        >
-          {props.verifying ? (
-            <>
-              <Spinner /> Sending money…
-            </>
-          ) : (
-            `Send ${formatTry(props.total)}`
-          )}
-        </button>
-        <button type="button" className="lw-button lw-button-secondary" onClick={props.onResend} disabled={!canResend}>
-          {props.resending ? "Sending new code…" : canResend ? "Resend code" : `Resend code in ${formatCountdown(resendIn)}`}
-        </button>
+        <Button variant="secondary" onClick={cancel} busy={cancelling} disabled={verifying}>
+          Cancel transfer
+        </Button>
+        <Button type="submit" busy={verifying} disabled={expired || resending || cancelling}>
+          {verifying ? 'Confirming…' : 'Confirm transfer'}
+        </Button>
       </div>
     </form>
   );
 }
 
-/* ============================================================================
- * Done
- * ========================================================================== */
+// ---------------------------------------------------------------------------
+// Done — receipt
+// ---------------------------------------------------------------------------
 
-function SuccessStep({ receipt, onRestart }: { receipt: Receipt; onRestart: () => void }) {
+function DoneStep({
+  receipt,
+  headingRef,
+  onNewTransfer,
+}: {
+  receipt: Receipt;
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onNewTransfer: () => void;
+}) {
   return (
-    <div className="lw-body lw-success">
-      <div className="lw-success-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="32" height="32">
-          <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <div className="lw-step lw-done">
+      <div className="lw-done__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
-      <h1 className="lw-title lw-center" tabIndex={-1} data-step-heading>
-        {formatTry(receipt.quote.amount)} sent to {receipt.recipient.name}
-      </h1>
-      <p className="lw-hint lw-center">{dateFormatter.format(new Date(receipt.completedAt))}</p>
+      <StepHeading headingRef={headingRef}>
+        {formatTry(receipt.amountKurus)} is on its way to {receipt.recipientName}
+      </StepHeading>
 
-      <dl className="lw-summary">
-        <SummaryRow label="Recipient">
-          <span className="lw-strong">{receipt.recipient.name}</span>
-          <span className="lw-sub lw-mono">{formatIban(receipt.recipient.iban)}</span>
-        </SummaryRow>
-        <SummaryRow label="Fee">{receipt.quote.fee === 0 ? "Free" : formatTry(receipt.quote.fee)}</SummaryRow>
-        <SummaryRow label="Total debited" emphasis>
-          {formatTry(receipt.quote.total)}
-        </SummaryRow>
-        <SummaryRow label="Reference">
-          <span className="lw-mono">{receipt.reference}</span>
-        </SummaryRow>
+      <dl className="lw-rows lw-summary">
+        <div className="lw-row">
+          <dt>To</dt>
+          <dd className="lw-mono">{maskIban(receipt.recipientIban)}</dd>
+        </div>
+        <div className="lw-row">
+          <dt>Amount</dt>
+          <dd>{formatTry(receipt.amountKurus)}</dd>
+        </div>
+        <div className="lw-row">
+          <dt>Fee</dt>
+          <dd>{receipt.feeKurus === 0 ? 'Free' : formatTry(receipt.feeKurus)}</dd>
+        </div>
+        <div className="lw-row lw-row--total">
+          <dt>Total</dt>
+          <dd>{formatTry(receipt.totalKurus)}</dd>
+        </div>
+        <div className="lw-row">
+          <dt>Date</dt>
+          <dd>{dateTimeFormatter.format(receipt.completedAt)}</dd>
+        </div>
+        <div className="lw-row">
+          <dt>Reference</dt>
+          <dd className="lw-mono">{receipt.reference}</dd>
+        </div>
       </dl>
 
       <div className="lw-actions">
-        <button type="button" className="lw-button lw-button-primary" onClick={onRestart}>
-          Make another transfer
-        </button>
+        <Button onClick={onNewTransfer}>Make another transfer</Button>
       </div>
     </div>
   );
 }
 
-/* ============================================================================
- * Shared building blocks
- * ========================================================================== */
+// ---------------------------------------------------------------------------
+// Screen
+// ---------------------------------------------------------------------------
 
-interface FieldControlProps {
-  id: string;
-  "aria-invalid": true | undefined;
-  "aria-describedby": string;
+type Step = 'recipient' | 'amount' | 'review' | 'otp' | 'done';
+
+const STEP_ORDER: Exclude<Step, 'done'>[] = ['recipient', 'amount', 'review', 'otp'];
+const STEP_LABELS: Record<Exclude<Step, 'done'>, string> = {
+  recipient: 'Recipient',
+  amount: 'Amount',
+  review: 'Review',
+  otp: 'Confirm',
+};
+
+function recipientNameOf(choice: RecipientChoice): string {
+  return choice.kind === 'saved' ? choice.recipient.name : choice.name;
 }
 
-function Field(props: {
-  label: string;
-  hint?: string;
-  error: string | null;
-  children: (controlProps: FieldControlProps) => ReactNode;
-}) {
-  const id = useId();
-  const hintId = `${id}-hint`;
-  const errorId = `${id}-error`;
+function recipientIbanOf(choice: RecipientChoice): string {
+  return choice.kind === 'saved' ? choice.recipient.iban : choice.iban;
+}
+
+export default function TransferScreen() {
+  const [step, setStep] = useState<Step>('recipient');
+  const [recipient, setRecipient] = useState<RecipientChoice | null>(null);
+  const [amountKurus, setAmountKurus] = useState<Kurus | null>(null);
+  const [description, setDescription] = useState('');
+  const [quote, setQuote] = useState<Quote | null>(null);
+  const [pending, setPending] = useState<PendingTransfer | null>(null);
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [reviewNotice, setReviewNotice] = useState<string | null>(null);
+
+  const [account, reloadAccount] = useAsync(transferApi.getAccount);
+  const [recipients, reloadRecipients] = useAsync(transferApi.listRecipients);
+
+  // Move focus to the new step's heading so screen readers announce the change.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (step !== 'otp') headingRef.current?.focus();
+  }, [step]);
+
+  const goTo = (next: Step) => {
+    if (next !== 'review') setReviewNotice(null);
+    setStep(next);
+  };
+
+  const initiate = useCallback(
+    (quoteId: string, idempotencyKey: string) => {
+      if (!recipient) return Promise.reject(new Error('No recipient'));
+      return transferApi.initiateTransfer({
+        quoteId,
+        idempotencyKey,
+        recipientName: recipientNameOf(recipient),
+        recipientIban: recipientIbanOf(recipient),
+        saveRecipient: recipient.kind === 'new' && recipient.save,
+      });
+    },
+    [recipient],
+  );
+
+  function startOver() {
+    setRecipient(null);
+    setAmountKurus(null);
+    setDescription('');
+    setQuote(null);
+    setPending(null);
+    setReceipt(null);
+    setReviewNotice(null);
+    reloadAccount();
+    reloadRecipients();
+    setStep('recipient');
+  }
+
+  const stepIndex = step === 'done' ? STEP_ORDER.length : STEP_ORDER.indexOf(step);
+
+  let body: ReactNode = null;
+  if (step === 'recipient') {
+    body = (
+      <RecipientStep
+        initial={recipient}
+        recipients={recipients}
+        onReloadRecipients={reloadRecipients}
+        ownIban={account.status === 'success' ? account.data.iban : null}
+        headingRef={headingRef}
+        onContinue={(choice) => {
+          setRecipient(choice);
+          goTo('amount');
+        }}
+      />
+    );
+  } else if (step === 'amount' && recipient) {
+    body = (
+      <AmountStep
+        recipientName={recipientNameOf(recipient)}
+        account={account}
+        onReloadAccount={reloadAccount}
+        initialAmount={amountKurus}
+        initialDescription={description}
+        headingRef={headingRef}
+        onBack={() => goTo('recipient')}
+        onContinue={(amount, desc) => {
+          setAmountKurus(amount);
+          setDescription(desc);
+          goTo('review');
+        }}
+      />
+    );
+  } else if (step === 'review' && recipient && amountKurus !== null && account.status === 'success') {
+    body = (
+      <ReviewStep
+        account={account.data}
+        recipientName={recipientNameOf(recipient)}
+        recipientIban={recipientIbanOf(recipient)}
+        isNewRecipient={recipient.kind === 'new'}
+        amountKurus={amountKurus}
+        description={description}
+        notice={reviewNotice}
+        headingRef={headingRef}
+        onEditRecipient={() => goTo('recipient')}
+        onEditAmount={() => goTo('amount')}
+        onInitiate={initiate}
+        onCodeSent={(p, q) => {
+          setPending(p);
+          setQuote(q);
+          goTo('otp');
+        }}
+      />
+    );
+  } else if (step === 'otp' && recipient && pending && quote) {
+    body = (
+      <OtpStep
+        pending={pending}
+        totalKurus={quote.totalKurus}
+        recipientName={recipientNameOf(recipient)}
+        headingRef={headingRef}
+        onPendingChange={setPending}
+        onConfirmed={(r) => {
+          setReceipt(r);
+          setPending(null);
+          goTo('done');
+        }}
+        onCancelled={(reason) => {
+          setPending(null);
+          setQuote(null);
+          setStep('review');
+          setReviewNotice(reason);
+        }}
+      />
+    );
+  } else if (step === 'done' && receipt) {
+    body = <DoneStep receipt={receipt} headingRef={headingRef} onNewTransfer={startOver} />;
+  } else {
+    // State and step disagree (should not happen); recover rather than render nothing.
+    body = (
+      <div className="lw-step">
+        <Alert>Something went wrong with this transfer.</Alert>
+        <div className="lw-actions">
+          <Button onClick={startOver}>Start again</Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="lw-field">
-      <label htmlFor={id} className="lw-label">
-        {props.label}
-      </label>
-      {props.children({
-        id,
-        "aria-invalid": props.error ? true : undefined,
-        "aria-describedby": [props.hint ? hintId : null, props.error ? errorId : null].filter(Boolean).join(" "),
-      })}
-      {props.hint && (
-        <p id={hintId} className="lw-hint">
-          {props.hint}
-        </p>
-      )}
-      {props.error && (
-        <p id={errorId} className="lw-error" role="alert">
-          {props.error}
-        </p>
-      )}
-    </div>
+    <main className="lw-screen">
+      <style>{STYLES}</style>
+      <div className="lw-card">
+        <header className="lw-header">
+          <p className="lw-brand">Leeward</p>
+          <h1 className="lw-title">Send money</h1>
+          {step !== 'done' && (
+            <nav aria-label="Transfer progress">
+              <ol className="lw-progress">
+                {STEP_ORDER.map((s, i) => (
+                  <li
+                    key={s}
+                    className="lw-progress__step"
+                    data-state={i < stepIndex ? 'done' : i === stepIndex ? 'current' : 'todo'}
+                    aria-current={i === stepIndex ? 'step' : undefined}
+                  >
+                    <span className="lw-progress__bar" aria-hidden="true" />
+                    <span className="lw-progress__label">
+                      <span className="lw-visually-hidden">
+                        Step {i + 1} of {STEP_ORDER.length}:{' '}
+                      </span>
+                      {STEP_LABELS[s]}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+        </header>
+        {body}
+      </div>
+    </main>
   );
 }
 
-function SummaryRow({ label, children, emphasis }: { label: string; children: ReactNode; emphasis?: boolean }) {
-  return (
-    <div className={`lw-row${emphasis ? " lw-row-emphasis" : ""}`}>
-      <dt>{label}</dt>
-      <dd>{children}</dd>
-    </div>
-  );
-}
+// ---------------------------------------------------------------------------
+// Styles (scoped by the lw- prefix)
+// ---------------------------------------------------------------------------
 
-function RecipientSummary({ recipient }: { recipient: Recipient }) {
-  return (
-    <div className="lw-recipient-chip">
-      <span className="lw-avatar" aria-hidden="true">
-        {initialsOf(recipient.name)}
-      </span>
-      <span className="lw-option-text">
-        <span className="lw-option-title">To {recipient.name}</span>
-        <span className="lw-option-sub">
-          {bankNameOf(recipient.iban)} · {maskIban(recipient.iban)}
-        </span>
-      </span>
-    </div>
-  );
-}
-
-function Spinner() {
-  return <span className="lw-spinner" aria-hidden="true" />;
-}
-
-/* ============================================================================
- * Styles (scoped under .lw-transfer)
- * ========================================================================== */
-
-const styles = `
-.lw-transfer {
-  --lw-bg: #f4f6f8;
+const STYLES = `
+.lw-screen {
+  --lw-bg: #eef2f4;
   --lw-surface: #ffffff;
-  --lw-text: #0f1b2d;
-  --lw-muted: #5b6878;
-  --lw-border: #d8dee6;
-  --lw-primary: #0b5c74;
-  --lw-primary-hover: #094a5e;
-  --lw-primary-soft: #e3f1f5;
-  --lw-error: #b42318;
-  --lw-error-soft: #fdecea;
-  --lw-success: #137a4b;
-  --lw-success-soft: #e3f5ec;
-  --lw-focus: 0 0 0 3px rgba(11, 92, 116, 0.35);
+  --lw-surface-2: #f5f8f9;
+  --lw-text: #13232b;
+  --lw-muted: #5b6b73;
+  --lw-border: #d6dfe3;
+  --lw-accent: #0d6b6e;
+  --lw-accent-hover: #0a5759;
+  --lw-accent-soft: #e2f1f1;
+  --lw-on-accent: #ffffff;
+  --lw-danger: #b42318;
+  --lw-danger-soft: #fdecea;
+  --lw-info-soft: #e8f1fb;
+  --lw-info: #1d4f8c;
+  --lw-success: #1a7f4b;
+  --lw-focus: #2f80ed;
   --lw-radius: 14px;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: var(--lw-text);
-  background: var(--lw-bg);
-  min-height: 100%;
-  padding: 24px 16px;
+  min-height: 100vh;
   box-sizing: border-box;
+  padding: 24px 16px;
+  background: var(--lw-bg);
+  color: var(--lw-text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-.lw-transfer *, .lw-transfer *::before, .lw-transfer *::after { box-sizing: border-box; }
-.lw-transfer :focus-visible { outline: none; box-shadow: var(--lw-focus); }
-
+@media (prefers-color-scheme: dark) {
+  .lw-screen {
+    --lw-bg: #0d1518;
+    --lw-surface: #152126;
+    --lw-surface-2: #1b2a30;
+    --lw-text: #e6eef0;
+    --lw-muted: #98a9b0;
+    --lw-border: #2b3d44;
+    --lw-accent: #4fb8b3;
+    --lw-accent-hover: #6ccac5;
+    --lw-accent-soft: #19393b;
+    --lw-on-accent: #06201f;
+    --lw-danger: #ff8a80;
+    --lw-danger-soft: #3a1c1a;
+    --lw-info-soft: #172a40;
+    --lw-info: #9cc3f2;
+    --lw-success: #5fd39a;
+  }
+}
+.lw-screen *, .lw-screen *::before, .lw-screen *::after { box-sizing: border-box; }
+:where(.lw-screen) :where(p, h1, h2, h3, dl, dd, ul, ol) { margin: 0; padding: 0; }
 .lw-card {
-  max-width: 440px; margin: 0 auto; background: var(--lw-surface);
-  border-radius: 20px; box-shadow: 0 1px 2px rgba(15,27,45,.06), 0 8px 24px rgba(15,27,45,.06);
-  overflow: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--lw-surface);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
 }
-.lw-header { padding: 16px 20px 0; }
-.lw-header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.lw-eyebrow { font-size: 14px; font-weight: 600; color: var(--lw-muted); }
-.lw-step-count { font-size: 13px; color: var(--lw-muted); min-width: 40px; text-align: right; }
-.lw-icon-button, .lw-icon-spacer { width: 40px; height: 40px; flex: none; }
-.lw-icon-button {
-  display: inline-flex; align-items: center; justify-content: center;
-  border: none; background: transparent; color: var(--lw-text); border-radius: 50%; cursor: pointer;
-  margin-left: -8px;
+@media (max-width: 520px) {
+  .lw-screen { padding: 0; background: var(--lw-surface); }
+  .lw-card { border-radius: 0; box-shadow: none; padding: 20px 16px 32px; }
 }
-.lw-icon-button:hover { background: var(--lw-bg); }
-.lw-progress { height: 4px; background: var(--lw-bg); border-radius: 2px; margin: 12px 0 20px; overflow: hidden; }
-.lw-progress-bar { height: 100%; background: var(--lw-primary); border-radius: 2px; transition: width .25s ease; }
-.lw-title { font-size: 22px; line-height: 1.25; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-.lw-title:focus { outline: none; box-shadow: none; }
-.lw-center { text-align: center; }
+.lw-header { margin-bottom: 24px; }
+.lw-brand { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lw-accent); }
+.lw-title { font-size: 26px; line-height: 1.2; font-weight: 700; margin-top: 2px; }
+.lw-progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 18px; list-style: none; }
+.lw-progress__step { display: flex; flex-direction: column; gap: 6px; }
+.lw-progress__bar { height: 4px; border-radius: 2px; background: var(--lw-border); }
+.lw-progress__step[data-state="done"] .lw-progress__bar,
+.lw-progress__step[data-state="current"] .lw-progress__bar { background: var(--lw-accent); }
+.lw-progress__label { font-size: 12px; color: var(--lw-muted); }
+.lw-progress__step[data-state="current"] .lw-progress__label { color: var(--lw-text); font-weight: 600; }
 
-.lw-body { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-.lw-lead { margin: 0; font-size: 15px; line-height: 1.5; color: var(--lw-muted); }
-.lw-lead strong { color: var(--lw-text); }
+.lw-step { display: flex; flex-direction: column; gap: 18px; }
+.lw-step-title { font-size: 20px; line-height: 1.3; font-weight: 650; outline: none; }
+.lw-lede { color: var(--lw-muted); }
+.lw-lede strong { color: var(--lw-text); }
 .lw-nowrap { white-space: nowrap; }
 
-.lw-fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
-.lw-label { display: block; font-size: 14px; font-weight: 600; margin: 0 0 8px; padding: 0; }
-.lw-hint { font-size: 13px; color: var(--lw-muted); margin: 6px 0 0; line-height: 1.4; }
-.lw-hint strong { color: var(--lw-text); }
-.lw-error { font-size: 13px; color: var(--lw-error); margin: 6px 0 0; line-height: 1.4; font-weight: 500; }
-.lw-note { font-size: 13px; color: var(--lw-muted); margin: 0; line-height: 1.5; }
-.lw-demo { color: var(--lw-primary); font-weight: 600; }
+.lw-segmented { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 12px; background: var(--lw-surface-2); border: 1px solid var(--lw-border); }
+.lw-segmented__option { appearance: none; border: 0; background: transparent; color: var(--lw-muted); font: inherit; font-size: 15px; font-weight: 600; padding: 10px 8px; border-radius: 9px; cursor: pointer; min-height: 44px; }
+.lw-segmented__option[aria-pressed="true"] { background: var(--lw-surface); color: var(--lw-text); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 
-.lw-options { display: flex; flex-direction: column; gap: 8px; }
-.lw-option {
-  position: relative; display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-  border: 1.5px solid var(--lw-border); border-radius: var(--lw-radius); cursor: pointer;
-  transition: border-color .15s, background-color .15s;
-}
-.lw-option:hover { border-color: #b4c0cc; }
-.lw-option input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
-.lw-option:has(input:checked) { border-color: var(--lw-primary); background: var(--lw-primary-soft); }
-.lw-option:has(input:focus-visible) { box-shadow: var(--lw-focus); }
-.lw-avatar {
-  width: 40px; height: 40px; flex: none; border-radius: 50%; background: var(--lw-primary-soft);
-  color: var(--lw-primary); display: inline-flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px;
-}
-.lw-avatar-new { background: var(--lw-bg); color: var(--lw-text); font-size: 20px; font-weight: 500; }
-.lw-option-text { display: flex; flex-direction: column; min-width: 0; }
-.lw-option-title { font-weight: 600; font-size: 15px; }
-.lw-option-sub { font-size: 13px; color: var(--lw-muted); }
+.lw-fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.lw-recipient-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.lw-recipient { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--lw-border); border-radius: var(--lw-radius); cursor: pointer; min-height: 64px; transition: border-color .15s, background .15s; }
+.lw-recipient:hover { border-color: var(--lw-accent); }
+.lw-recipient[data-selected] { border-color: var(--lw-accent); background: var(--lw-accent-soft); box-shadow: inset 0 0 0 1px var(--lw-accent); }
+.lw-recipient:focus-within { outline: 3px solid var(--lw-focus); outline-offset: 2px; }
+.lw-recipient__text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.lw-recipient__name { font-weight: 600; }
+.lw-recipient__meta { font-size: 14px; color: var(--lw-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lw-radio-dot { width: 20px; height: 20px; flex: none; border-radius: 50%; border: 2px solid var(--lw-border); }
+.lw-recipient[data-selected] .lw-radio-dot { border-color: var(--lw-accent); background: radial-gradient(var(--lw-accent) 0 45%, transparent 50%); }
+.lw-avatar { width: 40px; height: 40px; flex: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--lw-accent-soft); color: var(--lw-accent); font-weight: 700; font-size: 15px; }
 
-.lw-new-recipient { display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
-.lw-field { display: flex; flex-direction: column; }
-.lw-input {
-  width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; color: var(--lw-text);
-  border: 1.5px solid var(--lw-border); border-radius: 12px; background: var(--lw-surface);
-  transition: border-color .15s;
-}
-.lw-input:focus { border-color: var(--lw-primary); outline: none; box-shadow: var(--lw-focus); }
-.lw-input[aria-invalid="true"], .lw-invalid { border-color: var(--lw-error); }
-.lw-input:disabled { background: var(--lw-bg); color: var(--lw-muted); }
-.lw-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.95em; letter-spacing: 0.02em; }
+.lw-list-skeleton { display: flex; flex-direction: column; gap: 8px; }
+.lw-skeleton-row { height: 64px; border-radius: var(--lw-radius); background: var(--lw-surface-2); animation: lw-pulse 1.2s ease-in-out infinite; }
+.lw-skeleton-text { display: inline-block; width: 72px; height: 1em; vertical-align: middle; border-radius: 4px; background: var(--lw-surface-2); animation: lw-pulse 1.2s ease-in-out infinite; }
+@keyframes lw-pulse { 50% { opacity: .5; } }
 
-.lw-recipient-chip { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--lw-bg); border-radius: var(--lw-radius); }
-.lw-amount-wrap {
-  display: flex; align-items: center; gap: 6px; border-bottom: 2px solid var(--lw-border); padding: 4px 0;
-  transition: border-color .15s;
-}
-.lw-amount-wrap:focus-within { border-color: var(--lw-primary); }
-.lw-amount-wrap.lw-invalid { border-color: var(--lw-error); }
-.lw-currency { font-size: 32px; font-weight: 600; color: var(--lw-muted); }
-.lw-amount-input {
-  flex: 1; min-width: 0; border: none; background: transparent; font: inherit; font-size: 36px; font-weight: 700;
-  color: var(--lw-text); padding: 4px 0; font-variant-numeric: tabular-nums;
-}
-.lw-amount-input:focus { outline: none; box-shadow: none; }
+.lw-fields { display: flex; flex-direction: column; gap: 18px; }
+.lw-field { display: flex; flex-direction: column; gap: 6px; }
+.lw-label { font-size: 15px; font-weight: 600; }
+.lw-optional { font-weight: 400; color: var(--lw-muted); }
+.lw-input { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid var(--lw-border); border-radius: 12px; background: var(--lw-surface); color: var(--lw-text); font: inherit; }
+.lw-input::placeholder, .lw-amount__input::placeholder { color: var(--lw-muted); opacity: .7; }
+.lw-input:focus, .lw-amount:focus-within { outline: none; border-color: var(--lw-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lw-accent) 25%, transparent); }
+.lw-input[aria-invalid="true"], .lw-amount[data-invalid] { border-color: var(--lw-danger); }
+.lw-input:disabled { opacity: .6; }
+.lw-input--mono, .lw-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: .02em; }
+.lw-hint { font-size: 14px; color: var(--lw-muted); }
+.lw-hint--end { text-align: right; }
+.lw-field-error { font-size: 14px; color: var(--lw-danger); font-weight: 500; }
 
-.lw-summary { margin: 0; display: flex; flex-direction: column; }
-.lw-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--lw-bg); }
-.lw-row:last-child { border-bottom: none; }
-.lw-row dt { font-size: 14px; color: var(--lw-muted); flex: none; }
-.lw-row dd { margin: 0; text-align: right; display: flex; flex-direction: column; gap: 2px; font-size: 15px; font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
-.lw-row-emphasis dt { color: var(--lw-text); font-weight: 600; }
-.lw-row-emphasis dd { font-size: 18px; font-weight: 700; }
-.lw-strong { font-weight: 600; }
-.lw-sub { font-size: 13px; color: var(--lw-muted); }
-.lw-breakdown { background: var(--lw-bg); border-radius: var(--lw-radius); padding: 4px 16px; min-height: 64px; display: flex; flex-direction: column; justify-content: center; }
-.lw-breakdown .lw-row { border-bottom-color: var(--lw-border); }
-.lw-breakdown .lw-row:last-child { border-bottom: none; }
-.lw-loading { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--lw-muted); font-size: 14px; padding: 12px 0; }
+.lw-amount { display: flex; align-items: center; gap: 8px; padding: 6px 16px; border: 1px solid var(--lw-border); border-radius: 14px; background: var(--lw-surface); }
+.lw-amount__symbol { font-size: 28px; font-weight: 600; color: var(--lw-muted); }
+.lw-amount__input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; color: var(--lw-text); font: inherit; font-size: 32px; font-weight: 650; font-variant-numeric: tabular-nums; padding: 8px 0; }
+.lw-amount__code { font-size: 14px; font-weight: 600; color: var(--lw-muted); }
 
-.lw-banner { border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.45; }
-.lw-banner p { margin: 0; }
-.lw-banner-error { background: var(--lw-error-soft); color: var(--lw-error); }
-.lw-breakdown .lw-banner { margin: 12px 0; }
-.lw-link-button { margin-top: 6px; padding: 0; border: none; background: none; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+.lw-otp { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 28px; letter-spacing: .5em; text-align: center; padding-left: calc(14px + .5em); font-variant-numeric: tabular-nums; }
 
-.lw-otp { height: 56px; font-size: 24px; letter-spacing: 0.5em; text-align: center; font-variant-numeric: tabular-nums; padding-left: calc(14px + 0.5em); }
+.lw-checkbox { display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 44px; }
+.lw-checkbox input { width: 20px; height: 20px; accent-color: var(--lw-accent); margin: 0; }
 
-.lw-actions { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
-.lw-button {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 52px; padding: 0 20px;
-  border-radius: 999px; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: none;
-  transition: background-color .15s, opacity .15s;
-}
-.lw-button:disabled { cursor: not-allowed; opacity: 0.5; }
-.lw-button-primary { background: var(--lw-primary); color: #fff; }
-.lw-button-primary:not(:disabled):hover { background: var(--lw-primary-hover); }
-.lw-button-secondary { background: transparent; color: var(--lw-primary); }
-.lw-button-secondary:not(:disabled):hover { background: var(--lw-primary-soft); }
-.lw-button-secondary:disabled { color: var(--lw-muted); opacity: 1; }
+.lw-summary { border: 1px solid var(--lw-border); border-radius: var(--lw-radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.lw-summary__head { display: flex; justify-content: space-between; align-items: center; }
+.lw-summary__title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--lw-muted); }
+.lw-summary__party { display: flex; gap: 12px; align-items: flex-start; }
+.lw-summary__name { font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.lw-summary__meta { font-size: 14px; color: var(--lw-muted); overflow-wrap: anywhere; }
+.lw-quote { color: var(--lw-text); }
+.lw-badge { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--lw-info-soft); color: var(--lw-info); }
+.lw-rows { display: flex; flex-direction: column; gap: 8px; }
+.lw-row { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+.lw-row dt { color: var(--lw-muted); }
+.lw-row dd { font-variant-numeric: tabular-nums; text-align: right; }
+.lw-row--total { border-top: 1px solid var(--lw-border); padding-top: 10px; margin-top: 2px; }
+.lw-row--total dt { color: var(--lw-text); font-weight: 600; }
+.lw-row--total dd { font-size: 20px; font-weight: 700; }
+.lw-fineprint { font-size: 14px; color: var(--lw-muted); }
 
-.lw-spinner {
-  width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent;
-  display: inline-block; animation: lw-spin .7s linear infinite;
-}
+.lw-alert { border-radius: 12px; padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.lw-alert--error { background: var(--lw-danger-soft); color: var(--lw-danger); }
+.lw-alert--info { background: var(--lw-info-soft); color: var(--lw-info); }
+
+.lw-resend { min-height: 24px; }
+.lw-actions { display: flex; gap: 12px; margin-top: 6px; }
+.lw-actions .lw-btn--primary { flex: 1; }
+.lw-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-weight: 600; cursor: pointer; border-radius: 12px; }
+.lw-btn:focus-visible { outline: 3px solid var(--lw-focus); outline-offset: 2px; }
+.lw-btn:disabled { cursor: not-allowed; }
+.lw-btn--primary, .lw-btn--secondary { min-height: 52px; padding: 0 20px; font-size: 16px; }
+.lw-btn--primary { border: 0; background: var(--lw-accent); color: var(--lw-on-accent); }
+.lw-btn--primary:hover:not(:disabled) { background: var(--lw-accent-hover); }
+.lw-btn--primary:disabled { opacity: .5; }
+.lw-btn--primary[aria-busy="true"] { opacity: .85; }
+.lw-btn--secondary { border: 1px solid var(--lw-border); background: var(--lw-surface); color: var(--lw-text); }
+.lw-btn--secondary:hover:not(:disabled) { background: var(--lw-surface-2); }
+.lw-btn--secondary:disabled { opacity: .5; }
+.lw-btn--link { border: 0; background: none; padding: 4px 2px; min-height: 32px; color: var(--lw-accent); text-decoration: underline; text-underline-offset: 3px; font-size: 15px; }
+.lw-btn--link:disabled { color: var(--lw-muted); text-decoration: none; }
+
+.lw-spinner { display: inline-flex; width: 16px; height: 16px; }
+.lw-spinner > span { width: 100%; height: 100%; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: lw-spin .7s linear infinite; }
 @keyframes lw-spin { to { transform: rotate(360deg); } }
 
-.lw-success { align-items: stretch; padding-top: 32px; }
-.lw-success-icon {
-  width: 64px; height: 64px; margin: 0 auto; border-radius: 50%; background: var(--lw-success-soft);
-  color: var(--lw-success); display: flex; align-items: center; justify-content: center;
-}
-.lw-success .lw-title { margin-top: -4px; }
-.lw-success .lw-hint { margin-top: -14px; }
+.lw-done { align-items: stretch; text-align: left; }
+.lw-done__icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--lw-success) 15%, transparent); color: var(--lw-success); }
+
+.lw-visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .lw-transfer *, .lw-transfer *::before, .lw-transfer *::after { transition: none !important; animation-duration: 1.5s !important; }
+  .lw-screen *, .lw-screen *::before, .lw-screen *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
 }
 `;

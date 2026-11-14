@@ -14,7 +14,8 @@ for (const id of ["a-without-system", "b-with-system"]) {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(`/?run=${id}`);
-    await page.waitForTimeout(1500);
+    // Both runs simulate network delays of up to about a second; wait the same for both so each shows its loaded first step.
+    await page.waitForTimeout(3000);
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: `${out}${id}.png`, fullPage: true });
     await page.addScriptTag({ path: axePath });

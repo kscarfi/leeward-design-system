@@ -4,17 +4,17 @@
 
 | Metric | A: without system | B: with system |
 |---|---|---|
-| Lines of code | 1384 | 1056 |
-| Raw colors | 17 | 0 |
-| Raw spacing values | 38 | 0 |
+| Lines of code | 1722 | 1373 |
+| Raw colors | 34 | 0 |
+| Raw spacing values | 40 | 0 |
 | Unknown or primitive Leeward tokens | 0 | 0 |
-| Own CSS variables defined (a private palette) | 14 | 0 |
-| Custom components invented | 10 | 2 |
-| Leeward components used | 0 | 12 |
+| Own CSS variables defined (a private palette) | 20 | 0 |
+| Custom components invented | 11 | 10 |
+| Leeward components used | 0 | 19 |
 | Missing labels (static) | 0 | 0 |
-| Hand-formatted money | 0 | 1 |
+| Hand-formatted money | 0 | 0 |
 | Red amounts or icon-only money actions | 0 | 0 |
-| Em dashes in copy | 1 | 0 |
+| Em dashes in copy | 2 | 0 |
 | axe violations (rules) | 0 | 0 |
 | axe violations (elements) | 0 | 0 |
 | Color contrast failures (axe) | 0 | 0 |
@@ -30,12 +30,12 @@
 
 ## A: without system
 
-Custom components: `AmountStep`, `Field`, `OtpStep`, `RecipientStep`, `RecipientSummary`, `ReviewStep`, `Spinner`, `SuccessStep`, `SummaryRow`, `TransferFlow`
+Custom components: `Alert`, `AmountStep`, `Avatar`, `Button`, `DoneStep`, `FieldError`, `OtpStep`, `RecipientStep`, `ReviewStep`, `Spinner`, `StepHeading`
 
 No axe violations recorded.
 
 ## B: with system
 
-Custom components: `ErrorNotice`, `SummaryRow`
+Custom components: `AmountStep`, `DoneStep`, `FeeValue`, `Money`, `RecipientStep`, `ReviewStep`, `SavedRecipients`, `StepHeading`, `SummaryRow`, `VerifyStep`
 
 No axe violations recorded.
