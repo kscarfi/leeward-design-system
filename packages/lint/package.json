@@ -1,6 +1,6 @@
 {
   "name": "@leeward/lint",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ESLint and Stylelint rules that keep code on the Leeward Design System: known tokens only, no raw colors, labelled money actions.",
   "keywords": [
     "eslint-plugin",

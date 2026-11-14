@@ -1,0 +1,54 @@
+name: Release
+
+# Publishes the four packages to npm when a version tag is pushed, for example v0.2.0.
+# Uses npm trusted publishing (OIDC): no npm token is stored anywhere, and every version
+# gets a provenance statement that links it to this commit and workflow.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+
+      - name: Tag matches the package versions
+        run: |
+          for p in tokens react lint mcp-server; do
+            v=$(node -p "require('./packages/$p/package.json').version")
+            [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "::error::packages/$p is $v, tag is $GITHUB_REF_NAME"; exit 1; }
+          done
+
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Packages work when installed from their tarballs
+        run: pnpm smoke:packages
+
+      # pnpm packs each package (builds it and turns workspace: ranges into real versions);
+      # npm publishes the tarball, using the workflow's OIDC identity. Dependencies go first.
+      - name: Publish
+        run: |
+          mkdir -p "$RUNNER_TEMP/packs"
+          for p in tokens react lint mcp-server; do
+            name=$(node -p "require('./packages/$p/package.json').name")
+            version=$(node -p "require('./packages/$p/package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version is already on npm, skipping"
+              continue
+            fi
+            (cd "packages/$p" && pnpm pack --pack-destination "$RUNNER_TEMP/packs")
+            npm publish "$RUNNER_TEMP/packs/leeward-$p-$version.tgz" --access public
+          done
