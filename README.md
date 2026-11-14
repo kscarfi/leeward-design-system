@@ -50,14 +50,14 @@ Every number here is printed by a script or test runner in this repo.
 |---|---|
 | Contrast gate (`pnpm contrast`) | 1,336 required pairs across 2 brands in light and dark, 0 failures against WCAG 2.2 AA. Every resolver change is listed in [docs/contrast-report.md](docs/contrast-report.md). |
 | Partner brands | 120 random seed colors, every one passes all required pairs in light and dark (property test). |
-| Story tests with axe (`pnpm test:stories`) | 178 stories, each run in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,068 runs, 0 axe violations. Every component has interaction tests. |
-| Control sizes | A story measures Button, IconButton, TextField, Select, SegmentedControl and Chip at sm, md and lg: each matches its control height token. A token test checks that heights increase and radii never shrink in every brand. |
+| Story tests with axe (`pnpm test:stories`) | 181 stories, each run in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,086 runs, 0 axe violations. Every component has interaction tests. |
+| Control sizes | A story measures Button (rounded and pill), IconButton, TextField, Select, SegmentedControl and Chip at sm, md and lg: each matches its control height token. A token test checks that heights increase and radii never shrink in every brand. |
 | Layout at 360 px | Every story is checked for horizontal overflow on a 360 px wide screen. |
 | Documentation examples (`pnpm check:examples`) | All 53 code examples in the 39 component pages and the screen recipes in [docs/recipes](docs/recipes) compile against the real API. Every recipe also passes `validate_ui`. |
 | Docs coverage (`pnpm check:coverage`) | Every component and pattern has a docs page, stories with interaction tests and unit tests. Each docs page has a token table generated from the token source (`pnpm check:docs-tokens`). |
 | Links (`pnpm check:links`) | Every relative link in the Markdown docs resolves. |
 | Demo build | The demo app builds for production. |
-| Unit tests (`pnpm test`) | 91 tests: React 66, MCP server 11, lint rules 7, tokens 7. |
+| Unit tests (`pnpm test`) | 92 tests: React 67, MCP server 11, lint rules 7, tokens 7. |
 | Visual regression | Every story screenshotted in Leeward light, Leeward dark and Business light with Playwright. |
 | Lint (`pnpm lint`) | No raw colors, only known semantic tokens, spacing and type on scale, no icon-only money actions, no red amounts. |
 | Copy (`pnpm check:copy`) | No em dashes in any tracked text file. |

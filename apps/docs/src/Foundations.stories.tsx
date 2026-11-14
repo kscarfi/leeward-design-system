@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
 import primitives from "@leeward/tokens/primitives.json";
 import { tokens, type TokenName } from "@leeward/tokens";
 import { Heading, Text } from "@leeward/react";
@@ -145,12 +147,100 @@ export const Spacing: Story = {
   ),
 };
 
+/** Reads a variable in the current brand and mode. The page remounts when the toolbar changes, so the value follows it. */
+function LiveValue({ cssVar }: { cssVar: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    if (ref.current) setValue(getComputedStyle(ref.current).getPropertyValue(cssVar).trim());
+  }, [cssVar]);
+  return <Text as="span" variant="body-sm" tone="secondary"><span ref={ref}>{value}</span></Text>;
+}
+
+function RadiusSwatch({ name, size = 72 }: { name: TokenName; size?: number }) {
+  const cssVar = light[name].cssVar;
+  return (
+    <div style={{ display: "grid", gap: "var(--lw-space-2xs)", justifyItems: "start" }}>
+      <div data-radius={name} style={{ width: `${size}px`, height: `${size}px`, background: "var(--lw-fill-primary-weak)", border: "var(--lw-size-border-strong) solid var(--lw-border-primary-subtle)", borderRadius: `var(${cssVar})` }} />
+      <code style={{ fontSize: "var(--lw-type-body-sm-size)" }}>{cssVar}</code>
+      <LiveValue cssVar={cssVar} />
+      {light[name].description && <Text as="span" variant="caption" tone="tertiary">{light[name].description}</Text>}
+    </div>
+  );
+}
+
+const radiusScale = group("radius.").filter((n) => /^radius\.(none|xs|sm|md|lg|xl|2xl|pill)$/.test(n));
+const radiusRoles = group("radius.").filter((n) => !radiusScale.includes(n));
+const sizeKeys = ["xs", "sm", "md", "lg", "xl"] as const;
+const swatchGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 176px), 1fr))", gap: "var(--lw-space-lg)", alignItems: "start" } as const;
+const componentRadii = names.filter((n) => /radius/.test(n) && !n.startsWith("radius.") && !n.startsWith("control."));
+
+export const Radius: Story = {
+  render: (_, { globals }) => (
+    <div key={`${globals.brand ?? "leeward"}-${globals.mode ?? "light"}`} style={{ display: "grid", gap: "var(--lw-space-2xl)" }}>
+      <section style={{ display: "grid", gap: "var(--lw-space-md)" }}>
+        <Heading level={2} size="h3">Radius scale</Heading>
+        <Text tone="secondary">The base steps. Each brand multiplies them by its roundness, so Leeward Business has tighter corners. Switch the brand in the toolbar to compare.</Text>
+        <div style={swatchGrid}>
+          {radiusScale.map((name) => <RadiusSwatch key={name} name={name} />)}
+        </div>
+      </section>
+      <section style={{ display: "grid", gap: "var(--lw-space-md)" }}>
+        <Heading level={2} size="h3">Radius roles</Heading>
+        <Text tone="secondary">Use these by meaning, not by size: a card always takes the card radius.</Text>
+        <div style={swatchGrid}>
+          {radiusRoles.map((name) => <RadiusSwatch key={name} name={name} size={96} />)}
+        </div>
+      </section>
+      <section style={{ display: "grid", gap: "var(--lw-space-md)" }}>
+        <Heading level={2} size="h3">Control radius</Heading>
+        <Text tone="secondary">Radius grows with control size and never shrinks. Buttons, fields, selects and segmented controls of one size share it. Buttons can also be fully rounded with shape="pill".</Text>
+        <div style={{ display: "flex", gap: "var(--lw-space-lg)", flexWrap: "wrap", alignItems: "end" }}>
+          {sizeKeys.map((k) => {
+            const radius = light[`control.radius.${k}` as TokenName].cssVar;
+            return (
+              <div key={k} style={{ display: "grid", gap: "var(--lw-space-2xs)", justifyItems: "start" }}>
+                <div style={{ width: "120px", height: `var(${light[`control.height.${k}` as TokenName].cssVar})`, background: "var(--lw-fill-primary-weak)", border: "var(--lw-size-border-strong) solid var(--lw-border-primary-subtle)", borderRadius: `var(${radius})` }} />
+                <code style={{ fontSize: "var(--lw-type-body-sm-size)" }}>{radius}</code>
+                <LiveValue cssVar={radius} />
+              </div>
+            );
+          })}
+        </div>
+      </section>
+      <section style={{ display: "grid", gap: "var(--lw-space-md)" }}>
+        <Heading level={2} size="h3">Component radius tokens</Heading>
+        <Text tone="secondary">Each component reads its own token, which points at the scale above. Change a component's corners here without touching its CSS.</Text>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", minWidth: "100%" }}>
+            <thead><tr><th style={cell}>CSS variable</th><th style={cell}>Value</th><th style={cell}>Refers to</th></tr></thead>
+            <tbody>
+              {componentRadii.map((name) => (
+                <tr key={name}>
+                  <td style={cell}><code>{light[name].cssVar}</code></td>
+                  <td style={cell}><LiveValue cssVar={light[name].cssVar} /></td>
+                  <td style={cell}><code>{light[name].ref ?? ""}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // The pill radius always makes a fully round end.
+    const pill = canvasElement.querySelector('[data-radius="radius.pill"]') as HTMLElement;
+    await expect(parseFloat(getComputedStyle(pill).borderTopLeftRadius)).toBeGreaterThanOrEqual(pill.getBoundingClientRect().height / 2);
+  },
+};
+
 export const Elevation: Story = {
   render: () => (
     <div style={{ display: "grid", gap: "var(--lw-space-xl)" }}>
       <div style={{ display: "grid", gap: "var(--lw-space-md)" }}>
         <Heading level={2} size="h3">Elevation</Heading>
-        <Text tone="secondary">Eight levels from the Figma effect styles. In dark mode the same geometry is used with stronger shadows, and surfaces get lighter as they rise.</Text>
+        <Text tone="secondary">Eight levels from Leeward's effect styles. In dark mode the same geometry is used with stronger shadows, and surfaces get lighter as they rise.</Text>
         <div style={{ display: "flex", gap: "var(--lw-space-lg)", flexWrap: "wrap" }}>
           {["100", "200", "300", "400", "500", "600", "700", "800"].map((level) => (
             <div key={level} style={{ width: "140px", height: "96px", display: "grid", placeItems: "center", background: "var(--lw-fill-surface-raised)", borderRadius: "var(--lw-radius-card)", boxShadow: `var(--lw-elevation-${level})` }}>
