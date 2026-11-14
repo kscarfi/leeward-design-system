@@ -42,7 +42,9 @@ export function Select({ label, options, placeholder = "Choose an option", hint,
           aria-invalid={error ? true : undefined}
           aria-describedby={ids.describedBy}
         >
-          <RadixSelect.Value placeholder={<span className={styles.placeholder}>{placeholder}</span>} />
+          <span className={styles.value}>
+            <RadixSelect.Value placeholder={<span className={styles.placeholder}>{placeholder}</span>} />
+          </span>
           <RadixSelect.Icon className={styles.chevron}>
             <Icon name="chevron-down" />
           </RadixSelect.Icon>

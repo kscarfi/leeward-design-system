@@ -4,12 +4,12 @@
   display: inline-flex;
   align-items: center;
   gap: var(--lw-space-2xs);
-  min-height: var(--lw-size-control-sm);
-  padding-inline: var(--lw-space-sm);
+  height: var(--lw-chip-height-sm);
+  padding-inline: var(--lw-chip-padding-x-sm);
   background: var(--lw-fill-surface-default);
   color: var(--lw-text-default);
   border: var(--lw-size-border-default) solid var(--lw-border-default);
-  border-radius: var(--lw-radius-pill);
+  border-radius: var(--lw-chip-radius);
   cursor: pointer;
   transition: background-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
 }
@@ -33,3 +33,5 @@
 }
 
 .chip:disabled { color: var(--lw-text-subtler); border-color: var(--lw-border-subtle); cursor: not-allowed; }
+
+.md { composes: labelMd from "../../styles/type.module.css"; height: var(--lw-chip-height-md); padding-inline: var(--lw-chip-padding-x-md); }

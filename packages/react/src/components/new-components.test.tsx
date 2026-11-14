@@ -7,6 +7,8 @@ import { Accordion } from "./Accordion/Accordion.tsx";
 import { Alert } from "./Alert/Alert.tsx";
 import { Button } from "./Button/Button.tsx";
 import { Divider } from "./Divider/Divider.tsx";
+import { DropdownMenu } from "./DropdownMenu/DropdownMenu.tsx";
+import { IconButton } from "./IconButton/IconButton.tsx";
 import { EmptyState } from "./EmptyState/EmptyState.tsx";
 import { Icon } from "./Icon/Icon.tsx";
 import { iconNames } from "./Icon/icons.ts";
@@ -153,5 +155,15 @@ describe("QuickActions", () => {
     expect(screen.getByRole("list", { name: "Quick actions" })).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Send" }));
     expect(onClick).toHaveBeenCalled();
+  });
+});
+
+describe("DropdownMenu", () => {
+  it("opens from its trigger and runs the chosen action", async () => {
+    const onCopy = vi.fn();
+    render(<DropdownMenu trigger={<IconButton icon="more-vertical" label="More actions" />} actions={[{ label: "Copy IBAN", icon: "copy", onSelect: onCopy }, { label: "Close account", onSelect: () => {}, destructive: true }]} />);
+    await userEvent.click(screen.getByRole("button", { name: "More actions" }));
+    await userEvent.click(await screen.findByRole("menuitem", { name: "Copy IBAN" }));
+    expect(onCopy).toHaveBeenCalledOnce();
   });
 });

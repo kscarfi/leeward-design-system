@@ -1,13 +1,19 @@
+/* The outer height matches Button and TextField of the same size; items sit inside the inset. */
 .root {
   display: inline-flex;
-  gap: var(--lw-space-3xs);
-  padding: var(--lw-space-3xs);
+  align-items: stretch;
+  gap: var(--lw-segmented-inset);
+  height: var(--lw-segmented-height-md);
+  padding: var(--lw-segmented-inset);
   background: var(--lw-fill-surface-bold);
   border: var(--lw-size-border-default) solid var(--lw-border-muted);
-  border-radius: var(--lw-radius-control);
+  border-radius: var(--lw-segmented-radius-md);
   max-width: 100%;
   overflow-x: auto;
 }
+
+.sm { height: var(--lw-segmented-height-sm); border-radius: var(--lw-segmented-radius-sm); }
+.lg { height: var(--lw-segmented-height-lg); border-radius: var(--lw-segmented-radius-lg); }
 
 .fullWidth { display: flex; width: 100%; }
 .fullWidth .item { flex: 1; }
@@ -19,17 +25,18 @@
   align-items: center;
   justify-content: center;
   gap: var(--lw-space-2xs);
-  min-height: var(--lw-size-control-sm);
-  padding-inline: var(--lw-space-control-sm);
+  padding-inline: var(--lw-control-padding-x-md);
   background: transparent;
   border: 0;
-  border-radius: var(--lw-radius-control-sm);
+  border-radius: var(--lw-segmented-item-radius-md);
   color: var(--lw-text-muted);
   white-space: nowrap;
   cursor: pointer;
+  transition: background-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard), color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
 }
 
-.md .item { min-height: var(--lw-size-control-md); padding-inline: var(--lw-space-control-md); }
+.sm .item { padding-inline: var(--lw-control-padding-x-sm); border-radius: var(--lw-segmented-item-radius-sm); }
+.lg .item { font-size: var(--lw-type-button-md-size); line-height: var(--lw-type-button-md-line-height); padding-inline: var(--lw-control-padding-x-lg); border-radius: var(--lw-segmented-item-radius-lg); }
 
 .item::before {
   content: "";
@@ -40,7 +47,7 @@
   transform: translateY(-50%);
 }
 
-.item:hover:not([data-disabled]) { color: var(--lw-text-default); }
+.item:hover:not([data-disabled]):not([data-state="on"]) { color: var(--lw-text-default); background: var(--lw-fill-surface-bolder); }
 
 /* Selected: raised surface, shadow and stronger text, not color alone. */
 .item[data-state="on"] {

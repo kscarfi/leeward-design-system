@@ -2,12 +2,12 @@
   composes: bodyMd from "../../styles/type.module.css";
   display: block;
   width: 100%;
-  min-height: var(--lw-size-control-xl);
-  padding: var(--lw-space-sm);
+  min-height: var(--lw-textarea-min-height);
+  padding: var(--lw-textarea-padding);
   background: var(--lw-fill-surface-default);
   color: var(--lw-text-default);
   border: var(--lw-size-border-default) solid var(--lw-border-default);
-  border-radius: var(--lw-radius-control);
+  border-radius: var(--lw-textarea-radius);
   resize: vertical;
   field-sizing: content;
 }

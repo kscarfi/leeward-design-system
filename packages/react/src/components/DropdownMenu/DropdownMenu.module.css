@@ -1,10 +1,10 @@
 .content {
   z-index: var(--lw-layer-overlay);
   min-width: calc(var(--lw-size-content-sm) / 2);
-  padding: var(--lw-space-2xs);
+  padding: var(--lw-menu-padding);
   background: var(--lw-fill-surface-overlay);
   border: var(--lw-size-border-default) solid var(--lw-border-muted);
-  border-radius: var(--lw-radius-lg);
+  border-radius: var(--lw-menu-radius);
   box-shadow: var(--lw-elevation-500);
   animation: fade var(--lw-motion-duration-fast) var(--lw-motion-easing-enter);
 }
@@ -14,9 +14,9 @@
   display: flex;
   align-items: center;
   gap: var(--lw-space-xs);
-  min-height: var(--lw-size-touch-target);
+  min-height: var(--lw-menu-item-height);
   padding-inline: var(--lw-space-sm);
-  border-radius: var(--lw-radius-md);
+  border-radius: var(--lw-menu-item-radius);
   color: var(--lw-text-default);
   cursor: pointer;
   outline: none;

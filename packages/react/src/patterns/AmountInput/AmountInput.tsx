@@ -22,6 +22,7 @@ export interface AmountInputProps {
 }
 
 const symbols: Record<string, string> = { TRY: "₺", USD: "$", EUR: "€", GBP: "£" };
+const HOME_CURRENCY: Record<Locale, string> = { "tr-TR": "TRY", "en-US": "USD" };
 
 /** Parse "1.250,50" (tr-TR) or "1,250.50" (en-US) into 1250.5. Returns null for empty or invalid input. */
 export function parseAmount(raw: string, locale: Locale = "en-US"): number | null {
@@ -60,7 +61,8 @@ export function AmountInput({ label, value, defaultValue = null, onValueChange, 
       autoComplete="off"
       numeric
       size="lg"
-      prefix={symbols[currency] ?? currency}
+      // Same rule as formatAmount: the symbol only for the locale's own currency, the code otherwise.
+      prefix={HOME_CURRENCY[locale] === currency ? (symbols[currency] ?? currency) : currency}
       placeholder={locale === "tr-TR" ? "0,00" : "0.00"}
       hint={hint}
       error={error ?? builtIn}

@@ -29,7 +29,15 @@ export function TextField({ label, hint, error, prefix, suffix, optional, numeri
         {label}
       </FieldLabel>
       <FieldHint id={ids.hint}>{hint}</FieldHint>
-      <div className={cx(styles.control, styles[size], error && styles.invalid, disabled && styles.disabled)}>
+      <div
+        className={cx(styles.control, styles[size], error && styles.invalid, disabled && styles.disabled)}
+        // Taps on the wrapper or its 44 px hit area focus the input.
+        onPointerDown={(event) => {
+          if (event.target !== event.currentTarget) return;
+          event.preventDefault();
+          event.currentTarget.querySelector("input")?.focus();
+        }}
+      >
         {prefix && (
           <span className={styles.affix} aria-hidden="true">
             {prefix}

@@ -14,11 +14,11 @@
 .text {
   height: var(--lw-type-body-md-size);
   margin-block: var(--lw-space-2xs);
-  border-radius: var(--lw-radius-sm);
+  border-radius: var(--lw-skeleton-radius-text);
 }
 
 .last { width: 60%; }
-.rect { height: var(--lw-size-control-lg); border-radius: var(--lw-radius-md); }
+.rect { height: var(--lw-size-control-lg); border-radius: var(--lw-skeleton-radius-rect); }
 
 .circle {
   width: var(--lw-size-avatar-md);

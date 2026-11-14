@@ -5,21 +5,28 @@
   justify-content: space-between;
   gap: var(--lw-space-xs);
   width: 100%;
-  min-height: var(--lw-size-control-md);
-  padding-inline: var(--lw-space-sm);
+  height: var(--lw-input-height-md);
+  padding-inline: var(--lw-input-padding-x-md);
   background: var(--lw-fill-surface-default);
   color: var(--lw-text-default);
-  border: var(--lw-size-border-default) solid var(--lw-border-default);
-  border-radius: var(--lw-radius-control);
+  border: var(--lw-input-border-width) solid var(--lw-border-default);
+  border-radius: var(--lw-input-radius-md);
   cursor: pointer;
   text-align: start;
 }
 
-.sm { min-height: var(--lw-size-control-sm); font-size: var(--lw-type-body-sm-size); }
-.lg { min-height: var(--lw-size-control-lg); font-size: var(--lw-type-body-lg-size); }
+.sm { height: var(--lw-input-height-sm); padding-inline: var(--lw-input-padding-x-sm); border-radius: var(--lw-input-radius-sm); font-size: var(--lw-type-body-sm-size); }
+.lg { height: var(--lw-input-height-lg); padding-inline: var(--lw-input-padding-x-lg); border-radius: var(--lw-input-radius-lg); font-size: var(--lw-type-body-lg-size); }
 
-@media (pointer: coarse) {
-  .sm { min-height: var(--lw-size-touch-target); }
+/* Small triggers keep a 44 px hit area. */
+.trigger { position: relative; }
+.trigger::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  min-height: var(--lw-size-touch-target);
+  transform: translateY(-50%);
 }
 
 .trigger:hover:not(:disabled) { border-color: var(--lw-border-strong); }
@@ -34,7 +41,7 @@
 .invalid,
 .invalid:hover:not(:disabled) {
   border-color: var(--lw-border-danger);
-  border-width: var(--lw-size-border-strong);
+  border-width: var(--lw-input-border-width-invalid);
 }
 
 .invalid:focus-visible { box-shadow: var(--lw-elevation-focus-danger); }
@@ -49,11 +56,11 @@
   overflow: hidden;
   background: var(--lw-fill-surface-overlay);
   border: var(--lw-size-border-default) solid var(--lw-border-muted);
-  border-radius: var(--lw-radius-lg);
+  border-radius: var(--lw-menu-radius);
   box-shadow: var(--lw-elevation-400);
 }
 
-.viewport { padding: var(--lw-space-2xs); }
+.viewport { padding: var(--lw-menu-padding); }
 
 .item {
   composes: bodyMd from "../../styles/type.module.css";
@@ -61,9 +68,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--lw-space-xs);
-  min-height: var(--lw-size-touch-target);
+  min-height: var(--lw-menu-item-height);
   padding-inline: var(--lw-space-sm);
-  border-radius: var(--lw-radius-md);
+  border-radius: var(--lw-menu-item-radius);
   color: var(--lw-text-default);
   cursor: pointer;
   outline: none;
@@ -74,3 +81,12 @@
 .item[data-state="checked"] { color: var(--lw-text-primary); font-weight: var(--lw-type-label-md-weight); }
 .item[data-disabled] { color: var(--lw-text-subtler); cursor: not-allowed; }
 .indicator { display: inline-flex; }
+
+/* The value never wraps: long labels end with an ellipsis inside the fixed height. */
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -9,7 +9,7 @@ const meta = {
   title: "Components/Alert",
   component: Alert,
   parameters: { docs: { description: { component: docsDescription(docsMd) } } },
-  args: { onDismiss: fn(), tone: "info", title: "Transfers to other banks take up to one working day", children: "Money sent after 16:00 arrives the next working day." },
+  args: { tone: "info", title: "Transfers to other banks take up to one working day", children: "Money sent after 16:00 arrives the next working day." },
   decorators: [(Story) => <div style={{ maxWidth: "520px" }}><Story /></div>],
 } satisfies Meta<typeof Alert>;
 export default meta;
@@ -25,6 +25,7 @@ export const Warning: Story = { args: { tone: "warning", title: "You are close t
 export const Danger: Story = { args: { tone: "danger", title: "This payment failed", children: "Nothing left your account. Check the IBAN and try again.", live: "alert" } };
 export const WithActions: Story = { args: { tone: "warning", actions: <><Button size="sm">Raise limit</Button><Button size="sm" variant="ghost">Not now</Button></> } };
 export const Dismissible: Story = {
+  args: { onDismiss: fn() },
   play: async ({ canvasElement, args }) => {
     await userEvent.click(within(canvasElement).getByRole("button", { name: "Dismiss" }));
     await expect(args.onDismiss).toHaveBeenCalledOnce();

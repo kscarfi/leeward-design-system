@@ -18,7 +18,8 @@ export interface SegmentedControlProps {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
-  size?: "sm" | "md";
+  /** sm 36, md 44 (default), lg 48 px: the same heights as Button and TextField. */
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   className?: string;
 }

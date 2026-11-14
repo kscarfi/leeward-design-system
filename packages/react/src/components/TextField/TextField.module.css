@@ -1,23 +1,34 @@
 .control {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--lw-space-xs);
-  min-height: var(--lw-size-control-md);
-  padding-inline: var(--lw-space-sm);
+  height: var(--lw-input-height-md);
+  padding-inline: var(--lw-input-padding-x-md);
   background: var(--lw-fill-surface-default);
-  border: var(--lw-size-border-default) solid var(--lw-border-default);
-  border-radius: var(--lw-radius-control);
-  transition: border-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
+  border: var(--lw-input-border-width) solid var(--lw-border-default);
+  border-radius: var(--lw-input-radius-md);
+  cursor: text;
+  transition: border-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard), box-shadow var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);
 }
 
-.sm { min-height: var(--lw-size-control-sm); }
-.sm .input { min-height: var(--lw-size-control-sm); font-size: var(--lw-type-body-sm-size); }
-.lg { min-height: var(--lw-size-control-lg); padding-inline: var(--lw-space-md); }
-.lg .input { min-height: var(--lw-size-control-lg); font-size: var(--lw-type-body-lg-size); }
+/* Small fields keep a 44 px hit area: the wrapper focuses the input when tapped. */
+.control::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  min-height: var(--lw-size-touch-target);
+  transform: translateY(-50%);
+}
 
-/* On touch screens every field is at least 44 px tall, whatever its size. */
+.sm { height: var(--lw-input-height-sm); padding-inline: var(--lw-input-padding-x-sm); border-radius: var(--lw-input-radius-sm); }
+.sm .input { font-size: var(--lw-type-body-sm-size); }
+.lg { height: var(--lw-input-height-lg); padding-inline: var(--lw-input-padding-x-lg); border-radius: var(--lw-input-radius-lg); }
+.lg .input { font-size: var(--lw-type-body-lg-size); }
+
+/* Touch screens keep 16 px text so the browser does not zoom into the field. */
 @media (pointer: coarse) {
-  .sm, .sm .input { min-height: var(--lw-size-touch-target); }
   .sm .input { font-size: var(--lw-type-body-md-size); }
 }
 
@@ -35,7 +46,7 @@
 .invalid,
 .invalid:hover:not(.disabled) {
   border-color: var(--lw-border-danger);
-  border-width: var(--lw-size-border-strong);
+  border-width: var(--lw-input-border-width-invalid);
 }
 
 .disabled {
@@ -47,9 +58,8 @@
   composes: bodyMd from "../../styles/type.module.css";
   flex: 1;
   min-width: 0;
-  min-height: var(--lw-size-control-md);
+  height: 100%;
   padding: 0;
-  /* 16 px minimum stops iOS from zooming into the field on focus. */
   border: 0;
   background: transparent;
   color: var(--lw-text-default);

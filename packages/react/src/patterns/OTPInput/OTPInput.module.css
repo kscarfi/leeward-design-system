@@ -30,12 +30,12 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  max-width: var(--lw-size-control-lg);
-  height: var(--lw-size-control-lg);
+  max-width: var(--lw-otp-box-size);
+  height: var(--lw-otp-box-size);
   background: var(--lw-fill-surface-default);
   color: var(--lw-text-default);
   border: var(--lw-size-border-default) solid var(--lw-border-default);
-  border-radius: var(--lw-radius-control);
+  border-radius: var(--lw-otp-radius);
 }
 
 .active {

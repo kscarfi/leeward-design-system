@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: var(--lw-space-md);
   min-width: 0;
-  border-radius: var(--lw-radius-card);
+  border-radius: var(--lw-card-radius);
   color: var(--lw-text-default);
 }
 
@@ -12,6 +12,6 @@
 .filled { background: var(--lw-fill-surface-emphasis); }
 
 .padding-none { padding: 0; }
-.padding-sm { padding: var(--lw-space-sm); }
-.padding-md { padding: var(--lw-space-md); }
-.padding-lg { padding: var(--lw-space-lg); }
+.padding-sm { padding: var(--lw-card-padding-sm); }
+.padding-md { padding: var(--lw-card-padding-md); }
+.padding-lg { padding: var(--lw-card-padding-lg); }

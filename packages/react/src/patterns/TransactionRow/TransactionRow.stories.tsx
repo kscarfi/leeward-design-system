@@ -13,7 +13,7 @@ const meta = {
   component: TransactionRow,
   argTypes: { icon: { control: "select", options: iconNames } },
   parameters: { docs: { description: { component: docsDescription(docsMd) } } },
-  args: { onClick: fn(), merchant: "Coffee Lab", category: "Eating out", date, amount: 85, direction: "outgoing", currency: "TRY", locale: "tr-TR" },
+  args: { merchant: "Coffee Lab", category: "Eating out", date, amount: 85, direction: "outgoing", currency: "TRY", locale: "tr-TR" },
   decorators: [(Story) => <Card padding="none" style={{ maxWidth: "420px" }}><ul style={{ margin: 0, padding: 0 }}><Story /></ul></Card>],
 } satisfies Meta<typeof TransactionRow>;
 export default meta;

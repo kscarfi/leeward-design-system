@@ -13,7 +13,7 @@ const meta = {
   title: "Components/ListItem",
   component: ListItem,
   parameters: { docs: { description: { component: docsDescription(docsMd) } } },
-  args: { onClick: fn(), title: "Deniz Yılmaz", description: "TR•• •••• •••• •••• •••• 4821" },
+  args: { title: "Deniz Yılmaz", description: "TR•• •••• •••• •••• •••• 4821" },
   decorators: [(Story) => <Card padding="none" style={{ maxWidth: "400px" }}><List><Story /></List></Card>],
 } satisfies Meta<typeof ListItem>;
 export default meta;
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Static: Story = { args: { leading: <Avatar name="Deniz Yılmaz" decorative /> } };
 export const Button: Story = {
-  args: { leading: <Avatar name="Deniz Yılmaz" decorative />, chevron: true },
+  args: { leading: <Avatar name="Deniz Yılmaz" decorative />, chevron: true, onClick: fn() },
   play: async ({ canvasElement, args }) => {
     await userEvent.click(within(canvasElement).getByRole("button", { name: /Deniz Yılmaz/ }));
     await expect(args.onClick).toHaveBeenCalledOnce();

@@ -57,7 +57,9 @@ export function ToastProvider({ children, label = "Notifications", dismissLabel 
             type={tone === "danger" ? "foreground" : "background"}
             onOpenChange={(open) => !open && remove(id)}
           >
-            <Icon name={toneIcon[tone]} className={styles.icon} />
+            <span className={styles.iconWrap} aria-hidden="true">
+              <Icon name={toneIcon[tone]} weight="bold" />
+            </span>
             <div className={styles.text}>
               <RadixToast.Title className={styles.title}>{title}</RadixToast.Title>
               {description && <RadixToast.Description className={styles.description}>{description}</RadixToast.Description>}

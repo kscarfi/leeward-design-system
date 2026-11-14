@@ -4,17 +4,17 @@
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
-  border-radius: var(--lw-radius-pill);
+  border-radius: var(--lw-avatar-radius);
   background: var(--lw-fill-primary-weak);
   color: var(--lw-text-primary);
   user-select: none;
 }
 
-.xs { width: var(--lw-size-avatar-xs); height: var(--lw-size-avatar-xs); }
-.sm { width: var(--lw-size-avatar-sm); height: var(--lw-size-avatar-sm); }
-.md { width: var(--lw-size-avatar-md); height: var(--lw-size-avatar-md); }
-.lg { width: var(--lw-size-avatar-lg); height: var(--lw-size-avatar-lg); }
-.xl { width: var(--lw-size-avatar-xl); height: var(--lw-size-avatar-xl); }
+.xs { width: var(--lw-avatar-size-xs); height: var(--lw-avatar-size-xs); }
+.sm { width: var(--lw-avatar-size-sm); height: var(--lw-avatar-size-sm); }
+.md { width: var(--lw-avatar-size-md); height: var(--lw-avatar-size-md); }
+.lg { width: var(--lw-avatar-size-lg); height: var(--lw-avatar-size-lg); }
+.xl { width: var(--lw-avatar-size-xl); height: var(--lw-avatar-size-xl); }
 
 .image { width: 100%; height: 100%; object-fit: cover; }
 
@@ -35,3 +35,10 @@
   font-size: var(--lw-type-heading-h3-size);
   line-height: var(--lw-type-heading-h3-line-height);
 }
+
+/* Initials get a stable tint per name. Icons (categories) stay on the brand tint. */
+.tone-primary { background: var(--lw-fill-primary-weak); color: var(--lw-text-primary-on-subtle); }
+.tone-secondary { background: var(--lw-fill-secondary-weak); color: var(--lw-text-secondary-on-subtle); }
+.tone-info { background: var(--lw-fill-info-weak); color: var(--lw-text-info-on-subtle); }
+.tone-success { background: var(--lw-fill-success-weak); color: var(--lw-text-success-on-subtle); }
+.tone-warning { background: var(--lw-fill-warning-weak); color: var(--lw-text-warning-on-subtle); }

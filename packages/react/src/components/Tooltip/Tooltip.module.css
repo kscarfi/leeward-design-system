@@ -1,12 +1,12 @@
 .content {
   composes: bodySm from "../../styles/type.module.css";
   z-index: var(--lw-layer-tooltip);
-  max-width: var(--lw-size-tooltip-max);
-  padding-block: var(--lw-space-xs);
-  padding-inline: var(--lw-space-sm);
+  max-width: var(--lw-tooltip-max-width);
+  padding-block: var(--lw-tooltip-padding-y);
+  padding-inline: var(--lw-tooltip-padding-x);
   background: var(--lw-fill-neutral-default);
   color: var(--lw-text-inverse);
-  border-radius: var(--lw-radius-md);
+  border-radius: var(--lw-tooltip-radius);
   box-shadow: var(--lw-elevation-400);
   animation: fade-in var(--lw-motion-duration-fast) var(--lw-motion-easing-enter);
 }

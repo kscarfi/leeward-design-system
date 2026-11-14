@@ -13,13 +13,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--lw-size-icon-md);
-  height: var(--lw-size-icon-md);
+  width: var(--lw-checkbox-size);
+  height: var(--lw-checkbox-size);
   margin-top: var(--lw-space-3xs);
   padding: 0;
   background: var(--lw-fill-surface-default);
   border: var(--lw-size-border-strong) solid var(--lw-border-default);
-  border-radius: var(--lw-radius-sm);
+  border-radius: var(--lw-checkbox-radius);
   color: var(--lw-fill-primary-on-default);
   cursor: pointer;
 }

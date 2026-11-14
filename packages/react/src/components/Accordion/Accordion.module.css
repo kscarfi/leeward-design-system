@@ -1,6 +1,6 @@
 .root {
   border: var(--lw-size-border-default) solid var(--lw-border-muted);
-  border-radius: var(--lw-radius-card);
+  border-radius: var(--lw-accordion-radius);
   background: var(--lw-fill-surface-default);
   overflow: hidden;
 }
@@ -15,7 +15,7 @@
   justify-content: space-between;
   gap: var(--lw-space-sm);
   width: 100%;
-  min-height: var(--lw-size-control-lg);
+  min-height: var(--lw-accordion-trigger-height);
   padding: var(--lw-space-sm) var(--lw-space-md);
   background: transparent;
   border: 0;

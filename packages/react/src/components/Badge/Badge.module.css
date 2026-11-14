@@ -3,14 +3,14 @@
   display: inline-flex;
   align-items: center;
   gap: var(--lw-space-2xs);
-  min-height: var(--lw-size-icon-lg);
-  padding-inline: var(--lw-space-xs);
+  height: var(--lw-badge-height-md);
+  padding-inline: var(--lw-badge-padding-x-md);
   border: var(--lw-size-border-default) solid transparent;
-  border-radius: var(--lw-radius-badge);
+  border-radius: var(--lw-badge-radius);
   white-space: nowrap;
 }
 
-.sm { min-height: var(--lw-size-icon-md); padding-inline: var(--lw-space-xs-tight); gap: var(--lw-space-3xs); }
+.sm { height: var(--lw-badge-height-sm); padding-inline: var(--lw-badge-padding-x-sm); gap: var(--lw-space-3xs); }
 
 .subtle.neutral { background: var(--lw-fill-neutral-weak); color: var(--lw-text-neutral-on-subtle); border-color: var(--lw-border-neutral-subtler); }
 .subtle.info { background: var(--lw-fill-info-weak); color: var(--lw-text-info-on-subtle); border-color: var(--lw-border-info-subtler); }

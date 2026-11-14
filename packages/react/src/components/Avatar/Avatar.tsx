@@ -23,10 +23,19 @@ export function initials(name: string): string {
   return (first + last).toLocaleUpperCase();
 }
 
+const TONES = ["primary", "secondary", "info", "success", "warning"] as const;
+
+/** A stable tone per name, so the same person always gets the same color. */
+export function avatarTone(name: string): (typeof TONES)[number] {
+  let hash = 0;
+  for (const char of name) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
+  return TONES[hash % TONES.length]!;
+}
+
 export function Avatar({ name, src, icon, size = "md", decorative = false, className }: AvatarProps) {
   const a11y = decorative ? { "aria-hidden": true as const } : { role: "img", "aria-label": name };
   return (
-    <RadixAvatar.Root className={cx(styles.avatar, styles[size], className)} {...a11y}>
+    <RadixAvatar.Root className={cx(styles.avatar, styles[size], !icon && styles[`tone-${avatarTone(name)}`], className)} {...a11y}>
       {src && <RadixAvatar.Image src={src} alt="" className={styles.image} />}
       <RadixAvatar.Fallback className={styles.fallback} delayMs={src ? 300 : 0}>
         {icon ? <Icon name={icon} size={size === "xl" ? "xl" : size === "lg" ? "lg" : size === "xs" ? "sm" : "md"} /> : initials(name)}

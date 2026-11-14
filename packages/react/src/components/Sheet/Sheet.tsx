@@ -26,7 +26,14 @@ export function Sheet({ title, description, trigger, side = "bottom", children, 
       {trigger && <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>}
       <RadixDialog.Portal>
         <RadixDialog.Overlay className={styles.overlay} />
-        <RadixDialog.Content className={cx(styles.sheet, styles[side], className)} {...(description ? {} : { "aria-describedby": undefined })}>
+        <RadixDialog.Content
+          className={cx(styles.sheet, styles[side], className)}
+          {...(description ? {} : { "aria-describedby": undefined })}
+          onOpenAutoFocus={(event) => {
+            event.preventDefault();
+            (event.currentTarget as HTMLElement | null)?.focus();
+          }}
+        >
           {side === "bottom" && <span className={styles.handle} aria-hidden="true" />}
           <header className={styles.header}>
             <RadixDialog.Title className={styles.title}>{title}</RadixDialog.Title>

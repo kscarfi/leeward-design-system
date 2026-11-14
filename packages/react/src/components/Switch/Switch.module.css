@@ -17,12 +17,12 @@
 .track {
   position: relative;
   flex-shrink: 0;
-  width: var(--lw-size-touch-target);
-  height: var(--lw-size-icon-lg);
+  width: var(--lw-switch-track-width);
+  height: var(--lw-switch-track-height);
   padding: 0;
   background: var(--lw-fill-control-track);
   border: 0;
-  border-radius: var(--lw-radius-pill);
+  border-radius: var(--lw-switch-radius);
   cursor: pointer;
   transition: background-color var(--lw-motion-duration-base) var(--lw-motion-easing-standard);
 }
@@ -41,9 +41,9 @@
 
 .thumb {
   display: block;
-  width: var(--lw-size-icon-md);
-  height: var(--lw-size-icon-md);
-  margin-inline-start: var(--lw-space-3xs);
+  width: var(--lw-switch-thumb-size);
+  height: var(--lw-switch-thumb-size);
+  margin-inline-start: var(--lw-switch-inset);
   background: var(--lw-fill-control-thumb);
   border-radius: var(--lw-radius-pill);
   box-shadow: var(--lw-elevation-200);
@@ -52,7 +52,7 @@
 
 /* Travel distance: track width minus thumb width minus both insets. */
 .thumb[data-state="checked"] {
-  transform: translateX(calc(var(--lw-size-touch-target) - var(--lw-size-icon-md) - var(--lw-space-3xs) * 2));
+  transform: translateX(calc(var(--lw-switch-track-width) - var(--lw-switch-thumb-size) - var(--lw-switch-inset) * 2));
 }
 
 .track:disabled .thumb { background: var(--lw-fill-surface-default); box-shadow: none; }

@@ -15,9 +15,9 @@
   align-items: center;
   gap: var(--lw-space-sm);
   width: 100%;
-  min-height: var(--lw-size-touch-target);
-  padding-block: var(--lw-space-sm);
-  padding-inline: var(--lw-space-md);
+  min-height: var(--lw-list-item-min-height);
+  padding-block: var(--lw-list-item-padding-y);
+  padding-inline: var(--lw-list-item-padding-x);
   background: transparent;
   border: 0;
   color: inherit;

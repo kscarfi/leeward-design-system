@@ -11,8 +11,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--lw-size-avatar-xl);
-  height: var(--lw-size-avatar-xl);
+  width: var(--lw-empty-state-art-size);
+  height: var(--lw-empty-state-art-size);
   margin-bottom: var(--lw-space-xs);
   border-radius: var(--lw-radius-pill);
   background: var(--lw-fill-primary-weak);

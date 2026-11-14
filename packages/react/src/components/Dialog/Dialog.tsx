@@ -30,7 +30,15 @@ export function Dialog({ title, description, trigger, actions, children, closeLa
       {trigger && <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>}
       <RadixDialog.Portal>
         <RadixDialog.Overlay className={styles.overlay} />
-        <RadixDialog.Content className={cx(styles.content, className)} {...(description ? {} : { "aria-describedby": undefined })}>
+        <RadixDialog.Content
+          className={cx(styles.content, className)}
+          {...(description ? {} : { "aria-describedby": undefined })}
+          // Focus the dialog itself on open: screen readers read the title, and no button starts highlighted.
+          onOpenAutoFocus={(event) => {
+            event.preventDefault();
+            (event.currentTarget as HTMLElement | null)?.focus();
+          }}
+        >
           <header className={styles.header}>
             <RadixDialog.Title className={styles.title}>{title}</RadixDialog.Title>
             {!hideClose && (

@@ -12,10 +12,12 @@ export interface ProgressBarProps {
   valueText?: string;
   /** Pair warning and danger with words in valueText, for example "90% used". Color is never the only signal. */
   tone?: "brand" | "success" | "warning" | "danger";
+  /** sm 4 px, md 8 px (default). */
+  size?: "sm" | "md";
   className?: string;
 }
 
-export function ProgressBar({ label, value, max = 100, valueText, tone = "brand", className }: ProgressBarProps) {
+export function ProgressBar({ label, value, max = 100, valueText, tone = "brand", size = "md", className }: ProgressBarProps) {
   const id = useId();
   const percent = Math.round((Math.min(Math.max(value, 0), max) / max) * 100);
   const text = valueText ?? `${percent}%`;
@@ -27,7 +29,7 @@ export function ProgressBar({ label, value, max = 100, valueText, tone = "brand"
         </span>
         <span className={styles.value}>{text}</span>
       </div>
-      <Progress.Root value={value} max={max} aria-labelledby={id} aria-valuetext={text} getValueLabel={() => text} className={styles.track}>
+      <Progress.Root value={value} max={max} aria-labelledby={id} aria-valuetext={text} getValueLabel={() => text} className={cx(styles.track, size === "sm" && styles.sm)}>
         <Progress.Indicator className={cx(styles.indicator, styles[tone])} style={{ transform: `translateX(-${100 - percent}%)` }} />
       </Progress.Root>
     </div>

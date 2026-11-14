@@ -32,9 +32,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--lw-size-avatar-lg);
-  height: var(--lw-size-avatar-lg);
-  border-radius: var(--lw-radius-pill);
+  width: var(--lw-quick-action-icon-size);
+  height: var(--lw-quick-action-icon-size);
+  border-radius: var(--lw-quick-action-radius);
   background: var(--lw-fill-primary-weak);
   color: var(--lw-icon-primary);
   transition: background-color var(--lw-motion-duration-fast) var(--lw-motion-easing-standard), transform var(--lw-motion-duration-fast) var(--lw-motion-easing-standard);

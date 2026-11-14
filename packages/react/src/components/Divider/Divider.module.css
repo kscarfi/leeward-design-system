@@ -1,7 +1,7 @@
 .divider { flex-shrink: 0; background: var(--lw-border-muted); }
-.horizontal { width: 100%; height: var(--lw-size-border-default); }
-.vertical { width: var(--lw-size-border-default); align-self: stretch; }
+.horizontal { width: 100%; height: var(--lw-divider-thickness); }
+.vertical { width: var(--lw-divider-thickness); align-self: stretch; }
 
-.labelled { display: flex; align-items: center; gap: var(--lw-space-sm); width: 100%; }
-.line { flex: 1; height: var(--lw-size-border-default); background: var(--lw-border-muted); }
+.labelled { display: flex; align-items: center; gap: var(--lw-divider-gap); width: 100%; }
+.line { flex: 1; height: var(--lw-divider-thickness); background: var(--lw-border-muted); }
 .label { composes: caption from "../../styles/type.module.css"; color: var(--lw-text-subtle); }

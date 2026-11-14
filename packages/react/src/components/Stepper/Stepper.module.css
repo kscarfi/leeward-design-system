@@ -16,8 +16,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--lw-size-icon-lg);
-  height: var(--lw-size-icon-lg);
+  width: var(--lw-stepper-marker-size);
+  height: var(--lw-stepper-marker-size);
   border-radius: var(--lw-radius-pill);
   border: var(--lw-size-border-strong) solid var(--lw-border-default);
   color: var(--lw-text-muted);

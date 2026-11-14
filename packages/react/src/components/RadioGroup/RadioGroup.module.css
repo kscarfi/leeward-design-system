@@ -17,8 +17,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--lw-size-icon-md);
-  height: var(--lw-size-icon-md);
+  width: var(--lw-radio-size);
+  height: var(--lw-radio-size);
   margin-top: var(--lw-space-3xs);
   padding: 0;
   background: var(--lw-fill-surface-default);
@@ -40,8 +40,8 @@
 .invalid { border-color: var(--lw-border-danger); }
 
 .dot {
-  width: var(--lw-space-xs);
-  height: var(--lw-space-xs);
+  width: var(--lw-radio-dot-size);
+  height: var(--lw-radio-dot-size);
   border-radius: var(--lw-radius-pill);
   background: var(--lw-fill-primary-default);
 }

@@ -13,7 +13,7 @@
 .trigger {
   composes: labelMd from "../../styles/type.module.css";
   position: relative;
-  min-height: var(--lw-size-touch-target);
+  height: var(--lw-tabs-height);
   padding-inline: var(--lw-space-2xs);
   background: transparent;
   border: 0;
@@ -36,7 +36,7 @@
   position: absolute;
   inset-inline: 0;
   bottom: calc(var(--lw-size-border-default) * -1);
-  height: var(--lw-size-border-strong);
+  height: var(--lw-tabs-indicator-thickness);
   background: var(--lw-border-primary);
   border-radius: var(--lw-radius-pill);
 }

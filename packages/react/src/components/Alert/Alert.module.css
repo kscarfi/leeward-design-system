@@ -2,9 +2,9 @@
   display: flex;
   align-items: flex-start;
   gap: var(--lw-space-sm);
-  padding: var(--lw-space-md);
+  padding: var(--lw-alert-padding);
   border: var(--lw-size-border-default) solid transparent;
-  border-radius: var(--lw-radius-lg);
+  border-radius: var(--lw-alert-radius);
 }
 
 .icon { margin-top: var(--lw-space-3xs); }
