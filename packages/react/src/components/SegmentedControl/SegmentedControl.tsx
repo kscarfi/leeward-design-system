@@ -20,12 +20,14 @@ export interface SegmentedControlProps {
   onValueChange?: (value: string) => void;
   /** sm 36, md 44 (default), lg 48 px: the same heights as Button and TextField. */
   size?: "sm" | "md" | "lg";
+  /** rounded: the size's control radius. pill: fully rounded track and items, to sit next to pill buttons. */
+  shape?: "rounded" | "pill";
   fullWidth?: boolean;
   className?: string;
 }
 
 /** Pick one view or filter from 2 to 5 short options, such as Week, Month, Year. Arrow keys move between options. */
-export function SegmentedControl({ label, options, value, defaultValue, onValueChange, size = "md", fullWidth, className }: SegmentedControlProps) {
+export function SegmentedControl({ label, options, value, defaultValue, onValueChange, size = "md", shape = "rounded", fullWidth, className }: SegmentedControlProps) {
   return (
     <ToggleGroup.Root
       type="single"
@@ -34,7 +36,7 @@ export function SegmentedControl({ label, options, value, defaultValue, onValueC
       defaultValue={defaultValue ?? options[0]?.value ?? ""}
       // A segmented control always has one selection, so ignore attempts to clear it.
       onValueChange={(next) => next && onValueChange?.(next)}
-      className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}
+      className={cx(styles.root, styles[size], shape === "pill" && styles.pill, fullWidth && styles.fullWidth, className)}
     >
       {options.map((o) => (
         <ToggleGroup.Item key={o.value} value={o.value} disabled={o.disabled ?? false} className={styles.item}>

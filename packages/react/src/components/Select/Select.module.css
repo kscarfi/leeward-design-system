@@ -18,6 +18,11 @@
 .sm { height: var(--lw-input-height-sm); padding-inline: var(--lw-input-padding-x-sm); border-radius: var(--lw-input-radius-sm); font-size: var(--lw-type-body-sm-size); }
 .lg { height: var(--lw-input-height-lg); padding-inline: var(--lw-input-padding-x-lg); border-radius: var(--lw-input-radius-lg); font-size: var(--lw-type-body-lg-size); }
 
+/* Pill: fully rounded ends, with the next size's padding so text clears the curve. */
+.pill { border-radius: var(--lw-input-radius-pill); padding-inline: var(--lw-input-padding-x-pill-md); }
+.pill.sm { padding-inline: var(--lw-input-padding-x-pill-sm); }
+.pill.lg { padding-inline: var(--lw-input-padding-x-pill-lg); }
+
 /* Small triggers keep a 44 px hit area. */
 .trigger { position: relative; }
 .trigger::before {

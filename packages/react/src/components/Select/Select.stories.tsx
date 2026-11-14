@@ -30,6 +30,13 @@ export const Default: Story = {
   },
 };
 export const WithValue: Story = { args: { defaultValue: "savings" } };
+export const Pill: Story = {
+  args: { shape: "pill", size: "sm", label: "Category" },
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("combobox", { name: "Category" });
+    await expect(parseFloat(getComputedStyle(trigger).borderTopLeftRadius)).toBeGreaterThanOrEqual(trigger.getBoundingClientRect().height / 2);
+  },
+};
 export const WithHint: Story = { args: { hint: "Money leaves this account today" } };
 export const WithError: Story = { args: { error: "Choose an account to continue" } };
 export const Disabled: Story = { args: { disabled: true, defaultValue: "everyday" } };

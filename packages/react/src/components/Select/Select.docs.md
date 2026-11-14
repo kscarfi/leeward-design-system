@@ -19,6 +19,16 @@ Pick one option from a list in a popover. Built on Radix Select.
 | `md` | 44 px (compact 40) | Default. Same height as a md Button and TextField. |
 | `lg` | 48 px (compact 44) | Main choice of a screen. |
 
+## Shapes
+
+| Shape | Corners | Use it for |
+|---|---|---|
+| `rounded` (default) | The control radius of the size | Forms, dialogs and toolbars. |
+| `pill` | Fully rounded ends (`radius-pill` token) and the next size's horizontal padding | Filters in a row of pill Chips or next to a pill Button. |
+
+- A pill is exactly as tall as a rounded control of the same size.
+- Match the buttons next to it: pill with pill, rounded with rounded.
+
 ## States
 
 - Default, open, hover, focus, error, disabled. Options can be disabled.
@@ -56,6 +66,10 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | `--lw-input-padding-x-lg` | 20 px | 16 px | `control.padding-x.lg` |
 | `--lw-input-border-width` | 1 px | 1 px | `size.border.default` |
 | `--lw-input-border-width-invalid` | 2 px | 2 px | `size.border.strong` |
+| `--lw-input-radius-pill` | 9999 px | 9999 px | `radius.pill` |
+| `--lw-input-padding-x-pill-sm` | 16 px | 12 px | `control.padding-x.md` |
+| `--lw-input-padding-x-pill-md` | 20 px | 16 px | `control.padding-x.lg` |
+| `--lw-input-padding-x-pill-lg` | 24 px | 20 px | `control.padding-x.xl` |
 | `--lw-menu-radius` | 12 px | 12 px | `radius.lg` |
 | `--lw-menu-padding` | 4 px | 4 px | `space.2xs` |
 | `--lw-menu-item-height` | 44 px | 44 px | `size.touch-target` |

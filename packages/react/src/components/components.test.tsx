@@ -106,12 +106,22 @@ describe("TextField", () => {
     await userEvent.type(screen.getByLabelText("Name"), "Ece");
     expect(screen.getByLabelText("Name")).toHaveValue("Ece");
   });
+  it("adds the pill shape only when asked", () => {
+    const { rerender } = render(<TextField label="Search" />);
+    expect(screen.getByLabelText("Search").parentElement!.className).not.toMatch(/pill/);
+    rerender(<TextField label="Search" shape="pill" />);
+    expect(screen.getByLabelText("Search").parentElement!.className).toMatch(/pill/);
+  });
 });
 
 describe("Select", () => {
   it("is a labelled combobox", () => {
     render(<Select label="Pay from" options={[{ value: "a", label: "Everyday" }]} />);
     expect(screen.getByRole("combobox", { name: "Pay from" })).toBeInTheDocument();
+  });
+  it("adds the pill shape only when asked", () => {
+    render(<Select label="Category" shape="pill" options={[{ value: "a", label: "Bills" }]} />);
+    expect(screen.getByRole("combobox", { name: "Category" }).className).toMatch(/pill/);
   });
 });
 

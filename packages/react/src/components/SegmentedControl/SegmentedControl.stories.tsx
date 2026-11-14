@@ -21,5 +21,12 @@ export const Default: Story = {
   },
 };
 export const Small: Story = { args: { size: "sm" } };
+export const Pill: Story = {
+  args: { shape: "pill" },
+  play: async ({ canvasElement }) => {
+    const group = within(canvasElement).getByRole("radiogroup", { name: "Period" });
+    await expect(parseFloat(getComputedStyle(group).borderTopLeftRadius)).toBeGreaterThanOrEqual(group.getBoundingClientRect().height / 2);
+  },
+};
 export const WithIcons: Story = { args: { label: "View", options: [{ value: "list", label: "List", icon: "menu" }, { value: "chart", label: "Chart", icon: "pie-chart" }], defaultValue: "list" } };
 export const FullWidth: Story = { args: { fullWidth: true }, decorators: [(Story) => <div style={{ maxWidth: "400px" }}><Story /></div>] };

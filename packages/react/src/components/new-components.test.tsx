@@ -65,6 +65,10 @@ describe("SegmentedControl", () => {
     await userEvent.click(screen.getByRole("radio", { name: "Month" }));
     expect(onValueChange).toHaveBeenCalledTimes(1);
   });
+  it("adds the pill shape only when asked", () => {
+    render(<SegmentedControl label="Period" shape="pill" options={[{ value: "w", label: "Week" }]} />);
+    expect(screen.getByRole("radiogroup", { name: "Period" }).className).toMatch(/pill/);
+  });
 });
 
 describe("Textarea", () => {

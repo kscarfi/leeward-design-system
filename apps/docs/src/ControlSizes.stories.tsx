@@ -21,21 +21,22 @@ const options = [
   { value: "month", label: "Month" },
 ];
 
-function Row({ size }: { size: "sm" | "md" | "lg" }) {
+function Row({ size, shape = "rounded" }: { size: "sm" | "md" | "lg"; shape?: "rounded" | "pill" }) {
+  const key = shape === "pill" ? `${size}-pill` : size;
   return (
-    <section aria-label={`Size ${size}`} data-row={size} style={{ display: "grid", gap: "var(--lw-space-xs)" }}>
-      <Heading level={2} size="h5">Size {size}</Heading>
+    <section aria-label={`Size ${key}`} data-row={key} style={{ display: "grid", gap: "var(--lw-space-xs)" }}>
+      <Heading level={2} size="h5">Size {size}{shape === "pill" ? ", pill" : ""}</Heading>
       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "var(--lw-space-sm)" }}>
-        <Button size={size} data-measure="Button">Send</Button>
+        <Button size={size} shape={shape} data-measure="Button">Send</Button>
         <Button size={size} shape="pill" variant="secondary" data-measure="ButtonPill">Request</Button>
-        <IconButton size={size} variant="outline" icon="settings" label={`Settings ${size}`} data-measure="IconButton" />
+        <IconButton size={size} variant="outline" icon="settings" label={`Settings ${key}`} data-measure="IconButton" />
         <div style={{ width: "180px" }}>
-          <TextField size={size} label={`Name ${size}`} placeholder="Deniz" />
+          <TextField size={size} shape={shape} label={`Name ${key}`} placeholder="Deniz" />
         </div>
         <div style={{ width: "180px" }}>
-          <Select size={size} label={`Account ${size}`} options={[{ value: "a", label: "Everyday" }]} />
+          <Select size={size} shape={shape} label={`Account ${key}`} options={[{ value: "a", label: "Everyday" }]} />
         </div>
-        <SegmentedControl size={size} label={`Period ${size}`} options={options} />
+        <SegmentedControl size={size} shape={shape} label={`Period ${key}`} options={options} />
         {size !== "lg" && <Chip size={size} data-measure="Chip">Bills</Chip>}
       </div>
     </section>
@@ -51,25 +52,27 @@ export const Alignment: Story = {
       <Row size="sm" />
       <Row size="md" />
       <Row size="lg" />
+      <Row size="md" shape="pill" />
     </div>
   ),
   play: async ({ canvasElement }) => {
-    for (const size of ["sm", "md", "lg"] as const) {
-      const row = canvasElement.querySelector(`[data-row="${size}"]`) as HTMLElement;
+    for (const key of ["sm", "md", "lg", "md-pill"] as const) {
+      const size = key.split("-")[0] as "sm" | "md" | "lg";
+      const row = canvasElement.querySelector(`[data-row="${key}"]`) as HTMLElement;
       const canvas = within(row);
       const tokenPx = parseFloat(getComputedStyle(row).getPropertyValue(expected[size]!)) * (getComputedStyle(row).getPropertyValue(expected[size]!).includes("rem") ? parseFloat(getComputedStyle(document.documentElement).fontSize) : 1);
       const parts: Array<[string, HTMLElement]> = [
         ["Button", row.querySelector('[data-measure="Button"]') as HTMLElement],
         ["Button pill", row.querySelector('[data-measure="ButtonPill"]') as HTMLElement],
         ["IconButton", row.querySelector('[data-measure="IconButton"]') as HTMLElement],
-        ["TextField", (canvas.getByLabelText(`Name ${size}`) as HTMLElement).parentElement as HTMLElement],
-        ["Select", canvas.getByRole("combobox", { name: `Account ${size}` })],
-        ["SegmentedControl", canvas.getByRole("radiogroup", { name: `Period ${size}` })],
+        ["TextField", (canvas.getByLabelText(`Name ${key}`) as HTMLElement).parentElement as HTMLElement],
+        ["Select", canvas.getByRole("combobox", { name: `Account ${key}` })],
+        ["SegmentedControl", canvas.getByRole("radiogroup", { name: `Period ${key}` })],
       ];
       const chip = row.querySelector('[data-measure="Chip"]') as HTMLElement | null;
       if (chip) parts.push(["Chip", chip]);
       for (const [name, el] of parts) {
-        await expect({ size, name, height: Math.round(el.getBoundingClientRect().height) }).toEqual({ size, name, height: Math.round(tokenPx) });
+        await expect({ size: key, name, height: Math.round(el.getBoundingClientRect().height) }).toEqual({ size: key, name, height: Math.round(tokenPx) });
       }
     }
   },

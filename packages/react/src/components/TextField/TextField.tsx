@@ -17,11 +17,13 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   numeric?: boolean;
   /** sm 36 px, md 44 px (default, touch friendly), lg 48 px. */
   size?: "sm" | "md" | "lg";
+  /** rounded: the size's control radius. pill: fully rounded ends, to sit next to pill buttons, for example in a search bar. */
+  shape?: "rounded" | "pill";
   className?: string;
   ref?: Ref<HTMLInputElement>;
 }
 
-export function TextField({ label, hint, error, prefix, suffix, optional, numeric, size = "md", id, className, disabled, ref, ...rest }: TextFieldProps) {
+export function TextField({ label, hint, error, prefix, suffix, optional, numeric, size = "md", shape = "rounded", id, className, disabled, ref, ...rest }: TextFieldProps) {
   const ids = useFieldIds({ id, hint, error });
   return (
     <FieldRoot className={className}>
@@ -30,7 +32,7 @@ export function TextField({ label, hint, error, prefix, suffix, optional, numeri
       </FieldLabel>
       <FieldHint id={ids.hint}>{hint}</FieldHint>
       <div
-        className={cx(styles.control, styles[size], error && styles.invalid, disabled && styles.disabled)}
+        className={cx(styles.control, styles[size], shape === "pill" && styles.pill, error && styles.invalid, disabled && styles.disabled)}
         // Taps on the wrapper or its 44 px hit area focus the input.
         onPointerDown={(event) => {
           if (event.target !== event.currentTarget) return;

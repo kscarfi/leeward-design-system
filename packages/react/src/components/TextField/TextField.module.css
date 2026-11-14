@@ -27,6 +27,11 @@
 .lg { height: var(--lw-input-height-lg); padding-inline: var(--lw-input-padding-x-lg); border-radius: var(--lw-input-radius-lg); }
 .lg .input { font-size: var(--lw-type-body-lg-size); }
 
+/* Pill: fully rounded ends, with the next size's padding so text clears the curve. */
+.pill { border-radius: var(--lw-input-radius-pill); padding-inline: var(--lw-input-padding-x-pill-md); }
+.pill.sm { padding-inline: var(--lw-input-padding-x-pill-sm); }
+.pill.lg { padding-inline: var(--lw-input-padding-x-pill-lg); }
+
 /* Touch screens keep 16 px text so the browser does not zoom into the field. */
 @media (pointer: coarse) {
   .sm .input { font-size: var(--lw-type-body-md-size); }

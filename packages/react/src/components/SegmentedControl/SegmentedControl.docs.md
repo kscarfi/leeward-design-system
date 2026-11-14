@@ -19,6 +19,16 @@ Switch between 2 to 5 views or filters of the same content, such as Week, Month 
 | `md` | 44 px (compact 40) | Default. |
 | `lg` | 48 px (compact 44) | Main switch of a mobile screen. |
 
+## Shapes
+
+| Shape | Corners | Use it for |
+|---|---|---|
+| `rounded` (default) | The control radius of the size | Inside cards, forms and toolbars. |
+| `pill` | Fully rounded track and items (`--lw-segmented-radius-pill`) | Next to pill buttons and chips, for example period filters above a chart. |
+
+- A pill is exactly as tall as a rounded control of the same size.
+- Match the controls next to it: pill with pill, rounded with rounded.
+
 ## States
 
 - One option is always selected. Options can be disabled.
@@ -55,6 +65,7 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | `--lw-segmented-radius-md` | 10 px | 8 px | `control.radius.md` |
 | `--lw-segmented-radius-lg` | 12 px | 8 px | `control.radius.lg` |
 | `--lw-segmented-inset` | 2 px | 2 px | `space.3xs` |
+| `--lw-segmented-radius-pill` | 9999 px | 9999 px | `radius.pill` |
 | `--lw-segmented-item-radius-sm` | 6 px | 4 px | `control.radius.xs` |
 | `--lw-segmented-item-radius-md` | 8 px | 6 px | `control.radius.sm` |
 | `--lw-segmented-item-radius-lg` | 10 px | 8 px | `control.radius.md` |

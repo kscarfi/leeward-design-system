@@ -2385,6 +2385,18 @@
     },
     "border-width-invalid": {
       "$value": "{size.border.strong}"
+    },
+    "radius-pill": {
+      "$value": "{radius.pill}"
+    },
+    "padding-x-pill-sm": {
+      "$value": "{control.padding-x.md}"
+    },
+    "padding-x-pill-md": {
+      "$value": "{control.padding-x.lg}"
+    },
+    "padding-x-pill-lg": {
+      "$value": "{control.padding-x.xl}"
     }
   },
   "textarea": {
@@ -2421,6 +2433,9 @@
     },
     "inset": {
       "$value": "{space.3xs}"
+    },
+    "radius-pill": {
+      "$value": "{radius.pill}"
     },
     "item-radius-sm": {
       "$value": "{control.radius.xs}"
@@ -2721,6 +2736,45 @@
     },
     "gap": {
       "$value": "{space.sm}"
+    }
+  },
+  "summary-list": {
+    "$type": "dimension",
+    "row-padding-y": {
+      "$value": "{space.sm}"
+    },
+    "column-gap": {
+      "$value": "{space.md}"
+    }
+  },
+  "payment-card": {
+    "$type": "dimension",
+    "radius": {
+      "$value": "{radius.card}"
+    },
+    "padding": {
+      "$value": "{space.lg}"
+    },
+    "number-gap": {
+      "$value": "{space.sm}"
+    }
+  },
+  "spending": {
+    "$type": "dimension",
+    "bar-height": {
+      "$value": "{space.sm}"
+    },
+    "bar-radius": {
+      "$value": "{radius.pill}"
+    },
+    "bar-gap": {
+      "$value": "{space.3xs}"
+    },
+    "swatch-size": {
+      "$value": "{space.sm}"
+    },
+    "swatch-radius": {
+      "$value": "{radius.xs}"
     }
   },
   "icon-size": {

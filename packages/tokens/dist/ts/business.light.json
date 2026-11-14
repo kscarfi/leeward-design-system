@@ -3522,6 +3522,30 @@
     "type": "dimension",
     "ref": "size.border.strong"
   },
+  "input.radius-pill": {
+    "value": "9999px",
+    "cssVar": "--lw-input-radius-pill",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "input.padding-x-pill-sm": {
+    "value": "0.75rem",
+    "cssVar": "--lw-input-padding-x-pill-sm",
+    "type": "dimension",
+    "ref": "control.padding-x.md"
+  },
+  "input.padding-x-pill-md": {
+    "value": "1rem",
+    "cssVar": "--lw-input-padding-x-pill-md",
+    "type": "dimension",
+    "ref": "control.padding-x.lg"
+  },
+  "input.padding-x-pill-lg": {
+    "value": "1.25rem",
+    "cssVar": "--lw-input-padding-x-pill-lg",
+    "type": "dimension",
+    "ref": "control.padding-x.xl"
+  },
   "textarea.min-height": {
     "value": "3rem",
     "cssVar": "--lw-textarea-min-height",
@@ -3581,6 +3605,12 @@
     "cssVar": "--lw-segmented-inset",
     "type": "dimension",
     "ref": "space.3xs"
+  },
+  "segmented.radius-pill": {
+    "value": "9999px",
+    "cssVar": "--lw-segmented-radius-pill",
+    "type": "dimension",
+    "ref": "radius.pill"
   },
   "segmented.item-radius-sm": {
     "value": "4px",
@@ -4037,6 +4067,66 @@
     "cssVar": "--lw-divider-gap",
     "type": "dimension",
     "ref": "space.sm"
+  },
+  "summary-list.row-padding-y": {
+    "value": "0.75rem",
+    "cssVar": "--lw-summary-list-row-padding-y",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "summary-list.column-gap": {
+    "value": "1rem",
+    "cssVar": "--lw-summary-list-column-gap",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "payment-card.radius": {
+    "value": "12px",
+    "cssVar": "--lw-payment-card-radius",
+    "type": "dimension",
+    "ref": "radius.card"
+  },
+  "payment-card.padding": {
+    "value": "1.5rem",
+    "cssVar": "--lw-payment-card-padding",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "payment-card.number-gap": {
+    "value": "0.75rem",
+    "cssVar": "--lw-payment-card-number-gap",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "spending.bar-height": {
+    "value": "0.75rem",
+    "cssVar": "--lw-spending-bar-height",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "spending.bar-radius": {
+    "value": "9999px",
+    "cssVar": "--lw-spending-bar-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "spending.bar-gap": {
+    "value": "0.125rem",
+    "cssVar": "--lw-spending-bar-gap",
+    "type": "dimension",
+    "ref": "space.3xs"
+  },
+  "spending.swatch-size": {
+    "value": "0.75rem",
+    "cssVar": "--lw-spending-swatch-size",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "spending.swatch-radius": {
+    "value": "4px",
+    "cssVar": "--lw-spending-swatch-radius",
+    "type": "dimension",
+    "ref": "radius.xs"
   },
   "icon-size.xs": {
     "value": "0.75rem",

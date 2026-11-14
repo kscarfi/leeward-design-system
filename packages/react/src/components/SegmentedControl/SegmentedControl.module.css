@@ -38,6 +38,10 @@
 .sm .item { padding-inline: var(--lw-control-padding-x-sm); border-radius: var(--lw-segmented-item-radius-sm); }
 .lg .item { font-size: var(--lw-type-button-md-size); line-height: var(--lw-type-button-md-line-height); padding-inline: var(--lw-control-padding-x-lg); border-radius: var(--lw-segmented-item-radius-lg); }
 
+/* Pill: fully rounded track and items. */
+.pill,
+.pill .item { border-radius: var(--lw-segmented-radius-pill); }
+
 .item::before {
   content: "";
   position: absolute;

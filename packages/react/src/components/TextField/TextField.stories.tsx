@@ -21,6 +21,13 @@ export const Default: Story = {
     await expect(input).toHaveValue("Deniz Yılmaz");
   },
 };
+export const Pill: Story = {
+  args: { label: "Search transactions", placeholder: "Merchant or amount", shape: "pill", type: "search" },
+  play: async ({ canvasElement }) => {
+    const box = within(canvasElement).getByLabelText("Search transactions").parentElement as HTMLElement;
+    await expect(parseFloat(getComputedStyle(box).borderTopLeftRadius)).toBeGreaterThanOrEqual(box.getBoundingClientRect().height / 2);
+  },
+};
 export const WithHint: Story = { args: { label: "IBAN", hint: "26 characters, starts with TR", placeholder: "TR00 0000 0000 0000 0000 0000 00" } };
 export const WithError: Story = {
   args: { label: "IBAN", defaultValue: "TR12 3456", error: "This IBAN is too short. Check it and try again." },

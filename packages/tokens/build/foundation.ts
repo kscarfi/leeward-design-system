@@ -136,9 +136,9 @@ function componentTokens() {
   return {
     button: { $type: "dimension", ...sizes("height", all, (k) => `control.height.${k}`), ...sizes("radius", all, (k) => `control.radius.${k}`), ...sizes("padding-x", all, (k) => `control.padding-x.${k}`), ...sizes("gap", all, (k) => `control.gap.${k}`), "radius-pill": ref("radius.pill"), ...sizes("padding-x-pill", all, (k) => `control.padding-x.${pillPadding[k]}`) },
     "icon-button": { $type: "dimension", ...sizes("size", ["xs", "sm", "md", "lg"], (k) => `control.height.${k}`), radius: ref("radius.pill") },
-    input: { $type: "dimension", $description: "TextField, Select, AmountInput and OTPInput boxes.", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), ...sizes("padding-x", fields, (k) => `control.padding-x.${k}`), "border-width": ref("size.border.default"), "border-width-invalid": ref("size.border.strong") },
+    input: { $type: "dimension", $description: "TextField, Select, AmountInput and OTPInput boxes.", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), ...sizes("padding-x", fields, (k) => `control.padding-x.${k}`), "border-width": ref("size.border.default"), "border-width-invalid": ref("size.border.strong"), "radius-pill": ref("radius.pill"), ...sizes("padding-x-pill", fields, (k) => `control.padding-x.${pillPadding[k]}`) },
     textarea: { $type: "dimension", "min-height": ref("control.height.xl"), padding: ref("space.sm"), radius: ref("control.radius.md") },
-    segmented: { $type: "dimension", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), inset: ref("space.3xs"), ...sizes("item-radius", fields, (k) => `control.radius.${k === "sm" ? "xs" : k === "md" ? "sm" : "md"}`) },
+    segmented: { $type: "dimension", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), inset: ref("space.3xs"), "radius-pill": ref("radius.pill"), ...sizes("item-radius", fields, (k) => `control.radius.${k === "sm" ? "xs" : k === "md" ? "sm" : "md"}`) },
     chip: { $type: "dimension", ...sizes("height", ["sm", "md"], (k) => `control.height.${k}`), ...sizes("padding-x", ["sm", "md"], (k) => `control.padding-x.${k}`), radius: ref("radius.pill") },
     badge: { $type: "dimension", "height-sm": ref("sizer.5xSmall"), "height-md": ref("sizer.4xSmall"), "padding-x-sm": ref("space.xs-tight"), "padding-x-md": ref("space.xs"), radius: ref("radius.pill") },
     checkbox: { $type: "dimension", size: ref("size.icon.md"), radius: ref("radii.small") },
@@ -163,6 +163,9 @@ function componentTokens() {
     "empty-state": { $type: "dimension", "art-size": ref("size.avatar.xl") },
     spinner: { $type: "dimension", "size-sm": ref("size.icon.sm"), "size-md": ref("size.icon.md"), "size-lg": ref("size.icon.xl") },
     divider: { $type: "dimension", thickness: ref("size.border.default"), gap: ref("space.sm") },
+    "summary-list": { $type: "dimension", "row-padding-y": ref("space.sm"), "column-gap": ref("space.md") },
+    "payment-card": { $type: "dimension", radius: ref("radius.card"), padding: ref("space.lg"), "number-gap": ref("space.sm") },
+    spending: { $type: "dimension", "bar-height": ref("space.sm"), "bar-radius": ref("radius.pill"), "bar-gap": ref("space.3xs"), "swatch-size": ref("space.sm"), "swatch-radius": ref("radius.xs") },
     // Not "icon": that group holds the icon colors.
     "icon-size": { $type: "dimension", ...Object.fromEntries(all.map((k) => [k, ref(`size.icon.${k}`)])) },
   };

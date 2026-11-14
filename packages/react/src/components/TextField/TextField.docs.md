@@ -27,6 +27,16 @@ Single-line text input with a visible label, hint, error, and optional prefix or
 | `md` | 44 px (compact 40) | Default. Same height as a md Button. |
 | `lg` | 48 px (compact 44) | Main field of a screen, such as an amount. |
 
+## Shapes
+
+| Shape | Corners | Use it for |
+|---|---|---|
+| `rounded` (default) | The control radius of the size | Forms, dialogs and toolbars. |
+| `pill` | Fully rounded ends (`radius-pill` token) and the next size's horizontal padding | Search bars and single fields next to a pill Button, such as a search or promo code field. |
+
+- A pill is exactly as tall as a rounded control of the same size.
+- Match the buttons next to it: pill with pill, rounded with rounded.
+
 ## States
 
 - Default, hover, focus (focus ring), error (thicker danger border and danger focus ring), disabled.
@@ -71,6 +81,10 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | `--lw-input-padding-x-lg` | 20 px | 16 px | `control.padding-x.lg` |
 | `--lw-input-border-width` | 1 px | 1 px | `size.border.default` |
 | `--lw-input-border-width-invalid` | 2 px | 2 px | `size.border.strong` |
+| `--lw-input-radius-pill` | 9999 px | 9999 px | `radius.pill` |
+| `--lw-input-padding-x-pill-sm` | 16 px | 12 px | `control.padding-x.md` |
+| `--lw-input-padding-x-pill-md` | 20 px | 16 px | `control.padding-x.lg` |
+| `--lw-input-padding-x-pill-lg` | 24 px | 20 px | `control.padding-x.xl` |
 
 ## Accessibility
 

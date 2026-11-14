@@ -26,10 +26,12 @@ export interface SelectProps {
   id?: string;
   /** sm 36 px, md 44 px (default), lg 48 px. */
   size?: "sm" | "md" | "lg";
+  /** rounded: the size's control radius. pill: fully rounded ends, to sit next to pill buttons, for example in a search bar. */
+  shape?: "rounded" | "pill";
   className?: string;
 }
 
-export function Select({ label, options, placeholder = "Choose an option", hint, error, id, size = "md", className, disabled, ...root }: SelectProps) {
+export function Select({ label, options, placeholder = "Choose an option", hint, error, id, size = "md", shape = "rounded", className, disabled, ...root }: SelectProps) {
   const ids = useFieldIds({ id, hint, error });
   return (
     <FieldRoot className={className}>
@@ -38,7 +40,7 @@ export function Select({ label, options, placeholder = "Choose an option", hint,
       <RadixSelect.Root disabled={disabled ?? false} {...root}>
         <RadixSelect.Trigger
           id={ids.control}
-          className={cx(styles.trigger, styles[size], error && styles.invalid)}
+          className={cx(styles.trigger, styles[size], shape === "pill" && styles.pill, error && styles.invalid)}
           aria-invalid={error ? true : undefined}
           aria-describedby={ids.describedBy}
         >
