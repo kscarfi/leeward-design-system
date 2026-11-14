@@ -8,6 +8,8 @@ Designed and directed by Kemal Salih Carfi (https://kscarfi.com).
 
 ## Docs
 
+- [AGENTS.md](https://github.com/kscarfi/leeward-design-system/blob/main/AGENTS.md): read first. How to design and build Leeward screens: workflow, which component for which need, tokens, sizes, layout, banking, accessibility and copy rules, checklist
+- [Screen recipes](https://github.com/kscarfi/leeward-design-system/tree/main/docs/recipes): complete screens that compile: home, transfer, transaction details, settings, loading, empty and error states
 - [DESIGN.md](https://github.com/kscarfi/leeward-design-system/blob/main/DESIGN.md): principles, token rules, layout, copy, accessibility, component list
 - [components.manifest.json](https://github.com/kscarfi/leeward-design-system/blob/main/components.manifest.json): every component with props, variants, do and don't rules, accessibility and an example
 - [Contrast report](https://github.com/kscarfi/leeward-design-system/blob/main/docs/contrast-report.md): WCAG 2.2 and APCA results for every token pair

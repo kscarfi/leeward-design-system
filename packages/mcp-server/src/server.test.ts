@@ -118,3 +118,14 @@ test("validate_ui passes clean Leeward code", () => {
   assert.deepEqual(result.issues, []);
   assert.equal(result.stats.leewardComponents, 3);
 });
+
+test("validate_ui finds no issues in any screen recipe", async () => {
+  const { readdirSync, readFileSync } = await import("node:fs");
+  const dir = new URL("../../../docs/recipes/", import.meta.url);
+  const files = readdirSync(dir).filter((f) => f.endsWith(".tsx"));
+  assert.ok(files.length >= 5);
+  for (const file of files) {
+    const { issues } = validateUi(readFileSync(new URL(file, dir), "utf8"), file);
+    assert.deepEqual(issues, [], `${file} has issues`);
+  }
+});

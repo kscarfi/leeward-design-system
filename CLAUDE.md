@@ -2,6 +2,8 @@
 
 `PROJECT_BRIEF.md` is the single source of truth. Read it fully before any work.
 
+To build screens with the design system, follow `AGENTS.md`.
+
 ## Working rules
 
 1. Plan first. At the start of each day, write a short plan and wait for Kemal's OK. Do not start the next day without approval.

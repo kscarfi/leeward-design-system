@@ -8,6 +8,8 @@ Designed and directed by Kemal Salih Carfi (https://kscarfi.com).
 
 ## Read this first
 
+AI agents: read [AGENTS.md](AGENTS.md) first. It has the workflow, the component decision table, layout rules, banking rules and the checklist.
+
 1. Use components from `@leeward/react`. Do not invent new ones for things listed below.
 2. Style only with semantic `var(--lw-*)` tokens. No hex, rgb or raw px spacing.
 3. Every amount goes through `AmountDisplay`. Outgoing money is never red.
@@ -27,6 +29,17 @@ import { ToastProvider, TooltipProvider } from "@leeward/react";
   </TooltipProvider>
 </div>
 ```
+
+## Agent workflow
+
+How an agent should build a Leeward screen. The full guide is AGENTS.md in the repository root.
+
+- Read DESIGN.md once, and AGENTS.md for the decision table, layout, banking and copy rules.
+- For each screen: search_components for every need, get_component for each pick, then write code with only @leeward/react components and var(--lw-*) semantic tokens.
+- Start from a recipe in docs/recipes when one is close: HomeScreen, TransferFlow, TransactionDetails, SettingsScreen, ScreenStates.
+- Build the loading, empty and error states with every data view.
+- Run validate_ui on the result and fix every issue before finishing.
+- Check it in leeward and business, light and dark, at 360 and 1280 px.
 
 ## Principles
 

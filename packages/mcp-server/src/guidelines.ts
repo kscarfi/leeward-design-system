@@ -9,6 +9,18 @@ export interface Guideline {
 }
 
 export const guidelines: Record<string, Guideline> = {
+  workflow: {
+    title: "Agent workflow",
+    summary: "How an agent should build a Leeward screen. The full guide is AGENTS.md in the repository root.",
+    rules: [
+      "Read DESIGN.md once, and AGENTS.md for the decision table, layout, banking and copy rules.",
+      "For each screen: search_components for every need, get_component for each pick, then write code with only @leeward/react components and var(--lw-*) semantic tokens.",
+      "Start from a recipe in docs/recipes when one is close: HomeScreen, TransferFlow, TransactionDetails, SettingsScreen, ScreenStates.",
+      "Build the loading, empty and error states with every data view.",
+      "Run validate_ui on the result and fix every issue before finishing.",
+      "Check it in leeward and business, light and dark, at 360 and 1280 px.",
+    ],
+  },
   principles: {
     title: "Principles",
     summary: "Four brand principles that every screen follows.",

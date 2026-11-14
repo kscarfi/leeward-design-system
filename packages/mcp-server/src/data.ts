@@ -38,8 +38,15 @@ export interface Manifest {
 
 export const manifest = JSON.parse(readFileSync(new URL("../../../components.manifest.json", import.meta.url), "utf8")) as Manifest;
 export const componentNames = new Set(manifest.components.map((c) => c.name));
-// Exported helpers and sub-components that are valid JSX tags too.
-for (const extra of ["List", "DialogClose", "ToastProvider", "TooltipProvider"]) componentNames.add(extra);
+// Every capitalized value export of @leeward/react is a valid JSX tag too (List, DialogClose,
+// SheetClose, ToastProvider...). Read from the package itself so this list can never drift.
+const indexSource = readFileSync(new URL("../../react/src/index.ts", import.meta.url), "utf8");
+for (const block of indexSource.matchAll(/export \{([^}]*)\}/g)) {
+  for (const raw of block[1]!.split(",")) {
+    const name = raw.trim();
+    if (/^[A-Z]\w*$/.test(name)) componentNames.add(name);
+  }
+}
 
 export type TokenEntry = { value: string | number; cssVar: string; type?: string; description?: string; ref?: string };
 export const tokenBrands = brands as readonly string[];

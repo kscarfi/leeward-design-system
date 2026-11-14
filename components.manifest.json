@@ -229,7 +229,8 @@
         "As the only way to identify someone: show the name too."
       ],
       "contentGuidelines": [
-        "Initials come from the first and last word of `name`."
+        "Initials come from the first and last word of `name`.",
+        "Initials get a stable tint from the name (primary, secondary, info, success or warning), so the same person always has the same color. Icons stay on the brand tint."
       ],
       "sizes": [
         "`xs`: 24 px: Inline mentions.",
@@ -588,7 +589,7 @@
         "Put the amount in the label of money actions when it helps people check it."
       ],
       "sizes": [
-        "`xs`: 32 px (compact 32): Dense tables and toolbars on desktop.",
+        "`xs`: 32 px (compact 28): Dense tables and toolbars on desktop.",
         "`sm`: 36 px (compact 32): Inside cards and list rows.",
         "`md`: 44 px (compact 40): Default for forms and dialogs.",
         "`lg`: 48 px (compact 44): Main actions on mobile screens.",
@@ -819,6 +820,16 @@
           "description": "One of the names in `icons` at the top of this manifest."
         },
         {
+          "name": "size",
+          "type": "\"sm\" | \"md\"",
+          "required": false,
+          "description": "sm 36 px (default), md 44 px. Matches Button and TextField of the same size.",
+          "values": [
+            "sm",
+            "md"
+          ]
+        },
+        {
           "name": "children",
           "type": "ReactNode",
           "required": true
@@ -830,7 +841,12 @@
           "description": "Other native props are passed to the root element."
         }
       ],
-      "variants": {},
+      "variants": {
+        "size": [
+          "sm",
+          "md"
+        ]
+      },
       "purpose": "A toggle for filters, such as Money in or Money out in a transaction list.",
       "whenToUse": [
         "Filtering a list on the same screen."
@@ -843,7 +859,8 @@
         "One or two words per chip."
       ],
       "sizes": [
-        "Default: 36 px: With a 44 px hit area."
+        "`sm`: 36 px (compact 32): Default. Filters above lists, with a 44 px hit area.",
+        "`md`: 44 px (compact 40): Next to md fields and buttons."
       ],
       "do": [
         "Group chips in an element with `role=\"group\"` and an `aria-label`."
@@ -948,6 +965,7 @@
         "Do not stack dialogs."
       ],
       "accessibility": [
+        "On open, focus moves to the dialog itself, so screen readers read the title first and no button starts highlighted. Tab moves into the content.",
         "Traps focus, closes on Escape, returns focus to the trigger.",
         "Named by `title`, described by `description`."
       ],
@@ -1628,6 +1646,16 @@
             "warning",
             "danger"
           ]
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\"",
+          "required": false,
+          "description": "sm 4 px, md 8 px (default).",
+          "values": [
+            "sm",
+            "md"
+          ]
         }
       ],
       "variants": {
@@ -1636,6 +1664,10 @@
           "success",
           "warning",
           "danger"
+        ],
+        "size": [
+          "sm",
+          "md"
         ]
       },
       "purpose": "Progress toward a goal or limit, such as a savings goal or a daily card limit.",
@@ -1650,7 +1682,8 @@
         "Pair warning and danger with words: \"92% used, ₺800 left\"."
       ],
       "sizes": [
-        "Bar: 8 px: Full width of its container."
+        "`sm`: 4 px: Inside rows and cards.",
+        "`md`: 8 px: Default."
       ],
       "do": [
         "Show the numbers, not only the bar."
@@ -1804,11 +1837,13 @@
         },
         {
           "name": "size",
-          "type": "\"sm\" | \"md\"",
+          "type": "\"sm\" | \"md\" | \"lg\"",
           "required": false,
+          "description": "sm 36, md 44 (default), lg 48 px: the same heights as Button and TextField.",
           "values": [
             "sm",
-            "md"
+            "md",
+            "lg"
           ]
         },
         {
@@ -1820,7 +1855,8 @@
       "variants": {
         "size": [
           "sm",
-          "md"
+          "md",
+          "lg"
         ]
       },
       "purpose": "Switch between 2 to 5 views or filters of the same content, such as Week, Month and Year.",
@@ -1835,8 +1871,9 @@
         "One word per option when possible."
       ],
       "sizes": [
-        "`sm`: 36 px: Above charts and inside cards.",
-        "`md`: 44 px: Default."
+        "`sm`: 36 px (compact 32): Above charts and inside cards.",
+        "`md`: 44 px (compact 40): Default.",
+        "`lg`: 48 px (compact 44): Main switch of a mobile screen."
       ],
       "do": [
         "Keep options mutually exclusive."
@@ -1947,12 +1984,12 @@
       ],
       "contentGuidelines": [
         "Write the placeholder as a request: \"Choose an account\".",
-        "Keep option labels short and unique."
+        "Keep option labels short and unique. Long values end with an ellipsis instead of wrapping."
       ],
       "sizes": [
-        "`sm`: 36 px: Dense desktop forms.",
-        "`md`: 44 px: Default.",
-        "`lg`: 48 px: Main choice of a screen."
+        "`sm`: 36 px (compact 32): Dense desktop forms. Keeps a 44 px hit area.",
+        "`md`: 44 px (compact 40): Default. Same height as a md Button and TextField.",
+        "`lg`: 48 px (compact 44): Main choice of a screen."
       ],
       "do": [
         "Order options by how often they are used."
@@ -2058,6 +2095,7 @@
         "Do not open a sheet from a sheet."
       ],
       "accessibility": [
+        "On open, focus moves to the sheet itself.",
         "Modal dialog: traps focus, closes on Escape and returns focus.",
         "Respects the safe area at the bottom of phones."
       ],
@@ -2622,9 +2660,9 @@
         "Errors say what is wrong and how to fix it: \"This IBAN is too short. Check it and try again.\""
       ],
       "sizes": [
-        "`sm`: 36 px: Dense desktop forms. Grows to 44 px with 16 px text on touch screens.",
-        "`md`: 44 px: Default.",
-        "`lg`: 48 px: Main field of a screen, such as an amount."
+        "`sm`: 36 px (compact 32): Dense desktop forms. Keeps a 44 px hit area and 16 px text on touch screens.",
+        "`md`: 44 px (compact 40): Default. Same height as a md Button.",
+        "`lg`: 48 px (compact 44): Main field of a screen, such as an amount."
       ],
       "do": [
         "Always set a visible label.",
@@ -2736,7 +2774,7 @@
       ],
       "accessibility": [
         "Radix Toast region with a label. Danger toasts are announced assertively.",
-        "Each tone has an icon and a colored edge, never color alone."
+        "Each tone shows its icon in a tinted circle next to the title, never color alone."
       ],
       "keyboard": [
         "F8: Moves focus to the toast region",
@@ -3044,11 +3082,11 @@
         },
         {
           "name": "locale",
-          "type": "\"en-US\" | \"tr-TR\"",
+          "type": "\"tr-TR\" | \"en-US\"",
           "required": false,
           "values": [
-            "en-US",
-            "tr-TR"
+            "tr-TR",
+            "en-US"
           ]
         },
         {
