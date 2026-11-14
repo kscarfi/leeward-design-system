@@ -1,18 +1,27 @@
 {
   "name": "@leeward/tokens",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Design tokens in DTCG format, compiled with Style Dictionary.",
+  "version": "0.1.0",
+  "description": "Leeward Design System tokens: CSS variables, typed TS, Figma variables and the partner theme generator, for every brand and mode.",
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "css-variables",
+    "dtcg",
+    "figma",
+    "accessibility",
+    "banking"
+  ],
   "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "node build/build.ts",
     "generate": "node build/generate-primitives.ts",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "node --test build/*.test.ts"
+    "test": "node --test build/*.test.ts",
+    "build:pkg": "rm -rf lib && tsc -p tsconfig.build.json && node ../../scripts/rewrite-dts-imports.ts lib",
+    "prepack": "pnpm run build && pnpm run build:pkg"
   },
   "devDependencies": {
-    "colorjs.io": "0.7.1",
     "style-dictionary": "5.8.0"
   },
   "exports": {
@@ -21,8 +30,6 @@
     "./css/*": "./dist/css/*",
     "./figma/*": "./dist/figma/*",
     "./palette": "./build/palette.ts",
-    "./themes": "./build/themes.ts",
-    "./build": "./build/build.ts",
     "./tokens.json": "./dist/ts/leeward.light.json",
     "./partners/*": "./partners/*",
     "./contrast": "./build/contrast.ts",
@@ -31,13 +38,56 @@
     "./semantic": "./build/semantic.ts"
   },
   "files": [
-    "dist",
-    "build",
-    "src",
-    "themes",
+    "dist/css",
+    "dist/figma",
+    "dist/ts/*.json",
+    "lib",
     "partners",
-    "reference"
+    "src/primitive/color.json"
   ],
   "author": "Kemal Salih Carfi (https://kscarfi.com)",
-  "homepage": "https://github.com/kscarfi/leeward-design-system"
+  "homepage": "https://github.com/kscarfi/leeward-design-system",
+  "dependencies": {
+    "colorjs.io": "0.7.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./lib/dist/ts/index.d.ts",
+        "default": "./lib/dist/ts/index.js"
+      },
+      "./css": "./dist/css/tokens.css",
+      "./css/*": "./dist/css/*",
+      "./figma/*": "./dist/figma/*",
+      "./tokens.json": "./dist/ts/leeward.light.json",
+      "./primitives.json": "./src/primitive/color.json",
+      "./partners/*": "./partners/*",
+      "./palette": {
+        "types": "./lib/build/palette.d.ts",
+        "default": "./lib/build/palette.js"
+      },
+      "./partner": {
+        "types": "./lib/build/partner.d.ts",
+        "default": "./lib/build/partner.js"
+      },
+      "./contrast": {
+        "types": "./lib/build/contrast.d.ts",
+        "default": "./lib/build/contrast.js"
+      },
+      "./semantic": {
+        "types": "./lib/build/semantic.d.ts",
+        "default": "./lib/build/semantic.js"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kscarfi/leeward-design-system.git",
+    "directory": "packages/tokens"
+  },
+  "bugs": "https://github.com/kscarfi/leeward-design-system/issues",
+  "engines": {
+    "node": ">=20.10"
+  }
 }

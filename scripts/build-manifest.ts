@@ -116,6 +116,18 @@ function inherits(file: string, interfaceName: string): string | undefined {
   return match?.[1]?.trim();
 }
 
+/** Every capitalized value export of @leeward/react (List, DialogClose, ToastProvider...), so tools know every valid JSX tag. */
+function jsxExports(): string[] {
+  const names = new Set<string>();
+  for (const block of readFileSync(`${reactSrc}index.ts`, "utf8").matchAll(/export \{([^}]*)\}/g)) {
+    for (const raw of block[1]!.split(",")) {
+      const name = raw.trim();
+      if (/^[A-Z]\w*$/.test(name)) names.add(name);
+    }
+  }
+  return [...names].sort();
+}
+
 export function buildManifest() {
   const components: ManifestComponent[] = [];
   for (const kind of ["components", "patterns"] as const) {
@@ -133,12 +145,12 @@ export function buildManifest() {
   }
   const pkg = JSON.parse(readFileSync(`${root}packages/react/package.json`, "utf8"));
   return {
-    $schema: "./docs/manifest.schema.json",
     name: "Leeward Design System",
     version: pkg.version,
     package: "@leeward/react",
     setup: ['import "@leeward/react/fonts.css";', 'import "@leeward/react/styles.css";', 'Set data-theme="light" | "dark" | "auto" on a root element.', "Wrap the app in <TooltipProvider> and <ToastProvider>."],
     icons: iconNames(),
+    exports: jsxExports(),
     components,
   };
 }

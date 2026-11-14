@@ -17,3 +17,11 @@ playwright-report/
 apps/docs/visual/__screenshots__/darwin/
 apps/demo/results/
 .claude/launch.json
+
+# Package builds, made by prepack before pnpm pack or publish
+packages/tokens/lib/
+packages/react/dist/
+packages/lint/dist/
+packages/mcp-server/dist/
+packages/mcp-server/components.manifest.json
+*.tgz

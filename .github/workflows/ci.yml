@@ -58,6 +58,22 @@ jobs:
           name: contrast-report
           path: docs/contrast-report.md
 
+  packages:
+    name: npm packages work when installed
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Packs each package as npm would publish it, installs the tarballs into a clean project
+      # with plain npm, then type checks and builds a React app, uses the tokens, runs the lint
+      # rules and starts the MCP server.
+      - run: pnpm smoke:packages
+
   stories:
     name: Story tests and axe (light, dark, partner)
     runs-on: ubuntu-24.04

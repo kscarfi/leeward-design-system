@@ -1,5 +1,5 @@
-// Loads the manifest and tokens the tools serve. Both are generated and committed in the repo.
-import { readFileSync } from "node:fs";
+// Loads the manifest and tokens the tools serve. Both are generated, committed in the repo and shipped in the package.
+import { existsSync, readFileSync } from "node:fs";
 import { brands, modes, tokens } from "@leeward/tokens";
 
 export interface ManifestProp {
@@ -33,20 +33,17 @@ export interface Manifest {
   package: string;
   setup: string[];
   icons: string[];
+  exports: string[];
   components: ManifestComponent[];
 }
 
-export const manifest = JSON.parse(readFileSync(new URL("../../../components.manifest.json", import.meta.url), "utf8")) as Manifest;
-export const componentNames = new Set(manifest.components.map((c) => c.name));
-// Every capitalized value export of @leeward/react is a valid JSX tag too (List, DialogClose,
-// SheetClose, ToastProvider...). Read from the package itself so this list can never drift.
-const indexSource = readFileSync(new URL("../../react/src/index.ts", import.meta.url), "utf8");
-for (const block of indexSource.matchAll(/export \{([^}]*)\}/g)) {
-  for (const raw of block[1]!.split(",")) {
-    const name = raw.trim();
-    if (/^[A-Z]\w*$/.test(name)) componentNames.add(name);
-  }
-}
+// The published package carries its own copy of the manifest; in the repo it is read from the root.
+const manifestUrl = [new URL("../components.manifest.json", import.meta.url), new URL("../../../components.manifest.json", import.meta.url)].find((url) => existsSync(url));
+if (!manifestUrl) throw new Error("components.manifest.json not found. Run pnpm build:agent.");
+export const manifest = JSON.parse(readFileSync(manifestUrl, "utf8")) as Manifest;
+// Every component name plus every other capitalized export (List, DialogClose, SheetClose,
+// ToastProvider...) is a valid JSX tag. The manifest lists them, read from the package source.
+export const componentNames = new Set([...manifest.components.map((c) => c.name), ...manifest.exports]);
 
 export type TokenEntry = { value: string | number; cssVar: string; type?: string; description?: string; ref?: string };
 export const tokenBrands = brands as readonly string[];

@@ -3,7 +3,7 @@ import tseslint from "typescript-eslint";
 import { recommended as leeward } from "@leeward/lint/eslint";
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/node_modules/**", "**/storybook-static/**", "apps/demo/runs/**"] },
+  { ignores: ["**/dist/**", "**/node_modules/**", "**/storybook-static/**", "apps/demo/runs/**", "scripts/package-smoke/**", "packages/tokens/lib/**"] },
   ...tseslint.configs.recommended,
   {
     files: ["**/*.{ts,tsx}"],

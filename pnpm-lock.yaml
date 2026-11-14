@@ -294,25 +294,20 @@ importers:
   packages/lint:
     dependencies:
       '@leeward/tokens':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tokens
+    devDependencies:
       eslint:
         specifier: 10.14.0
         version: 10.14.0
-      eslint-plugin-react-hooks:
-        specifier: 7.1.1
-        version: 7.1.1(eslint@10.14.0)
       stylelint:
         specifier: 18.0.0
         version: 18.0.0
-      typescript-eslint:
-        specifier: 8.72.2
-        version: 8.72.2(eslint@10.14.0)(typescript@6.0.3)
 
   packages/mcp-server:
     dependencies:
       '@leeward/tokens':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tokens
       '@modelcontextprotocol/server':
         specifier: 2.4.0
@@ -330,13 +325,13 @@ importers:
 
   packages/react:
     dependencies:
+      '@leeward/tokens':
+        specifier: workspace:^
+        version: link:../tokens
       radix-ui:
         specifier: 1.8.1
         version: 1.8.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
     devDependencies:
-      '@leeward/tokens':
-        specifier: workspace:*
-        version: link:../tokens
       '@storybook/react-vite':
         specifier: 10.6.7
         version: 10.6.7(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(storybook@10.6.7(@types/react@19.3.0)(prettier@3.10.1)(react@19.3.1))(typescript@6.0.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2))
@@ -378,10 +373,11 @@ importers:
         version: 5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/ui@5.1.0)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2))
 
   packages/tokens:
-    devDependencies:
+    dependencies:
       colorjs.io:
         specifier: 0.7.1
         version: 0.7.1
+    devDependencies:
       style-dictionary:
         specifier: 5.8.0
         version: 5.8.0

@@ -1,17 +1,26 @@
 {
   "name": "@leeward/mcp-server",
-  "version": "0.0.0",
-  "private": true,
-  "description": "MCP server that exposes Leeward tokens, components and rules to AI agents.",
+  "version": "0.1.0",
+  "description": "MCP server that gives AI agents the Leeward Design System: tokens, components, guidelines and a UI validator.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "design-system",
+    "claude",
+    "agents"
+  ],
   "license": "MIT",
   "type": "module",
   "scripts": {
     "start": "node src/index.ts",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "node --test src/*.test.ts"
+    "test": "node --test src/*.test.ts",
+    "build:pkg": "rm -rf dist && tsc -p tsconfig.build.json && node ../../scripts/rewrite-dts-imports.ts dist && cp ../../components.manifest.json .",
+    "prepack": "pnpm run build:pkg"
   },
   "dependencies": {
-    "@leeward/tokens": "workspace:*",
+    "@leeward/tokens": "workspace:^",
     "@modelcontextprotocol/server": "2.4.0",
     "typescript": "6.0.3",
     "zod": "4.6.7"
@@ -28,5 +37,38 @@
     "./guidelines": "./src/guidelines.ts"
   },
   "author": "Kemal Salih Carfi (https://kscarfi.com)",
-  "homepage": "https://github.com/kscarfi/leeward-design-system"
+  "homepage": "https://github.com/kscarfi/leeward-design-system",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kscarfi/leeward-design-system.git",
+    "directory": "packages/mcp-server"
+  },
+  "bugs": "https://github.com/kscarfi/leeward-design-system/issues",
+  "publishConfig": {
+    "access": "public",
+    "bin": {
+      "leeward-mcp": "./dist/index.js"
+    },
+    "exports": {
+      ".": {
+        "types": "./dist/server.d.ts",
+        "default": "./dist/server.js"
+      },
+      "./validate": {
+        "types": "./dist/validate.d.ts",
+        "default": "./dist/validate.js"
+      },
+      "./guidelines": {
+        "types": "./dist/guidelines.d.ts",
+        "default": "./dist/guidelines.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "components.manifest.json"
+  ],
+  "engines": {
+    "node": ">=20.10"
+  }
 }

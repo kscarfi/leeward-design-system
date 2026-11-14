@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "rewriteRelativeImportExtensions": true,
+    "rootDir": ".",
+    "outDir": "lib"
+  },
+  "include": ["dist/ts/index.ts", "build/palette.ts", "build/partner.ts", "build/contrast.ts", "build/semantic.ts"]
+}

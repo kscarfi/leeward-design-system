@@ -1,5 +1,5 @@
 // Leeward Design System, React components and banking patterns.
-export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./components/Button/Button.tsx";
+export { Button, type ButtonProps, type ButtonVariant, type ButtonSize, type ButtonShape } from "./components/Button/Button.tsx";
 export { IconButton, type IconButtonProps } from "./components/IconButton/IconButton.tsx";
 export { Text, type TextProps, type TextVariant, type TextTone } from "./components/Text/Text.tsx";
 export { Heading, type HeadingProps, type HeadingSize } from "./components/Heading/Heading.tsx";

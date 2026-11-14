@@ -26,7 +26,8 @@
     "check:examples": "node scripts/check-docs-examples.ts",
     "check:links": "node scripts/check-links.ts",
     "check:coverage": "node scripts/check-coverage.ts",
-    "check:docs-tokens": "node scripts/sync-docs-tokens.ts --check"
+    "check:docs-tokens": "node scripts/sync-docs-tokens.ts --check",
+    "smoke:packages": "node scripts/smoke-packages.ts"
   },
   "devDependencies": {
     "@leeward/lint": "workspace:*",

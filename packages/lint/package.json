@@ -1,20 +1,24 @@
 {
   "name": "@leeward/lint",
-  "version": "0.0.0",
-  "private": true,
-  "description": "ESLint and Stylelint governance rules for Leeward.",
+  "version": "0.1.0",
+  "description": "ESLint and Stylelint rules that keep code on the Leeward Design System: known tokens only, no raw colors, labelled money actions.",
+  "keywords": [
+    "eslint-plugin",
+    "stylelint-plugin",
+    "design-tokens",
+    "design-system",
+    "accessibility"
+  ],
   "license": "MIT",
   "type": "module",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "test": "node --test src/*.test.ts"
+    "test": "node --test src/*.test.ts",
+    "build:pkg": "rm -rf dist && tsc -p tsconfig.build.json && node ../../scripts/rewrite-dts-imports.ts dist",
+    "prepack": "pnpm run build:pkg"
   },
   "dependencies": {
-    "@leeward/tokens": "workspace:*",
-    "eslint": "10.14.0",
-    "eslint-plugin-react-hooks": "7.1.1",
-    "stylelint": "18.0.0",
-    "typescript-eslint": "8.72.2"
+    "@leeward/tokens": "workspace:^"
   },
   "exports": {
     "./eslint": "./src/eslint-plugin.ts",
@@ -22,5 +26,50 @@
     "./stylelint-plugin": "./src/stylelint-plugin.ts"
   },
   "author": "Kemal Salih Carfi (https://kscarfi.com)",
-  "homepage": "https://github.com/kscarfi/leeward-design-system"
+  "homepage": "https://github.com/kscarfi/leeward-design-system",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kscarfi/leeward-design-system.git",
+    "directory": "packages/lint"
+  },
+  "bugs": "https://github.com/kscarfi/leeward-design-system/issues",
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      "./eslint": {
+        "types": "./dist/eslint-plugin.d.ts",
+        "default": "./dist/eslint-plugin.js"
+      },
+      "./stylelint": {
+        "types": "./dist/stylelint-config.d.ts",
+        "default": "./dist/stylelint-config.js"
+      },
+      "./stylelint-plugin": {
+        "types": "./dist/stylelint-plugin.d.ts",
+        "default": "./dist/stylelint-plugin.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.10"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0",
+    "stylelint": ">=16.0.0"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "stylelint": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "eslint": "10.14.0",
+    "stylelint": "18.0.0"
+  }
 }

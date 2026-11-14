@@ -1,19 +1,29 @@
 {
   "name": "@leeward/react",
-  "version": "0.0.0",
-  "private": true,
-  "description": "React components and banking patterns for Leeward.",
+  "version": "0.1.0",
+  "description": "Leeward Design System for React: accessible components and banking patterns, themed by @leeward/tokens.",
+  "keywords": [
+    "react",
+    "design-system",
+    "components",
+    "accessibility",
+    "wcag",
+    "banking",
+    "fintech"
+  ],
   "license": "MIT",
   "type": "module",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:pkg": "vite build -c vite.lib.config.ts && node build/styles.ts && tsc -p tsconfig.build.json && node ../../scripts/rewrite-dts-imports.ts dist/types",
+    "prepack": "pnpm run build:pkg"
   },
   "dependencies": {
+    "@leeward/tokens": "workspace:^",
     "radix-ui": "1.8.1"
   },
   "devDependencies": {
-    "@leeward/tokens": "workspace:*",
     "@storybook/react-vite": "10.6.7",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
@@ -41,5 +51,25 @@
     "react-dom": "^19.0.0"
   },
   "author": "Kemal Salih Carfi (https://kscarfi.com)",
-  "homepage": "https://github.com/kscarfi/leeward-design-system"
+  "homepage": "https://github.com/kscarfi/leeward-design-system",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kscarfi/leeward-design-system.git",
+    "directory": "packages/react"
+  },
+  "bugs": "https://github.com/kscarfi/leeward-design-system/issues",
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./styles.css": "./dist/styles.css",
+      "./fonts.css": "./dist/fonts.css"
+    }
+  },
+  "files": [
+    "dist"
+  ]
 }
