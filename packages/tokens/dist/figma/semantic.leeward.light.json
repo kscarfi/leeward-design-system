@@ -9727,6 +9727,84 @@
           "targetVariableName": "space/2"
         }
       }
+    },
+    "radius-pill": {
+      "$type": "dimension",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/pill"
+        }
+      }
+    },
+    "padding-x-pill-xs": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    },
+    "padding-x-pill-sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/4"
+        }
+      }
+    },
+    "padding-x-pill-md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/5"
+        }
+      }
+    },
+    "padding-x-pill-lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/6"
+        }
+      }
+    },
+    "padding-x-pill-xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/6"
+        }
+      }
     }
   },
   "icon-button": {

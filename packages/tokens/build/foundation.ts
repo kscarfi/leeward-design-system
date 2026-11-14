@@ -131,8 +131,10 @@ const sizes = (prefix: string, keys: string[], target: (k: string) => string) =>
 function componentTokens() {
   const all = ["xs", "sm", "md", "lg", "xl"];
   const fields = ["sm", "md", "lg"];
+  // Pill buttons take the next size's padding so the label clears the round ends.
+  const pillPadding: Record<string, string> = { xs: "sm", sm: "md", md: "lg", lg: "xl", xl: "xl" };
   return {
-    button: { $type: "dimension", ...sizes("height", all, (k) => `control.height.${k}`), ...sizes("radius", all, (k) => `control.radius.${k}`), ...sizes("padding-x", all, (k) => `control.padding-x.${k}`), ...sizes("gap", all, (k) => `control.gap.${k}`) },
+    button: { $type: "dimension", ...sizes("height", all, (k) => `control.height.${k}`), ...sizes("radius", all, (k) => `control.radius.${k}`), ...sizes("padding-x", all, (k) => `control.padding-x.${k}`), ...sizes("gap", all, (k) => `control.gap.${k}`), "radius-pill": ref("radius.pill"), ...sizes("padding-x-pill", all, (k) => `control.padding-x.${pillPadding[k]}`) },
     "icon-button": { $type: "dimension", ...sizes("size", ["xs", "sm", "md", "lg"], (k) => `control.height.${k}`), radius: ref("radius.pill") },
     input: { $type: "dimension", $description: "TextField, Select, AmountInput and OTPInput boxes.", ...sizes("height", fields, (k) => `control.height.${k}`), ...sizes("radius", fields, (k) => `control.radius.${k}`), ...sizes("padding-x", fields, (k) => `control.padding-x.${k}`), "border-width": ref("size.border.default"), "border-width-invalid": ref("size.border.strong") },
     textarea: { $type: "dimension", "min-height": ref("control.height.xl"), padding: ref("space.sm"), radius: ref("control.radius.md") },

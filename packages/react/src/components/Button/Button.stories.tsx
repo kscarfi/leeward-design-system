@@ -38,6 +38,31 @@ export const Sizes: Story = {
   ),
 };
 
+export const Pill: Story = { args: { shape: "pill", children: "Open an account" } };
+
+export const Shapes: Story = {
+  render: (args) => (
+    <div style={{ display: "grid", gap: "var(--lw-space-md)", justifyItems: "start" }}>
+      {(["rounded", "pill"] as const).map((shape) => (
+        <div key={shape} data-shape={shape} style={{ display: "flex", gap: "var(--lw-space-sm)", alignItems: "center", flexWrap: "wrap" }}>
+          <Button {...args} shape={shape} size="sm" variant="secondary">Request</Button>
+          <Button {...args} shape={shape} size="md" variant="outline">Download</Button>
+          <Button {...args} shape={shape} size="lg" iconStart="arrow-up-right">Send</Button>
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // A pill is exactly as tall as a rounded button of the same size; only the corners change.
+    const rounded = [...canvasElement.querySelectorAll('[data-shape="rounded"] button')] as HTMLElement[];
+    const pill = [...canvasElement.querySelectorAll('[data-shape="pill"] button')] as HTMLElement[];
+    for (const [i, button] of pill.entries()) {
+      await expect(button.getBoundingClientRect().height).toBe(rounded[i]!.getBoundingClientRect().height);
+      await expect(parseFloat(getComputedStyle(button).borderTopLeftRadius)).toBeGreaterThanOrEqual(button.getBoundingClientRect().height / 2);
+    }
+  },
+};
+
 export const WithIcons: Story = { args: { iconStart: "arrow-up-right", children: "Send" } };
 export const IconEnd: Story = { args: { variant: "secondary", iconEnd: "arrow-right", children: "Continue" } };
 

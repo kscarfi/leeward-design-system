@@ -123,6 +123,8 @@ All controls share one scale. A Button, IconButton, TextField, Select, Segmented
 | `lg` | 48 / 44 px | Main fields and actions on phones |
 | `xl` | 56 / 48 px | The last action of a mobile flow |
 
+Button also has `shape="pill"` for fully rounded ends, at the same heights. Use pills for standalone actions (onboarding, empty states, promotional cards); keep `rounded` in forms and toolbars, and never mix the two in one group.
+
 Every control keeps a 44 px hit area. Use the same size for controls that sit in one row.
 
 ## 7. Layout

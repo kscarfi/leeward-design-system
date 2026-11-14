@@ -48,6 +48,14 @@ describe("Button", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  it("adds the pill shape only when asked", () => {
+    const { rerender } = render(<Button>Send</Button>);
+    const rounded = screen.getByRole("button").className;
+    rerender(<Button shape="pill">Send</Button>);
+    expect(screen.getByRole("button").className).not.toBe(rounded);
+    expect(screen.getByRole("button").className).toMatch(/pill/);
+  });
+
   it("is disabled natively when disabled", () => {
     render(<Button disabled>Send</Button>);
     expect(screen.getByRole("button")).toBeDisabled();

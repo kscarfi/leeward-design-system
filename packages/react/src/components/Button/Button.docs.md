@@ -17,6 +17,7 @@ Buttons start an action: send money, confirm a transfer, freeze a card. The labe
 ## Anatomy
 
 - Container with the variant background and a 44 px hit area.
+- Shape: `rounded` corners by default, or `pill` for fully rounded ends.
 - Optional start icon (`iconStart`), label, optional end icon (`iconEnd`).
 - Spinner that replaces the content while `loading`.
 
@@ -39,6 +40,16 @@ Buttons start an action: send money, confirm a transfer, freeze a card. The labe
 | `md` | 44 px (compact 40) | Default for forms and dialogs. |
 | `lg` | 48 px (compact 44) | Main actions on mobile screens. |
 | `xl` | 56 px (compact 48) | The last step of a mobile flow, usually `fullWidth`. |
+
+## Shapes
+
+| Shape | Corners | Use it for |
+|---|---|---|
+| `rounded` (default) | The control radius of the size (`--lw-button-radius-<size>`), which follows the brand's roundness | Forms, dialogs, cards and toolbars, next to fields and selects of the same size. |
+| `pill` | Fully rounded ends (`--lw-button-radius-pill`) | Standalone actions with room around them: onboarding, empty states, promotional cards, the main action at the bottom of a mobile screen. |
+
+- A pill is exactly as tall as a rounded button of the same size. It uses the next size's horizontal padding (`--lw-button-padding-x-pill-<size>`) so the label clears the round ends.
+- Pick one shape per screen or flow, and use the same shape for buttons that sit side by side.
 
 ## States
 
@@ -70,6 +81,7 @@ Buttons start an action: send money, confirm a transfer, freeze a card. The labe
 - Do not put two primary buttons next to each other.
 - Do not disable a submit button to hide errors: let people submit and show what to fix.
 - Do not use a button for navigation.
+- Do not mix rounded and pill buttons in one group, or put a pill button inside a form row next to rounded fields.
 
 ## Tokens
 
@@ -99,6 +111,12 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | `--lw-button-gap-md` | 8 px | 8 px | `control.gap.md` |
 | `--lw-button-gap-lg` | 8 px | 8 px | `control.gap.lg` |
 | `--lw-button-gap-xl` | 8 px | 8 px | `control.gap.xl` |
+| `--lw-button-radius-pill` | 9999 px | 9999 px | `radius.pill` |
+| `--lw-button-padding-x-pill-xs` | 12 px | 12 px | `control.padding-x.sm` |
+| `--lw-button-padding-x-pill-sm` | 16 px | 12 px | `control.padding-x.md` |
+| `--lw-button-padding-x-pill-md` | 20 px | 16 px | `control.padding-x.lg` |
+| `--lw-button-padding-x-pill-lg` | 24 px | 20 px | `control.padding-x.xl` |
+| `--lw-button-padding-x-pill-xl` | 24 px | 20 px | `control.padding-x.xl` |
 
 ## Accessibility
 

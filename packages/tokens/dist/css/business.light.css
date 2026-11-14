@@ -571,6 +571,12 @@
   --lw-button-gap-md: 0.5rem;
   --lw-button-gap-lg: 0.5rem;
   --lw-button-gap-xl: 0.5rem;
+  --lw-button-radius-pill: 9999px;
+  --lw-button-padding-x-pill-xs: 0.75rem;
+  --lw-button-padding-x-pill-sm: 0.75rem;
+  --lw-button-padding-x-pill-md: 1rem;
+  --lw-button-padding-x-pill-lg: 1.25rem;
+  --lw-button-padding-x-pill-xl: 1.25rem;
   --lw-icon-button-size-xs: 1.75rem;
   --lw-icon-button-size-sm: 2rem;
   --lw-icon-button-size-md: 2.5rem;

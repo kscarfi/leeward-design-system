@@ -522,6 +522,16 @@
           ]
         },
         {
+          "name": "shape",
+          "type": "\"rounded\" | \"pill\"",
+          "required": false,
+          "description": "rounded: the default corner radius for the size. pill: fully rounded ends, for standalone actions such as hero and onboarding buttons.",
+          "values": [
+            "rounded",
+            "pill"
+          ]
+        },
+        {
           "name": "loading",
           "type": "boolean",
           "required": false,
@@ -570,6 +580,10 @@
           "md",
           "lg",
           "xl"
+        ],
+        "shape": [
+          "rounded",
+          "pill"
         ]
       },
       "purpose": "Buttons start an action: send money, confirm a transfer, freeze a card. The label always says what happens next.",
@@ -604,7 +618,8 @@
         "Do not use `danger` for normal payments: sending money is not an error.",
         "Do not put two primary buttons next to each other.",
         "Do not disable a submit button to hide errors: let people submit and show what to fix.",
-        "Do not use a button for navigation."
+        "Do not use a button for navigation.",
+        "Do not mix rounded and pill buttons in one group, or put a pill button inside a form row next to rounded fields."
       ],
       "accessibility": [
         "Native `<button>` with `type=\"button\"` by default.",

@@ -41,6 +41,14 @@
 .lg { composes: buttonMd from "../../styles/type.module.css"; height: var(--lw-button-height-lg); padding-inline: var(--lw-button-padding-x-lg); gap: var(--lw-button-gap-lg); border-radius: var(--lw-button-radius-lg); }
 .xl { composes: buttonLg from "../../styles/type.module.css"; height: var(--lw-button-height-xl); padding-inline: var(--lw-button-padding-x-xl); gap: var(--lw-button-gap-xl); border-radius: var(--lw-button-radius-xl); }
 
+/* Pill: fully rounded ends, with the next size's padding so the label clears the curve. */
+.pill { border-radius: var(--lw-button-radius-pill); }
+.pill.xs { padding-inline: var(--lw-button-padding-x-pill-xs); }
+.pill.sm { padding-inline: var(--lw-button-padding-x-pill-sm); }
+.pill.md { padding-inline: var(--lw-button-padding-x-pill-md); }
+.pill.lg { padding-inline: var(--lw-button-padding-x-pill-lg); }
+.pill.xl { padding-inline: var(--lw-button-padding-x-pill-xl); }
+
 .fullWidth { width: 100%; }
 
 .primary { background: var(--lw-fill-primary-default); color: var(--lw-fill-primary-on-default); box-shadow: var(--lw-elevation-100); }

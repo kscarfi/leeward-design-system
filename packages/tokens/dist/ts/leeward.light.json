@@ -3391,6 +3391,42 @@
     "type": "dimension",
     "ref": "control.gap.xl"
   },
+  "button.radius-pill": {
+    "value": "9999px",
+    "cssVar": "--lw-button-radius-pill",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "button.padding-x-pill-xs": {
+    "value": "0.75rem",
+    "cssVar": "--lw-button-padding-x-pill-xs",
+    "type": "dimension",
+    "ref": "control.padding-x.sm"
+  },
+  "button.padding-x-pill-sm": {
+    "value": "1rem",
+    "cssVar": "--lw-button-padding-x-pill-sm",
+    "type": "dimension",
+    "ref": "control.padding-x.md"
+  },
+  "button.padding-x-pill-md": {
+    "value": "1.25rem",
+    "cssVar": "--lw-button-padding-x-pill-md",
+    "type": "dimension",
+    "ref": "control.padding-x.lg"
+  },
+  "button.padding-x-pill-lg": {
+    "value": "1.5rem",
+    "cssVar": "--lw-button-padding-x-pill-lg",
+    "type": "dimension",
+    "ref": "control.padding-x.xl"
+  },
+  "button.padding-x-pill-xl": {
+    "value": "1.5rem",
+    "cssVar": "--lw-button-padding-x-pill-xl",
+    "type": "dimension",
+    "ref": "control.padding-x.xl"
+  },
   "icon-button.size-xs": {
     "value": "2rem",
     "cssVar": "--lw-icon-button-size-xs",

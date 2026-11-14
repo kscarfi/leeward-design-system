@@ -8,7 +8,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "One control scale for every interactive control. A Button, IconButton, TextField, Select, SegmentedControl and Chip of the same size have exactly the same height and radius, so they line up in toolbars and forms. Heights: xs 32, sm 36, md 44, lg 48, xl 56 px (compact brands step down). Radius grows with size: xs 6, sm 8, md 10, lg and xl 12 px. Every control keeps a 44 px hit area.",
+          "One control scale for every interactive control. A Button (rounded or pill), IconButton, TextField, Select, SegmentedControl and Chip of the same size have exactly the same height and radius, so they line up in toolbars and forms. Heights: xs 32, sm 36, md 44, lg 48, xl 56 px (compact brands step down). Radius grows with size: xs 6, sm 8, md 10, lg and xl 12 px. Every control keeps a 44 px hit area.",
       },
     },
   },
@@ -27,6 +27,7 @@ function Row({ size }: { size: "sm" | "md" | "lg" }) {
       <Heading level={2} size="h5">Size {size}</Heading>
       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "var(--lw-space-sm)" }}>
         <Button size={size} data-measure="Button">Send</Button>
+        <Button size={size} shape="pill" variant="secondary" data-measure="ButtonPill">Request</Button>
         <IconButton size={size} variant="outline" icon="settings" label={`Settings ${size}`} data-measure="IconButton" />
         <div style={{ width: "180px" }}>
           <TextField size={size} label={`Name ${size}`} placeholder="Deniz" />
@@ -59,6 +60,7 @@ export const Alignment: Story = {
       const tokenPx = parseFloat(getComputedStyle(row).getPropertyValue(expected[size]!)) * (getComputedStyle(row).getPropertyValue(expected[size]!).includes("rem") ? parseFloat(getComputedStyle(document.documentElement).fontSize) : 1);
       const parts: Array<[string, HTMLElement]> = [
         ["Button", row.querySelector('[data-measure="Button"]') as HTMLElement],
+        ["Button pill", row.querySelector('[data-measure="ButtonPill"]') as HTMLElement],
         ["IconButton", row.querySelector('[data-measure="IconButton"]') as HTMLElement],
         ["TextField", (canvas.getByLabelText(`Name ${size}`) as HTMLElement).parentElement as HTMLElement],
         ["Select", canvas.getByRole("combobox", { name: `Account ${size}` })],

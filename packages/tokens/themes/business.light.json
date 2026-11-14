@@ -2315,6 +2315,24 @@
     },
     "gap-xl": {
       "$value": "{control.gap.xl}"
+    },
+    "radius-pill": {
+      "$value": "{radius.pill}"
+    },
+    "padding-x-pill-xs": {
+      "$value": "{control.padding-x.sm}"
+    },
+    "padding-x-pill-sm": {
+      "$value": "{control.padding-x.md}"
+    },
+    "padding-x-pill-md": {
+      "$value": "{control.padding-x.lg}"
+    },
+    "padding-x-pill-lg": {
+      "$value": "{control.padding-x.xl}"
+    },
+    "padding-x-pill-xl": {
+      "$value": "{control.padding-x.xl}"
     }
   },
   "icon-button": {

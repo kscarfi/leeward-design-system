@@ -7,11 +7,14 @@ import styles from "./Button.module.css";
 
 export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger";
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
+export type ButtonShape = "rounded" | "pill";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** primary: the one main action on a screen. secondary and outline: alternatives. danger: irreversible actions only. */
   variant?: ButtonVariant;
   size?: ButtonSize;
+  /** rounded: the default corner radius for the size. pill: fully rounded ends, for standalone actions such as hero and onboarding buttons. */
+  shape?: ButtonShape;
   /** Shows a spinner, keeps the label for screen readers and blocks repeat clicks. */
   loading?: boolean;
   fullWidth?: boolean;
@@ -26,6 +29,7 @@ const iconSize = { xs: "sm", sm: "sm", md: "md", lg: "md", xl: "lg" } as const;
 export function Button({
   variant = "primary",
   size = "md",
+  shape = "rounded",
   loading = false,
   fullWidth = false,
   iconStart,
@@ -44,7 +48,7 @@ export function Button({
     <button
       ref={ref}
       type={type}
-      className={cx(styles.button, styles[variant], styles[size], fullWidth && styles.fullWidth, loading && styles.loading, className)}
+      className={cx(styles.button, styles[variant], styles[size], shape === "pill" && styles.pill, fullWidth && styles.fullWidth, loading && styles.loading, className)}
       disabled={disabled && !loading}
       aria-disabled={inactive || undefined}
       aria-busy={loading || undefined}
