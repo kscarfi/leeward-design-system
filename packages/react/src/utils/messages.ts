@@ -16,6 +16,18 @@ const en = {
   remove: "Remove",
   ibanEnding: "IBAN ending in",
   otpDigits: (n: number) => `${n}-digit code`,
+  cardEnding: "Card ending in",
+  expires: "Expires",
+  frozen: "Frozen",
+  favorite: "Favorite",
+  goalReached: "Goal reached",
+  ofTarget: (target: string) => `of ${target}`,
+  targetBy: (date: string) => `By ${date}`,
+  saved: (percent: number) => `${percent}% saved`,
+  total: "Total",
+  addMoney: "Add money",
+  progress: "Progress",
+  percentOfTotal: (percent: number) => `${percent}% of total`,
 };
 
 const tr: typeof en = {
@@ -33,6 +45,18 @@ const tr: typeof en = {
   remove: "Kaldır",
   ibanEnding: "Son dört hanesi",
   otpDigits: (n: number) => `${n} haneli kod`,
+  cardEnding: "Son dört hanesi",
+  expires: "Son kullanma",
+  frozen: "Donduruldu",
+  favorite: "Favori",
+  goalReached: "Hedefe ulaşıldı",
+  ofTarget: (target: string) => `Hedef ${target}`,
+  targetBy: (date: string) => `${date} tarihine kadar`,
+  saved: (percent: number) => `%${percent} biriktirildi`,
+  total: "Toplam",
+  addMoney: "Para ekle",
+  progress: "İlerleme",
+  percentOfTotal: (percent: number) => `Toplamın %${percent} payı`,
 };
 
 export type Messages = typeof en;

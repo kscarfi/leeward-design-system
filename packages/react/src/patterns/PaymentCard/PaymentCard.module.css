@@ -1,0 +1,53 @@
+/* ISO card proportions. The text sits on the primary fill, so it uses the color made for it. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  aspect-ratio: 1.586;
+  padding: var(--lw-payment-card-padding);
+  border-radius: var(--lw-payment-card-radius);
+  background: linear-gradient(135deg, var(--lw-fill-primary-default), var(--lw-fill-primary-strong));
+  color: var(--lw-fill-primary-on-default);
+  box-shadow: var(--lw-elevation-300);
+  overflow: hidden;
+}
+
+.top, .bottom { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--lw-space-sm); }
+.brand { composes: headingXs from "../../styles/type.module.css"; }
+.type { composes: labelSm from "../../styles/type.module.css"; }
+
+.number {
+  composes: amountMd from "../../styles/type.module.css";
+  margin: 0;
+  display: flex;
+  gap: var(--lw-payment-card-number-gap);
+  font-family: var(--lw-type-code-family);
+  font-variant-numeric: tabular-nums;
+}
+
+.field { display: grid; min-width: 0; }
+.end { text-align: end; }
+.caption { composes: caption from "../../styles/type.module.css"; }
+.holder { composes: labelMd from "../../styles/type.module.css"; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Frozen: the card dims and a badge with words says why, not color alone. */
+.frozen { background: var(--lw-fill-neutral-default); color: var(--lw-fill-neutral-on-default); box-shadow: var(--lw-elevation-100); }
+
+/* In the top row, where the card type sits when the card is active. */
+.badge {
+  composes: labelSm from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-2xs);
+  padding: var(--lw-space-2xs) var(--lw-space-sm);
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-fill-surface-default);
+  color: var(--lw-text-default);
+  box-shadow: var(--lw-elevation-200);
+}
+
+@media (forced-colors: active) {
+  .card { border: var(--lw-size-border-default) solid CanvasText; }
+}

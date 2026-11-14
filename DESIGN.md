@@ -221,7 +221,12 @@ Brands and modes swap semantic tokens. Components never change.
 | `AmountInput` | pattern | Money entry with the decimal keypad on phones, locale formatting on blur and a clear limit error. |
 | `BalanceHeader` | pattern | The account balance at the top of home and account screens, with a hide and show control. |
 | `OTPInput` | pattern | One-time code entry with paste, SMS autofill and clear errors. |
+| `PaymentCard` | pattern | Card artwork with the masked number, card name, holder and expiry, and a clear frozen state. |
 | `QuickActions` | pattern | A row of shortcuts such as Send, Request, Top up and Pay bills. It wraps on narrow screens. |
+| `RecipientRow` | pattern | A saved recipient: avatar, name, bank and masked IBAN. Choosing the row starts a transfer to them. |
+| `SavingsGoal` | pattern | A savings goal: what people saved, the target, progress and the date they want to reach it. |
+| `SpendingBreakdown` | pattern | Spending by category for a period: the total, one bar that shows the shape, and a list with names, amounts and shares. |
+| `SummaryList` | pattern | Label and value pairs that let people check a transfer before they send it, or read a receipt after. |
 | `TransactionRow` | pattern | One transaction: merchant, category, date, amount and status. The row reads as one sentence for screen readers. |
 
 Full props, rules and examples: [`components.manifest.json`](components.manifest.json).

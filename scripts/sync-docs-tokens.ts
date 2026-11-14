@@ -47,6 +47,11 @@ export const COMPONENT_TOKENS: Record<string, { path: string; prefixes: string[]
   TransactionRow: { path: "patterns/TransactionRow", prefixes: ["list-item.", "avatar."] },
   AccountCard: { path: "patterns/AccountCard", prefixes: ["card."] },
   OTPInput: { path: "patterns/OTPInput", prefixes: ["otp."] },
+  SummaryList: { path: "patterns/SummaryList", prefixes: ["summary-list."] },
+  RecipientRow: { path: "patterns/RecipientRow", prefixes: ["list-item.", "avatar."] },
+  PaymentCard: { path: "patterns/PaymentCard", prefixes: ["payment-card."] },
+  SavingsGoal: { path: "patterns/SavingsGoal", prefixes: ["card.", "progress."] },
+  SpendingBreakdown: { path: "patterns/SpendingBreakdown", prefixes: ["spending."] },
 };
 
 const px = (v: unknown) => {

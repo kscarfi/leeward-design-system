@@ -6,6 +6,11 @@ import { AmountDisplay } from "./AmountDisplay/AmountDisplay.tsx";
 import { BalanceHeader } from "./BalanceHeader/BalanceHeader.tsx";
 import { OTPInput } from "./OTPInput/OTPInput.tsx";
 import { TransactionRow, transactionSentence } from "./TransactionRow/TransactionRow.tsx";
+import { SummaryList } from "./SummaryList/SummaryList.tsx";
+import { RecipientRow } from "./RecipientRow/RecipientRow.tsx";
+import { PaymentCard } from "./PaymentCard/PaymentCard.tsx";
+import { SavingsGoal } from "./SavingsGoal/SavingsGoal.tsx";
+import { SpendingBreakdown } from "./SpendingBreakdown/SpendingBreakdown.tsx";
 
 describe("AmountDisplay", () => {
   it("signs incoming amounts and announces the direction", () => {
@@ -101,5 +106,61 @@ describe("OTPInput", () => {
   it("links the error message", () => {
     render(<OTPInput label="Code" error="Wrong code" />);
     expect(screen.getByLabelText("Code")).toHaveAccessibleDescription("Wrong code");
+  });
+});
+
+describe("SummaryList", () => {
+  it("pairs every label with its value in a description list", () => {
+    const { container } = render(<SummaryList items={[{ label: "Fee", value: "₺0,00", hint: "Free" }]} total={{ label: "Total", value: "₺250,00" }} />);
+    expect(container.querySelector("dl")).toBeInTheDocument();
+    expect(screen.getByText("Fee").tagName).toBe("DT");
+    expect(screen.getByText("₺0,00").closest("dd")).toHaveTextContent("Free");
+    expect(screen.getByText("Total").tagName).toBe("DT");
+  });
+});
+
+describe("RecipientRow", () => {
+  it("reads the masked IBAN as its last four digits and calls onClick", async () => {
+    const onClick = vi.fn();
+    render(<ul><RecipientRow name="Deniz Yılmaz" bank="Leeward" iban="TR33 0006 1005 1978 6457 8413 26" favorite onClick={onClick} /></ul>);
+    const row = screen.getByRole("button");
+    expect(row).toHaveAccessibleName(/Deniz Yılmaz, Favorite/);
+    expect(row).toHaveAccessibleName(/IBAN ending in 1 3 2 6/);
+    await userEvent.click(row);
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+  it("is static without onClick or href", () => {
+    render(<ul><RecipientRow name="Ece" iban="TR12 0001 0012 3456 7890 1234 56" /></ul>);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+});
+
+describe("PaymentCard", () => {
+  it("names the card in one sentence and says when it is frozen", () => {
+    render(<PaymentCard name="Everyday debit" last4="4821" expiry="08/28" holder="Ece Kaya" frozen />);
+    expect(screen.getByRole("article", { name: "Everyday debit, Card ending in 4 8 2 1, Expires 08/28, Frozen" })).toBeInTheDocument();
+    expect(screen.getByText("Frozen")).toBeInTheDocument();
+  });
+});
+
+describe("SavingsGoal", () => {
+  it("rounds progress down and says when the goal is reached", () => {
+    const { rerender } = render(<SavingsGoal name="Holiday" saved={2999} target={3000} currency="USD" />);
+    expect(screen.getByText("99% saved")).toBeInTheDocument();
+    rerender(<SavingsGoal name="Holiday" saved={3200} target={3000} currency="USD" />);
+    expect(screen.getByText("Goal reached")).toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { name: "Progress" })).toHaveAttribute("aria-valuenow", "3000");
+  });
+});
+
+describe("SpendingBreakdown", () => {
+  it("sorts by amount, drops zero and gives every share in words", () => {
+    render(<SpendingBreakdown title="November" currency="USD" categories={[{ name: "Bills", amount: 25 }, { name: "Food", amount: 75 }, { name: "Gifts", amount: 0 }]} />);
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(2);
+    expect(items[0]).toHaveTextContent("Food");
+    expect(items[0]).toHaveTextContent("75% of total");
+    expect(screen.queryByText("Gifts")).not.toBeInTheDocument();
   });
 });

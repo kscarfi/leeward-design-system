@@ -41,5 +41,10 @@ export { AccountCard, type AccountCardProps, type AccountAction } from "./patter
 export { OTPInput, type OTPInputProps } from "./patterns/OTPInput/OTPInput.tsx";
 export { AmountInput, parseAmount, type AmountInputProps } from "./patterns/AmountInput/AmountInput.tsx";
 export { QuickActions, type QuickActionsProps, type QuickAction } from "./patterns/QuickActions/QuickActions.tsx";
+export { SummaryList, type SummaryListProps, type SummaryItem } from "./patterns/SummaryList/SummaryList.tsx";
+export { RecipientRow, type RecipientRowProps } from "./patterns/RecipientRow/RecipientRow.tsx";
+export { PaymentCard, type PaymentCardProps } from "./patterns/PaymentCard/PaymentCard.tsx";
+export { SavingsGoal, type SavingsGoalProps } from "./patterns/SavingsGoal/SavingsGoal.tsx";
+export { SpendingBreakdown, type SpendingBreakdownProps, type SpendingCategory } from "./patterns/SpendingBreakdown/SpendingBreakdown.tsx";
 
 export { formatAmount, formatDate, formatIban, maskIban, spokenAmount, MINUS, type Locale } from "./utils/format.ts";

@@ -60,6 +60,10 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | `--lw-input-padding-x-lg` | 20 px | 16 px | `control.padding-x.lg` |
 | `--lw-input-border-width` | 1 px | 1 px | `size.border.default` |
 | `--lw-input-border-width-invalid` | 2 px | 2 px | `size.border.strong` |
+| `--lw-input-radius-pill` | 9999 px | 9999 px | `radius.pill` |
+| `--lw-input-padding-x-pill-sm` | 16 px | 12 px | `control.padding-x.md` |
+| `--lw-input-padding-x-pill-md` | 20 px | 16 px | `control.padding-x.lg` |
+| `--lw-input-padding-x-pill-lg` | 24 px | 20 px | `control.padding-x.xl` |
 
 ## Accessibility
 

@@ -1,0 +1,58 @@
+.root { display: grid; gap: var(--lw-space-md); }
+.header { display: grid; gap: var(--lw-space-2xs); }
+.title { composes: headingXs from "../../styles/type.module.css"; color: var(--lw-text-default); }
+
+.bar {
+  display: flex;
+  gap: var(--lw-spending-bar-gap);
+  height: var(--lw-spending-bar-height);
+  border-radius: var(--lw-spending-bar-radius);
+  overflow: hidden;
+}
+
+.slice { flex-basis: 0; min-width: var(--lw-spending-bar-gap); }
+
+/* One grid for every row (subgrid), so shares and amounts line up in columns. */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  column-gap: var(--lw-space-xs);
+}
+
+.item {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  padding-block: var(--lw-space-xs);
+}
+
+.item + .item { border-top: var(--lw-size-border-default) solid var(--lw-border-subtle); }
+
+.swatch {
+  flex-shrink: 0;
+  width: var(--lw-spending-swatch-size);
+  height: var(--lw-spending-swatch-size);
+  border-radius: var(--lw-spending-swatch-radius);
+}
+
+.icon { color: var(--lw-icon-muted); flex-shrink: 0; }
+.name { composes: bodyMd from "../../styles/type.module.css"; color: var(--lw-text-default); min-width: 0; }
+.share { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-text-muted); font-variant-numeric: tabular-nums; text-align: end; }
+.amount { composes: labelMd from "../../styles/type.module.css"; color: var(--lw-text-default); font-variant-numeric: tabular-nums; text-align: end; }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }
+
+.primary { background: var(--lw-fill-primary-default); }
+.secondary { background: var(--lw-fill-secondary-default); }
+.info { background: var(--lw-fill-info-default); }
+.success { background: var(--lw-fill-success-default); }
+.attention { background: var(--lw-fill-attention-default); }
+.warning { background: var(--lw-fill-warning-default); }
+.neutral { background: var(--lw-fill-neutral-default); }
+
+@media (forced-colors: active) {
+  .slice, .swatch { border: var(--lw-size-border-default) solid CanvasText; }
+}

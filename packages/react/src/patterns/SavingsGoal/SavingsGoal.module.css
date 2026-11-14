@@ -1,0 +1,19 @@
+.card { gap: var(--lw-space-md); }
+.top { display: flex; align-items: center; gap: var(--lw-space-sm); }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--lw-size-avatar-md);
+  height: var(--lw-size-avatar-md);
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-fill-secondary-weak);
+  color: var(--lw-icon-secondary);
+}
+
+.titles { display: grid; min-width: 0; }
+.name { composes: headingXs from "../../styles/type.module.css"; color: var(--lw-text-default); }
+.meta { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-text-muted); }
+.amounts { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--lw-space-xs); }

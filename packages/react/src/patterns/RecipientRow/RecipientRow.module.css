@@ -1,0 +1,3 @@
+/* Inline, not flex: flex items get a space between them in the accessible name ("Deniz , Favorite"). */
+.favorite { display: inline-block; margin-inline-start: var(--lw-space-2xs); vertical-align: -0.125em; color: var(--lw-icon-attention); line-height: 0; }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

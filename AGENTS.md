@@ -80,6 +80,11 @@ export function App({ children }: { children: ReactNode }) {
 | A row in settings or menus | `ListItem` inside `List` | `TransactionRow` |
 | Home shortcuts | `QuickActions` | A row of IconButtons |
 | An account summary | `AccountCard` | A custom card |
+| The review step of a transfer, a receipt | `SummaryList` with a `total` | A table or loose text |
+| A saved recipient to pick | `RecipientRow` inside `List` | `ListItem` with a hand-masked IBAN |
+| A bank card | `PaymentCard` (`frozen` when it is) | An image of a card |
+| A savings goal | `SavingsGoal` | `ProgressBar` alone |
+| Spending by category | `SpendingBreakdown` | A chart without the list |
 | A status label | `Badge` | Colored text |
 | A message on the page | `Alert` | A colored box |
 | A confirmation after an action | `useToast().show(...)` | `Alert` |
@@ -87,7 +92,7 @@ export function App({ children }: { children: ReactNode }) {
 | A task in context (filters, details) | `Sheet` | `Dialog` |
 | Secondary actions on an item | `DropdownMenu` with an `IconButton` "More actions" | Several IconButtons |
 | Progress through steps | `Stepper` (`compact` on phones) | `ProgressBar` |
-| Progress toward a goal or limit | `ProgressBar` with `valueText` | A styled div |
+| Progress toward a limit | `ProgressBar` with `valueText` | A styled div |
 | Content loading | `Skeleton` inside `role="status"` | A spinner for whole pages |
 | Nothing to show yet | `EmptyState` | Plain text |
 | Headings | `Heading` with `level` | `Text` in bold |
@@ -129,7 +134,7 @@ All controls share one scale. A Button, IconButton, TextField, Select, Segmented
 | `lg` | 48 / 44 px | Main fields and actions on phones |
 | `xl` | 56 / 48 px | The last action of a mobile flow |
 
-Button also has `shape="pill"` for fully rounded ends, at the same heights. Use pills for standalone actions (onboarding, empty states, promotional cards); keep `rounded` in forms and toolbars, and never mix the two in one group.
+Button, TextField, Select and SegmentedControl also take `shape="pill"` for fully rounded ends, at the same heights. Use pills for standalone actions and search or filter bars (onboarding, empty states, promotional cards, a search field with a pill button); keep `rounded` in forms and toolbars. Never mix the two shapes in one group.
 
 Every control keeps a 44 px hit area. Use the same size for controls that sit in one row.
 

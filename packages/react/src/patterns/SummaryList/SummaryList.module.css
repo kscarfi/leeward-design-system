@@ -1,0 +1,30 @@
+.list { margin: 0; display: grid; }
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lw-summary-list-column-gap);
+  padding-block: var(--lw-summary-list-row-padding-y);
+}
+
+.row + .row { border-top: var(--lw-size-border-default) solid var(--lw-border-subtle); }
+
+.label { composes: bodyMd from "../../styles/type.module.css"; color: var(--lw-text-muted); flex-shrink: 0; }
+
+.value {
+  composes: labelLg from "../../styles/type.module.css";
+  margin: 0;
+  display: grid;
+  justify-items: end;
+  text-align: end;
+  color: var(--lw-text-default);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.hint { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-text-muted); }
+
+.row + .total { border-top: var(--lw-size-border-strong) solid var(--lw-border-default); }
+.totalLabel { composes: headingXs from "../../styles/type.module.css"; color: var(--lw-text-default); }
+.totalValue { composes: headingXs from "../../styles/type.module.css"; margin: 0; display: grid; justify-items: end; text-align: end; color: var(--lw-text-default); font-variant-numeric: tabular-nums; }
