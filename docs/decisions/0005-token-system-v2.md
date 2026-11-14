@@ -10,7 +10,7 @@ Kemal asked for a richer system: complete palettes and tokens, more components, 
 
 ## What the token source contains
 
-- 26 primitive ramps with 14 steps (0 to 1000), plus alpha ramps. Most are Tailwind based; lapisBlue, purpleHaze, oceanBlue, coralRed, blueRibbon, richBlack and pumpkin are custom.
+- 23 primitive color ramps with steps 0 to 1000, plus alpha ramps. Most are Tailwind based; lapisBlue, purpleHaze, oceanBlue, coralRed, richBlack and pumpkin are custom. A 24th, ink, is derived from richBlack and slate (see Decision 3).
 - 436 semantic colors: `fill`, `text`, `icon` and `border` for 8 roles (primary, secondary, neutral, info, success, warning, attention, danger) with intensities (default, emphasis, strong, subtle, subtler, subtlest, weak, on-*), plus disabled, inverse, focus rings and links.
 - Spacing (0 to 80 px), a sizer for component heights (16 to 72 px), radii (0 to 32 px and pill), border widths, a major second type scale and 8 elevation levels.
 

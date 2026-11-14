@@ -13,4 +13,4 @@ Changes: a curated subset of 142 icons in three styles, colors replaced with `cu
 
 ## Color ramps
 
-Most primitive ramps in `packages/tokens/source/ramps.json` are based on the [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) color palette (MIT). The custom ramps (lapisBlue, purpleHaze, oceanBlue, coralRed, blueRibbon, richBlack, pumpkin and the extended 950 to 1000 steps) were designed by Kemal Salih Carfi.
+Most primitive ramps in `packages/tokens/source/ramps.json` are based on the [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) color palette (MIT). The custom ramps (lapisBlue, purpleHaze, oceanBlue, coralRed, richBlack, pumpkin and the extended 950 to 1000 steps) were designed by Kemal Salih Carfi.

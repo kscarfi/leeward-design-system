@@ -32,7 +32,7 @@ Leeward is a fictional digital-only bank. It is not a real company. In sailing, 
 
 | Area | What you get | Where |
 |---|---|---|
-| Tokens | From Leeward's token source in [packages/tokens/source](packages/tokens/source): 26 ramps with 14 steps, spacing, sizer, radii, border widths, type scale and 8 elevation levels. 711 semantic tokens per brand and mode (`fill`, `text`, `icon`, `border` for 8 roles). Output as CSS variables, typed TS and Figma variables (DTCG). | [packages/tokens](packages/tokens), [ADR 0005](docs/decisions/0005-token-system-v2.md) |
+| Tokens | From Leeward's token source in [packages/tokens/source](packages/tokens/source): 24 color ramps (steps 0 to 1000) and 2 alpha ramps, spacing, sizer, radii, border widths, type scale and 8 elevation levels. 711 semantic tokens per brand and mode (`fill`, `text`, `icon`, `border` for 8 roles). Output as CSS variables, typed TS and Figma variables (DTCG). | [packages/tokens](packages/tokens), [ADR 0005](docs/decisions/0005-token-system-v2.md) |
 | Brands and modes | Leeward and Leeward Business, each in light and dark, plus partner brands generated from one color. A contrast resolver guarantees WCAG 2.2 AA for every brand and mode. | [ADR 0004](docs/decisions/0004-partner-themes.md), [ADR 0005](docs/decisions/0005-token-system-v2.md) |
 | Typography | Plus Jakarta Sans (display and text) and IBM Plex Mono (codes), both OFL. 34 type roles; display, title and hero amounts are fluid from phone to desktop. | [ADR 0005](docs/decisions/0005-token-system-v2.md) |
 | Icons | 142 Solar icons in linear, bold and duotone (CC BY 4.0, by 480 Design). | [LICENSE-THIRD-PARTY.md](LICENSE-THIRD-PARTY.md) |

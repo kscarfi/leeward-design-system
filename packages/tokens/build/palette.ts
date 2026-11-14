@@ -8,7 +8,7 @@ import Color from "colorjs.io";
 export const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 975, 1000] as const;
 export type Step = (typeof STEPS)[number];
 
-// Contrast against #FFFFFF per step: the median of the 19 vivid primitive ramps
+// Contrast against #FFFFFF per step: the median of the vivid primitive ramps when the scale was set
 // in Leeward's token source, so generated ramps share the shape of the hand-made ones. Step 0 is white.
 export const CONTRAST_TARGETS: Record<Step, number> = {
   50: 1.09,
