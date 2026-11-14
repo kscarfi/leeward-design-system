@@ -1,21 +1,53 @@
-# Leeward Design System
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/banner-dark.jpg">
+    <img src="docs/assets/readme/banner-light.jpg" alt="Leeward Design System, by Kemal Salih Carfi" width="100%">
+  </picture>
+</h1>
 
 <!-- DRAFT: headline needs Kemal's approval (PROJECT_BRIEF.md, section 7.2). -->
-**An open-source, AI-ready design system for a fictional digital bank, built in 7 days.**
+**An open-source, AI-ready design system for digital banking.**
 
 > Status: built, including the "same prompt, two results" demo.
-
-<!-- Hero image or GIF of the docs site goes here. -->
 
 ## Why it exists
 
 When an AI agent (Claude Code, Cursor or similar) generates a banking screen, how do you guarantee it is on-brand, accessible and consistent?
 
-This repo answers with three layers: tokens and components that make the right thing easy, governance that makes the wrong thing fail in CI, and an agent layer that hands the rules to the agent before it writes code.
+This repo answers with three layers:
+
+<table>
+  <tr>
+    <td width="33%" valign="top" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/s1-dark.jpg">
+        <img src="docs/assets/readme/s1-light.jpg" alt="A lighthouse built from stacked blocks" width="100%">
+      </picture>
+      <br><strong>Foundations and components</strong>
+      <br>Tokens, components and banking patterns that make the right thing the easy thing.
+    </td>
+    <td width="33%" valign="top" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/s2-dark.jpg">
+        <img src="docs/assets/readme/s2-light.jpg" alt="A harbor wall holding back the wind" width="100%">
+      </picture>
+      <br><strong>Governance</strong>
+      <br>Contrast, lint, accessibility and visual checks that make the wrong thing fail in CI.
+    </td>
+    <td width="33%" valign="top" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/s3-dark.jpg">
+        <img src="docs/assets/readme/s3-light.jpg" alt="A chart with a dotted route and a compass" width="100%">
+      </picture>
+      <br><strong>Agent layer</strong>
+      <br>AGENTS.md, DESIGN.md, llms.txt and an MCP server that hand the rules to an agent before it writes code.
+    </td>
+  </tr>
+</table>
 
 ## The brand
 
-Leeward is a fictional digital-only bank. It is not a real company. In sailing, the lee is the side of the ship sheltered from the wind. Leeward brings that idea to money: however rough the world gets, your money sits on the sheltered side.
+Leeward is a digital-only bank concept, created for this design system. In sailing, the lee is the side of the ship sheltered from the wind. Leeward brings that idea to money: however rough the world gets, your money sits on the sheltered side.
 
 *Steady money, whatever the weather.*
 
@@ -189,13 +221,15 @@ Time spent and AI mistakes, with how each was caught: [docs/build-log.md](docs/b
 
 ## Toolchain
 
-Claude Code, Figma, ColorsMine, Coverage Report, DesignOps.Tools. The token source is in [packages/tokens/source](packages/tokens/source).
+Claude Code, Figma, ColorsMine, Coverage Report, DesignOps.Tools, Google Nano Banana 2 (README illustrations). The token source is in [packages/tokens/source](packages/tokens/source).
 
 Icons: [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736) by 480 Design, CC BY 4.0, via [saoudi-h/solar-icons](https://github.com/saoudi-h/solar-icons). Fonts: Plus Jakarta Sans and IBM Plex Mono, OFL. See [LICENSE-THIRD-PARTY.md](LICENSE-THIRD-PARTY.md).
 
 ## Credits
 
 Designed and directed by Kemal Salih Carfi ([kscarfi.com](https://kscarfi.com), [LinkedIn](https://www.linkedin.com/in/kemalsalihcarfi/)). Built with Claude Code.
+
+Logo by Kemal Salih Carfi. README illustrations directed by Kemal Salih Carfi and generated with Google Nano Banana 2. Brand files are in [docs/assets/brand](docs/assets/brand).
 
 ## License
 
