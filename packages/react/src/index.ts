@@ -5,6 +5,7 @@ export { Text, type TextProps, type TextVariant, type TextTone } from "./compone
 export { Heading, type HeadingProps, type HeadingSize } from "./components/Heading/Heading.tsx";
 export { Icon, type IconProps } from "./components/Icon/Icon.tsx";
 export { iconData, iconNames, iconWeights, type IconName, type IconWeight } from "./components/Icon/icons.ts";
+export { iconMeta, reservedIcons, type IconMeta, type IconCategory } from "./components/Icon/iconMeta.ts";
 export { TextField, type TextFieldProps } from "./components/TextField/TextField.tsx";
 export { Select, type SelectProps, type SelectOption } from "./components/Select/Select.tsx";
 export { Checkbox, type CheckboxProps } from "./components/Checkbox/Checkbox.tsx";

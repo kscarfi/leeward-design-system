@@ -30,6 +30,30 @@ Solar icons by 480 Design (CC BY 4.0) on a 24 px grid: 142 icons in three weight
 | `lg` | 24 px | Navigation and large buttons. |
 | `xl` | 32 px | Empty states and illustrations. |
 
+## Naming, keywords and reserved icons
+
+- Names describe meaning, not the drawing: `send`, not `paper-plane`. Every icon also has keywords (`iconMeta`), so searching "pay" finds `send` and `arrow-up-right`.
+- One style family: Solar linear by default, bold for selected or pressed states, duotone only for larger decorative spots.
+- Icons sit on a 24 px grid and are sized with the icon size tokens, so they line up with text of the matching role.
+- Some icons are reserved for one meaning. Use them only for that meaning, and never use another icon for it:
+
+| Icon | Reserved for |
+|---|---|
+| `arrow-left` | Going back to the previous screen |
+| `chevron-right` | A row or link that opens another screen |
+| `chevron-down` | Expanding, or opening a list of options |
+| `close` | Closing or dismissing |
+| `plus` | Adding something new |
+| `trash` | Deleting |
+| `search` | Search |
+| `more-horizontal`, `more-vertical` | More actions |
+| `check` | Selected or done |
+| `check-circle`, `info`, `alert-triangle`, `alert-circle` | Success, information, warning and error status |
+| `send` | Sending money |
+| `eye`, `eye-off` | Showing and hiding content, such as a balance |
+| `lock` | Locked or frozen |
+| `logout` | Signing out |
+
 ## Content guidelines
 
 - Name icons by meaning: `send`, `card-transfer`, `alert-circle`.
