@@ -15,6 +15,7 @@
 <p align="center"><strong>An open-source, AI-ready design system for digital banking.</strong><br>Tokens, React components, banking patterns, lint rules and an MCP server, designed and directed by Kemal Salih Carfi.</p>
 
 <p align="center">
+  <a href="https://kscarfi.github.io/leeward-design-system/">Storybook</a> ·
   <a href="#quick-start">Quick start</a> ·
   <a href="#use-it-with-an-ai-agent">AI agents</a> ·
   <a href="#whats-inside">What's inside</a> ·
@@ -132,7 +133,7 @@ npm install @leeward/react
 | **Icons** | 142 Solar icons in linear, bold and duotone. |
 | **Components** | 53: Accordion, Alert, Avatar, AvatarGroup, Badge, Banner, Breadcrumbs, Button, Calendar, Card, Checkbox, CheckboxGroup, Chip, Combobox, DatePicker, Dialog, Divider, DropdownMenu, EmptyState, Fieldset, FileUpload, Heading, Icon, IconButton, Image, Indicator, Link, ListItem, NavigationBar, NumberInput, PageHeader, Pagination, Popover, ProgressBar, RadioGroup, SearchField, SegmentedControl, Select, Sheet, Skeleton, SkipLink, Slider, Spinner, Stack, Stepper, Switch, Table, Tabs, Text, TextField, Textarea, Toast, Tooltip. |
 | **Banking patterns** | 12: AccountCard, AmountDisplay, AmountInput, BalanceHeader, OTPInput, PaymentCard, QuickActions, RecipientRow, SavingsGoal, SpendingBreakdown, SummaryList, TransactionRow. |
-| **Docs** | A page for every component and pattern: when to use it, variants, sizes, states, content and accessibility rules, keyboard support, a generated token table and examples that compile. Guides for [foundations](docs/guides/foundations.md), [writing and terminology](docs/guides/writing.md), [internationalization](docs/guides/internationalization.md) and [accessibility](docs/guides/accessibility.md). Run Storybook locally with `pnpm storybook`. |
+| **Docs** | A page for every component and pattern: when to use it, variants, sizes, states, content and accessibility rules, keyboard support, a generated token table and examples that compile. Guides for [foundations](docs/guides/foundations.md), [writing and terminology](docs/guides/writing.md), [internationalization](docs/guides/internationalization.md) and [accessibility](docs/guides/accessibility.md). Browse them in the [live Storybook](https://kscarfi.github.io/leeward-design-system/), or run it locally with `pnpm storybook`. |
 | **Agent layer** | [AGENTS.md](AGENTS.md), [DESIGN.md](DESIGN.md), [llms.txt](llms.txt), [components.manifest.json](components.manifest.json) and the MCP server. |
 
 ## Packages
