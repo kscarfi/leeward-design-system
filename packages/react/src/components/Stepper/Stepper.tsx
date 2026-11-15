@@ -30,7 +30,7 @@ export function Stepper({ steps, current, variant = "full", label = "Progress", 
     );
   }
   return (
-    <nav aria-label={label} className={className}>
+    <nav aria-label={label} className={cx(styles.root, className)}>
       <ol className={styles.list}>
         {steps.map((step, i) => {
           const state = i < current ? "done" : i === current ? "current" : "upcoming";

@@ -167,11 +167,11 @@ Every number below is printed by a script or test runner in this repository, and
 |---|---|
 | Contrast (`pnpm contrast`) | 1,336 required pairs (2 brands, light and dark), 0 failures against WCAG 2.2 AA. Every adjustment is listed in [docs/contrast-report.md](docs/contrast-report.md). |
 | Partner brands | 120 random seed colors: every generated brand passes all required pairs in light and dark. |
-| Stories with axe (`pnpm test:stories`) | 274 story tests in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,644 runs, 0 accessibility violations. Every component has interaction tests. |
+| Stories with axe (`pnpm test:stories`) | 277 story tests in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,662 runs, 0 accessibility violations. Every component has interaction tests. |
 | Control sizes | A story measures every control at sm, md and lg, rounded and pill, against its height token. A token test checks heights increase and radii never shrink. |
 | Layout | No story scrolls sideways on a 360 px screen. |
 | Visual regression | Every story is compared with committed screenshots in Leeward light, Leeward dark and Business light. |
-| Unit tests (`pnpm test`) | 126 tests: React 100, MCP server 11, lint rules 7, tokens 8. |
+| Unit tests (`pnpm test`) | 127 tests: React 101, MCP server 11, lint rules 7, tokens 8. |
 | Docs | 79 code examples and screen recipes compile; every recipe passes `validate_ui`; every component has docs, stories and tests; token tables and links are checked. |
 | Packages (`pnpm smoke:packages`) | The packed packages are installed into a clean project with npm: types, production build, tokens, lint rules and the MCP server are checked. |
 | Lint and copy | No raw colors, no unknown or primitive tokens, spacing and type on scale, no icon-only money actions, no red amounts, no em dashes. |

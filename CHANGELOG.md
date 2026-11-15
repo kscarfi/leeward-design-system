@@ -13,6 +13,14 @@ All four packages (`@leeward/react`, `@leeward/tokens`, `@leeward/lint`, `@leewa
 - Column grid tokens (`--lw-grid-columns-*`, `-gutter-*`, `-margin-*`) for phone, tablet and desktop.
 - Guides for foundations, writing and terminology, internationalization, and an accessibility statement.
 - Repository: contributing guide, code of conduct, security policy, roadmap, versioning and browser support policy, issue templates.
+- IconButton: `shape="rounded"` for a rounded square next to the default pill, with `--lw-icon-button-radius-<size>` tokens.
+- Indicator: `anchor` (`circle` or `rectangle`), `placement` (`top` or `bottom`) and a `success` tone, for presence dots on avatars.
+
+### Changed
+
+- Overlays (Combobox, DatePicker, DropdownMenu, Popover, Select) share one surface style. Select's list now uses elevation 500 like the others.
+- Alert and Banner share one set of tone styles. NavigationBar counts use Indicator, Pagination arrows use IconButton, and the Calendar's Today button uses Button.
+- Stepper decides whether to show every step name from its own width instead of the screen width.
 
 ## 0.2.0
 

@@ -1,9 +1,12 @@
+.root { container-type: inline-size; }
 .list { display: flex; gap: var(--lw-space-xs); margin: 0; padding: 0; list-style: none; overflow-x: auto; }
 
-.step { display: flex; flex: 1; align-items: center; gap: var(--lw-space-xs); min-width: 0; }
+.step { display: flex; flex: 1 1 auto; align-items: center; gap: var(--lw-space-xs); min-width: 0; }
+.step:first-child { flex-grow: 0; }
+/* Connectors take the spare room, so names shorten only when the row is truly full. */
 .step + .step::before {
   content: "";
-  flex: 0 0 var(--lw-space-md);
+  flex: 1 0 var(--lw-space-md);
   height: var(--lw-size-border-strong);
   border-radius: var(--lw-radius-pill);
   background: var(--lw-border-muted);
@@ -30,8 +33,8 @@
 .current .name { color: var(--lw-text-default); }
 .done .marker { border-color: var(--lw-fill-primary-default); background: var(--lw-fill-primary-weak); color: var(--lw-icon-primary-on-subtle); }
 
-/* Phones: only markers, the current step keeps its name. */
-@media (max-width: 479px) {
+/* Narrow containers: only markers, the current step keeps its name. */
+@container (max-width: 30rem) {
   .step:not(.current) .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 }
 

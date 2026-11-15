@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, screen, userEvent, waitFor, within, fn } from "storybook/test";
 import { Button } from "../Button/Button.tsx";
 import { Checkbox } from "../Checkbox/Checkbox.tsx";
+import { Icon } from "../Icon/Icon.tsx";
+import { List, ListItem } from "../ListItem/ListItem.tsx";
 import { Sheet, SheetClose } from "./Sheet.tsx";
 import docsMd from "./Sheet.docs.md?raw";
 import { docsDescription } from "../../stories/docs.ts";
@@ -42,8 +44,25 @@ export const Bottom: Story = {
 };
 export const End: Story = { args: { side: "end", defaultOpen: true } };
 export const Start: Story = {
-  args: { side: "start", defaultOpen: true, title: "Menu" },
+  args: {
+    side: "start",
+    defaultOpen: true,
+    title: "Menu",
+    footer: undefined,
+    children: (
+      <nav aria-label="Main">
+        <List>
+          <ListItem title="Home" href="#home" leading={<Icon name="home" />} />
+          <ListItem title="Payments" href="#payments" leading={<Icon name="arrows-left-right" />} />
+          <ListItem title="Cards" href="#cards" leading={<Icon name="card" />} />
+          <ListItem title="Settings" href="#settings" leading={<Icon name="settings" />} />
+        </List>
+      </nav>
+    ),
+  },
   play: async () => {
-    await expect(await screen.findByRole("dialog", { name: "Menu" })).toBeVisible();
+    const dialog = await screen.findByRole("dialog", { name: "Menu" });
+    await expect(dialog).toBeVisible();
+    await expect(within(dialog).getByRole("link", { name: "Cards" })).toBeVisible();
   },
 };

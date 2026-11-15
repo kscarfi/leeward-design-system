@@ -8,7 +8,7 @@ const meta = {
   title: "Patterns/SavingsGoal",
   component: SavingsGoal,
   parameters: { docs: { description: { component: docsDescription(docsMd) } } },
-  args: { name: "Holiday fund", saved: 18500, target: 30000, currency: "TRY", locale: "tr-TR", targetDate: new Date("2027-06-01"), icon: "airplane" },
+  args: { name: "Tatil fonu", saved: 18500, target: 30000, currency: "TRY", locale: "tr-TR", targetDate: new Date("2027-06-01"), icon: "airplane" },
   decorators: [(Story) => <div style={{ maxWidth: "400px" }}><Story /></div>],
 } satisfies Meta<typeof SavingsGoal>;
 export default meta;

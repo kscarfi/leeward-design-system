@@ -14,7 +14,7 @@ Shows where people are in a multi-step flow, such as a transfer.
 
 | Variant | Use it for |
 |---|---|
-| `full` | Every step with its name. Under 480 px only the current name shows. |
+| `full` | Every step with its name. When the stepper is narrower than 480 px, only the current name shows. |
 | `compact` | "Step 2 of 4" with a progress bar, for phones. |
 
 ## Content guidelines
