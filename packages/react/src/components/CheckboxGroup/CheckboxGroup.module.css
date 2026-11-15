@@ -1,0 +1,7 @@
+.root { display: flex; flex-direction: column; gap: var(--lw-space-sm); margin: 0; padding: 0; border: 0; min-width: 0; }
+.legend { composes: labelSm from "../../styles/type.module.css"; padding: 0; color: var(--lw-text-default); }
+.options { display: flex; gap: var(--lw-space-sm); }
+.vertical { flex-direction: column; }
+.horizontal { flex-direction: row; flex-wrap: wrap; gap: var(--lw-space-lg); }
+/* Options sit under the "select all" checkbox, indented to show they belong to it. */
+.nested { padding-inline-start: var(--lw-space-xl); }

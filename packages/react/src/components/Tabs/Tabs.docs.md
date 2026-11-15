@@ -17,6 +17,8 @@ Switch between views of the same object, such as Activity, Statements and Detail
 
 ## Behavior and responsive
 
+- Each tab can have an `icon` before its label. The label stays: tabs are never icon-only.
+
 - The tab list scrolls sideways on narrow screens.
 - `fullWidth` gives each tab equal width on phones.
 

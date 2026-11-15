@@ -38,6 +38,13 @@
   animation: in var(--lw-motion-duration-slow) var(--lw-motion-easing-enter);
 }
 
+.start {
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: min(100%, var(--lw-sheet-width));
+  animation: in-start var(--lw-motion-duration-slow) var(--lw-motion-easing-enter);
+}
+
 /* Wide screens: a bottom sheet stays a readable width, centered. */
 @media (min-width: 768px) {
   .bottom { max-width: var(--lw-sheet-width); margin-inline: auto; }
@@ -65,3 +72,4 @@
 @keyframes fade { from { opacity: 0; } }
 @keyframes up { from { transform: translateY(100%); } }
 @keyframes in { from { transform: translateX(100%); } }
+@keyframes in-start { from { transform: translateX(-100%); } }

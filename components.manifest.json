@@ -21,6 +21,7 @@
     "Button",
     "Card",
     "Checkbox",
+    "CheckboxGroup",
     "Chip",
     "Dialog",
     "DialogClose",
@@ -863,6 +864,104 @@
       "example": "import { Checkbox } from \"@leeward/react\";\n\nexport function SaveRecipient() {\n  return <Checkbox label=\"Save this person as a recipient\" onCheckedChange={(checked) => console.log(checked)} />;\n}"
     },
     {
+      "name": "CheckboxGroup",
+      "kind": "component",
+      "import": "import { CheckboxGroup } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "The question the group answers, read as the group's name."
+        },
+        {
+          "name": "options",
+          "type": "CheckboxOption[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string[]",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string[]",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string[]) => void",
+          "required": false
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Error for the whole group, for example \"Choose at least one account\"."
+        },
+        {
+          "name": "selectAllLabel",
+          "type": "string",
+          "required": false,
+          "description": "Adds a parent checkbox that selects every option; it shows the mixed state when some are selected."
+        },
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": false,
+          "values": [
+            "vertical",
+            "horizontal"
+          ]
+        }
+      ],
+      "variants": {
+        "orientation": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      "purpose": "Several independent choices under one question, for example which accounts to include in a statement.",
+      "whenToUse": [
+        "People can pick any number of options, including none.",
+        "A list where \"select all\" helps, such as notification types or accounts."
+      ],
+      "whenNotToUse": [
+        "Only one option can be chosen: use RadioGroup.",
+        "A single yes or no: use one Checkbox.",
+        "A setting that applies at once: use Switch."
+      ],
+      "contentGuidelines": [
+        "The legend is a short question or noun phrase: \"Include these accounts\".",
+        "Option labels are parallel and short.",
+        "The error says what to do: \"Choose at least one account\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Use a group whenever two or more checkboxes answer one question."
+      ],
+      "dont": [
+        "Do not use a group as a single-choice list.",
+        "Do not disable options without saying why in a hint."
+      ],
+      "accessibility": [
+        "A `fieldset` with a `legend`, so screen readers announce the question before each option.",
+        "The \"select all\" checkbox exposes the mixed state (`aria-checked=\"mixed\"`).",
+        "The hint and error are linked to the group with `aria-describedby`."
+      ],
+      "keyboard": [
+        "Tab: Moves to the next checkbox",
+        "Space: Checks or unchecks the focused checkbox"
+      ],
+      "example": "import { CheckboxGroup } from \"@leeward/react\";\n\nexport function StatementAccounts() {\n  return (\n    <CheckboxGroup\n      label=\"Include these accounts\"\n      selectAllLabel=\"All accounts\"\n      defaultValue={[\"everyday\"]}\n      options={[\n        { value: \"everyday\", label: \"Everyday\" },\n        { value: \"savings\", label: \"Rainy day savings\" },\n        { value: \"business\", label: \"Business\", disabled: true, hint: \"Statements for business accounts come from Leeward Business\" },\n      ]}\n    />\n  );\n}"
+    },
+    {
       "name": "Chip",
       "kind": "component",
       "import": "import { Chip } from \"@leeward/react\";",
@@ -1112,7 +1211,14 @@
         {
           "name": "actions",
           "type": "MenuAction[]",
-          "required": true
+          "required": false,
+          "description": "A flat list of actions. Use `groups` instead for labelled sections."
+        },
+        {
+          "name": "groups",
+          "type": "MenuGroup[]",
+          "required": false,
+          "description": "Sections separated by a line, each with an optional label."
         },
         {
           "name": "align",
@@ -1152,6 +1258,8 @@
         "Enter or Space: Opens",
         "Arrow keys: Move",
         "Enter: Selects",
+        "Right arrow: Opens a submenu",
+        "Left arrow: Closes a submenu",
         "Escape: Closes"
       ],
       "example": "import { DropdownMenu, IconButton } from \"@leeward/react\";\n\nexport function AccountMenu() {\n  return (\n    <DropdownMenu\n      trigger={<IconButton icon=\"more-vertical\" label=\"More actions\" />}\n      actions={[\n        { label: \"Copy IBAN\", icon: \"copy\", onSelect: () => {} },\n        { label: \"Close account\", icon: \"trash\", onSelect: () => {}, destructive: true },\n      ]}\n    />\n  );\n}"
@@ -1547,6 +1655,18 @@
           "name": "externalLabel",
           "type": "string",
           "required": false
+        },
+        {
+          "name": "iconStart",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
+        },
+        {
+          "name": "iconEnd",
+          "type": "IconName",
+          "required": false,
+          "description": "One of the names in `icons` at the top of this manifest."
         },
         {
           "name": "...rest",
@@ -2140,12 +2260,13 @@
         },
         {
           "name": "side",
-          "type": "\"bottom\" | \"end\"",
+          "type": "\"bottom\" | \"end\" | \"start\"",
           "required": false,
-          "description": "bottom on phones by default; end slides in from the right on wider screens.",
+          "description": "bottom on phones by default; end slides in from the inline end (right in left-to-right), start from the inline start, for navigation.",
           "values": [
             "bottom",
-            "end"
+            "end",
+            "start"
           ]
         },
         {
@@ -2167,7 +2288,8 @@
       "variants": {
         "side": [
           "bottom",
-          "end"
+          "end",
+          "start"
         ]
       },
       "purpose": "A panel for a task in context, such as filters or transaction details.",

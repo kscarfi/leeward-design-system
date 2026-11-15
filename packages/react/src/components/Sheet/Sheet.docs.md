@@ -15,7 +15,8 @@ A panel for a task in context, such as filters or transaction details.
 | Variant | Use it for |
 |---|---|
 | `bottom` | Default. Slides up, within thumb reach. Centered and limited to 560 px on wide screens. |
-| `end` | Slides in from the side on wide screens. |
+| `end` | Slides in from the inline end on wide screens, for details and filters. |
+| `start` | Slides in from the inline start, for navigation menus. |
 
 ## Content guidelines
 

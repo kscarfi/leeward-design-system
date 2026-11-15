@@ -18,6 +18,7 @@ import { Sheet } from "./Sheet/Sheet.tsx";
 import { Spinner } from "./Spinner/Spinner.tsx";
 import { Stepper } from "./Stepper/Stepper.tsx";
 import { Textarea } from "./Textarea/Textarea.tsx";
+import { CheckboxGroup } from "./CheckboxGroup/CheckboxGroup.tsx";
 
 describe("Icon v2", () => {
   it("ships the curated Solar set in three weights", () => {
@@ -169,5 +170,25 @@ describe("DropdownMenu", () => {
     await userEvent.click(screen.getByRole("button", { name: "More actions" }));
     await userEvent.click(await screen.findByRole("menuitem", { name: "Copy IBAN" }));
     expect(onCopy).toHaveBeenCalledOnce();
+  });
+});
+
+describe("CheckboxGroup", () => {
+  it("names the group by its legend and selects all enabled options", async () => {
+    const onValueChange = vi.fn();
+    render(<CheckboxGroup label="Accounts" selectAllLabel="All" defaultValue={["a"]} onValueChange={onValueChange} options={[{ value: "a", label: "A" }, { value: "b", label: "B" }, { value: "c", label: "C", disabled: true }]} />);
+    expect(screen.getByRole("group", { name: "Accounts" })).toBeInTheDocument();
+    const all = screen.getByRole("checkbox", { name: "All" });
+    expect(all).toHaveAttribute("aria-checked", "mixed");
+    await userEvent.click(all);
+    expect(onValueChange).toHaveBeenLastCalledWith(["a", "b"]);
+    expect(all).toHaveAttribute("aria-checked", "true");
+  });
+});
+
+describe("Link icons", () => {
+  it("keeps the text as the accessible name", () => {
+    render(<Link href="#s" variant="standalone" iconStart="download">Download statement</Link>);
+    expect(screen.getByRole("link", { name: "Download statement" })).toBeInTheDocument();
   });
 });

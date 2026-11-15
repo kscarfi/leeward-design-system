@@ -15,6 +15,7 @@ export const COMPONENT_TOKENS: Record<string, { path: string; prefixes: string[]
   Textarea: { path: "components/Textarea", prefixes: ["textarea."] },
   Select: { path: "components/Select", prefixes: ["input.", "menu."] },
   Checkbox: { path: "components/Checkbox", prefixes: ["checkbox."] },
+  CheckboxGroup: { path: "components/CheckboxGroup", prefixes: ["checkbox."] },
   RadioGroup: { path: "components/RadioGroup", prefixes: ["radio."] },
   Switch: { path: "components/Switch", prefixes: ["switch."] },
   SegmentedControl: { path: "components/SegmentedControl", prefixes: ["segmented."] },

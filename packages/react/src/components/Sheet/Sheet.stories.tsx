@@ -41,3 +41,9 @@ export const Bottom: Story = {
   },
 };
 export const End: Story = { args: { side: "end", defaultOpen: true } };
+export const Start: Story = {
+  args: { side: "start", defaultOpen: true, title: "Menu" },
+  play: async () => {
+    await expect(await screen.findByRole("dialog", { name: "Menu" })).toBeVisible();
+  },
+};

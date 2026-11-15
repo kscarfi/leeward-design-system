@@ -191,6 +191,7 @@ Brands and modes swap semantic tokens. Components never change.
 | `Button` | component | Buttons start an action: send money, confirm a transfer, freeze a card. The label always says what happens next. |
 | `Card` | component | A surface that groups related content, such as an account, a goal or a list. |
 | `Checkbox` | component | A yes or no choice inside a form, or one of several independent choices. |
+| `CheckboxGroup` | component | Several independent choices under one question, for example which accounts to include in a statement. |
 | `Chip` | component | A toggle for filters, such as Money in or Money out in a transaction list. |
 | `Dialog` | component | A modal for a decision that needs full attention, such as freezing a card or closing an account. |
 | `Divider` | component | A thin line that separates groups of content on a surface. |

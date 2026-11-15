@@ -19,6 +19,10 @@ Secondary actions for an item, behind a More button.
 ## Behavior and responsive
 
 - Destructive actions go last, after a separator.
+- `groups` split long menus into labelled sections, such as "Card" and "Account".
+- An action with `items` opens a submenu; keep submenus one level deep.
+- `shortcut` shows a keyboard shortcut on the end side. It is display only: register the shortcut in the app.
+- Disabled items stay visible so people learn the action exists.
 
 ## Do
 
@@ -53,6 +57,8 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | Enter or Space | Opens |
 | Arrow keys | Move |
 | Enter | Selects |
+| Right arrow | Opens a submenu |
+| Left arrow | Closes a submenu |
 | Escape | Closes |
 
 ## Example

@@ -9,6 +9,7 @@ export { iconMeta, reservedIcons, type IconMeta, type IconCategory } from "./com
 export { TextField, type TextFieldProps } from "./components/TextField/TextField.tsx";
 export { Select, type SelectProps, type SelectOption } from "./components/Select/Select.tsx";
 export { Checkbox, type CheckboxProps } from "./components/Checkbox/Checkbox.tsx";
+export { CheckboxGroup, type CheckboxGroupProps, type CheckboxOption } from "./components/CheckboxGroup/CheckboxGroup.tsx";
 export { RadioGroup, type RadioGroupProps, type RadioOption } from "./components/RadioGroup/RadioGroup.tsx";
 export { Switch, type SwitchProps } from "./components/Switch/Switch.tsx";
 export { Badge, type BadgeProps, type BadgeTone } from "./components/Badge/Badge.tsx";
@@ -32,7 +33,7 @@ export { Link, type LinkProps } from "./components/Link/Link.tsx";
 export { Spinner, type SpinnerProps } from "./components/Spinner/Spinner.tsx";
 export { EmptyState, type EmptyStateProps } from "./components/EmptyState/EmptyState.tsx";
 export { Sheet, SheetClose, type SheetProps } from "./components/Sheet/Sheet.tsx";
-export { DropdownMenu, type DropdownMenuProps, type MenuAction } from "./components/DropdownMenu/DropdownMenu.tsx";
+export { DropdownMenu, type DropdownMenuProps, type MenuAction, type MenuGroup } from "./components/DropdownMenu/DropdownMenu.tsx";
 export { Stepper, type StepperProps } from "./components/Stepper/Stepper.tsx";
 
 export { AmountDisplay, type AmountDisplayProps, type AmountDirection } from "./patterns/AmountDisplay/AmountDisplay.tsx";

@@ -29,6 +29,18 @@ export const Default: Story = {
     await expect(canvas.getByRole("tab", { name: "Statements" })).toHaveAttribute("aria-selected", "true");
   },
 };
+export const WithIcons: Story = {
+  args: {
+    items: [
+      { value: "activity", label: "Activity", icon: "history", content: <Text>Your last 30 days of payments.</Text> },
+      { value: "statements", label: "Statements", icon: "documents", content: <Text>Monthly statements as PDF.</Text> },
+      { value: "details", label: "Details", icon: "info", content: <Text>IBAN, account number and branch.</Text> },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole("tab", { name: "Statements" })).toBeVisible();
+  },
+};
 export const FullWidth: Story = { args: { fullWidth: true }, decorators: [(Story) => <div style={{ maxWidth: "400px" }}><Story /></div>] };
 export const DisabledTab: Story = {
   args: {

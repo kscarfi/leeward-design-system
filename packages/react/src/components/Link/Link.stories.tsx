@@ -16,6 +16,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Standalone: Story = { args: { variant: "standalone" } };
+export const WithIcons: Story = {
+  args: { variant: "standalone", iconStart: "download", children: "Download statement", href: "#statement" },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole("link", { name: "Download statement" })).toBeVisible();
+  },
+};
+export const SeeAll: Story = { args: { variant: "standalone", iconEnd: "arrow-right", children: "See all transactions", href: "#all" } };
 export const Inline: Story = { render: (args) => <Text>Transfers are free. <Link {...args}>See all fees</Link> for card payments abroad.</Text> };
 export const External: Story = {
   play: async ({ canvasElement }) => {

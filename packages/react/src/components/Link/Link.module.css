@@ -15,4 +15,5 @@
 .standalone:hover { text-decoration-line: underline; }
 
 .icon { margin-inline-start: var(--lw-space-3xs); }
+.iconStart { margin-inline-end: var(--lw-space-3xs); }
 .srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

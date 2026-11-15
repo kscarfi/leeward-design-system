@@ -13,6 +13,10 @@
 .trigger {
   composes: labelMd from "../../styles/type.module.css";
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-2xs);
   height: var(--lw-tabs-height);
   padding-inline: var(--lw-space-2xs);
   background: transparent;

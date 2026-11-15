@@ -11,8 +11,8 @@ export interface SheetProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  /** bottom on phones by default; end slides in from the right on wider screens. */
-  side?: "bottom" | "end";
+  /** bottom on phones by default; end slides in from the inline end (right in left-to-right), start from the inline start, for navigation. */
+  side?: "bottom" | "end" | "start";
   children?: ReactNode;
   footer?: ReactNode;
   closeLabel?: string;

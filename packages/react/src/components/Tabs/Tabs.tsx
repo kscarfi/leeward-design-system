@@ -1,6 +1,8 @@
 import { Tabs as RadixTabs } from "radix-ui";
 import type { ReactNode } from "react";
 import { cx } from "../../utils/cx.ts";
+import { Icon } from "../Icon/Icon.tsx";
+import type { IconName } from "../Icon/icons.ts";
 import styles from "./Tabs.module.css";
 
 export interface TabItem {
@@ -8,6 +10,8 @@ export interface TabItem {
   label: string;
   content: ReactNode;
   disabled?: boolean;
+  /** Optional icon before the label. The label stays: tabs are never icon-only. */
+  icon?: IconName;
 }
 
 export interface TabsProps {
@@ -29,6 +33,7 @@ export function Tabs({ label, items, defaultValue, fullWidth, className, ...root
       <RadixTabs.List aria-label={label} className={cx(styles.list, fullWidth && styles.fullWidth)}>
         {items.map((item) => (
           <RadixTabs.Trigger key={item.value} value={item.value} disabled={item.disabled ?? false} className={styles.trigger}>
+            {item.icon && <Icon name={item.icon} size="sm" />}
             {item.label}
           </RadixTabs.Trigger>
         ))}

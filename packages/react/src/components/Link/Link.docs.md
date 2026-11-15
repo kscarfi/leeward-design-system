@@ -23,6 +23,8 @@ Navigation to another page or site.
 
 ## Behavior and responsive
 
+- Standalone links can show `iconStart` (for example `download`) or `iconEnd` (for example `arrow-right` for "See all"). Icons are decorative; the text is the name.
+
 - `external` opens a new tab and says so.
 
 ## Do
