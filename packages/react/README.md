@@ -32,8 +32,8 @@ export function App() {
 
 ## What is inside
 
-- **32 components**: Accordion, Alert, Avatar, Badge, Button, Card, Checkbox, Chip, Dialog, Divider, DropdownMenu, EmptyState, Heading, Icon, IconButton, Link, ListItem, ProgressBar, RadioGroup, SegmentedControl, Select, Sheet, Skeleton, Spinner, Stepper, Switch, Tabs, Text, TextField, Textarea, Toast and Tooltip.
-- **7 banking patterns**: AmountDisplay, AmountInput, BalanceHeader, QuickActions, TransactionRow, AccountCard, OTPInput.
+- **53 components**: Accordion, Alert, Avatar, AvatarGroup, Badge, Banner, Breadcrumbs, Button, Calendar, Card, Checkbox, CheckboxGroup, Chip, Combobox, DatePicker, Dialog, Divider, DropdownMenu, EmptyState, Fieldset, FileUpload, Heading, Icon, IconButton, Image, Indicator, Link, ListItem, NavigationBar, NumberInput, PageHeader, Pagination, Popover, ProgressBar, RadioGroup, SearchField, SegmentedControl, Select, Sheet, Skeleton, SkipLink, Slider, Spinner, Stack, Stepper, Switch, Table, Tabs, Text, TextField, Textarea, Toast and Tooltip.
+- **12 banking patterns**: AccountCard, AmountDisplay, AmountInput, BalanceHeader, OTPInput, PaymentCard, QuickActions, RecipientRow, SavingsGoal, SpendingBreakdown, SummaryList and TransactionRow.
 - **Icons**: 142 Solar icons in linear, bold and duotone.
 - One control scale: a Button, TextField, Select and SegmentedControl of the same size are exactly the same height.
 

@@ -2,6 +2,18 @@
 
 All four packages (`@leeward/react`, `@leeward/tokens`, `@leeward/lint`, `@leeward/mcp-server`) share one version.
 
+## 0.3.0
+
+### Added
+
+- **20 components:** DatePicker and Calendar, Combobox, SearchField, NumberInput, Slider, FileUpload, Fieldset, CheckboxGroup, Breadcrumbs, Pagination, NavigationBar, PageHeader, SkipLink, Table, Popover, Banner, AvatarGroup, Indicator, Image and Stack. Each has docs, stories with interaction tests, unit tests, component tokens and English and Turkish copy.
+- DropdownMenu: labelled `groups`, one-level submenus (`items`) and `shortcut` hints.
+- Tabs: an `icon` per tab. Sheet: `side="start"`. Link: `iconStart` and `iconEnd`. TextField: `endAction` for an interactive control at the end of the field.
+- Icons: `iconMeta` with a category, search keywords and reserved meanings for every icon; the icon gallery is searchable.
+- Column grid tokens (`--lw-grid-columns-*`, `-gutter-*`, `-margin-*`) for phone, tablet and desktop.
+- Guides for foundations, writing and terminology, internationalization, and an accessibility statement.
+- Repository: contributing guide, code of conduct, security policy, roadmap, versioning and browser support policy, issue templates.
+
 ## 0.2.0
 
 ### Added

@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Run by hand, for example after the baseline workflow commits new screenshots.
+  workflow_dispatch:
 
 permissions:
   contents: read

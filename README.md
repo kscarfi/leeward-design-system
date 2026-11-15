@@ -125,12 +125,12 @@ npm install @leeward/react
 
 | Area | What you get |
 |---|---|
-| **Tokens** | 24 color ramps and 2 alpha ramps, spacing, sizes, radii, type scale and 8 elevation levels. 711 semantic tokens per brand and mode, named by layer, role and intensity (`--lw-fill-primary-default`). Every component also has its own sizing and radius tokens. Output as CSS variables, typed TypeScript and Figma variables. |
+| **Tokens** | 24 color ramps and 2 alpha ramps, spacing, sizes, radii, type scale and 8 elevation levels. 735 semantic tokens per brand and mode (930 with component tokens), named by layer, role and intensity (`--lw-fill-primary-default`). Every component also has its own sizing and radius tokens. Output as CSS variables, typed TypeScript and Figma variables. |
 | **Brands and modes** | Leeward and Leeward Business, each in light and dark, plus partner brands from one color. A contrast resolver checks 334 required pairs per brand and mode and adjusts tokens until every pair passes WCAG 2.2 AA. |
 | **One control scale** | xs 32, sm 36, md 44, lg 48, xl 56 px (compact brands step down). A Button, TextField, Select and SegmentedControl of the same size are exactly the same height, in rounded or pill shape. Every control keeps a 44 px hit area. |
 | **Typography** | Plus Jakarta Sans and IBM Plex Mono, 34 type roles; display, title and large amounts scale with the screen. Turkish letters, the lira sign and tabular figures throughout. |
 | **Icons** | 142 Solar icons in linear, bold and duotone. |
-| **Components** | 32: Accordion, Alert, Avatar, Badge, Button, Card, Checkbox, Chip, Dialog, Divider, DropdownMenu, EmptyState, Heading, Icon, IconButton, Link, ListItem, ProgressBar, RadioGroup, SegmentedControl, Select, Sheet, Skeleton, Spinner, Stepper, Switch, Tabs, Text, TextField, Textarea, Toast, Tooltip. |
+| **Components** | 53: Accordion, Alert, Avatar, AvatarGroup, Badge, Banner, Breadcrumbs, Button, Calendar, Card, Checkbox, CheckboxGroup, Chip, Combobox, DatePicker, Dialog, Divider, DropdownMenu, EmptyState, Fieldset, FileUpload, Heading, Icon, IconButton, Image, Indicator, Link, ListItem, NavigationBar, NumberInput, PageHeader, Pagination, Popover, ProgressBar, RadioGroup, SearchField, SegmentedControl, Select, Sheet, Skeleton, SkipLink, Slider, Spinner, Stack, Stepper, Switch, Table, Tabs, Text, TextField, Textarea, Toast, Tooltip. |
 | **Banking patterns** | 12: AccountCard, AmountDisplay, AmountInput, BalanceHeader, OTPInput, PaymentCard, QuickActions, RecipientRow, SavingsGoal, SpendingBreakdown, SummaryList, TransactionRow. |
 | **Docs** | A page for every component and pattern: when to use it, variants, sizes, states, content and accessibility rules, keyboard support, a generated token table and examples that compile. Guides for [foundations](docs/guides/foundations.md), [writing and terminology](docs/guides/writing.md), [internationalization](docs/guides/internationalization.md) and [accessibility](docs/guides/accessibility.md). Run Storybook locally with `pnpm storybook`. |
 | **Agent layer** | [AGENTS.md](AGENTS.md), [DESIGN.md](DESIGN.md), [llms.txt](llms.txt), [components.manifest.json](components.manifest.json) and the MCP server. |
@@ -167,12 +167,12 @@ Every number below is printed by a script or test runner in this repository, and
 |---|---|
 | Contrast (`pnpm contrast`) | 1,336 required pairs (2 brands, light and dark), 0 failures against WCAG 2.2 AA. Every adjustment is listed in [docs/contrast-report.md](docs/contrast-report.md). |
 | Partner brands | 120 random seed colors: every generated brand passes all required pairs in light and dark. |
-| Stories with axe (`pnpm test:stories`) | 200 story tests in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,200 runs, 0 accessibility violations. Every component has interaction tests. |
+| Stories with axe (`pnpm test:stories`) | 274 story tests in 6 brand and mode combinations (Leeward, Business, Harbor; light and dark): 1,644 runs, 0 accessibility violations. Every component has interaction tests. |
 | Control sizes | A story measures every control at sm, md and lg, rounded and pill, against its height token. A token test checks heights increase and radii never shrink. |
 | Layout | No story scrolls sideways on a 360 px screen. |
 | Visual regression | Every story is compared with committed screenshots in Leeward light, Leeward dark and Business light. |
-| Unit tests (`pnpm test`) | 102 tests: React 76, MCP server 11, lint rules 7, tokens 8. |
-| Docs | 58 code examples and screen recipes compile; every recipe passes `validate_ui`; every component has docs, stories and tests; token tables and links are checked. |
+| Unit tests (`pnpm test`) | 126 tests: React 100, MCP server 11, lint rules 7, tokens 8. |
+| Docs | 79 code examples and screen recipes compile; every recipe passes `validate_ui`; every component has docs, stories and tests; token tables and links are checked. |
 | Packages (`pnpm smoke:packages`) | The packed packages are installed into a clean project with npm: types, production build, tokens, lint rules and the MCP server are checked. |
 | Lint and copy | No raw colors, no unknown or primitive tokens, spacing and type on scale, no icon-only money actions, no red amounts, no em dashes. |
 
