@@ -4209,6 +4209,57 @@
     "cssVar": "--lw-breakpoint-xl",
     "type": "dimension"
   },
+  "grid.columns.phone": {
+    "value": 4,
+    "cssVar": "--lw-grid-columns-phone",
+    "type": "number"
+  },
+  "grid.columns.tablet": {
+    "value": 8,
+    "cssVar": "--lw-grid-columns-tablet",
+    "type": "number"
+  },
+  "grid.columns.desktop": {
+    "value": 12,
+    "cssVar": "--lw-grid-columns-desktop",
+    "type": "number"
+  },
+  "grid.gutter.phone": {
+    "value": "1rem",
+    "cssVar": "--lw-grid-gutter-phone",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "grid.gutter.tablet": {
+    "value": "1.5rem",
+    "cssVar": "--lw-grid-gutter-tablet",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "grid.gutter.desktop": {
+    "value": "1.5rem",
+    "cssVar": "--lw-grid-gutter-desktop",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "grid.margin.phone": {
+    "value": "1rem",
+    "cssVar": "--lw-grid-margin-phone",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "grid.margin.tablet": {
+    "value": "2rem",
+    "cssVar": "--lw-grid-margin-tablet",
+    "type": "dimension",
+    "ref": "space.xl"
+  },
+  "grid.margin.desktop": {
+    "value": "3rem",
+    "cssVar": "--lw-grid-margin-desktop",
+    "type": "dimension",
+    "ref": "space.2xl"
+  },
   "type.display.lg.family": {
     "value": "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif",
     "cssVar": "--lw-type-display-lg-family",

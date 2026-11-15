@@ -1,0 +1,7 @@
+import { Markdown, Meta } from "@storybook/addon-docs/blocks";
+import guide from "../../../docs/guides/writing.md?raw";
+import { githubLinks } from "./githubLinks.ts";
+
+<Meta title="Guides/Writing" />
+
+<Markdown>{githubLinks(guide, "docs/guides")}</Markdown>

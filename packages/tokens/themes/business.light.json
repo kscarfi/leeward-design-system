@@ -2847,6 +2847,45 @@
       }
     }
   },
+  "grid": {
+    "$description": "Column grid. Phones use 4 columns, tablets 8, desktops 12. Gutters and page margins come from the spacing scale.",
+    "columns": {
+      "$type": "number",
+      "phone": {
+        "$value": 4
+      },
+      "tablet": {
+        "$value": 8
+      },
+      "desktop": {
+        "$value": 12
+      }
+    },
+    "gutter": {
+      "$type": "dimension",
+      "phone": {
+        "$value": "{space.md}"
+      },
+      "tablet": {
+        "$value": "{space.lg}"
+      },
+      "desktop": {
+        "$value": "{space.lg}"
+      }
+    },
+    "margin": {
+      "$type": "dimension",
+      "phone": {
+        "$value": "{space.md}"
+      },
+      "tablet": {
+        "$value": "{space.xl}"
+      },
+      "desktop": {
+        "$value": "{space.2xl}"
+      }
+    }
+  },
   "type": {
     "$description": "Type roles. Display and title roles are fluid between 360 and 1280 px viewports.",
     "display": {

@@ -11368,5 +11368,103 @@
         "unit": "px"
       }
     }
+  },
+  "grid": {
+    "columns": {
+      "phone": {
+        "$type": "number",
+        "$value": 4
+      },
+      "tablet": {
+        "$type": "number",
+        "$value": 8
+      },
+      "desktop": {
+        "$type": "number",
+        "$value": 12
+      }
+    },
+    "gutter": {
+      "phone": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableSetName": "Leeward Primitives",
+            "targetVariableName": "space/4"
+          }
+        }
+      },
+      "tablet": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableSetName": "Leeward Primitives",
+            "targetVariableName": "space/6"
+          }
+        }
+      },
+      "desktop": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableSetName": "Leeward Primitives",
+            "targetVariableName": "space/6"
+          }
+        }
+      }
+    },
+    "margin": {
+      "phone": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableSetName": "Leeward Primitives",
+            "targetVariableName": "space/4"
+          }
+        }
+      },
+      "tablet": {
+        "$type": "dimension",
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        },
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableSetName": "Leeward Primitives",
+            "targetVariableName": "space/8"
+          }
+        }
+      },
+      "desktop": {
+        "$type": "dimension",
+        "$value": {
+          "value": 48,
+          "unit": "px"
+        },
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableSetName": "Leeward Primitives",
+            "targetVariableName": "space/12"
+          }
+        }
+      }
+    }
   }
 }

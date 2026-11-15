@@ -240,6 +240,13 @@ export function foundation(brand: Brand) {
     ...componentTokens(),
     layer: { $type: "number", base: { $value: 0 }, raised: { $value: 10 }, sticky: { $value: 100 }, overlay: { $value: 1000 }, toast: { $value: 1100 }, tooltip: { $value: 1200 } },
     breakpoint: { $type: "dimension", $description: "Reference only: CSS cannot read variables in media queries.", sm: dim(640), md: dim(768), lg: dim(1024), xl: dim(1280) },
+    // Column grid per screen size: phones (under sm), tablets (sm to lg) and desktops (lg and up).
+    grid: {
+      $description: "Column grid. Phones use 4 columns, tablets 8, desktops 12. Gutters and page margins come from the spacing scale.",
+      columns: { $type: "number", phone: { $value: 4 }, tablet: { $value: 8 }, desktop: { $value: 12 } },
+      gutter: { $type: "dimension", phone: ref("space.md"), tablet: ref("space.lg"), desktop: ref("space.lg") },
+      margin: { $type: "dimension", phone: ref("space.md"), tablet: ref("space.xl"), desktop: ref("space.2xl") },
+    },
     type,
   };
 }

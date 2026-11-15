@@ -132,7 +132,7 @@ npm install @leeward/react
 | **Icons** | 142 Solar icons in linear, bold and duotone. |
 | **Components** | 32: Accordion, Alert, Avatar, Badge, Button, Card, Checkbox, Chip, Dialog, Divider, DropdownMenu, EmptyState, Heading, Icon, IconButton, Link, ListItem, ProgressBar, RadioGroup, SegmentedControl, Select, Sheet, Skeleton, Spinner, Stepper, Switch, Tabs, Text, TextField, Textarea, Toast, Tooltip. |
 | **Banking patterns** | 12: AccountCard, AmountDisplay, AmountInput, BalanceHeader, OTPInput, PaymentCard, QuickActions, RecipientRow, SavingsGoal, SpendingBreakdown, SummaryList, TransactionRow. |
-| **Docs** | A page for every component and pattern: when to use it, variants, sizes, states, content and accessibility rules, keyboard support, a generated token table and examples that compile. Run Storybook locally with `pnpm storybook`. |
+| **Docs** | A page for every component and pattern: when to use it, variants, sizes, states, content and accessibility rules, keyboard support, a generated token table and examples that compile. Guides for [foundations](docs/guides/foundations.md), [writing and terminology](docs/guides/writing.md), [internationalization](docs/guides/internationalization.md) and [accessibility](docs/guides/accessibility.md). Run Storybook locally with `pnpm storybook`. |
 | **Agent layer** | [AGENTS.md](AGENTS.md), [DESIGN.md](DESIGN.md), [llms.txt](llms.txt), [components.manifest.json](components.manifest.json) and the MCP server. |
 
 ## Packages
@@ -144,7 +144,7 @@ npm install @leeward/react
 | [`@leeward/lint`](https://www.npmjs.com/package/@leeward/lint) | ESLint and Stylelint rules that keep code on the system |
 | [`@leeward/mcp-server`](https://www.npmjs.com/package/@leeward/mcp-server) | MCP server for AI agents |
 
-All four share one version. Changes are in [CHANGELOG.md](CHANGELOG.md); releases are published from CI with npm trusted publishing ([docs/releasing.md](docs/releasing.md)).
+All four share one version. Changes are in [CHANGELOG.md](CHANGELOG.md), the plan in [ROADMAP.md](ROADMAP.md), and the versioning, deprecation and browser support policy in [docs/versioning.md](docs/versioning.md). Releases are published from CI with npm trusted publishing ([docs/releasing.md](docs/releasing.md)). To contribute, read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## The brand
 
@@ -242,6 +242,7 @@ apps/
   demo/         Same prompt, two results
 docs/
   recipes/      Complete screens built only from the system
+  guides/       Foundations, writing, internationalization, accessibility
   decisions/    Architecture decision records
   assets/       Logo, README artwork
   build-log.md  What the AI did, what Kemal decided, and every AI mistake

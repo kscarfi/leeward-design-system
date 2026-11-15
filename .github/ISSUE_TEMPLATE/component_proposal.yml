@@ -1,0 +1,40 @@
+name: Component proposal
+description: Propose a new component, pattern, variant or token.
+labels: ["proposal"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What do people need to do that the system does not support today?
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where it is needed
+      description: At least two screens or products. One-off needs are built locally (see CONTRIBUTING.md).
+    validations:
+      required: true
+  - type: textarea
+    id: prior
+    attributes:
+      label: How other systems solve it
+      description: Links to two or three design systems and what you would take from each.
+  - type: textarea
+    id: variants
+    attributes:
+      label: Variants, sizes and states
+    validations:
+      required: true
+  - type: textarea
+    id: a11y
+    attributes:
+      label: Keyboard and screen reader behavior
+      description: The WAI-ARIA pattern it follows, if any, and what a screen reader should announce.
+    validations:
+      required: true
+  - type: textarea
+    id: copy
+    attributes:
+      label: Copy, in English and Turkish

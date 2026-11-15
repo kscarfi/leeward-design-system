@@ -26,6 +26,7 @@ If something here conflicts with a component's own documentation, the component 
 | `components.manifest.json` | Every component: props with types, variants, sizes, do and don't, accessibility, keyboard, a compiling example | Before using a component you have not used in this task |
 | `docs/recipes/*.tsx` | Complete screens that compile: home, transfer, transaction details, settings, loading, empty and error states | Before building a similar screen |
 | `packages/react/src/**/Name.docs.md` | The full page for each component, including its sizing and radius tokens | When you need detail beyond the manifest |
+| `docs/guides/*.md` | How to use color, type, layout, elevation and motion; voice, tone and terminology (English and Turkish); internationalization; the accessibility statement | When you write copy, lay out a screen or localize |
 | Storybook | Every component in every brand and mode, with controls | When you can run it (`pnpm storybook`) |
 
 ## 3. Setup in an app

@@ -1,0 +1,43 @@
+name: Bug report
+description: Something in a Leeward component, token or tool does not work as documented.
+labels: ["bug"]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Component, token or tool
+      placeholder: For example Select, --lw-fill-primary-default, validate_ui
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A link to a reproduction (StackBlitz, CodeSandbox, a story) helps most.
+    validations:
+      required: true
+  - type: input
+    id: setup
+    attributes:
+      label: Version, brand, mode and browser
+      placeholder: "@leeward/react 0.2.0, Business, dark, Safari 18"
+    validations:
+      required: true
+  - type: dropdown
+    id: a11y
+    attributes:
+      label: Is this an accessibility problem?
+      options: ["No", "Yes: keyboard", "Yes: screen reader", "Yes: contrast or color", "Yes: other"]
+    validations:
+      required: true
+  - type: input
+    id: at
+    attributes:
+      label: Assistive technology used, if any
+      placeholder: For example VoiceOver on iOS 18
