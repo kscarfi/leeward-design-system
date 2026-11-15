@@ -21,7 +21,8 @@ Page and section headings. `level` sets the document outline, `size` sets the lo
 
 ## States
 
-- Tones: `default`, `muted`, `primary`, `inverse`.
+- Tones: `default`, `muted`, `primary` (the brand color), `inverse`.
+- On Heading, `primary` is the brand color. Text uses `primary` for the main text color and `brand` for the brand color.
 
 ## Content guidelines
 

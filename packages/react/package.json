@@ -1,6 +1,6 @@
 {
   "name": "@leeward/react",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Leeward Design System for React: accessible components and banking patterns, themed by @leeward/tokens.",
   "keywords": [
     "react",

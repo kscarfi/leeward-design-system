@@ -8,7 +8,7 @@ const meta = {
   title: "Patterns/OTPInput",
   component: OTPInput,
   parameters: { docs: { description: { component: docsDescription(docsMd) } } },
-  args: { onChange: fn(), label: "Verification code", hint: "We sent a 6-digit code to •••• 4821", onComplete: fn() },
+  args: { onValueChange: fn(), label: "Verification code", hint: "We sent a 6-digit code to •••• 4821", onComplete: fn() },
   decorators: [(Story) => <div style={{ maxWidth: "360px" }}><Story /></div>],
 } satisfies Meta<typeof OTPInput>;
 export default meta;

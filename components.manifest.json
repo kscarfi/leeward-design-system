@@ -1,6 +1,6 @@
 {
   "name": "Leeward Design System",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "package": "@leeward/react",
   "setup": [
     "import \"@leeward/react/fonts.css\";",
@@ -5198,20 +5198,38 @@
           ]
         },
         {
+          "name": "masked",
+          "type": "boolean",
+          "required": false,
+          "description": "Controlled state: true shows four dots in place of the balance."
+        },
+        {
+          "name": "defaultMasked",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onMaskedChange",
+          "type": "(masked: boolean) => void",
+          "required": false
+        },
+        {
           "name": "hidden",
           "type": "boolean",
           "required": false,
-          "description": "Controlled hidden state."
+          "deprecated": "Use `masked`. Kept until 2.0."
         },
         {
           "name": "defaultHidden",
           "type": "boolean",
-          "required": false
+          "required": false,
+          "deprecated": "Use `defaultMasked`. Kept until 2.0."
         },
         {
           "name": "onHiddenChange",
           "type": "(hidden: boolean) => void",
-          "required": false
+          "required": false,
+          "deprecated": "Use `onMaskedChange`. Kept until 2.0."
         },
         {
           "name": "meta",
@@ -5278,9 +5296,15 @@
           "required": false
         },
         {
-          "name": "onChange",
+          "name": "onValueChange",
           "type": "(value: string) => void",
           "required": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "deprecated": "Use `onValueChange`. Kept until 2.0."
         },
         {
           "name": "onComplete",

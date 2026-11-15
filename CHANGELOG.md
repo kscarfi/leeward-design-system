@@ -2,6 +2,29 @@
 
 All four packages (`@leeward/react`, `@leeward/tokens`, `@leeward/lint`, `@leeward/mcp-server`) share one version.
 
+## 1.0.0
+
+The first stable version. From here on, the public API follows semantic versioning strictly: anything that removes or renames a component, prop or token, or changes a default, waits for 2.0. See [docs/versioning.md](docs/versioning.md).
+
+### Added
+
+- OTPInput: `onValueChange`, the same name every other input uses.
+- BalanceHeader: `masked`, `defaultMasked` and `onMaskedChange`, the same word AccountCard and AmountDisplay use.
+- `components.manifest.json` marks deprecated props with `deprecated` and what to use instead, so agents and the MCP server can avoid them.
+- Live Storybook at [kscarfi.github.io/leeward-design-system](https://kscarfi.github.io/leeward-design-system/), published on every push to main.
+- The [Figma file](https://www.figma.com/community/file/1703881089318257135/leeward-design-system) on Figma Community, with the same components, variants and props as the code.
+
+### Deprecated
+
+These keep working in every 1.x version and are removed in 2.0:
+
+- OTPInput `onChange`: use `onValueChange`.
+- BalanceHeader `hidden`, `defaultHidden` and `onHiddenChange`: use `masked`, `defaultMasked` and `onMaskedChange`. `hidden` also clashed with the HTML attribute of the same name.
+
+### Changed
+
+- Text and Heading docs explain that `tone="primary"` means the main text color on Text and the brand color on Heading. The names stay as they are in 1.x.
+
 ## 0.3.0
 
 ### Added

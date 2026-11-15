@@ -12,9 +12,15 @@ export interface BalanceHeaderProps {
   balance: number;
   currency: string;
   locale?: Locale;
-  /** Controlled hidden state. */
+  /** Controlled state: true shows four dots in place of the balance. */
+  masked?: boolean;
+  defaultMasked?: boolean;
+  onMaskedChange?: (masked: boolean) => void;
+  /** @deprecated Use `masked`. Kept until 2.0. */
   hidden?: boolean;
+  /** @deprecated Use `defaultMasked`. Kept until 2.0. */
   defaultHidden?: boolean;
+  /** @deprecated Use `onMaskedChange`. Kept until 2.0. */
   onHiddenChange?: (hidden: boolean) => void;
   /** Supporting line, for example "Updated 2 minutes ago". */
   meta?: ReactNode;
@@ -23,28 +29,29 @@ export interface BalanceHeaderProps {
   className?: string;
 }
 
-export function BalanceHeader({ label, balance, currency, locale = "en-US", hidden, defaultHidden = false, onHiddenChange, meta, actions, className }: BalanceHeaderProps) {
+export function BalanceHeader({ label, balance, currency, locale = "en-US", masked, defaultMasked, onMaskedChange, hidden, defaultHidden, onHiddenChange, meta, actions, className }: BalanceHeaderProps) {
   const m = messages(locale);
-  const [internal, setInternal] = useState(defaultHidden);
-  const isHidden = hidden ?? internal;
+  const controlled = masked ?? hidden;
+  const [internal, setInternal] = useState(defaultMasked ?? defaultHidden ?? false);
+  const isMasked = controlled ?? internal;
   const toggle = () => {
-    const next = !isHidden;
-    if (hidden === undefined) setInternal(next);
-    onHiddenChange?.(next);
+    const next = !isMasked;
+    if (controlled === undefined) setInternal(next);
+    (onMaskedChange ?? onHiddenChange)?.(next);
   };
   return (
     <section className={cx(styles.root, className)} aria-label={label}>
       <div className={styles.labelRow}>
         <span className={styles.label}>{label}</span>
         <IconButton
-          icon={isHidden ? "eye" : "eye-off"}
-          label={isHidden ? m.showBalance : m.hideBalance}
+          icon={isMasked ? "eye" : "eye-off"}
+          label={isMasked ? m.showBalance : m.hideBalance}
           size="sm"
-          aria-pressed={isHidden}
+          aria-pressed={isMasked}
           onClick={toggle}
         />
       </div>
-      <AmountDisplay value={balance} currency={currency} locale={locale} size="xl" masked={isHidden} />
+      <AmountDisplay value={balance} currency={currency} locale={locale} size="xl" masked={isMasked} />
       {meta && <p className={styles.meta}>{meta}</p>}
       {actions && <div className={styles.actions}>{actions}</div>}
     </section>

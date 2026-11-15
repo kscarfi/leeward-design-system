@@ -10,7 +10,7 @@ All four packages share one version and follow [semantic versioning](https://sem
 | New component, prop or token; a deprecation | Minor: 0.2.0 to 0.3.0 | A new `shape` prop |
 | Removing or renaming a component, prop or token; changing a default | Major | Removing a deprecated prop |
 
-While the version is below 1.0, a minor version may include a breaking change; it is always listed under "Breaking" in the [changelog](../CHANGELOG.md) with a migration note.
+Since 1.0.0 the public API is stable: components, their props and prop values, CSS variables and the exports of each package. Before 1.0, a minor version could include a breaking change; those are listed under "Breaking" in the [changelog](../CHANGELOG.md) with a migration note.
 
 ## Release cycle
 

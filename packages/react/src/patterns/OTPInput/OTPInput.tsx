@@ -10,6 +10,8 @@ export interface OTPInputProps {
   length?: number;
   value?: string;
   defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  /** @deprecated Use `onValueChange`. Kept until 2.0. */
   onChange?: (value: string) => void;
   /** Called once when every digit is filled. */
   onComplete?: (value: string) => void;
@@ -28,7 +30,7 @@ export interface OTPInputProps {
  * (autocomplete="one-time-code"), password managers and screen readers all work
  * without custom focus juggling.
  */
-export function OTPInput({ label, length = 6, value, defaultValue = "", onChange, onComplete, hint, error, disabled, autoFocus, locale = "en-US", name, id, className }: OTPInputProps) {
+export function OTPInput({ label, length = 6, value, defaultValue = "", onValueChange, onChange, onComplete, hint, error, disabled, autoFocus, locale = "en-US", name, id, className }: OTPInputProps) {
   const ids = useFieldIds({ id, hint, error });
   const inputRef = useRef<HTMLInputElement>(null);
   const [internal, setInternal] = useState(defaultValue);
@@ -39,7 +41,7 @@ export function OTPInput({ label, length = 6, value, defaultValue = "", onChange
   const update = (raw: string) => {
     const next = raw.replace(/\D/g, "").slice(0, length);
     if (value === undefined) setInternal(next);
-    onChange?.(next);
+    (onValueChange ?? onChange)?.(next);
     if (next.length === length && code.length !== length) onComplete?.(next);
   };
 

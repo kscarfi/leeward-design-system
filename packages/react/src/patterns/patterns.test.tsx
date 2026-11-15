@@ -40,12 +40,19 @@ describe("AmountDisplay", () => {
 
 describe("BalanceHeader", () => {
   it("toggles hidden state with a pressed button", async () => {
-    const onHiddenChange = vi.fn();
-    render(<BalanceHeader label="Available balance" balance={100} currency="TRY" onHiddenChange={onHiddenChange} />);
+    const onMaskedChange = vi.fn();
+    render(<BalanceHeader label="Available balance" balance={100} currency="TRY" onMaskedChange={onMaskedChange} />);
     expect(screen.getByRole("region", { name: "Available balance" })).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Hide balance" }));
-    expect(onHiddenChange).toHaveBeenCalledWith(true);
+    expect(onMaskedChange).toHaveBeenCalledWith(true);
     expect(screen.getByRole("button", { name: "Show balance" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("still accepts the deprecated hidden props", async () => {
+    const onHiddenChange = vi.fn();
+    render(<BalanceHeader label="Available balance" balance={100} currency="TRY" defaultHidden onHiddenChange={onHiddenChange} />);
+    await userEvent.click(screen.getByRole("button", { name: "Show balance" }));
+    expect(onHiddenChange).toHaveBeenCalledWith(false);
   });
 });
 
@@ -101,6 +108,16 @@ describe("OTPInput", () => {
     expect(input).toHaveValue("482913");
     expect(onComplete).toHaveBeenCalledOnce();
     expect(onComplete).toHaveBeenCalledWith("482913");
+  });
+
+  it("reports every change with onValueChange, and with the deprecated onChange", async () => {
+    const onValueChange = vi.fn();
+    const onChange = vi.fn();
+    render(<><OTPInput label="New" onValueChange={onValueChange} /><OTPInput label="Old" onChange={onChange} /></>);
+    await userEvent.type(screen.getByLabelText("New"), "12");
+    await userEvent.type(screen.getByLabelText("Old"), "3");
+    expect(onValueChange).toHaveBeenLastCalledWith("12");
+    expect(onChange).toHaveBeenLastCalledWith("3");
   });
 
   it("links the error message", () => {

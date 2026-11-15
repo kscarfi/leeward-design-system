@@ -9,7 +9,7 @@ const meta = {
   title: "Patterns/BalanceHeader",
   component: BalanceHeader,
   parameters: { docs: { description: { component: docsDescription(docsMd) } } },
-  args: { onHiddenChange: fn(), label: "Available balance", balance: 24580.35, currency: "TRY", locale: "tr-TR", meta: "Updated 2 minutes ago" },
+  args: { onMaskedChange: fn(), label: "Available balance", balance: 24580.35, currency: "TRY", locale: "tr-TR", meta: "Updated 2 minutes ago" },
 } satisfies Meta<typeof BalanceHeader>;
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -23,7 +23,7 @@ export const Default: Story = {
     await expect(canvas.getByText("Bakiye gizli")).toBeInTheDocument();
   },
 };
-export const Hidden: Story = { args: { defaultHidden: true } };
+export const Hidden: Story = { args: { defaultMasked: true } };
 export const English: Story = { args: { locale: "en-US" } };
 export const WithActions: Story = {
   args: {

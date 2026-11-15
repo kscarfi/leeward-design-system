@@ -174,7 +174,7 @@ Every number below is printed by a script or test runner in this repository, and
 | Control sizes | A story measures every control at sm, md and lg, rounded and pill, against its height token. A token test checks heights increase and radii never shrink. |
 | Layout | No story scrolls sideways on a 360 px screen. |
 | Visual regression | Every story is compared with committed screenshots in Leeward light, Leeward dark and Business light. |
-| Unit tests (`pnpm test`) | 127 tests: React 101, MCP server 11, lint rules 7, tokens 8. |
+| Unit tests (`pnpm test`) | 129 tests: React 103, MCP server 11, lint rules 7, tokens 8. |
 | Docs | 79 code examples and screen recipes compile; every recipe passes `validate_ui`; every component has docs, stories and tests; token tables and links are checked. |
 | Packages (`pnpm smoke:packages`) | The packed packages are installed into a clean project with npm: types, production build, tokens, lint rules and the MCP server are checked. |
 | Lint and copy | No raw colors, no unknown or primitive tokens, spacing and type on scale, no icon-only money actions, no red amounts, no em dashes. |

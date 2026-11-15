@@ -12,6 +12,8 @@ export interface ManifestProp {
   required: boolean;
   description?: string;
   values?: string[];
+  /** What to use instead, from the prop's @deprecated tag. Agents should not use deprecated props. */
+  deprecated?: string;
 }
 
 export interface ManifestComponent {
@@ -94,12 +96,15 @@ function propsOf(file: string, interfaceName: string): ManifestProp[] {
     if (literals.length > 0 && literals.length === (type as ts.UnionType).types.filter((t) => !(t.flags & ts.TypeFlags.Undefined)).length) typeText = literals.map((v) => JSON.stringify(v)).join(" | ");
     else if (/^[A-Z]\w+$/.test(typeText) && resolved.includes("|") && resolved.length < 400) typeText = resolved;
     const description = symbol ? ts.displayPartsToString(symbol.getDocumentationComment(checker)).trim() : "";
+    const deprecatedTag = symbol?.getJsDocTags(checker).find((tag) => tag.name === "deprecated");
+    const deprecated = deprecatedTag ? ts.displayPartsToString(deprecatedTag.text).trim() || "Deprecated." : undefined;
     props.push({
       name,
       type: typeText,
       required: !member.questionToken,
       ...(description ? { description } : {}),
       ...(literals.length > 1 ? { values: literals } : {}),
+      ...(deprecated ? { deprecated } : {}),
     });
   }
   return props;

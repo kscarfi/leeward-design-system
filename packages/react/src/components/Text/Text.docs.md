@@ -24,6 +24,7 @@ Body text, labels, subtitles, captions and inline code, using the type roles and
 ## States
 
 - Tones: `primary` (default text), `secondary` (muted), `tertiary` (subtle), `brand`, `success`, `warning`, `danger`, `inverse`.
+- On Text, `primary` means the main text color. For the brand color use `brand`. Heading uses `primary` for the brand color, so check the component when you copy a tone.
 
 ## Content guidelines
 

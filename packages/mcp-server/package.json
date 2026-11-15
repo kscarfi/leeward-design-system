@@ -1,6 +1,6 @@
 {
   "name": "@leeward/mcp-server",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "MCP server that gives AI agents the Leeward Design System: tokens, components, guidelines and a UI validator.",
   "keywords": [
     "mcp",
