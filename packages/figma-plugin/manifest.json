@@ -1,0 +1,9 @@
+{
+  "name": "Leeward Design System builder",
+  "id": "leeward-design-system-builder",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": { "allowedDomains": ["none"] }
+}
