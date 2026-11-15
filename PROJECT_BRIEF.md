@@ -8,7 +8,7 @@
 
 ## 1. What this project is
 
-Leeward Design System is an open-source, AI-ready design system for a fictional digital bank called **Leeward**. It is built from zero in 7 working days, in public, as a portfolio showcase.
+Leeward Design System is an open-source, AI-ready design system for **Leeward**, a concept digital bank. It is built from zero in 7 working days, in public, as a portfolio showcase.
 
 It is **not a commercial product** and earns no money. Its only job is to prove, with evidence anyone can inspect, that Kemal can use AI as serious infrastructure for UI/UX work: faster, scalable, sustainable and of high quality.
 
@@ -35,7 +35,7 @@ The project is done when all of these are true:
 
 ## 2. The brand: Leeward
 
-All of this is fictional. Leeward is not a real company and must not resemble any real bank's branding.
+Leeward is a concept, not a real company, and must not resemble any real bank's branding.
 
 ### Name and story
 
@@ -314,7 +314,7 @@ Rules:
 
 ## 9. README outline (public face)
 
-1. One-line pitch: *An open-source, AI-ready design system for a fictional digital bank, built in 7 days.*
+1. One-line pitch: *An open-source, AI-ready design system for a concept digital bank, built in 7 days.*
 2. A hero image or GIF of the docs site
 3. Why it exists (the one question from section 1)
 4. What is inside (tokens, components, patterns, themes, governance, agent layer)
