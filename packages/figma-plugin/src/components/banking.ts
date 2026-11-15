@@ -101,8 +101,7 @@ export async function buildPaymentCard() {
       const on = frozen ? "fill.neutral.on-default" : "fill.primary.on-default";
       const badge = frozen ? await box({ name: "Frozen", dir: "row", cross: "center", gap: "space.2xs", px: "space.sm", py: "space.2xs", radius: "radius.pill", fill: "fill.surface.default", effect: "200" }, [icon("lock", "icon-size.sm", "text.default"), await text("Frozen", "label.sm", "text.default")]) : await text("Debit", "label.sm", on, { name: "Type" });
       const top = await box({ name: "Top", dir: "row", main: "between", cross: "center", w: "fill" }, [await text("Leeward", "heading.h5", on, { name: "#Brand" }), badge]);
-      const number = await text("••••  ••••  ••••  4821", "code", on, { name: "#Number" });
-      number.fontSize = 20;
+      const number = await text("••••  ••••  ••••  4821", "amount.md", on, { name: "#Number", mono: true });
       const col = async (caption: string, value: string, prop: string, end = false) => box({ name: caption, dir: "column", cross: end ? "end" : "start" }, [await text(caption, "caption", on), await text(value, "label.md", on, { name: `#${prop}` })]);
       const bottom = await box({ name: "Bottom", dir: "row", main: "between", cross: "end", w: "fill" }, [await col("Everyday debit", "Ece Kaya", "Holder"), await col("Expires", "08/28", "Expiry", true)]);
       const c = await comp({ dir: "column", main: "between", px: "payment-card.padding", py: "payment-card.padding", radius: "payment-card.radius", w: 340, h: 214, fill: frozen ? "fill.neutral.default" : "fill.primary.default", effect: frozen ? "100" : "300" }, [top, number, bottom]);
@@ -163,7 +162,7 @@ export async function buildRecipientRow() {
       const star = icon("star", "icon-size.sm", "icon.attention", "bold");
       star.visible = p.favorite === "true";
       const name = await box({ name: "Name", dir: "row", cross: "center", gap: "space.2xs" }, [await text("Deniz Yılmaz", "label.md", "text.default", { name: "#Name" }), star]);
-      const texts = await box({ name: "Text", dir: "column" }, [name, await text("Leeward · TR•• •••• •••• •••• •••• ••13 26", "body.sm", "text.muted", { name: "#Detail", truncate: true })]);
+      const texts = await box({ name: "Text", dir: "column", w: "fill" }, [name, await text("Leeward · TR•• •••• •••• •••• •••• ••13 26", "body.sm", "text.muted", { name: "#Detail", truncate: true, w: "fill" })]);
       const chevron = icon("chevron-right", "icon-size.md", "icon.muted");
       chevron.visible = p.kind === "choosable";
       return comp({ dir: "row", cross: "center", gap: "space.sm", px: "space.md", py: "space.sm", w: 360, fill: "fill.surface.default" }, [instance("Avatar", { tone: "primary", size: "md" }, { Initials: "DY" }), fillParent(texts), chevron]);
@@ -181,6 +180,10 @@ export async function buildSavingsGoal() {
       const top = await box({ name: "Top", dir: "row", cross: "center", gap: "space.sm" }, [instance("_Icon tile", { tone: "secondary", shape: "circle" }, {}, {}, { Icon: reached ? "laptop" : "airplane" }), await box({ name: "Titles", dir: "column" }, [await text(reached ? "New laptop" : "Holiday fund", "heading.h5", "text.default", { name: "Name" }), await text("By June 1, 2027", "body.sm", "text.muted", { name: "#Meta" })])]);
       const amounts = await box({ name: "Amounts", dir: "row", cross: "baseline", gap: "space.xs" }, [instance("AmountDisplay", { direction: "neutral", size: "lg" }, { Amount: reached ? "₺31.200,00" : "₺18.500,00" }), await text("of ₺30.000,00", "body.sm", "text.muted", { name: "#Target" })]);
       const progress = instance("ProgressBar", { tone: reached ? "success" : "brand", size: "md" }, { Label: "Progress", Value: reached ? "Goal reached" : "61% saved" });
+      // The bar shows the real share of the target: 61% in progress, full when reached.
+      const bar = progress?.findOne((n) => n.name === "Indicator") as RectangleNode | null;
+      const track = progress?.findOne((n) => n.name === "Track") as FrameNode | null;
+      if (bar && track) bar.resize(Math.round((track.width || 320) * (reached ? 1 : 0.61)), bar.height);
       const action = reached ? null : await box({ name: "Action", dir: "row" }, [instance("Button", { variant: "secondary", shape: "rounded", size: "sm", state: "default" }, { Label: "Add money" }, { "Show icon start": true }, { "Icon start": "plus" })]);
       return card([top, amounts, progress ? fillParent(progress) : null, action]);
     },

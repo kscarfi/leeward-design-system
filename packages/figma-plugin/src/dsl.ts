@@ -1,7 +1,7 @@
 // A small drawing kit. Every color, size, radius and gap is bound to a Leeward variable, so a
 // component built here changes with the mode, exactly like the React component changes with the theme.
 import type { Library } from "./variables.ts";
-import { textStyles, effectStyles } from "./styles.ts";
+import { effectStyles, styleFor } from "./styles.ts";
 import { problems } from "./util.ts";
 
 let lib: Library | undefined;
@@ -147,14 +147,42 @@ export async function style(node: FrameNode | ComponentNode, o: BoxOptions): Pro
   if (o.minW !== undefined) bindNum(node, "minWidth", o.minW);
   if (o.maxW !== undefined) bindNum(node, "maxWidth", o.maxW);
   if (o.w === "fill" || o.h === "fill") fillParent(node, o.w === "fill" && o.h === "fill" ? "wh" : o.w === "fill" ? "w" : "h");
-  if (o.effect) {
+  const ringOnly = Boolean(o.effect?.startsWith("focus")) && !o.fill;
+  if (o.effect && !ringOnly) {
     const effect = effectStyles.get(o.effect);
     if (effect) await node.setEffectStyleIdAsync(effect.id);
     else problems.push(`No effect style ${o.effect}`);
   }
   // Figma draws shadow spread only on frames that clip content, and focus rings are pure spread.
-  node.clipsContent = o.clip ?? Boolean(o.effect?.startsWith("focus"));
+  node.clipsContent = o.clip ?? (Boolean(o.effect?.startsWith("focus")) && !ringOnly);
+  // A frame without a fill casts no shadow, so its focus ring is drawn as a stroke once its size is known.
+  if (ringOnly) rings.set(node, o.effect!);
   if (o.opacity !== undefined) node.opacity = o.opacity;
+}
+
+const rings = new WeakMap<SceneNode, string>();
+
+/**
+ * Draws the focus ring of a frame without a fill: a stroke in the focus color, 2 px outside the
+ * element with a 2 px gap (or on its inner edge for focus-inset). It stretches with the frame.
+ */
+export function finish(node: FrameNode | ComponentNode): void {
+  const kind = rings.get(node);
+  if (!kind) return;
+  const offset = kind === "focus-inset" ? 0 : 4;
+  const ring = figma.createRectangle();
+  ring.name = "Focus ring";
+  node.appendChild(ring);
+  if (node.layoutMode !== "NONE") ring.layoutPositioning = "ABSOLUTE";
+  ring.x = -offset;
+  ring.y = -offset;
+  ring.resize(Math.max(1, node.width + offset * 2), Math.max(1, node.height + offset * 2));
+  ring.constraints = { horizontal: "STRETCH", vertical: "STRETCH" };
+  ring.fills = [];
+  ring.strokes = [paint(kind === "focus-danger" ? "border.danger" : kind === "focus-inverse" ? "border.inverse" : "border.focus")];
+  ring.strokeAlign = "INSIDE";
+  bindNum(ring, "strokeWeight", "size.focus-ring.width");
+  ring.cornerRadius = (typeof node.topLeftRadius === "number" ? node.topLeftRadius : 0) + offset;
 }
 
 /** An auto layout frame. */
@@ -162,6 +190,7 @@ export async function box(o: BoxOptions, children: Array<SceneNode | null | unde
   const frame = figma.createFrame();
   await style(frame, o);
   append(frame, children);
+  finish(frame);
   return frame;
 }
 
@@ -176,6 +205,8 @@ export interface TextOptions {
   /** Marks amounts. Figma has no API for tabular figures, so this only documents intent. */
   numeric?: boolean;
   weight?: "Regular" | "Medium" | "SemiBold" | "Bold";
+  /** IBM Plex Mono at the role's size. */
+  mono?: boolean;
 }
 
 /** "labelSm" (the CSS module class) and "label.sm" (the token) both work. */
@@ -188,20 +219,14 @@ export function role(name: string): string {
 export async function text(characters: string, typeRole: string, color: string, o: TextOptions = {}): Promise<TextNode> {
   const node = figma.createText();
   const r = role(typeRole);
-  const s = textStyles.get(r);
+  // Weight, family and decoration come from a style variation, so the text stays linked to a text style.
+  const s = await styleFor(r, { weight: o.weight, mono: o.mono, decoration: o.strike ? "STRIKETHROUGH" : o.underline ? "UNDERLINE" : undefined });
   if (s) await node.setTextStyleIdAsync(s.id);
   else problems.push(`No text style ${r}`);
-  if (o.weight) {
-    const font = { family: (node.fontName as FontName).family, style: o.weight };
-    await figma.loadFontAsync(font);
-    node.fontName = font;
-  }
   node.characters = characters;
   node.fills = [paint(color)];
   node.name = o.name ?? characters.slice(0, 40);
   if (o.align) node.textAlignHorizontal = o.align === "left" ? "LEFT" : o.align === "center" ? "CENTER" : "RIGHT";
-  if (o.strike) node.textDecoration = "STRIKETHROUGH";
-  if (o.underline) node.textDecoration = "UNDERLINE";
   if (o.truncate) {
     node.textTruncation = "ENDING";
     node.maxLines = 1;
@@ -252,5 +277,8 @@ export function ellipse(o: { name?: string; size: Num; fill?: string; stroke?: s
 export function setMode(node: FrameNode, modeName: string): void {
   const l = library();
   const id = l.modeIds[modeName];
-  if (id) node.setExplicitVariableModeForCollection(l.collection, id);
+  if (id) node.setExplicitVariableModeForCollection(l.collections.Color, id);
+  // Dimensions follow the brand only: "Business Dark" uses the Business sizes.
+  const brandId = l.brandModeIds[modeName.split(" ")[0]!];
+  if (brandId) node.setExplicitVariableModeForCollection(l.collections.Dimension, brandId);
 }

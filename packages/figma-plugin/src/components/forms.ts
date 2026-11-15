@@ -5,7 +5,8 @@ import { icon } from "../icons.ts";
 import { comp, instance, instances, variantSet, type Props } from "../kit.ts";
 
 const W = 320;
-const FIELD_STATES = ["default", "hover", "focus", "filled", "error", "disabled"];
+// typing: focused with a value, so placeholder and value states both have a focused look.
+const FIELD_STATES = ["default", "hover", "focus", "typing", "filled", "error", "disabled"];
 const hidden = <T extends SceneNode>(node: T): T => {
   node.visible = false;
   return node;
@@ -35,7 +36,7 @@ export async function buildInput() {
       const pill = p.shape === "pill";
       const state = p.state!;
       const disabled = state === "disabled";
-      const filled = state === "filled" || state === "error" || disabled;
+      const filled = state === "filled" || state === "typing" || state === "error" || disabled;
       const role = size === "sm" ? "body.sm" : size === "lg" ? "body.lg" : "body.md";
       const iconColor = disabled ? "icon.subtler" : "icon.muted";
       const steppers = await box({ name: "?Steppers", dir: "row", gap: "space.3xs" }, instances([
@@ -61,7 +62,7 @@ export async function buildInput() {
         fill: disabled ? "fill.disabled.default" : "fill.surface.default",
         stroke: state === "error" ? "border.danger" : disabled ? "border.subtle" : state === "hover" ? "border.strong" : "border.default",
         strokeWidth: state === "error" ? "input.border-width-invalid" : "input.border-width",
-        ...(state === "focus" ? { effect: "focus" } : {}),
+        ...(state === "focus" || state === "typing" ? { effect: "focus" } : {}),
       }, [start, hidden(await text("₺", role, "text.muted", { name: "?#Prefix" })), fillParent(placeholder), fillParent(value), hidden(await text("unit", role, "text.muted", { name: "?#Suffix" })), hidden(steppers), end]);
     },
     { description: "The control inside TextField, Select, SearchField, NumberInput, AmountInput, Combobox and DatePicker. Turn slots on with the Show properties and swap the icons." },
@@ -151,9 +152,9 @@ export async function buildSelect() {
 export async function buildSearchField() {
   return variantSet(
     "SearchField",
-    { shape: ["rounded", "pill"], size: ["sm", "md"], state: ["default", "focus", "filled"] },
+    { shape: ["rounded", "pill"], size: ["sm", "md"], state: ["default", "focus", "typing", "filled"] },
     async (p) =>
-      field({ label: "Search transactions", input: p, texts: { Placeholder: "Merchant or amount", Value: "Coffee" }, flags: { "Show icon start": true, "Show icon end": p.state === "filled" }, swaps: { "Icon start": "search", "Icon end": "close" } }),
+      field({ label: "Search transactions", input: p, texts: { Placeholder: "Merchant or amount", Value: "Coffee" }, flags: { "Show icon start": true, "Show icon end": p.state === "filled" || p.state === "typing" }, swaps: { "Icon start": "search", "Icon end": "close" } }),
     { description: "Searches a list. The clear button appears once there is text." },
   );
 }
@@ -163,7 +164,7 @@ export async function buildNumberInput() {
     "NumberInput",
     { state: ["default", "focus", "error", "disabled"] },
     async (p) =>
-      field({ label: "Loan term", input: { shape: "rounded", size: "md", state: p.state === "default" ? "filled" : p.state! }, texts: { Placeholder: "0", Value: p.state === "error" ? "48" : "12", Suffix: "months" }, flags: { "Show suffix": true, Steppers: true }, hint: "Between 3 and 36 months", ...(p.state === "error" ? { error: "Choose between 3 and 36 months" } : {}) }),
+      field({ label: "Loan term", input: { shape: "rounded", size: "md", state: p.state === "default" ? "filled" : p.state === "focus" ? "typing" : p.state! }, texts: { Placeholder: "0", Value: p.state === "error" ? "48" : "12", Suffix: "months" }, flags: { "Show suffix": true, Steppers: true }, hint: "Between 3 and 36 months", ...(p.state === "error" ? { error: "Choose between 3 and 36 months" } : {}) }),
     { description: "A number with step buttons and a unit. Typing works too; arrow keys step by one." },
   );
 }
@@ -173,7 +174,7 @@ export async function buildAmountInput() {
     "AmountInput",
     { state: ["default", "focus", "error"] },
     async (p) =>
-      field({ label: "Amount", input: { shape: "rounded", size: "lg", state: p.state === "default" ? "filled" : p.state! }, texts: { Prefix: "₺", Value: p.state === "error" ? "30.000,00" : "1.250,50" }, flags: { "Show prefix": true }, hint: "Available: ₺24.580,35", ...(p.state === "error" ? { error: "This is more than you have. You can send up to ₺24.580,35." } : {}) }),
+      field({ label: "Amount", input: { shape: "rounded", size: "lg", state: p.state === "default" ? "filled" : p.state === "focus" ? "typing" : p.state! }, texts: { Prefix: "₺", Value: p.state === "error" ? "30.000,00" : "1.250,50" }, flags: { "Show prefix": true }, hint: "Available: ₺24.580,35", ...(p.state === "error" ? { error: "This is more than you have. You can send up to ₺24.580,35." } : {}) }),
     { description: "Money in the person's locale, with the currency shown and the available balance as the hint." },
   );
 }
@@ -190,7 +191,7 @@ export async function buildCombobox() {
     async (p) => {
       const open = p.state === "open";
       const list = open ? await menuList([[{ state: "selected" }, { Label: "Türkiye İş Bankası" }], [{ state: "default" }, { Label: "İş Yatırım" }], [{ state: "default" }, { Label: "Ziraat Bankası" }]]) : null;
-      return field({ label: "Bank", input: { shape: "rounded", size: "md", state: open ? "focus" : p.state! }, texts: { Placeholder: "Start typing a bank name", Value: open ? "iş" : "Türkiye İş Bankası" }, flags: { "Show icon end": true }, swaps: { "Icon end": "chevron-down" }, extra: list, ...(p.state === "error" ? { error: "Choose the recipient's bank" } : {}) });
+      return field({ label: "Bank", input: { shape: "rounded", size: "md", state: open ? "typing" : p.state! }, texts: { Placeholder: "Start typing a bank name", Value: open ? "iş" : "Türkiye İş Bankası" }, flags: { "Show icon end": true }, swaps: { "Icon end": "chevron-down" }, extra: list, ...(p.state === "error" ? { error: "Choose the recipient's bank" } : {}) });
     },
     { description: "Type to filter a long list of _Menu item options, then pick one. Matching ignores accents and Turkish dotted and dotless i." },
   );
@@ -244,7 +245,7 @@ export async function buildDatePicker() {
     { state: ["default", "filled", "open", "error"] },
     async (p) => {
       const popover = p.state === "open" ? await box({ name: "Popover", dir: "column", radius: "popover.radius", fill: "fill.surface.overlay", stroke: "border.muted", effect: "500" }, [instance("Calendar")]) : null;
-      return field({ label: "Send on", input: { shape: "rounded", size: "md", state: p.state === "open" ? "focus" : p.state! }, texts: { Placeholder: "MM/DD/YYYY", Value: "11/18/2026" }, flags: { "Show icon end": true }, swaps: { "Icon end": "calendar" }, hint: "MM/DD/YYYY", extra: popover, ...(p.state === "error" ? { error: "Enter a date as MM/DD/YYYY." } : {}) });
+      return field({ label: "Send on", input: { shape: "rounded", size: "md", state: p.state === "open" ? "typing" : p.state! }, texts: { Placeholder: "MM/DD/YYYY", Value: "11/18/2026" }, flags: { "Show icon end": true }, swaps: { "Icon end": "calendar" }, hint: "MM/DD/YYYY", extra: popover, ...(p.state === "error" ? { error: "Enter a date as MM/DD/YYYY." } : {}) });
     },
     { description: "Type a date or pick it from the calendar. The format hint follows the locale." },
   );

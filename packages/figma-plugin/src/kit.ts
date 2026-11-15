@@ -1,5 +1,5 @@
 // Variant sets, component properties and instances of components built earlier.
-import { style, append, type BoxOptions } from "./dsl.ts";
+import { append, finish, style, type BoxOptions } from "./dsl.ts";
 import { problems } from "./util.ts";
 import { iconComponents } from "./icons.ts";
 
@@ -21,6 +21,7 @@ export async function comp(o: BoxOptions, children: Array<SceneNode | null | und
   const c = figma.createComponent();
   await style(c, o);
   append(c, children);
+  finish(c);
   return c;
 }
 
@@ -68,6 +69,15 @@ export async function variantSet(
   return result;
 }
 
+/** Where each column and row of a variant grid sits, so the docs can label them. */
+export interface GridLabels {
+  colKey: string;
+  rowKeys: string[];
+  cols: Array<{ label: string; x: number; w: number }>;
+  rows: Array<{ label: string; y: number; h: number }>;
+}
+export const gridLabels = new WeakMap<ComponentSetNode, GridLabels>();
+
 function grid(set: ComponentSetNode, keys: string[], combos: Props[]): void {
   const gap = 24;
   const pad = 32;
@@ -88,6 +98,12 @@ function grid(set: ComponentSetNode, keys: string[], combos: Props[]): void {
     node.y = pad + rowH.slice(0, ri).reduce((a, b) => a + b + gap, 0);
   }
   set.resizeWithoutConstraints(pad * 2 + colW.reduce((a, b) => a + b, 0) + gap * (cols.length - 1), pad * 2 + rowH.reduce((a, b) => a + b, 0) + gap * (rows.length - 1));
+  gridLabels.set(set, {
+    colKey: cap(colKey),
+    rowKeys: keys.slice(0, -1).map(cap),
+    cols: cols.map((label, i) => ({ label, x: pad + colW.slice(0, i).reduce((a, b) => a + b + gap, 0), w: colW[i]! })),
+    rows: rows.map((label, i) => ({ label: label.split("|").join(" · "), y: pad + rowH.slice(0, i).reduce((a, b) => a + b + gap, 0), h: rowH[i]! })),
+  });
 }
 
 async function wireProps(owner: ComponentNode | ComponentSetNode, variants: ComponentNode[]): Promise<void> {

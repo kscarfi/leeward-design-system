@@ -129,16 +129,16 @@ export async function buildListItem() {
       const interactive = p.kind !== "static";
       return comp({ dir: "row", cross: "center", gap: "space.sm", px: "list-item.padding-x", py: "list-item.padding-y", w: 360, fill: interactive && p.state === "hover" ? "fill.surface.bold" : "fill.surface.default", ...(interactive && p.state === "focus" ? { effect: "focus-inset" } : {}) }, [lead, fillParent(texts), end]);
     },
-    { description: "A row in a list: static text, a button, a link or a row with a switch. Built from _Icon tile and, for toggles, _Switch track." },
+    { skip: (p) => p.kind === "static" && p.state !== "default", description: "A row in a list: static text, a button, a link or a row with a switch. Built from _Icon tile and, for toggles, _Switch track." },
   );
 }
 
 export async function buildTable() {
   await variantSet(
     "_Table cell",
-    { kind: ["header", "body", "body-end"] },
+    { kind: ["header", "header-end", "body", "body-end"] },
     async (p) => {
-      if (p.kind === "header") return comp({ dir: "row", cross: "center", gap: "space.2xs", px: "table.cell-padding-x", h: "table.header-height", w: 140, fill: "fill.surface.bold", stroke: "border.default", strokeSides: { bottom: true }, strokeWidth: 1 }, [await text("Merchant", "label.sm", "text.muted", { name: "#Label" }), Object.assign(icon("arrows-up-down", "icon-size.sm", "icon.subtler"), { name: "?Sort" })]);
+      if (p.kind!.startsWith("header")) return comp({ dir: "row", cross: "center", main: p.kind === "header-end" ? "end" : "start", gap: "space.2xs", px: "table.cell-padding-x", h: "table.header-height", w: 140, fill: "fill.surface.bold", stroke: "border.default", strokeSides: { bottom: true }, strokeWidth: 1 }, [await text("Merchant", "label.sm", "text.muted", { name: "#Label" }), Object.assign(icon("arrows-up-down", "icon-size.sm", "icon.subtler"), { name: "?Sort" })]);
       const end = p.kind === "body-end";
       return comp({ dir: "row", cross: "center", main: end ? "end" : "start", px: "table.cell-padding-x", py: "table.cell-padding-y", w: 140, stroke: "border.subtle", strokeSides: { bottom: true }, strokeWidth: 1 }, [await text(end ? "−₺642,40" : "Migros", "body.sm", "text.default", { name: "#Value", numeric: end })]);
     },
@@ -154,8 +154,14 @@ export async function buildTable() {
         if (n) n.resize(w, n.height);
         return n;
       };
-      const header = await box({ name: "Header", dir: "row" }, cols.map((c) => sized(instance("_Table cell", { kind: "header" }, { Label: c.name }), c.w)));
-      const body = await Promise.all(rows.map((r, ri) => box({ name: `Row ${ri + 1}`, dir: "row" }, r.map((v, i) => sized(instance("_Table cell", { kind: cols[i]!.end ? "body-end" : "body" }, { Value: v }), cols[i]!.w)))));
+      const header = await box({ name: "Header", dir: "row" }, cols.map((c) => sized(instance("_Table cell", { kind: c.end ? "header-end" : "header" }, { Label: c.name }), c.w)));
+      const body = await Promise.all(rows.map((r, ri) => box({ name: `Row ${ri + 1}`, dir: "row" }, r.map((v, i) => {
+        const cell = sized(instance("_Table cell", { kind: cols[i]!.end ? "body-end" : "body" }, { Value: v }), cols[i]!.w);
+        // Incoming money keeps its color, as in AmountDisplay.
+        const t = v.startsWith("+") ? (cell?.findOne((n) => n.type === "TEXT") as TextNode | null) : null;
+        if (t) t.fills = [paint("amount.incoming")];
+        return cell;
+      }))));
       const caption = await box({ name: "Caption", dir: "row", px: "table.cell-padding-x", py: "table.cell-padding-y" }, [await text("Transactions in November", "heading.h5", "text.default", { name: "#Caption" })]);
       return comp({ dir: "column", radius: "table.radius", fill: "fill.surface.default", stroke: "border.subtle", clip: true }, [caption, header, ...body]);
     },

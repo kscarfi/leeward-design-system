@@ -58,7 +58,9 @@ export async function buildToast() {
       const t = p.tone!;
       const iconTone = t === "neutral" ? "info" : t;
       const wrap = await box({ name: "Icon", dir: "row", main: "center", cross: "center", w: "size.avatar.md", h: "size.avatar.md", radius: "radius.pill", fill: `fill.${iconTone}.weak` }, [icon(TONE_ICON[t]!, "icon-size.md", `icon.${iconTone}-on-subtle`, "bold")]);
-      const texts = await box({ name: "Text", dir: "column" }, [await text("Money sent", "label.md", "text.default", { name: "#Title" }), await text("Deniz gets ₺250,00 in a few seconds.", "body.sm", "text.muted", { name: "#Description" })]);
+      const copy: Record<string, [string, string]> = { success: ["Money sent", "Deniz gets ₺250,00 in a few seconds."], neutral: ["Statement ready", "Your November statement is in Documents."], warning: ["Card limit almost reached", "You have ₺800 left for today."], danger: ["Payment failed", "Nothing left your account. Try again."] };
+      const [title, body] = copy[t]!;
+      const texts = await box({ name: "Text", dir: "column" }, [await text(title, "label.md", "text.default", { name: "Title", w: "fill" }), await text(body, "body.sm", "text.muted", { name: "Description", w: "fill" })]);
       const action = p.action === "true" ? await box({ name: "Action", dir: "row", cross: "center", px: "space.sm", h: "size.control.sm", radius: "radius.control" }, [await text("Undo", "label.sm", "text.link-default", { name: "#Action" })]) : null;
       return comp({ dir: "row", cross: "center", gap: "space.sm", px: "toast.padding", py: "toast.padding", radius: "toast.radius", fill: "fill.surface.overlay", stroke: "border.muted", effect: "600", w: 400 }, [wrap, fillParent(texts), action, close()]);
     },
@@ -215,7 +217,7 @@ export async function buildSheet() {
       const header = await box({ name: "Header", dir: "row", main: "between", cross: "center", w: "fill" }, [await text(p.side === "start" ? "Menu" : "Filter transactions", "heading.h3", "text.default", { name: "#Title" }), close()]);
       const content =
         p.side === "start"
-          ? await box({ name: "Content", dir: "column", w: "fill" }, [instance("ListItem", { kind: "link" }, { Title: "Home" }), instance("ListItem", { kind: "link" }, { Title: "Payments" }), instance("ListItem", { kind: "link" }, { Title: "Cards" })])
+          ? await box({ name: "Content", dir: "column", w: "fill" }, [instance("ListItem", { kind: "link", state: "default" }, { Title: "Home" }, { "Show description": false }), instance("ListItem", { kind: "link", state: "default" }, { Title: "Payments" }, { "Show description": false }), instance("ListItem", { kind: "link", state: "default" }, { Title: "Cards" }, { "Show description": false })])
           : await box({ name: "Content", dir: "column", gap: "space.sm", w: "fill" }, [instance("Checkbox", { checked: "true", state: "default" }, { Label: "Money in" }), instance("Checkbox", { checked: "true", state: "default" }, { Label: "Money out" }), instance("Checkbox", { checked: "false", state: "default" }, { Label: "Pending only" })]);
       for (const c of content.children) if (c.type === "INSTANCE") c.layoutSizingHorizontal = "FILL";
       const parts: SceneNode[] = [header, content];

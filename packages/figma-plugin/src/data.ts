@@ -5,6 +5,7 @@ import businessLight from "../../tokens/dist/ts/business.light.json";
 import businessDark from "../../tokens/dist/ts/business.dark.json";
 import primitives from "../../tokens/src/primitive/color.json";
 import manifest from "../../../components.manifest.json";
+import reactPackage from "../../react/package.json";
 import { iconData } from "../../react/src/components/Icon/icons.generated.ts";
 
 export interface Token {
@@ -49,3 +50,6 @@ export interface ManifestComponent {
 export const components = (manifest as { components: ManifestComponent[] }).components;
 
 export const icons = iconData as Record<string, Record<"linear" | "bold" | "duotone", string>>;
+
+/** The package version the file is generated from. */
+export const version = (reactPackage as { version: string }).version;

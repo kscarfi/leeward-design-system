@@ -3,6 +3,7 @@
 import { icons } from "./data.ts";
 import { iconMeta } from "../../react/src/components/Icon/iconMeta.ts";
 import { bindNum, box, paint, text } from "./dsl.ts";
+import { docPage } from "./docs.ts";
 
 /** Linear weight of each icon, the one components use. */
 export const iconComponents = new Map<string, ComponentNode>();
@@ -65,11 +66,13 @@ export async function buildIcons(page: PageNode): Promise<FrameNode> {
     );
     sections.push(await box({ name: category, dir: "column", gap: "space.md" }, [await text(category, "title.sm", "text.default"), await box({ name: "Grid", dir: "row", wrap: true, gap: "space.md", w: 1200 }, cells)]));
   }
-  const root = await box({ name: "Icons", dir: "column", gap: "space.2xl", px: "space.3xl", py: "space.3xl", fill: "fill.surface.default" }, [
-    await text("Icons", "display.md", "text.default"),
-    await text(`${Object.keys(icons).length} icons from the Solar set, CC BY 4.0, on a 24 px grid. Each has linear, bold and duotone weights. Use linear in UI, bold for selected states, duotone for empty states.`, "body.lg", "text.muted", { w: 1200 }),
-    ...sections,
-  ]);
+  const root = await docPage({
+    section: "Assets",
+    title: "Icons",
+    description: `The ${Object.keys(icons).length} icons the components use, named for what they mean. Linear for UI, bold for selected states, duotone for empty states. Solar Icons Set by 480 Design, CC BY 4.0.`,
+    width: 1328,
+    body: sections,
+  });
   page.appendChild(root);
   return root;
 }
