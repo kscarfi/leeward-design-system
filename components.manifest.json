@@ -635,14 +635,14 @@
       "props": [
         {
           "name": "tone",
-          "type": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"neutral\"",
+          "type": "\"success\" | \"warning\" | \"danger\" | \"neutral\" | \"info\"",
           "required": false,
           "values": [
-            "info",
             "success",
             "warning",
             "danger",
-            "neutral"
+            "neutral",
+            "info"
           ]
         },
         {
@@ -686,11 +686,11 @@
       ],
       "variants": {
         "tone": [
-          "info",
           "success",
           "warning",
           "danger",
-          "neutral"
+          "neutral",
+          "info"
         ]
       },
       "purpose": "A full-width message at the top of the app or a page about something that affects everything there, such as planned maintenance.",
@@ -2285,6 +2285,16 @@
           ]
         },
         {
+          "name": "shape",
+          "type": "\"pill\" | \"rounded\"",
+          "required": false,
+          "description": "pill (default): a circle. rounded: the control radius of the size, to match a rounded Button or field next to it.",
+          "values": [
+            "pill",
+            "rounded"
+          ]
+        },
+        {
           "name": "...rest",
           "type": "Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"children\" | \"aria-label\">",
           "required": false,
@@ -2303,6 +2313,10 @@
           "sm",
           "md",
           "lg"
+        ],
+        "shape": [
+          "pill",
+          "rounded"
         ]
       },
       "purpose": "An icon-only button for frequent, well-known secondary actions such as close, settings, more or show balance.",
@@ -2446,15 +2460,36 @@
           "name": "label",
           "type": "string",
           "required": false,
-          "description": "Screen reader text, for example \"3 unread messages\". Defaults to \"3 new\"."
+          "description": "Screen reader text, for example \"3 unread messages\". Defaults to \"3 new\". Pass \"\" when the element's own name already says it."
         },
         {
           "name": "tone",
-          "type": "\"danger\" | \"primary\"",
+          "type": "\"danger\" | \"primary\" | \"success\"",
           "required": false,
           "values": [
             "danger",
-            "primary"
+            "primary",
+            "success"
+          ]
+        },
+        {
+          "name": "anchor",
+          "type": "\"circle\" | \"rectangle\"",
+          "required": false,
+          "description": "circle (default) for IconButtons and Avatars: the mark sits on the circle's edge. rectangle for square or rounded corners.",
+          "values": [
+            "circle",
+            "rectangle"
+          ]
+        },
+        {
+          "name": "placement",
+          "type": "\"top\" | \"bottom\"",
+          "required": false,
+          "description": "top (default) for counts and news; bottom for status, such as \"online\".",
+          "values": [
+            "top",
+            "bottom"
           ]
         },
         {
@@ -2470,7 +2505,8 @@
       "variants": {
         "tone": [
           "danger",
-          "primary"
+          "primary",
+          "success"
         ]
       },
       "purpose": "A dot or count on the corner of an icon or avatar, such as unread notifications.",

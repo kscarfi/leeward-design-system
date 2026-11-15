@@ -3457,6 +3457,30 @@
     "type": "dimension",
     "ref": "radius.pill"
   },
+  "icon-button.radius-xs": {
+    "value": "6px",
+    "cssVar": "--lw-icon-button-radius-xs",
+    "type": "dimension",
+    "ref": "control.radius.xs"
+  },
+  "icon-button.radius-sm": {
+    "value": "8px",
+    "cssVar": "--lw-icon-button-radius-sm",
+    "type": "dimension",
+    "ref": "control.radius.sm"
+  },
+  "icon-button.radius-md": {
+    "value": "10px",
+    "cssVar": "--lw-icon-button-radius-md",
+    "type": "dimension",
+    "ref": "control.radius.md"
+  },
+  "icon-button.radius-lg": {
+    "value": "12px",
+    "cssVar": "--lw-icon-button-radius-lg",
+    "type": "dimension",
+    "ref": "control.radius.lg"
+  },
   "input.height-sm": {
     "value": "2.25rem",
     "cssVar": "--lw-input-height-sm",

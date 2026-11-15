@@ -1,10 +1,9 @@
 .wrap { position: relative; display: inline-flex; }
 
+/* The mark's center sits on the anchor's edge. On a circle the 45 degree point is 14.6% in from the
+   bounding box (1 - cos 45°, halved); on a rectangle it is the corner itself. */
 .mark {
   position: absolute;
-  top: 0;
-  inset-inline-end: 0;
-  transform: translate(25%, -25%);
   border-radius: var(--lw-indicator-radius);
   box-shadow: 0 0 0 var(--lw-size-border-strong) var(--lw-fill-surface-default);
   pointer-events: none;
@@ -23,8 +22,17 @@
   font-variant-numeric: tabular-nums;
 }
 
+.circle.top { top: 14.6%; inset-inline-end: 14.6%; transform: translate(50%, -50%); }
+.circle.bottom { bottom: 14.6%; inset-inline-end: 14.6%; transform: translate(50%, 50%); }
+.rectangle.top { top: 0; inset-inline-end: 0; transform: translate(50%, -50%); }
+.rectangle.bottom { bottom: 0; inset-inline-end: 0; transform: translate(50%, 50%); }
+
+/* Right-to-left: the mark moves to the other corner, so the horizontal shift flips too. */
+:dir(rtl) .mark { translate: -100% 0; }
+
 .danger { background: var(--lw-fill-danger-default); color: var(--lw-fill-danger-on-default); }
 .primary { background: var(--lw-fill-primary-default); color: var(--lw-fill-primary-on-default); }
+.success { background: var(--lw-fill-success-default); color: var(--lw-fill-success-on-default); }
 .srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }
 
 @media (forced-colors: active) {

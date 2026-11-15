@@ -35,6 +35,15 @@ An icon-only button for frequent, well-known secondary actions such as close, se
 | `md` | 44 px | Default. |
 | `lg` | 48 px | Main icon actions on mobile. |
 
+## Shapes
+
+| Shape | Corners | Use it for |
+|---|---|---|
+| `pill` (default) | A circle (`--lw-icon-button-radius`) | Headers, toolbars and floating actions. |
+| `rounded` | The control radius of the size (`--lw-icon-button-radius-<size>`) | Next to rounded Buttons, fields and selects, so a toolbar or form row has one corner style. |
+
+- Both shapes have the same size and hit area. Match the shape of the controls next to it.
+
 ## States
 
 - Default, hover, pressed, focus, disabled.
@@ -72,6 +81,10 @@ Sizing and radius tokens. Change them in `packages/tokens/build/foundation.ts`; 
 | `--lw-icon-button-size-md` | 44 px | 40 px | `control.height.md` |
 | `--lw-icon-button-size-lg` | 48 px | 44 px | `control.height.lg` |
 | `--lw-icon-button-radius` | 9999 px | 9999 px | `radius.pill` |
+| `--lw-icon-button-radius-xs` | 6 px | 4 px | `control.radius.xs` |
+| `--lw-icon-button-radius-sm` | 8 px | 6 px | `control.radius.sm` |
+| `--lw-icon-button-radius-md` | 10 px | 8 px | `control.radius.md` |
+| `--lw-icon-button-radius-lg` | 12 px | 8 px | `control.radius.lg` |
 
 ## Accessibility
 

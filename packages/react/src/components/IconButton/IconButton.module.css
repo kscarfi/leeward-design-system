@@ -28,6 +28,12 @@
 .md { width: var(--lw-icon-button-size-md); height: var(--lw-icon-button-size-md); }
 .lg { width: var(--lw-icon-button-size-lg); height: var(--lw-icon-button-size-lg); }
 
+/* Rounded: the same corner radius as a rounded Button or field of the same size. */
+.rounded.xs { border-radius: var(--lw-icon-button-radius-xs); }
+.rounded.sm { border-radius: var(--lw-icon-button-radius-sm); }
+.rounded.md { border-radius: var(--lw-icon-button-radius-md); }
+.rounded.lg { border-radius: var(--lw-icon-button-radius-lg); }
+
 .ghost { background: transparent; color: var(--lw-icon-default); }
 .ghost:hover:not(:disabled) { background: var(--lw-fill-surface-bold); }
 .ghost:active:not(:disabled) { background: var(--lw-fill-surface-bolder); }

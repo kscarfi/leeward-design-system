@@ -582,6 +582,10 @@
   --lw-icon-button-size-md: 2.5rem;
   --lw-icon-button-size-lg: 2.75rem;
   --lw-icon-button-radius: 9999px;
+  --lw-icon-button-radius-xs: 4px;
+  --lw-icon-button-radius-sm: 6px;
+  --lw-icon-button-radius-md: 8px;
+  --lw-icon-button-radius-lg: 8px;
   --lw-input-height-sm: 2rem;
   --lw-input-height-md: 2.5rem;
   --lw-input-height-lg: 2.75rem;

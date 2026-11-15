@@ -2351,6 +2351,18 @@
     },
     "radius": {
       "$value": "{radius.pill}"
+    },
+    "radius-xs": {
+      "$value": "{control.radius.xs}"
+    },
+    "radius-sm": {
+      "$value": "{control.radius.sm}"
+    },
+    "radius-md": {
+      "$value": "{control.radius.md}"
+    },
+    "radius-lg": {
+      "$value": "{control.radius.lg}"
     }
   },
   "input": {

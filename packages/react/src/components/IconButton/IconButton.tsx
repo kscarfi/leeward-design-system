@@ -10,17 +10,19 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   label: string;
   variant?: "ghost" | "secondary" | "outline" | "primary";
   size?: "xs" | "sm" | "md" | "lg";
+  /** pill (default): a circle. rounded: the control radius of the size, to match a rounded Button or field next to it. */
+  shape?: "pill" | "rounded";
   ref?: Ref<HTMLButtonElement>;
 }
 
 const iconSize = { xs: "sm", sm: "sm", md: "md", lg: "lg" } as const;
 
 /** Icon-only button. Not for moving money: use Button with a text label for that. */
-export function IconButton({ icon, label, variant = "ghost", size = "md", type = "button", className, ref, ...rest }: IconButtonProps) {
+export function IconButton({ icon, label, variant = "ghost", size = "md", shape = "pill", type = "button", className, ref, ...rest }: IconButtonProps) {
   // A pressed toggle shows the bold weight, so state is visible without relying on color.
   const pressed = rest["aria-pressed"] === true || rest["aria-pressed"] === "true";
   return (
-    <button ref={ref} type={type} aria-label={label} className={cx(styles.iconButton, styles[variant], styles[size], className)} {...rest}>
+    <button ref={ref} type={type} aria-label={label} className={cx(styles.iconButton, styles[variant], styles[size], shape === "rounded" && styles.rounded, className)} {...rest}>
       <Icon name={icon} size={iconSize[size]} weight={pressed ? "bold" : "linear"} />
     </button>
   );

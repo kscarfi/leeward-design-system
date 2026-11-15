@@ -13,6 +13,9 @@ A dot or count on the corner of an icon or avatar, such as unread notifications.
 
 ## Behavior and responsive
 
+- `anchor="circle"` (default) puts the mark on the edge of round elements, such as an IconButton or Avatar; `anchor="rectangle"` puts it on the corner of square or rounded ones.
+- `placement="bottom"` with `tone="success"` shows a status such as "online"; counts and news go at the top.
+
 - `count` shows a number, capped at `max` ("99+"); 0 hides it. `dot` shows a dot without a number.
 
 ## Do

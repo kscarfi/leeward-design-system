@@ -67,6 +67,12 @@ describe("IconButton", () => {
     render(<IconButton icon="close" label="Close" />);
     expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
   });
+  it("adds the rounded shape only when asked", () => {
+    const { rerender } = render(<IconButton icon="close" label="Close" />);
+    expect(screen.getByRole("button").className).not.toMatch(/rounded/);
+    rerender(<IconButton icon="close" label="Close" shape="rounded" />);
+    expect(screen.getByRole("button").className).toMatch(/rounded/);
+  });
 });
 
 describe("Icon", () => {

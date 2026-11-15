@@ -9728,6 +9728,58 @@
           "targetVariableName": "radii/pill"
         }
       }
+    },
+    "radius-xs": {
+      "$type": "dimension",
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/small"
+        }
+      }
+    },
+    "radius-sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/default"
+        }
+      }
+    },
+    "radius-md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 10,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/large"
+        }
+      }
+    },
+    "radius-lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/xLarge"
+        }
+      }
     }
   },
   "input": {
