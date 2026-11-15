@@ -55,14 +55,11 @@
 .chevron { display: inline-flex; color: var(--lw-icon-muted); }
 
 .content {
-  z-index: var(--lw-layer-overlay);
+  composes: overlay from "../../styles/surface.module.css";
   min-width: var(--radix-select-trigger-width);
   max-height: var(--radix-select-content-available-height);
   overflow: hidden;
-  background: var(--lw-fill-surface-overlay);
-  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-menu-radius);
-  box-shadow: var(--lw-elevation-400);
 }
 
 .viewport { padding: var(--lw-menu-padding); }

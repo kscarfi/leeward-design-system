@@ -3,6 +3,7 @@ import { cx } from "../../utils/cx.ts";
 import type { Locale } from "../../utils/format.ts";
 import { messages } from "../../utils/messages.ts";
 import { Icon } from "../Icon/Icon.tsx";
+import { Indicator } from "../Indicator/Indicator.tsx";
 import type { IconName } from "../Icon/icons.ts";
 import styles from "./NavigationBar.module.css";
 
@@ -36,14 +37,12 @@ export function NavigationBar({ items, current, label = "Main", locale = "en-US"
           const active = item.label === current;
           const body = (
             <>
-              <span className={styles.indicator}>
-                <Icon name={item.icon} size="lg" weight={active ? "bold" : "linear"} />
-                {item.count ? (
-                  <span className={styles.count} aria-hidden="true">
-                    {item.count > 99 ? "99+" : item.count}
-                  </span>
-                ) : null}
-              </span>
+              {/* The item's hidden sentence already says the count, so the Indicator adds no text of its own. */}
+              <Indicator {...(item.count ? { count: item.count } : {})} anchor="rectangle" label="" locale={locale}>
+                <span className={styles.indicator}>
+                  <Icon name={item.icon} size="lg" weight={active ? "bold" : "linear"} />
+                </span>
+              </Indicator>
               {/* With a count, screen readers get one sentence: separate flex children would add a space before the comma. */}
               <span className={styles.label} aria-hidden={item.count ? true : undefined}>
                 {item.label}

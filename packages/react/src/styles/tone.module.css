@@ -1,0 +1,13 @@
+/* Soft tone surfaces for messages (Alert, Banner): background, border and text on it.
+   The icon classes give the matching icon color. Color is never the only signal: each tone also has an icon. */
+.surfaceInfo { background: var(--lw-fill-info-weak); border-color: var(--lw-border-info-subtler); color: var(--lw-text-info-on-subtle); }
+.surfaceSuccess { background: var(--lw-fill-success-weak); border-color: var(--lw-border-success-subtler); color: var(--lw-text-success-on-subtle); }
+.surfaceWarning { background: var(--lw-fill-warning-weak); border-color: var(--lw-border-warning-subtler); color: var(--lw-text-warning-on-subtle); }
+.surfaceDanger { background: var(--lw-fill-danger-weak); border-color: var(--lw-border-danger-subtler); color: var(--lw-text-danger-on-subtle); }
+.surfaceNeutral { background: var(--lw-fill-neutral-weak); border-color: var(--lw-border-neutral-subtler); color: var(--lw-text-neutral-on-subtle); }
+
+.iconInfo { color: var(--lw-icon-info-on-subtle); }
+.iconSuccess { color: var(--lw-icon-success-on-subtle); }
+.iconWarning { color: var(--lw-icon-warning-on-subtle); }
+.iconDanger { color: var(--lw-icon-danger-on-subtle); }
+.iconNeutral { color: var(--lw-icon-neutral-on-subtle); }

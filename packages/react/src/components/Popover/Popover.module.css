@@ -1,13 +1,10 @@
 .content {
-  z-index: var(--lw-layer-overlay);
+  composes: overlay from "../../styles/surface.module.css";
   width: max-content;
   max-width: min(var(--lw-popover-max-width), calc(100vw - var(--lw-space-xl)));
   padding: var(--lw-popover-padding);
-  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-popover-radius);
-  background: var(--lw-fill-surface-overlay);
   color: var(--lw-text-default);
-  box-shadow: var(--lw-elevation-500);
   animation: fade var(--lw-motion-duration-fast) var(--lw-motion-easing-enter);
 }
 

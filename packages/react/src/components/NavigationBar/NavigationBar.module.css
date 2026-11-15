@@ -45,20 +45,5 @@
 .label { composes: labelXs from "../../styles/type.module.css"; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .active .label { font-weight: var(--lw-type-label-sm-weight); }
 
-.count {
-  composes: badge from "../../styles/type.module.css";
-  position: absolute;
-  top: 0;
-  inset-inline-end: var(--lw-space-xs);
-  min-width: var(--lw-indicator-count-height);
-  height: var(--lw-indicator-count-height);
-  padding-inline: var(--lw-indicator-count-padding-x);
-  border-radius: var(--lw-indicator-radius);
-  background: var(--lw-fill-danger-default);
-  color: var(--lw-fill-danger-on-default);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

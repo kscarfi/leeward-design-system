@@ -1,18 +1,15 @@
 .root { position: relative; }
 
 .list {
+  composes: overlay from "../../styles/surface.module.css";
   position: absolute;
   inset-inline: 0;
-  z-index: var(--lw-layer-overlay);
   margin: var(--lw-space-2xs) 0 0;
   padding: var(--lw-menu-padding);
   max-height: calc(var(--lw-menu-item-height) * 6.5);
   overflow-y: auto;
   list-style: none;
-  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-menu-radius);
-  background: var(--lw-fill-surface-overlay);
-  box-shadow: var(--lw-elevation-500);
 }
 
 .list[hidden] { display: none; }

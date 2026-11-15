@@ -14,13 +14,3 @@
 .actions { display: flex; flex-wrap: wrap; gap: var(--lw-space-xs); margin-top: var(--lw-space-xs); }
 .close { margin: calc(var(--lw-space-xs) * -1); }
 
-.info { background: var(--lw-fill-info-weak); border-color: var(--lw-border-info-subtler); color: var(--lw-text-info-on-subtle); }
-.info .icon { color: var(--lw-icon-info-on-subtle); }
-.success { background: var(--lw-fill-success-weak); border-color: var(--lw-border-success-subtler); color: var(--lw-text-success-on-subtle); }
-.success .icon { color: var(--lw-icon-success-on-subtle); }
-.warning { background: var(--lw-fill-warning-weak); border-color: var(--lw-border-warning-subtler); color: var(--lw-text-warning-on-subtle); }
-.warning .icon { color: var(--lw-icon-warning-on-subtle); }
-.danger { background: var(--lw-fill-danger-weak); border-color: var(--lw-border-danger-subtler); color: var(--lw-text-danger-on-subtle); }
-.danger .icon { color: var(--lw-icon-danger-on-subtle); }
-.neutral { background: var(--lw-fill-neutral-weak); border-color: var(--lw-border-neutral-subtler); color: var(--lw-text-neutral-on-subtle); }
-.neutral .icon { color: var(--lw-icon-neutral-on-subtle); }

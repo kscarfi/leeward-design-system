@@ -2,6 +2,7 @@ import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { cx } from "../../utils/cx.ts";
 import type { Locale } from "../../utils/format.ts";
 import { messages } from "../../utils/messages.ts";
+import { Button } from "../Button/Button.tsx";
 import { IconButton } from "../IconButton/IconButton.tsx";
 import styles from "./Calendar.module.css";
 
@@ -134,9 +135,9 @@ export function Calendar({ value, onValueChange, min, max, isDateDisabled, defau
       </table>
       {showToday && !disabled(today) && (
         <div className={styles.footer}>
-          <button type="button" className={styles.todayButton} onClick={() => select(today)}>
+          <Button variant="ghost" size="xs" shape="pill" onClick={() => select(today)}>
             {m.today}
-          </button>
+          </Button>
         </div>
       )}
     </div>

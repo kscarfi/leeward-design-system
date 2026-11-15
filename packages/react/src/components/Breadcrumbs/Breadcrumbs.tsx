@@ -4,6 +4,7 @@ import type { Locale } from "../../utils/format.ts";
 import { messages } from "../../utils/messages.ts";
 import { Icon } from "../Icon/Icon.tsx";
 import type { IconName } from "../Icon/icons.ts";
+import target from "../../styles/target.module.css";
 import styles from "./Breadcrumbs.module.css";
 
 export interface BreadcrumbItem {
@@ -36,7 +37,7 @@ export function Breadcrumbs({ items, maxItems = 4, locale = "en-US", className }
           return (
             <li key={item ? `${item.label}-${i}` : "more"} className={styles.item}>
               {item === null ? (
-                <button type="button" className={styles.more} aria-label={m.showPath} onClick={() => setExpanded(true)}>
+                <button type="button" className={cx(styles.more, target.target)} aria-label={m.showPath} onClick={() => setExpanded(true)}>
                   …
                 </button>
               ) : last || !item.href ? (

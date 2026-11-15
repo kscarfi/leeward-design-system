@@ -1,7 +1,8 @@
 import { cx } from "../../utils/cx.ts";
 import type { Locale } from "../../utils/format.ts";
 import { messages } from "../../utils/messages.ts";
-import { Icon } from "../Icon/Icon.tsx";
+import { IconButton } from "../IconButton/IconButton.tsx";
+import target from "../../styles/target.module.css";
 import styles from "./Pagination.module.css";
 
 export interface PaginationProps {
@@ -42,9 +43,7 @@ export function Pagination({ page, totalPages, hasNext, onPageChange, siblings =
     <nav aria-label={m.pagination} className={cx(styles.nav, className)}>
       <ul className={styles.list}>
         <li>
-          <button type="button" className={styles.step} aria-label={m.previousPage} disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
-            <Icon name="chevron-left" size="sm" />
-          </button>
+          <IconButton icon="chevron-left" size="sm" shape="rounded" label={m.previousPage} disabled={page <= 1} onClick={() => onPageChange(page - 1)} />
         </li>
         {known ? (
           pageRange(page, totalPages, siblings).map((p, i) =>
@@ -54,7 +53,7 @@ export function Pagination({ page, totalPages, hasNext, onPageChange, siblings =
               </li>
             ) : (
               <li key={p}>
-                <button type="button" className={cx(styles.page, p === page && styles.current)} aria-current={p === page ? "page" : undefined} aria-label={m.page(p)} onClick={() => onPageChange(p)}>
+                <button type="button" className={cx(styles.page, target.target, p === page && styles.current)} aria-current={p === page ? "page" : undefined} aria-label={m.page(p)} onClick={() => onPageChange(p)}>
                   {p}
                 </button>
               </li>
@@ -66,9 +65,7 @@ export function Pagination({ page, totalPages, hasNext, onPageChange, siblings =
           </li>
         )}
         <li>
-          <button type="button" className={styles.step} aria-label={m.nextPage} disabled={!nextExists} onClick={() => onPageChange(page + 1)}>
-            <Icon name="chevron-right" size="sm" />
-          </button>
+          <IconButton icon="chevron-right" size="sm" shape="rounded" label={m.nextPage} disabled={!nextExists} onClick={() => onPageChange(page + 1)} />
         </li>
       </ul>
       {known && (

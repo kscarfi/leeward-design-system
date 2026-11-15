@@ -1,0 +1,8 @@
+/* The one floating surface: menus, selects, comboboxes, popovers and the date picker share it,
+   so they look and stack the same. Each component adds its own size, padding and radius token. */
+.overlay {
+  z-index: var(--lw-layer-overlay);
+  background: var(--lw-fill-surface-overlay);
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
+  box-shadow: var(--lw-elevation-500);
+}

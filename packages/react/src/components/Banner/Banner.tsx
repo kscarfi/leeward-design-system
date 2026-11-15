@@ -5,9 +5,10 @@ import { messages } from "../../utils/messages.ts";
 import { Icon } from "../Icon/Icon.tsx";
 import type { IconName } from "../Icon/icons.ts";
 import { IconButton } from "../IconButton/IconButton.tsx";
+import { toneClasses, type MessageTone } from "../../utils/tone.ts";
 import styles from "./Banner.module.css";
 
-export type BannerTone = "info" | "success" | "warning" | "danger" | "neutral";
+export type BannerTone = MessageTone;
 
 export interface BannerProps {
   tone?: BannerTone;
@@ -29,8 +30,8 @@ const toneIcon: Record<BannerTone, IconName> = { info: "info", success: "check-c
 export function Banner({ tone = "info", children, action, onDismiss, live = "status", locale = "en-US", className }: BannerProps) {
   const role = live === "off" ? undefined : live;
   return (
-    <div role={role} className={cx(styles.banner, styles[tone], className)}>
-      <Icon name={toneIcon[tone]} weight="bold" className={styles.icon} />
+    <div role={role} className={cx(styles.banner, toneClasses(tone).surface, className)}>
+      <Icon name={toneIcon[tone]} weight="bold" className={cx(styles.icon, toneClasses(tone).icon)} />
       <div className={styles.body}>
         <p className={styles.text}>{children}</p>
         {action && <div className={styles.action}>{action}</div>}

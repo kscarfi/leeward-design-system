@@ -1,11 +1,8 @@
 .content {
-  z-index: var(--lw-layer-overlay);
+  composes: overlay from "../../styles/surface.module.css";
   min-width: calc(var(--lw-size-content-sm) / 2);
   padding: var(--lw-menu-padding);
-  background: var(--lw-fill-surface-overlay);
-  border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-menu-radius);
-  box-shadow: var(--lw-elevation-500);
   animation: fade var(--lw-motion-duration-fast) var(--lw-motion-easing-enter);
 }
 

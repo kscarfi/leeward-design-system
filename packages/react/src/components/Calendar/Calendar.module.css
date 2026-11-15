@@ -33,16 +33,3 @@
 .disabled { color: var(--lw-text-subtler); text-decoration: line-through; cursor: not-allowed; }
 
 .footer { display: flex; justify-content: center; }
-.todayButton {
-  composes: labelSm from "../../styles/type.module.css";
-  position: relative;
-  min-height: var(--lw-control-height-xs);
-  padding-inline: var(--lw-space-sm);
-  border: 0;
-  border-radius: var(--lw-radius-pill);
-  background: transparent;
-  color: var(--lw-text-primary);
-  cursor: pointer;
-}
-.todayButton::before { content: ""; position: absolute; inset-inline: 0; top: 50%; height: var(--lw-size-touch-target); transform: translateY(-50%); }
-.todayButton:hover { background: var(--lw-fill-primary-weak); }

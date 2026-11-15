@@ -3,6 +3,7 @@ import { cx } from "../../utils/cx.ts";
 import { Icon } from "../Icon/Icon.tsx";
 import type { IconName } from "../Icon/icons.ts";
 import { IconButton } from "../IconButton/IconButton.tsx";
+import { toneClasses } from "../../utils/tone.ts";
 import styles from "./Alert.module.css";
 
 export type AlertTone = "info" | "success" | "warning" | "danger" | "neutral";
@@ -26,8 +27,8 @@ const toneIcon: Record<AlertTone, IconName> = { info: "info", success: "check-ci
 export function Alert({ tone = "info", title, children, actions, onDismiss, dismissLabel = "Dismiss", live = "status", className, ...rest }: AlertProps) {
   const role = live === "off" ? undefined : live;
   return (
-    <div role={role} className={cx(styles.alert, styles[tone], className)} {...rest}>
-      <Icon name={toneIcon[tone]} weight="bold" className={styles.icon} />
+    <div role={role} className={cx(styles.alert, toneClasses(tone).surface, className)} {...rest}>
+      <Icon name={toneIcon[tone]} weight="bold" className={cx(styles.icon, toneClasses(tone).icon)} />
       <div className={styles.body}>
         {title && <p className={styles.title}>{title}</p>}
         {children && <div className={styles.text}>{children}</div>}
