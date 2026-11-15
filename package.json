@@ -27,7 +27,8 @@
     "check:links": "node scripts/check-links.ts",
     "check:coverage": "node scripts/check-coverage.ts",
     "check:docs-tokens": "node scripts/sync-docs-tokens.ts --check",
-    "smoke:packages": "node scripts/smoke-packages.ts"
+    "smoke:packages": "node scripts/smoke-packages.ts",
+    "size": "node packages/react/build/size.ts"
   },
   "devDependencies": {
     "@leeward/lint": "workspace:*",

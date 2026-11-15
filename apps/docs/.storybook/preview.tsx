@@ -3,6 +3,7 @@ import "@leeward/react/styles.css";
 import "@leeward/tokens/partners/harbor.css";
 import "./preview.css";
 import type { Decorator, Preview } from "@storybook/react-vite";
+import { create } from "storybook/theming";
 import { ToastProvider, TooltipProvider } from "@leeward/react";
 
 const withTheme: Decorator = (Story, context) => {
@@ -65,7 +66,11 @@ const preview: Preview = {
       test: "error",
       options: { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] } },
     },
-    docs: { toc: { headingSelector: "h2, h3", title: "On this page" } },
+    docs: {
+      toc: { headingSelector: "h2, h3", title: "On this page" },
+      // Docs pages use the system's own fonts, not Storybook's default Nunito Sans.
+      theme: create({ base: "light", fontBase: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif', fontCode: '"IBM Plex Mono", ui-monospace, monospace' }),
+    },
     controls: { expanded: true, sort: "requiredFirst" },
     viewport: {
       options: {

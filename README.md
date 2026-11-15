@@ -176,6 +176,7 @@ Every number below is printed by a script or test runner in this repository, and
 | Visual regression | Every story is compared with committed screenshots in Leeward light, Leeward dark and Business light. |
 | Unit tests (`pnpm test`) | 129 tests: React 103, MCP server 11, lint rules 7, tokens 8. |
 | Docs | 79 code examples and screen recipes compile; every recipe passes `validate_ui`; every component has docs, stories and tests; token tables and links are checked. |
+| Bundle size (`pnpm size`) | An app that imports only Button ships 62.8 KB of JavaScript gzipped; with every export, 148.9 KB. Styles are 13.6 KB and tokens for both brands and modes 22.3 KB gzipped. Most of the Button figure is icon data: every icon ships with the Icon component today, and the icon file alone is 55.4 KB gzipped. Splitting icons into their own modules is on the [roadmap](ROADMAP.md). React and React DOM are not counted. |
 | Packages (`pnpm smoke:packages`) | The packed packages are installed into a clean project with npm: types, production build, tokens, lint rules and the MCP server are checked. |
 | Lint and copy | No raw colors, no unknown or primitive tokens, spacing and type on scale, no icon-only money actions, no red amounts, no em dashes. |
 
@@ -232,7 +233,7 @@ pnpm install
 pnpm storybook
 ```
 
-Other scripts: `pnpm build:tokens`, `pnpm build:agent`, `pnpm contrast`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:stories`, `pnpm smoke:packages`.
+Other scripts: `pnpm size`, `pnpm build:tokens`, `pnpm build:agent`, `pnpm contrast`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:stories`, `pnpm smoke:packages`.
 
 ```
 packages/
