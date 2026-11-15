@@ -187,30 +187,50 @@ Brands and modes swap semantic tokens. Components never change.
 | `Accordion` | component | Expandable sections for fees, FAQs and account details. |
 | `Alert` | component | An inline message on the page: what happened and what to do next. |
 | `Avatar` | component | Initials, a photo or a category icon for a person or merchant. |
+| `AvatarGroup` | component | A few people at once, such as who shares a joint account or a split bill. |
 | `Badge` | component | A short status or category label such as Pending, Paid or Declined. |
+| `Banner` | component | A full-width message at the top of the app or a page about something that affects everything there, such as planned maintenance. |
+| `Breadcrumbs` | component | Shows where a page sits in a hierarchy and links to each level above it. |
 | `Button` | component | Buttons start an action: send money, confirm a transfer, freeze a card. The label always says what happens next. |
+| `Calendar` | component | A month grid for picking one date. DatePicker uses it in a popover; use it on its own when the calendar is the main thing on screen. |
 | `Card` | component | A surface that groups related content, such as an account, a goal or a list. |
 | `Checkbox` | component | A yes or no choice inside a form, or one of several independent choices. |
 | `CheckboxGroup` | component | Several independent choices under one question, for example which accounts to include in a statement. |
 | `Chip` | component | A toggle for filters, such as Money in or Money out in a transaction list. |
+| `Combobox` | component | A text field that filters a list as people type, for choosing one value from many, such as a bank. |
+| `DatePicker` | component | One date, typed or picked from a calendar, such as when a scheduled transfer should go out. |
 | `Dialog` | component | A modal for a decision that needs full attention, such as freezing a card or closing an account. |
 | `Divider` | component | A thin line that separates groups of content on a surface. |
 | `DropdownMenu` | component | Secondary actions for an item, behind a More button. |
 | `EmptyState` | component | Shown when a list or search has nothing to show yet. |
+| `Fieldset` | component | Groups related fields under one name, so screen readers announce the group with each field. |
+| `FileUpload` | component | Adds documents, such as an ID or a proof of address, by drag and drop or with a regular button. |
 | `Heading` | component | Page and section headings. `level` sets the document outline, `size` sets the look, so both can be right at the same time. |
 | `Icon` | component | Solar icons by 480 Design (CC BY 4.0) on a 24 px grid: 142 icons in three weights. Icons draw in `currentColor`, so they follow the text tone around them. |
 | `IconButton` | component | An icon-only button for frequent, well-known secondary actions such as close, settings, more or show balance. |
+| `Image` | component | An image that keeps its space while it loads and shows a calm fallback if it fails. |
+| `Indicator` | component | A dot or count on the corner of an icon or avatar, such as unread notifications. |
 | `Link` | component | Navigation to another page or site. |
 | `ListItem` | component | A row in a List with a title, description, leading and trailing content. The whole row can be a link or a button. |
+| `NavigationBar` | component | Bottom navigation for phones: three to five top-level destinations, each with an icon and a label. |
+| `NumberInput` | component | A whole number with minus and plus buttons, such as a loan term in months or a number of cards. |
+| `PageHeader` | component | The top of a screen: a back button, the title and up to two actions. |
+| `Pagination` | component | Moves through a long list, such as a statement, a page at a time. |
+| `Popover` | component | Extra detail next to the thing it explains, such as how a fee is calculated. Unlike Tooltip, it can hold links and buttons. |
 | `ProgressBar` | component | Progress toward a goal or limit, such as a savings goal or a daily card limit. |
 | `RadioGroup` | component | Pick exactly one option from 2 to 5 visible choices, with optional descriptions. |
+| `SearchField` | component | A text field for searching, with a search icon and a clear button. Pill by default. |
 | `SegmentedControl` | component | Switch between 2 to 5 views or filters of the same content, such as Week, Month and Year. |
 | `Select` | component | Pick one option from a list in a popover. Built on Radix Select. |
 | `Sheet` | component | A panel for a task in context, such as filters or transaction details. |
 | `Skeleton` | component | A placeholder in the shape of content that is loading. |
+| `SkipLink` | component | A link that lets keyboard and screen reader users jump past the navigation to the main content. Hidden until it gets focus. |
+| `Slider` | component | Picks a value in a range when the feel matters more than the exact number, such as a monthly saving amount. |
 | `Spinner` | component | A small wait indicator when the shape of the result is unknown. |
+| `Stack` | component | Lays out children in a column or a row with a gap from the spacing scale, so screens never need hand-written margins. |
 | `Stepper` | component | Shows where people are in a multi-step flow, such as a transfer. |
 | `Switch` | component | Turns a setting on or off immediately, such as online card payments. |
+| `Table` | component | Rows and columns of data people compare, such as a statement on desktop. |
 | `Tabs` | component | Switch between views of the same object, such as Activity, Statements and Details of an account. |
 | `Text` | component | Body text, labels, subtitles, captions and inline code, using the type roles and text tones of the system. |
 | `TextField` | component | Single-line text input with a visible label, hint, error, and optional prefix or suffix. |

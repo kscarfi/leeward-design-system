@@ -1,6 +1,6 @@
 {
   "name": "Leeward Design System",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "package": "@leeward/react",
   "setup": [
     "import \"@leeward/react/fonts.css\";",
@@ -16,42 +16,62 @@
     "AmountDisplay",
     "AmountInput",
     "Avatar",
+    "AvatarGroup",
     "Badge",
     "BalanceHeader",
+    "Banner",
+    "Breadcrumbs",
     "Button",
+    "Calendar",
     "Card",
     "Checkbox",
     "CheckboxGroup",
     "Chip",
+    "Combobox",
+    "DatePicker",
     "Dialog",
     "DialogClose",
     "Divider",
     "DropdownMenu",
     "EmptyState",
+    "Fieldset",
+    "FileUpload",
     "Heading",
     "Icon",
     "IconButton",
+    "Image",
+    "Indicator",
     "Link",
     "List",
     "ListItem",
     "MINUS",
+    "NavigationBar",
+    "NumberInput",
     "OTPInput",
+    "PageHeader",
+    "Pagination",
     "PaymentCard",
+    "Popover",
     "ProgressBar",
     "QuickActions",
     "RadioGroup",
     "RecipientRow",
     "SavingsGoal",
+    "SearchField",
     "SegmentedControl",
     "Select",
     "Sheet",
     "SheetClose",
     "Skeleton",
+    "SkipLink",
+    "Slider",
     "SpendingBreakdown",
     "Spinner",
+    "Stack",
     "Stepper",
     "SummaryList",
     "Switch",
+    "Table",
     "Tabs",
     "Text",
     "TextField",
@@ -303,6 +323,72 @@
       "example": "import { Avatar } from \"@leeward/react\";\n\nexport function Recipient() {\n  return <Avatar name=\"Deniz Yılmaz\" />;\n}"
     },
     {
+      "name": "AvatarGroup",
+      "kind": "component",
+      "import": "import { AvatarGroup } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "people",
+          "type": "AvatarGroupPerson[]",
+          "required": true
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": "Avatars shown before the \"+n\" counter. Default 3."
+        },
+        {
+          "name": "size",
+          "type": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "xs",
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "size": [
+          "xs",
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "purpose": "A few people at once, such as who shares a joint account or a split bill.",
+      "whenToUse": [
+        "Showing that several people are involved, in a row or a card."
+      ],
+      "whenNotToUse": [
+        "A list people choose from: use RecipientRow."
+      ],
+      "contentGuidelines": [],
+      "sizes": [],
+      "do": [
+        "Put the most relevant people first."
+      ],
+      "dont": [
+        "Do not use it as a button without a visible label next to it."
+      ],
+      "accessibility": [
+        "One image named with the people it shows: \"Deniz Yılmaz, Ece Kaya and 2 more\"."
+      ],
+      "keyboard": [],
+      "example": "import { AvatarGroup } from \"@leeward/react\";\n\nexport function JointAccount() {\n  return <AvatarGroup people={[{ name: \"Deniz Yılmaz\" }, { name: \"Ece Kaya\" }, { name: \"Can Öztürk\" }, { name: \"Elif Şahin\" }]} max={3} />;\n}"
+    },
+    {
       "name": "Badge",
       "kind": "component",
       "import": "import { Badge } from \"@leeward/react\";",
@@ -543,6 +629,151 @@
       "example": "import { Badge } from \"@leeward/react\";\n\nexport function PendingBadge() {\n  return <Badge tone=\"warning\">Pending</Badge>;\n}"
     },
     {
+      "name": "Banner",
+      "kind": "component",
+      "import": "import { Banner } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "tone",
+          "type": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"neutral\"",
+          "required": false,
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "neutral"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true,
+          "description": "One or two short sentences about something that affects the whole app or page."
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "required": false,
+          "description": "One Link or small Button, for example \"See the schedule\"."
+        },
+        {
+          "name": "onDismiss",
+          "type": "() => void",
+          "required": false,
+          "description": "Shows a close button. Leave it out for problems people cannot fix by closing the banner."
+        },
+        {
+          "name": "live",
+          "type": "\"alert\" | \"status\" | \"off\"",
+          "required": false,
+          "description": "\"alert\" only for urgent problems, such as an outage. Default \"status\".",
+          "values": [
+            "alert",
+            "status",
+            "off"
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "tone": [
+          "info",
+          "success",
+          "warning",
+          "danger",
+          "neutral"
+        ]
+      },
+      "purpose": "A full-width message at the top of the app or a page about something that affects everything there, such as planned maintenance.",
+      "whenToUse": [
+        "System-wide news: maintenance, a service problem, a change in terms."
+      ],
+      "whenNotToUse": [
+        "A message about one part of the page: use Alert.",
+        "Feedback after an action: use a toast."
+      ],
+      "contentGuidelines": [
+        "Say what is affected and when: \"Card payments may fail between 02:00 and 04:00 on Sunday.\"",
+        "The action names the next step: \"See the schedule\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Show one banner at a time."
+      ],
+      "dont": [
+        "Do not use banners for marketing."
+      ],
+      "accessibility": [
+        "`role=\"status\"` by default; use `live=\"alert\"` only for urgent problems such as an outage.",
+        "The tone is shown by an icon as well as color."
+      ],
+      "keyboard": [],
+      "example": "import { Banner, Link } from \"@leeward/react\";\n\nexport function Maintenance() {\n  return (\n    <Banner tone=\"warning\" action={<Link href=\"#schedule\">See the schedule</Link>} onDismiss={() => {}}>\n      Card payments may fail between 02:00 and 04:00 on Sunday.\n    </Banner>\n  );\n}"
+    },
+    {
+      "name": "Breadcrumbs",
+      "kind": "component",
+      "import": "import { Breadcrumbs } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "items",
+          "type": "BreadcrumbItem[]",
+          "required": true,
+          "description": "From the top level to the current page."
+        },
+        {
+          "name": "maxItems",
+          "type": "number",
+          "required": false,
+          "description": "Above this many items the middle collapses behind a \"…\" button. Default 4."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "Shows where a page sits in a hierarchy and links to each level above it.",
+      "whenToUse": [
+        "Desktop screens three or more levels deep, such as Accounts, Everyday, Statements."
+      ],
+      "whenNotToUse": [
+        "Phones: use PageHeader with a back button.",
+        "Steps in a flow: use Stepper."
+      ],
+      "contentGuidelines": [
+        "Use the same names as the pages' titles."
+      ],
+      "sizes": [],
+      "do": [
+        "Start from the top level the person can reach."
+      ],
+      "dont": [
+        "Do not make the current page a link."
+      ],
+      "accessibility": [
+        "A `nav` named \"Breadcrumb\" with an ordered list.",
+        "The current page has `aria-current=\"page\"`.",
+        "Separators are decorative icons, not read aloud."
+      ],
+      "keyboard": [],
+      "example": "import { Breadcrumbs } from \"@leeward/react\";\n\nexport function StatementPath() {\n  return (\n    <Breadcrumbs\n      items={[\n        { label: \"Accounts\", href: \"/accounts\", icon: \"home\" },\n        { label: \"Everyday\", href: \"/accounts/everyday\" },\n        { label: \"Statements\" },\n      ]}\n    />\n  );\n}"
+    },
+    {
       "name": "Button",
       "kind": "component",
       "import": "import { Button } from \"@leeward/react\";",
@@ -683,6 +914,91 @@
         "Enter or Space: Activates it"
       ],
       "example": "import { Button } from \"@leeward/react\";\n\nexport function SendButton() {\n  return (\n    <Button iconStart=\"send\" onClick={() => console.log(\"send\")}>\n      Send money\n    </Button>\n  );\n}"
+    },
+    {
+      "name": "Calendar",
+      "kind": "component",
+      "import": "import { Calendar } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "value",
+          "type": "Date | null",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(date: Date) => void",
+          "required": false
+        },
+        {
+          "name": "min",
+          "type": "Date | undefined",
+          "required": false,
+          "description": "Earliest date people can pick."
+        },
+        {
+          "name": "max",
+          "type": "Date | undefined",
+          "required": false,
+          "description": "Latest date people can pick."
+        },
+        {
+          "name": "isDateDisabled",
+          "type": "(date: Date) => boolean",
+          "required": false,
+          "description": "Return true for dates people cannot pick, for example bank holidays."
+        },
+        {
+          "name": "defaultMonth",
+          "type": "Date | undefined",
+          "required": false,
+          "description": "Month shown first. Defaults to the selected date, or today."
+        },
+        {
+          "name": "showToday",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a \"Today\" shortcut under the grid."
+        },
+        {
+          "name": "locale",
+          "type": "\"en-US\" | \"tr-TR\"",
+          "required": false,
+          "values": [
+            "en-US",
+            "tr-TR"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "A month grid for picking one date. DatePicker uses it in a popover; use it on its own when the calendar is the main thing on screen.",
+      "whenToUse": [
+        "Scheduling screens where people see a month, such as standing orders."
+      ],
+      "whenNotToUse": [
+        "A date field in a form: use DatePicker."
+      ],
+      "contentGuidelines": [],
+      "sizes": [],
+      "do": [
+        "Disable dates people cannot use, such as bank holidays for transfers."
+      ],
+      "dont": [
+        "Do not use it for date ranges yet."
+      ],
+      "accessibility": [
+        "A `grid` named by the month; each day button is named with the full date.",
+        "Today has `aria-current=\"date\"`; the selected day's cell has `aria-selected`.",
+        "The month name is announced when it changes."
+      ],
+      "keyboard": [
+        "Arrow keys: Move a day or a week",
+        "Home and End: Start and end of the week",
+        "Page up and down: Previous and next month",
+        "Shift with Page up and down: Previous and next year",
+        "Enter or Space: Chooses the day"
+      ],
+      "example": "import { useState } from \"react\";\nimport { Calendar } from \"@leeward/react\";\n\nexport function StandingOrderDay() {\n  const [date, setDate] = useState<Date | null>(null);\n  return <Calendar value={date} onValueChange={setDate} min={new Date()} locale=\"tr-TR\" />;\n}"
     },
     {
       "name": "Card",
@@ -1043,6 +1359,259 @@
       "example": "import { useState } from \"react\";\nimport { Chip } from \"@leeward/react\";\n\nexport function MoneyInFilter() {\n  const [selected, setSelected] = useState(false);\n  return <Chip selected={selected} onSelectedChange={setSelected}>Money in</Chip>;\n}"
     },
     {
+      "name": "Combobox",
+      "kind": "component",
+      "import": "import { Combobox } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "ComboboxOption[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | null",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string | null) => void",
+          "required": false
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "emptyText",
+          "type": "string",
+          "required": false,
+          "description": "Shown when nothing matches. Defaults to \"No results\"."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "shape",
+          "type": "\"rounded\" | \"pill\"",
+          "required": false,
+          "values": [
+            "rounded",
+            "pill"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "shape": [
+          "rounded",
+          "pill"
+        ]
+      },
+      "purpose": "A text field that filters a list as people type, for choosing one value from many, such as a bank.",
+      "whenToUse": [
+        "One choice from more than about 15 options, or options people know by name."
+      ],
+      "whenNotToUse": [
+        "Fewer than about 15 options: use Select. Free text search: use SearchField."
+      ],
+      "contentGuidelines": [
+        "Options have a short label and an optional second line, such as a bank code."
+      ],
+      "sizes": [],
+      "do": [
+        "Put the most common options first."
+      ],
+      "dont": [
+        "Do not use it for actions."
+      ],
+      "accessibility": [
+        "WAI-ARIA combobox with a listbox popup; the active option is announced with `aria-activedescendant`.",
+        "The number of results is read in a status region."
+      ],
+      "keyboard": [
+        "Arrow down: Opens the list or moves down",
+        "Arrow up: Moves up",
+        "Enter: Chooses the active option",
+        "Escape: Closes the list, then clears the text"
+      ],
+      "example": "import { Combobox } from \"@leeward/react\";\n\nexport function BankPicker() {\n  return (\n    <Combobox\n      label=\"Bank\"\n      placeholder=\"Start typing a bank name\"\n      options={[\n        { value: \"leeward\", label: \"Leeward\" },\n        { value: \"ziraat\", label: \"Ziraat Bankası\", description: \"TR00 0001\" },\n        { value: \"isbank\", label: \"Türkiye İş Bankası\", description: \"TR00 0064\" },\n      ]}\n    />\n  );\n}"
+    },
+    {
+      "name": "DatePicker",
+      "kind": "component",
+      "import": "import { DatePicker } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "Date | null",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "Date | null",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(date: Date | null) => void",
+          "required": false
+        },
+        {
+          "name": "min",
+          "type": "Date | undefined",
+          "required": false
+        },
+        {
+          "name": "max",
+          "type": "Date | undefined",
+          "required": false
+        },
+        {
+          "name": "isDateDisabled",
+          "type": "(date: Date) => boolean",
+          "required": false,
+          "description": "Return true for dates people cannot pick, for example weekends for a transfer date."
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Your own error. Typed dates that cannot be read get a built-in message."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "purpose": "One date, typed or picked from a calendar, such as when a scheduled transfer should go out.",
+      "whenToUse": [
+        "A date field in a form: transfer date, date of birth, statement start."
+      ],
+      "whenNotToUse": [
+        "A date people pick by browsing a month: use Calendar on its own."
+      ],
+      "contentGuidelines": [
+        "The hint shows the format by default (\"DD.MM.YYYY\" in Turkish shows as \"GG.AA.YYYY\")."
+      ],
+      "sizes": [],
+      "do": [
+        "Set `min` and `max`, and disable dates that cannot be used."
+      ],
+      "dont": [
+        "Do not make people use the calendar for a date of birth: typing is faster."
+      ],
+      "accessibility": [
+        "A normal text field with a visible label and format hint; the calendar button is named \"Choose date\".",
+        "The calendar follows the WAI-ARIA date grid pattern (see Calendar)."
+      ],
+      "keyboard": [],
+      "example": "import { DatePicker } from \"@leeward/react\";\n\nexport function TransferDate() {\n  const today = new Date();\n  return <DatePicker label=\"Send on\" min={today} isDateDisabled={(d) => d.getDay() === 0 || d.getDay() === 6} locale=\"tr-TR\" />;\n}"
+    },
+    {
       "name": "Dialog",
       "kind": "component",
       "import": "import { Dialog } from \"@leeward/react\";",
@@ -1322,6 +1891,154 @@
       ],
       "keyboard": [],
       "example": "import { Button, EmptyState } from \"@leeward/react\";\n\nexport function NoPayments() {\n  return <EmptyState icon=\"wallet-money\" title=\"No payments yet\" description=\"Your payments show up here.\" action={<Button iconStart=\"send\">Send money</Button>} />;\n}"
+    },
+    {
+      "name": "Fieldset",
+      "kind": "component",
+      "import": "import { Fieldset } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "legend",
+          "type": "string",
+          "required": true,
+          "description": "Names the group, for example \"Recipient\" or \"Card address\". Read before each field inside."
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Error that belongs to the group, not to one field, for example \"Enter either an IBAN or a phone number\"."
+        },
+        {
+          "name": "hideLegend",
+          "type": "boolean",
+          "required": false,
+          "description": "Hide the legend visually but keep it for screen readers, when a heading above already says the same."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        }
+      ],
+      "variants": {},
+      "purpose": "Groups related fields under one name, so screen readers announce the group with each field.",
+      "whenToUse": [
+        "Fields that only make sense together: an address, a card's expiry and security code, \"pay by IBAN or by phone number\"."
+      ],
+      "whenNotToUse": [
+        "A single field: use its own label.",
+        "Checkboxes or radios: CheckboxGroup and RadioGroup already are fieldsets."
+      ],
+      "contentGuidelines": [
+        "The legend is a short noun phrase: \"Card address\".",
+        "A group error says how the fields relate: \"Enter either an IBAN or a phone number\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Use `hideLegend` when a heading right above says the same, so screen readers still hear the group name."
+      ],
+      "dont": [
+        "Do not nest fieldsets more than one level."
+      ],
+      "accessibility": [
+        "A `fieldset` with a `legend`; the hint and error are linked with `aria-describedby`."
+      ],
+      "keyboard": [],
+      "example": "import { Fieldset, TextField } from \"@leeward/react\";\n\nexport function CardAddress() {\n  return (\n    <Fieldset legend=\"Card address\" hint=\"Where we send your new card\">\n      <TextField label=\"Street and number\" />\n      <TextField label=\"City\" />\n      <TextField label=\"Postcode\" numeric />\n    </Fieldset>\n  );\n}"
+    },
+    {
+      "name": "FileUpload",
+      "kind": "component",
+      "import": "import { FileUpload } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Say which files are accepted and how large they can be, for example \"PDF or photo, up to 10 MB\"."
+        },
+        {
+          "name": "accept",
+          "type": "string",
+          "required": false,
+          "description": "Same format as the input accept attribute, for example \"application/pdf,image/*\"."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "maxSize",
+          "type": "number",
+          "required": false,
+          "description": "Largest file size in bytes. Larger files are refused with a message."
+        },
+        {
+          "name": "files",
+          "type": "File[]",
+          "required": false
+        },
+        {
+          "name": "onFilesChange",
+          "type": "(files: File[]) => void",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "Adds documents, such as an ID or a proof of address, by drag and drop or with a regular button.",
+      "whenToUse": [
+        "Forms that need a document from the person."
+      ],
+      "whenNotToUse": [
+        "Profile photos: use the platform's image picker with a preview."
+      ],
+      "contentGuidelines": [
+        "The hint says what is accepted and the limit: \"PDF or photo, up to 10 MB\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Say what happens to the document after upload."
+      ],
+      "dont": [
+        "Do not upload automatically before people confirm the form."
+      ],
+      "accessibility": [
+        "A native file input, labelled by the visible label; works with keyboard and screen readers.",
+        "Errors are linked to the input; each remove button names its file."
+      ],
+      "keyboard": [],
+      "example": "import { FileUpload } from \"@leeward/react\";\n\nexport function ProofOfAddress() {\n  return <FileUpload label=\"Proof of address\" hint=\"PDF or photo, up to 10 MB\" accept=\"application/pdf,image/*\" maxSize={10 * 1024 * 1024} />;\n}"
     },
     {
       "name": "Heading",
@@ -1626,6 +2343,159 @@
       "example": "import { IconButton } from \"@leeward/react\";\n\nexport function CloseButton({ onClose }: { onClose: () => void }) {\n  return <IconButton icon=\"close\" label=\"Close\" onClick={onClose} />;\n}"
     },
     {
+      "name": "Image",
+      "kind": "component",
+      "import": "import { Image } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true,
+          "description": "Required. Describe what the image shows; use \"\" only for purely decorative images."
+        },
+        {
+          "name": "ratio",
+          "type": "string",
+          "required": false,
+          "description": "Width to height, for example \"16 / 9\" or \"1\". Reserves space so the page does not jump."
+        },
+        {
+          "name": "fit",
+          "type": "\"cover\" | \"contain\"",
+          "required": false,
+          "description": "How the image fills its box. Default cover.",
+          "values": [
+            "cover",
+            "contain"
+          ]
+        },
+        {
+          "name": "rounded",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<ImgHTMLAttributes<HTMLImageElement>, \"alt\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {},
+      "purpose": "An image that keeps its space while it loads and shows a calm fallback if it fails.",
+      "whenToUse": [
+        "Content images: merchant logos, offer artwork, document previews."
+      ],
+      "whenNotToUse": [
+        "Icons: use Icon. People: use Avatar."
+      ],
+      "contentGuidelines": [
+        "`alt` says what the image shows, in the context of the page. Use `alt=\"\"` only when the image adds nothing."
+      ],
+      "sizes": [],
+      "do": [
+        "Set a ratio for every image in a list."
+      ],
+      "dont": [
+        "Do not put text people need inside images."
+      ],
+      "accessibility": [
+        "`alt` is required. The fallback keeps the same name, so screen readers still know what was meant."
+      ],
+      "keyboard": [],
+      "example": "import { Image } from \"@leeward/react\";\n\nexport function OfferArt() {\n  return <Image src=\"/offers/travel.jpg\" alt=\"Coastline at sunset\" ratio=\"16 / 9\" />;\n}"
+    },
+    {
+      "name": "Indicator",
+      "kind": "component",
+      "import": "import { Indicator } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true,
+          "description": "The element it sits on, usually an IconButton or Avatar."
+        },
+        {
+          "name": "count",
+          "type": "number",
+          "required": false,
+          "description": "Shows a number. Above `max` it shows \"max+\". 0 hides the indicator."
+        },
+        {
+          "name": "dot",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a dot without a number, for \"something new\"."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Screen reader text, for example \"3 unread messages\". Defaults to \"3 new\"."
+        },
+        {
+          "name": "tone",
+          "type": "\"danger\" | \"primary\"",
+          "required": false,
+          "values": [
+            "danger",
+            "primary"
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "tone": [
+          "danger",
+          "primary"
+        ]
+      },
+      "purpose": "A dot or count on the corner of an icon or avatar, such as unread notifications.",
+      "whenToUse": [
+        "Something new behind an icon: unread messages, a pending request."
+      ],
+      "whenNotToUse": [
+        "Status of an item: use Badge.",
+        "Amounts: never show money in an indicator."
+      ],
+      "contentGuidelines": [],
+      "sizes": [],
+      "do": [
+        "Give a `label` that says what is new: \"3 unread messages\"."
+      ],
+      "dont": [
+        "Do not stack several indicators on one element."
+      ],
+      "accessibility": [
+        "The visible mark is hidden from screen readers; a hidden text says what it means, after the element's own name."
+      ],
+      "keyboard": [],
+      "example": "import { IconButton, Indicator } from \"@leeward/react\";\n\nexport function Notifications() {\n  return (\n    <Indicator count={3} label=\"3 unread notifications\">\n      <IconButton icon=\"bell\" label=\"Notifications\" />\n    </Indicator>\n  );\n}"
+    },
+    {
       "name": "Link",
       "kind": "component",
       "import": "import { Link } from \"@leeward/react\";",
@@ -1792,6 +2662,438 @@
       ],
       "keyboard": [],
       "example": "import { Icon, List, ListItem } from \"@leeward/react\";\n\nexport function SettingsList() {\n  return (\n    <List>\n      <ListItem title=\"Security\" description=\"Passcode, Face ID\" leading={<Icon name=\"shield\" />} href=\"/security\" chevron />\n      <ListItem title=\"Notifications\" leading={<Icon name=\"bell\" />} href=\"/notifications\" chevron />\n    </List>\n  );\n}"
+    },
+    {
+      "name": "NavigationBar",
+      "kind": "component",
+      "import": "import { NavigationBar } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "items",
+          "type": "NavigationItem[]",
+          "required": true,
+          "description": "Three to five top-level destinations."
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": true,
+          "description": "The label of the current destination."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Accessible name of the navigation, for example \"Main\"."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "Bottom navigation for phones: three to five top-level destinations, each with an icon and a label.",
+      "whenToUse": [
+        "The main sections of a mobile app: Home, Payments, Cards, Profile."
+      ],
+      "whenNotToUse": [
+        "Desktop: use a side or top navigation.",
+        "Actions such as \"Send money\": navigation goes to places, it does not do things."
+      ],
+      "contentGuidelines": [
+        "One word per label: \"Home\", \"Cards\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Keep the order the same on every screen."
+      ],
+      "dont": [
+        "Do not use more than five destinations or hide labels."
+      ],
+      "accessibility": [
+        "A `nav` named \"Main\"; the current destination has `aria-current=\"page\"`.",
+        "The current state is shown by a pill and a bold icon, not by color alone.",
+        "Counts are read as \"3 new\" after the label."
+      ],
+      "keyboard": [],
+      "example": "import { NavigationBar } from \"@leeward/react\";\n\nexport function AppNavigation() {\n  return (\n    <NavigationBar\n      current=\"Home\"\n      items={[\n        { label: \"Home\", icon: \"home\", href: \"/\" },\n        { label: \"Payments\", icon: \"arrows-left-right\", href: \"/payments\" },\n        { label: \"Cards\", icon: \"card\", href: \"/cards\" },\n        { label: \"Inbox\", icon: \"inbox\", href: \"/inbox\", count: 2 },\n      ]}\n    />\n  );\n}"
+    },
+    {
+      "name": "NumberInput",
+      "kind": "component",
+      "import": "import { NumberInput } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "number | null",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "number | null",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: number | null) => void",
+          "required": false
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "required": false,
+          "description": "Unit after the number, for example \"months\". Shown and read with the value."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "purpose": "A whole number with minus and plus buttons, such as a loan term in months or a number of cards.",
+      "whenToUse": [
+        "Small whole numbers with clear limits."
+      ],
+      "whenNotToUse": [
+        "Money: use AmountInput. Long numbers such as IBANs or card numbers: use TextField."
+      ],
+      "contentGuidelines": [
+        "Put the unit in `unit`, not in the label: label \"Loan term\", unit \"months\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Set `min` and `max` and say the range in the hint."
+      ],
+      "dont": [
+        "Do not use it for numbers people never change step by step."
+      ],
+      "accessibility": [
+        "The input has the `spinbutton` role with its value, limits and unit (\"12 months\").",
+        "The minus and plus buttons are for pointers; keyboard users use the arrow keys, so the buttons are left out of the Tab order."
+      ],
+      "keyboard": [
+        "Arrow up and down: Step by `step`",
+        "Page up and down: Step by ten steps",
+        "Home and End: Jump to `min` and `max`"
+      ],
+      "example": "import { NumberInput } from \"@leeward/react\";\n\nexport function LoanTerm() {\n  return <NumberInput label=\"Loan term\" unit=\"months\" min={3} max={36} step={3} defaultValue={12} hint=\"Between 3 and 36 months\" />;\n}"
+    },
+    {
+      "name": "PageHeader",
+      "kind": "component",
+      "import": "import { PageHeader } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "The screen title. Rendered as the page's h1."
+        },
+        {
+          "name": "onBack",
+          "type": "() => void",
+          "required": false,
+          "description": "Shows a back button. Leave it out on top-level screens."
+        },
+        {
+          "name": "backLabel",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Up to two IconButtons or one small Button on the end side."
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "required": false,
+          "description": "Stays at the top while the page scrolls."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "The top of a screen: a back button, the title and up to two actions.",
+      "whenToUse": [
+        "Every screen in the app, so titles and back buttons are always in the same place."
+      ],
+      "whenNotToUse": [
+        "Inside cards or sections: use Heading."
+      ],
+      "contentGuidelines": [
+        "The title names the screen in two or three words: \"Send money\", \"Card settings\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Use IconButtons with labels for actions, such as \"Help\"."
+      ],
+      "dont": [
+        "Do not put money movement actions here: they belong in the screen's main Button."
+      ],
+      "accessibility": [
+        "A `header` containing the `h1`.",
+        "The back button is named \"Back\" or \"Geri\"."
+      ],
+      "keyboard": [],
+      "example": "import { IconButton, PageHeader } from \"@leeward/react\";\n\nexport function SendMoneyHeader() {\n  return <PageHeader title=\"Send money\" onBack={() => history.back()} actions={<IconButton icon=\"help\" label=\"Help\" />} />;\n}"
+    },
+    {
+      "name": "Pagination",
+      "kind": "component",
+      "import": "import { Pagination } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "required": true,
+          "description": "The current page, starting at 1."
+        },
+        {
+          "name": "totalPages",
+          "type": "number",
+          "required": false,
+          "description": "Total pages. Omit when the total is unknown, and pass `hasNext` instead."
+        },
+        {
+          "name": "hasNext",
+          "type": "boolean",
+          "required": false,
+          "description": "For an unknown total: whether a next page exists."
+        },
+        {
+          "name": "onPageChange",
+          "type": "(page: number) => void",
+          "required": true
+        },
+        {
+          "name": "siblings",
+          "type": "number",
+          "required": false,
+          "description": "Pages shown on each side of the current page. Default 1."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "Moves through a long list, such as a statement, a page at a time.",
+      "whenToUse": [
+        "Desktop tables and lists where people need to reach a specific page."
+      ],
+      "whenNotToUse": [
+        "Phones and feeds: load more as people scroll, or show a \"Show more\" button."
+      ],
+      "contentGuidelines": [],
+      "sizes": [],
+      "do": [
+        "Keep the list's sort and filters when the page changes.",
+        "Move focus to the top of the list after a page change."
+      ],
+      "dont": [
+        "Do not show more than 7 page buttons."
+      ],
+      "accessibility": [
+        "A `nav` named \"Pagination\"; the current page has `aria-current=\"page\"`.",
+        "Buttons are named \"Page 3\", \"Previous page\" and \"Next page\".",
+        "A polite live region says \"Page 3 of 10\" after a change."
+      ],
+      "keyboard": [
+        "Tab: Moves between page buttons",
+        "Enter or Space: Goes to the page"
+      ],
+      "example": "import { useState } from \"react\";\nimport { Pagination } from \"@leeward/react\";\n\nexport function StatementPages() {\n  const [page, setPage] = useState(3);\n  return <Pagination page={page} totalPages={12} onPageChange={setPage} />;\n}"
+    },
+    {
+      "name": "Popover",
+      "kind": "component",
+      "import": "import { Popover } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "trigger",
+          "type": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+          "required": true,
+          "description": "A single focusable element, usually a Button, IconButton or Link."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "Short heading. Also the popover's accessible name."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "side",
+          "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+          "required": false,
+          "values": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"center\" | \"end\"",
+          "required": false,
+          "values": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "required": false
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {
+        "side": [
+          "top",
+          "right",
+          "bottom",
+          "left"
+        ]
+      },
+      "purpose": "Extra detail next to the thing it explains, such as how a fee is calculated. Unlike Tooltip, it can hold links and buttons.",
+      "whenToUse": [
+        "An explanation people open on purpose, with a title and a few sentences or a link."
+      ],
+      "whenNotToUse": [
+        "A short hint on hover: use Tooltip.",
+        "A task or a form: use Dialog or Sheet."
+      ],
+      "contentGuidelines": [
+        "The title is a short question or noun: \"How is this fee calculated?\"",
+        "Keep it under about 40 words."
+      ],
+      "sizes": [],
+      "do": [
+        "Use a clear trigger, such as an IconButton labelled \"About this fee\"."
+      ],
+      "dont": [
+        "Do not hide information people need to decide, such as the fee amount itself."
+      ],
+      "accessibility": [
+        "A dialog named by its title; focus moves into it when it opens and back to the trigger when it closes."
+      ],
+      "keyboard": [
+        "Enter or Space: Opens",
+        "Tab: Moves through the content",
+        "Escape: Closes"
+      ],
+      "example": "import { IconButton, Link, Popover } from \"@leeward/react\";\n\nexport function FeeInfo() {\n  return (\n    <Popover title=\"How is this fee calculated?\" trigger={<IconButton icon=\"info\" size=\"sm\" label=\"About this fee\" />}>\n      <p>Transfers to other banks cost ₺4,50. Transfers between Leeward accounts are free.</p>\n      <Link href=\"#fees\">See all fees</Link>\n    </Popover>\n  );\n}"
     },
     {
       "name": "ProgressBar",
@@ -1988,6 +3290,76 @@
         "Space: Selects the focused option"
       ],
       "example": "import { RadioGroup } from \"@leeward/react\";\n\nexport function WhenToSend() {\n  return (\n    <RadioGroup\n      label=\"When should it arrive?\"\n      defaultValue=\"now\"\n      options={[\n        { value: \"now\", label: \"Now\", description: \"Free, arrives in seconds\" },\n        { value: \"date\", label: \"On a date\", description: \"Choose a day in the next 12 months\" },\n      ]}\n    />\n  );\n}"
+    },
+    {
+      "name": "SearchField",
+      "kind": "component",
+      "import": "import { SearchField } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false
+        },
+        {
+          "name": "onSearch",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "Called on Enter. Results that update while typing do not need it."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        },
+        {
+          "name": "...rest",
+          "type": "Omit<TextFieldProps, \"prefix\" | \"suffix\" | \"type\" | \"onChange\" | \"value\" | \"defaultValue\">",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {},
+      "purpose": "A text field for searching, with a search icon and a clear button. Pill by default.",
+      "whenToUse": [
+        "Searching transactions, recipients, help articles."
+      ],
+      "whenNotToUse": [
+        "Choosing one value from a list: use Combobox."
+      ],
+      "contentGuidelines": [
+        "The label says what is searched: \"Search transactions\". The placeholder gives an example: \"Merchant or amount\"."
+      ],
+      "sizes": [],
+      "do": [
+        "Show the number of results near the list."
+      ],
+      "dont": [
+        "Do not use the placeholder as the only label."
+      ],
+      "accessibility": [
+        "Wrapped in a `search` landmark.",
+        "The clear button is named \"Clear search\" and moves focus back to the field."
+      ],
+      "keyboard": [
+        "Enter: Searches",
+        "Escape: Clears the text"
+      ],
+      "example": "import { SearchField } from \"@leeward/react\";\n\nexport function TransactionSearch() {\n  return <SearchField label=\"Search transactions\" placeholder=\"Merchant or amount\" onSearch={(q) => console.log(q)} />;\n}"
     },
     {
       "name": "SegmentedControl",
@@ -2385,6 +3757,164 @@
       "example": "import { Skeleton } from \"@leeward/react\";\n\nexport function LoadingList() {\n  return (\n    <div role=\"status\" aria-busy=\"true\" aria-label=\"Loading transactions\">\n      <Skeleton shape=\"circle\" />\n      <Skeleton lines={2} />\n    </div>\n  );\n}"
     },
     {
+      "name": "SkipLink",
+      "kind": "component",
+      "import": "import { SkipLink } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "targetId",
+          "type": "string",
+          "required": false,
+          "description": "The id of the main content, without \"#\"."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Defaults to \"Skip to main content\" in the locale."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "A link that lets keyboard and screen reader users jump past the navigation to the main content. Hidden until it gets focus.",
+      "whenToUse": [
+        "On every page with navigation before the main content. Make it the first focusable element."
+      ],
+      "whenNotToUse": [
+        "Inside components or dialogs."
+      ],
+      "contentGuidelines": [],
+      "sizes": [],
+      "do": [
+        "Put it before the logo and navigation."
+      ],
+      "dont": [
+        "Do not hide it with `display: none`: it must be focusable."
+      ],
+      "accessibility": [
+        "A normal link, so screen readers list it with the page's links.",
+        "Text defaults to \"Skip to main content\" or \"Ana içeriğe geç\"."
+      ],
+      "keyboard": [],
+      "example": "import { SkipLink } from \"@leeward/react\";\n\nexport function Layout() {\n  return (\n    <>\n      <SkipLink />\n      <nav aria-label=\"Main\">...</nav>\n      <main id=\"main\" tabIndex={-1}>...</main>\n    </>\n  );\n}"
+    },
+    {
+      "name": "Slider",
+      "kind": "component",
+      "import": "import { Slider } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "defaultValue",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: number) => void",
+          "required": false
+        },
+        {
+          "name": "onValueCommit",
+          "type": "(value: number) => void",
+          "required": false,
+          "description": "Called when people let go, for expensive updates."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "formatValue",
+          "type": "(value: number) => string",
+          "required": false,
+          "description": "How the value is shown and read, for example (v) => formatAmount(v, { currency: \"TRY\", locale })."
+        },
+        {
+          "name": "showLimits",
+          "type": "boolean",
+          "required": false,
+          "description": "Labels under the two ends, for example the minimum and maximum amounts."
+        },
+        {
+          "name": "hint",
+          "type": "ReactNode",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "variants": {},
+      "purpose": "Picks a value in a range when the feel matters more than the exact number, such as a monthly saving amount.",
+      "whenToUse": [
+        "Exploring a range: \"How much do you want to save each month?\""
+      ],
+      "whenNotToUse": [
+        "Exact values people already know: use AmountInput or NumberInput."
+      ],
+      "contentGuidelines": [
+        "Format the value for people with `formatValue`, for example with `formatAmount()`."
+      ],
+      "sizes": [],
+      "do": [
+        "Pair it with a field when an exact value is also useful."
+      ],
+      "dont": [
+        "Do not use a slider for more than a few hundred steps."
+      ],
+      "accessibility": [
+        "The thumb has the `slider` role, the label as its name and the formatted value as its value text.",
+        "The track has a 44 px tall hit area."
+      ],
+      "keyboard": [
+        "Arrow keys: Step by `step`",
+        "Page up and down: Larger steps",
+        "Home and End: Jump to the limits"
+      ],
+      "example": "import { Slider, formatAmount } from \"@leeward/react\";\n\nexport function MonthlySaving() {\n  return <Slider label=\"Save each month\" min={0} max={10000} step={250} defaultValue={2000} formatValue={(v) => formatAmount(v, { currency: \"TRY\", locale: \"tr-TR\" })} />;\n}"
+    },
+    {
       "name": "Spinner",
       "kind": "component",
       "import": "import { Spinner } from \"@leeward/react\";",
@@ -2441,6 +3971,126 @@
       ],
       "keyboard": [],
       "example": "import { Spinner } from \"@leeward/react\";\n\nexport function Loading() {\n  return <Spinner label=\"Loading your accounts\" />;\n}"
+    },
+    {
+      "name": "Stack",
+      "kind": "component",
+      "import": "import { Stack } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "as",
+          "type": "\"div\" | \"section\" | \"ul\" | \"ol\" | \"li\" | \"header\" | \"footer\" | \"main\" | \"nav\" | \"form\"",
+          "required": false,
+          "values": [
+            "div",
+            "section",
+            "ul",
+            "ol",
+            "li",
+            "header",
+            "footer",
+            "main",
+            "nav",
+            "form"
+          ]
+        },
+        {
+          "name": "direction",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": false,
+          "description": "vertical (default) stacks children top to bottom; horizontal puts them in a row.",
+          "values": [
+            "vertical",
+            "horizontal"
+          ]
+        },
+        {
+          "name": "gap",
+          "type": "\"none\" | \"3xs\" | \"2xs\" | \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"4xl\"",
+          "required": false,
+          "description": "Space between children, from the spacing scale.",
+          "values": [
+            "none",
+            "3xs",
+            "2xs",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl"
+          ]
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\"",
+          "required": false,
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch",
+            "baseline"
+          ]
+        },
+        {
+          "name": "justify",
+          "type": "\"start\" | \"center\" | \"end\" | \"between\"",
+          "required": false,
+          "values": [
+            "start",
+            "center",
+            "end",
+            "between"
+          ]
+        },
+        {
+          "name": "wrap",
+          "type": "boolean",
+          "required": false,
+          "description": "Let a horizontal stack wrap onto new lines on narrow screens."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "...rest",
+          "type": "HTMLAttributes<HTMLElement>",
+          "required": false,
+          "description": "Other native props are passed to the root element."
+        }
+      ],
+      "variants": {
+        "direction": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      "purpose": "Lays out children in a column or a row with a gap from the spacing scale, so screens never need hand-written margins.",
+      "whenToUse": [
+        "Any group of elements that needs consistent spacing: a form, a card body, a row of buttons."
+      ],
+      "whenNotToUse": [
+        "A two-dimensional layout with columns: use CSS grid with the grid tokens.",
+        "Spacing inside a component: components handle their own spacing."
+      ],
+      "contentGuidelines": [],
+      "sizes": [],
+      "do": [
+        "Nest stacks: a vertical stack of sections, each a stack of fields."
+      ],
+      "dont": [
+        "Do not add margins to children of a Stack."
+      ],
+      "accessibility": [
+        "Renders a `div` by default; use `as` for meaning (`section`, `ul`, `nav`, `form`)."
+      ],
+      "keyboard": [],
+      "example": "import { Button, Stack, TextField } from \"@leeward/react\";\n\nexport function RecipientForm() {\n  return (\n    <Stack as=\"form\" gap=\"lg\">\n      <Stack gap=\"md\">\n        <TextField label=\"Name\" />\n        <TextField label=\"IBAN\" numeric />\n      </Stack>\n      <Stack direction=\"horizontal\" gap=\"sm\" justify=\"end\" wrap>\n        <Button variant=\"ghost\">Cancel</Button>\n        <Button type=\"submit\">Save recipient</Button>\n      </Stack>\n    </Stack>\n  );\n}"
     },
     {
       "name": "Stepper",
@@ -2581,6 +4231,102 @@
         "Space: Toggles"
       ],
       "example": "import { useState } from \"react\";\nimport { Switch } from \"@leeward/react\";\n\nexport function OnlinePayments() {\n  const [on, setOn] = useState(true);\n  return <Switch label=\"Online card payments\" checked={on} onCheckedChange={setOn} />;\n}"
+    },
+    {
+      "name": "Table",
+      "kind": "component",
+      "import": "import { Table } from \"@leeward/react\";",
+      "props": [
+        {
+          "name": "caption",
+          "type": "string",
+          "required": true,
+          "description": "Says what the table lists, for example \"Transactions in November\". Read as the table's name."
+        },
+        {
+          "name": "hideCaption",
+          "type": "boolean",
+          "required": false,
+          "description": "Keep the caption for screen readers but hide it, when a heading right above says the same."
+        },
+        {
+          "name": "columns",
+          "type": "Array<TableColumn<Row>>",
+          "required": true
+        },
+        {
+          "name": "rows",
+          "type": "Row[]",
+          "required": true
+        },
+        {
+          "name": "rowKey",
+          "type": "(row: Row) => string",
+          "required": true
+        },
+        {
+          "name": "sort",
+          "type": "TableSort | undefined",
+          "required": false,
+          "description": "Controlled sort. Without `onSortChange`, the table sorts itself."
+        },
+        {
+          "name": "defaultSort",
+          "type": "TableSort | undefined",
+          "required": false
+        },
+        {
+          "name": "onSortChange",
+          "type": "(sort: TableSort) => void",
+          "required": false
+        },
+        {
+          "name": "emptyText",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Shown in one row when there are no rows."
+        },
+        {
+          "name": "locale",
+          "type": "\"tr-TR\" | \"en-US\"",
+          "required": false,
+          "values": [
+            "tr-TR",
+            "en-US"
+          ]
+        }
+      ],
+      "variants": {},
+      "purpose": "Rows and columns of data people compare, such as a statement on desktop.",
+      "whenToUse": [
+        "Desktop screens where people scan, sort and compare many rows with several values each."
+      ],
+      "whenNotToUse": [
+        "Phones: use List with TransactionRow.",
+        "Layout: never use a table to place things on a page."
+      ],
+      "contentGuidelines": [
+        "The caption says what is listed and for when: \"Transactions in November\".",
+        "Amounts align to the end and use AmountDisplay."
+      ],
+      "sizes": [],
+      "do": [
+        "Add Pagination under long tables."
+      ],
+      "dont": [
+        "Do not put more than one action in a row; use a DropdownMenu."
+      ],
+      "accessibility": [
+        "A real `table` with a `caption` and `th scope=\"col\"`.",
+        "Sorted columns have `aria-sort`, and the sort button says the direction.",
+        "The scroll frame is focusable and named by the caption, so keyboard users can scroll it."
+      ],
+      "keyboard": [
+        "Tab: Moves to the scroll frame and to sort buttons",
+        "Arrow keys: Scroll the frame when it has focus",
+        "Enter or Space: Sorts by the column"
+      ],
+      "example": "import { AmountDisplay, Table } from \"@leeward/react\";\n\ninterface Row { id: string; date: Date; merchant: string; amount: number }\n\nconst rows: Row[] = [\n  { id: \"1\", date: new Date(\"2026-11-12\"), merchant: \"Coffee Lab\", amount: -85 },\n  { id: \"2\", date: new Date(\"2026-11-11\"), merchant: \"Salary\", amount: 52000 },\n];\n\nexport function Statement() {\n  return (\n    <Table\n      caption=\"Transactions in November\"\n      rowKey={(r) => r.id}\n      rows={rows}\n      defaultSort={{ key: \"date\", direction: \"descending\" }}\n      columns={[\n        { key: \"date\", header: \"Date\", sortable: true, render: (r) => r.date.toLocaleDateString(\"en-US\"), sortValue: (r) => r.date },\n        { key: \"merchant\", header: \"Merchant\", sortable: true },\n        { key: \"amount\", header: \"Amount\", align: \"end\", sortable: true, render: (r) => <AmountDisplay value={r.amount} currency=\"TRY\" size=\"sm\" direction={r.amount < 0 ? \"outgoing\" : \"incoming\"} /> },\n      ]}\n    />\n  );\n}"
     },
     {
       "name": "Tabs",
@@ -2823,6 +4569,12 @@
           "name": "suffix",
           "type": "ReactNode",
           "required": false
+        },
+        {
+          "name": "endAction",
+          "type": "ReactNode",
+          "required": false,
+          "description": "An interactive control at the end of the field, such as a clear or show-password IconButton. Unlike `suffix`, it stays in the accessibility tree."
         },
         {
           "name": "optional",

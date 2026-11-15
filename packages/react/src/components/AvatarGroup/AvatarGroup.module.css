@@ -1,0 +1,24 @@
+.group { display: inline-flex; align-items: center; }
+/* Each avatar overlaps the one before it by a sixth of its size, so initials are never covered;
+   a ring in the surface color keeps them apart. */
+.avatar { box-shadow: 0 0 0 var(--lw-avatar-group-ring-width) var(--lw-fill-surface-default); }
+.xs .avatar + .avatar { margin-inline-start: calc(var(--lw-avatar-size-xs) / -6); }
+.sm .avatar + .avatar { margin-inline-start: calc(var(--lw-avatar-size-sm) / -6); }
+.md .avatar + .avatar { margin-inline-start: calc(var(--lw-avatar-size-md) / -6); }
+.lg .avatar + .avatar { margin-inline-start: calc(var(--lw-avatar-size-lg) / -6); }
+
+.more {
+  composes: labelXs from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--lw-avatar-radius);
+  background: var(--lw-fill-surface-bolder);
+  color: var(--lw-text-default);
+  font-variant-numeric: tabular-nums;
+}
+
+.xs .more { width: var(--lw-avatar-size-xs); height: var(--lw-avatar-size-xs); }
+.sm .more { width: var(--lw-avatar-size-sm); height: var(--lw-avatar-size-sm); }
+.md .more { width: var(--lw-avatar-size-md); height: var(--lw-avatar-size-md); }
+.lg .more { width: var(--lw-avatar-size-lg); height: var(--lw-avatar-size-lg); }

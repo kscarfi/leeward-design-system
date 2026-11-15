@@ -11173,6 +11173,513 @@
       }
     }
   },
+  "calendar": {
+    "cell-size": {
+      "$type": "dimension",
+      "$value": {
+        "value": 40,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/xSmall"
+        }
+      }
+    },
+    "cell-radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/pill"
+        }
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/0_5"
+        }
+      }
+    },
+    "padding": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    }
+  },
+  "slider": {
+    "track-height": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/1"
+        }
+      }
+    },
+    "thumb-size": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/5xSmall"
+        }
+      }
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/pill"
+        }
+      }
+    }
+  },
+  "file-upload": {
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/xLarge"
+        }
+      }
+    },
+    "padding": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/6"
+        }
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    }
+  },
+  "table": {
+    "cell-padding-x": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/4"
+        }
+      }
+    },
+    "cell-padding-y": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    },
+    "header-height": {
+      "$type": "dimension",
+      "$value": {
+        "value": 40,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/xSmall"
+        }
+      }
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/xLarge"
+        }
+      }
+    }
+  },
+  "pagination": {
+    "item-size": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/3xSmall"
+        }
+      }
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/small"
+        }
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/1"
+        }
+      }
+    }
+  },
+  "breadcrumbs": {
+    "gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/1"
+        }
+      }
+    }
+  },
+  "navigation-bar": {
+    "height": {
+      "$type": "dimension",
+      "$value": {
+        "value": 64,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/2xLarge"
+        }
+      }
+    },
+    "indicator-width": {
+      "$type": "dimension",
+      "$value": {
+        "value": 56,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/large"
+        }
+      }
+    },
+    "indicator-height": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/3xSmall"
+        }
+      }
+    },
+    "indicator-radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/pill"
+        }
+      }
+    }
+  },
+  "page-header": {
+    "height": {
+      "$type": "dimension",
+      "$value": {
+        "value": 56,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/large"
+        }
+      }
+    },
+    "padding-x": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/4"
+        }
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    }
+  },
+  "banner": {
+    "padding-x": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/6"
+        }
+      }
+    },
+    "padding-y": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/3"
+        }
+      }
+    }
+  },
+  "popover": {
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/xLarge"
+        }
+      }
+    },
+    "padding": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/4"
+        }
+      }
+    },
+    "max-width": {
+      "$type": "dimension",
+      "$value": {
+        "value": 480,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "size/content/sm"
+        }
+      }
+    }
+  },
+  "avatar-group": {
+    "ring-width": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "border-width/thick"
+        }
+      }
+    }
+  },
+  "indicator": {
+    "dot-size": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/2"
+        }
+      }
+    },
+    "count-height": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "sizer/5xSmall"
+        }
+      }
+    },
+    "count-padding-x": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "space/1"
+        }
+      }
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/pill"
+        }
+      }
+    }
+  },
+  "image": {
+    "radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableSetName": "Leeward Primitives",
+          "targetVariableName": "radii/xLarge"
+        }
+      }
+    }
+  },
   "spending": {
     "bar-height": {
       "$type": "dimension",

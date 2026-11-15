@@ -1,0 +1,8 @@
+.popover {
+  z-index: var(--lw-layer-overlay);
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
+  border-radius: var(--lw-popover-radius);
+  background: var(--lw-fill-surface-overlay);
+  box-shadow: var(--lw-elevation-500);
+}
+.popover:focus-visible { outline: none; }

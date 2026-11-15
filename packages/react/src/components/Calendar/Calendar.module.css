@@ -1,0 +1,48 @@
+.calendar { display: inline-flex; flex-direction: column; gap: var(--lw-space-xs); padding: var(--lw-calendar-padding); }
+.header { display: flex; align-items: center; justify-content: space-between; gap: var(--lw-space-xs); }
+.month { composes: labelMd from "../../styles/type.module.css"; margin: 0; color: var(--lw-text-default); text-transform: capitalize; }
+
+.grid { border-collapse: separate; border-spacing: var(--lw-calendar-gap); }
+.weekday { composes: caption from "../../styles/type.module.css"; height: var(--lw-space-lg); color: var(--lw-text-muted); font-weight: var(--lw-type-label-sm-weight); text-align: center; }
+.cell { padding: 0; text-align: center; }
+
+.day {
+  composes: labelSm from "../../styles/type.module.css";
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lw-calendar-cell-size);
+  height: var(--lw-calendar-cell-size);
+  padding: 0;
+  border: var(--lw-size-border-default) solid transparent;
+  border-radius: var(--lw-calendar-cell-radius);
+  background: transparent;
+  color: var(--lw-text-default);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.day:hover:not(.selected):not(.disabled) { background: var(--lw-fill-surface-bold); }
+.day:focus-visible { outline: none; box-shadow: var(--lw-elevation-focus); }
+.outside { color: var(--lw-text-subtle); }
+
+/* Today: an outline and aria-current. Selected: filled, plus aria-selected on the cell. */
+.today { border-color: var(--lw-border-strong); }
+.selected { background: var(--lw-fill-primary-default); color: var(--lw-fill-primary-on-default); border-color: var(--lw-fill-primary-default); }
+.disabled { color: var(--lw-text-subtler); text-decoration: line-through; cursor: not-allowed; }
+
+.footer { display: flex; justify-content: center; }
+.todayButton {
+  composes: labelSm from "../../styles/type.module.css";
+  position: relative;
+  min-height: var(--lw-control-height-xs);
+  padding-inline: var(--lw-space-sm);
+  border: 0;
+  border-radius: var(--lw-radius-pill);
+  background: transparent;
+  color: var(--lw-text-primary);
+  cursor: pointer;
+}
+.todayButton::before { content: ""; position: absolute; inset-inline: 0; top: 50%; height: var(--lw-size-touch-target); transform: translateY(-50%); }
+.todayButton:hover { background: var(--lw-fill-primary-weak); }

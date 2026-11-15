@@ -4099,6 +4099,228 @@
     "type": "dimension",
     "ref": "space.sm"
   },
+  "calendar.cell-size": {
+    "value": "2.5rem",
+    "cssVar": "--lw-calendar-cell-size",
+    "type": "dimension",
+    "ref": "sizer.xSmall"
+  },
+  "calendar.cell-radius": {
+    "value": "9999px",
+    "cssVar": "--lw-calendar-cell-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "calendar.gap": {
+    "value": "0.125rem",
+    "cssVar": "--lw-calendar-gap",
+    "type": "dimension",
+    "ref": "space.3xs"
+  },
+  "calendar.padding": {
+    "value": "0.75rem",
+    "cssVar": "--lw-calendar-padding",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "slider.track-height": {
+    "value": "0.25rem",
+    "cssVar": "--lw-slider-track-height",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "slider.thumb-size": {
+    "value": "1.25rem",
+    "cssVar": "--lw-slider-thumb-size",
+    "type": "dimension",
+    "ref": "sizer.5xSmall"
+  },
+  "slider.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-slider-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "file-upload.radius": {
+    "value": "16px",
+    "cssVar": "--lw-file-upload-radius",
+    "type": "dimension",
+    "ref": "radius.card"
+  },
+  "file-upload.padding": {
+    "value": "1.5rem",
+    "cssVar": "--lw-file-upload-padding",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "file-upload.gap": {
+    "value": "0.75rem",
+    "cssVar": "--lw-file-upload-gap",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "table.cell-padding-x": {
+    "value": "1rem",
+    "cssVar": "--lw-table-cell-padding-x",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "table.cell-padding-y": {
+    "value": "0.75rem",
+    "cssVar": "--lw-table-cell-padding-y",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "table.header-height": {
+    "value": "2.75rem",
+    "cssVar": "--lw-table-header-height",
+    "type": "dimension",
+    "ref": "control.height.md"
+  },
+  "table.radius": {
+    "value": "16px",
+    "cssVar": "--lw-table-radius",
+    "type": "dimension",
+    "ref": "radius.card"
+  },
+  "pagination.item-size": {
+    "value": "2.25rem",
+    "cssVar": "--lw-pagination-item-size",
+    "type": "dimension",
+    "ref": "control.height.sm"
+  },
+  "pagination.radius": {
+    "value": "8px",
+    "cssVar": "--lw-pagination-radius",
+    "type": "dimension",
+    "ref": "control.radius.sm"
+  },
+  "pagination.gap": {
+    "value": "0.25rem",
+    "cssVar": "--lw-pagination-gap",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "breadcrumbs.gap": {
+    "value": "0.25rem",
+    "cssVar": "--lw-breadcrumbs-gap",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "navigation-bar.height": {
+    "value": "4rem",
+    "cssVar": "--lw-navigation-bar-height",
+    "type": "dimension",
+    "ref": "sizer.2xLarge"
+  },
+  "navigation-bar.indicator-width": {
+    "value": "3.5rem",
+    "cssVar": "--lw-navigation-bar-indicator-width",
+    "type": "dimension",
+    "ref": "sizer.large"
+  },
+  "navigation-bar.indicator-height": {
+    "value": "2rem",
+    "cssVar": "--lw-navigation-bar-indicator-height",
+    "type": "dimension",
+    "ref": "sizer.3xSmall"
+  },
+  "navigation-bar.indicator-radius": {
+    "value": "9999px",
+    "cssVar": "--lw-navigation-bar-indicator-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "page-header.height": {
+    "value": "3.5rem",
+    "cssVar": "--lw-page-header-height",
+    "type": "dimension",
+    "ref": "sizer.large"
+  },
+  "page-header.padding-x": {
+    "value": "1rem",
+    "cssVar": "--lw-page-header-padding-x",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "page-header.gap": {
+    "value": "0.75rem",
+    "cssVar": "--lw-page-header-gap",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "banner.padding-x": {
+    "value": "1.5rem",
+    "cssVar": "--lw-banner-padding-x",
+    "type": "dimension",
+    "ref": "space.lg"
+  },
+  "banner.padding-y": {
+    "value": "0.75rem",
+    "cssVar": "--lw-banner-padding-y",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "banner.gap": {
+    "value": "0.75rem",
+    "cssVar": "--lw-banner-gap",
+    "type": "dimension",
+    "ref": "space.sm"
+  },
+  "popover.radius": {
+    "value": "12px",
+    "cssVar": "--lw-popover-radius",
+    "type": "dimension",
+    "ref": "radius.lg"
+  },
+  "popover.padding": {
+    "value": "1rem",
+    "cssVar": "--lw-popover-padding",
+    "type": "dimension",
+    "ref": "space.md"
+  },
+  "popover.max-width": {
+    "value": "30rem",
+    "cssVar": "--lw-popover-max-width",
+    "type": "dimension",
+    "ref": "size.content.sm"
+  },
+  "avatar-group.ring-width": {
+    "value": "2px",
+    "cssVar": "--lw-avatar-group-ring-width",
+    "type": "dimension",
+    "ref": "size.border.strong"
+  },
+  "indicator.dot-size": {
+    "value": "0.5rem",
+    "cssVar": "--lw-indicator-dot-size",
+    "type": "dimension",
+    "ref": "space.xs"
+  },
+  "indicator.count-height": {
+    "value": "1.25rem",
+    "cssVar": "--lw-indicator-count-height",
+    "type": "dimension",
+    "ref": "sizer.5xSmall"
+  },
+  "indicator.count-padding-x": {
+    "value": "0.25rem",
+    "cssVar": "--lw-indicator-count-padding-x",
+    "type": "dimension",
+    "ref": "space.2xs"
+  },
+  "indicator.radius": {
+    "value": "9999px",
+    "cssVar": "--lw-indicator-radius",
+    "type": "dimension",
+    "ref": "radius.pill"
+  },
+  "image.radius": {
+    "value": "12px",
+    "cssVar": "--lw-image-radius",
+    "type": "dimension",
+    "ref": "radius.lg"
+  },
   "spending.bar-height": {
     "value": "0.75rem",
     "cssVar": "--lw-spending-bar-height",

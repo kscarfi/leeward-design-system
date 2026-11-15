@@ -91,6 +91,8 @@
   font-variant-numeric: tabular-nums;
 }
 
+.endAction { display: inline-flex; flex-shrink: 0; margin-inline-end: calc(var(--lw-space-xs) * -1); }
+
 .affix {
   composes: bodyMd from "../../styles/type.module.css";
   color: var(--lw-text-muted);

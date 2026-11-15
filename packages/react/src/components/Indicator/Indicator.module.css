@@ -1,0 +1,32 @@
+.wrap { position: relative; display: inline-flex; }
+
+.mark {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  transform: translate(25%, -25%);
+  border-radius: var(--lw-indicator-radius);
+  box-shadow: 0 0 0 var(--lw-size-border-strong) var(--lw-fill-surface-default);
+  pointer-events: none;
+}
+
+.dot { width: var(--lw-indicator-dot-size); height: var(--lw-indicator-dot-size); }
+
+.count {
+  composes: badge from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--lw-indicator-count-height);
+  height: var(--lw-indicator-count-height);
+  padding-inline: var(--lw-indicator-count-padding-x);
+  font-variant-numeric: tabular-nums;
+}
+
+.danger { background: var(--lw-fill-danger-default); color: var(--lw-fill-danger-on-default); }
+.primary { background: var(--lw-fill-primary-default); color: var(--lw-fill-primary-on-default); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }
+
+@media (forced-colors: active) {
+  .mark { border: var(--lw-size-border-default) solid CanvasText; }
+}

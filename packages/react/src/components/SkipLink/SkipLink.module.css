@@ -1,0 +1,22 @@
+/* Off screen until focused, then shown at the top start corner above everything. */
+.link {
+  composes: labelMd from "../../styles/type.module.css";
+  position: fixed;
+  top: var(--lw-space-sm);
+  inset-inline-start: var(--lw-space-sm);
+  z-index: var(--lw-layer-tooltip);
+  padding: var(--lw-space-sm) var(--lw-space-md);
+  border-radius: var(--lw-control-radius-md);
+  background: var(--lw-fill-surface-raised);
+  color: var(--lw-text-default);
+  box-shadow: var(--lw-elevation-600);
+  text-decoration: underline;
+  transform: translateY(calc(-100% - var(--lw-space-xl)));
+}
+
+.link:focus,
+.link:focus-visible { transform: none; box-shadow: var(--lw-elevation-focus), var(--lw-elevation-600); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .link { transition: transform var(--lw-motion-duration-fast) var(--lw-motion-easing-standard); }
+}

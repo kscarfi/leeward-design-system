@@ -1,0 +1,36 @@
+.nav { display: flex; justify-content: center; }
+.list { display: flex; flex-wrap: wrap; align-items: center; gap: var(--lw-pagination-gap); margin: 0; padding: 0; list-style: none; }
+
+.page { composes: labelSm from "../../styles/type.module.css"; }
+.step { composes: labelSm from "../../styles/type.module.css"; }
+
+.page,
+.step {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--lw-pagination-item-size);
+  height: var(--lw-pagination-item-size);
+  padding-inline: var(--lw-space-xs);
+  border: var(--lw-size-border-default) solid transparent;
+  border-radius: var(--lw-pagination-radius);
+  background: transparent;
+  color: var(--lw-text-default);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.page::before,
+.step::before { content: ""; position: absolute; top: 50%; left: 50%; width: max(100%, var(--lw-size-touch-target)); height: var(--lw-size-touch-target); transform: translate(-50%, -50%); }
+
+.page:hover:not(.current),
+.step:hover:not(:disabled) { background: var(--lw-fill-surface-bold); }
+
+/* Current page: filled and bold, plus aria-current, not color alone. */
+.current { background: var(--lw-fill-primary-weak); border-color: var(--lw-border-primary-subtler); color: var(--lw-text-primary-on-subtle); font-weight: var(--lw-type-label-md-weight); }
+.step { color: var(--lw-icon-default); }
+.step:disabled { color: var(--lw-icon-subtler); cursor: not-allowed; }
+.gap { composes: labelSm from "../../styles/type.module.css"; min-width: var(--lw-space-lg); text-align: center; color: var(--lw-text-muted); }
+.status { composes: labelSm from "../../styles/type.module.css"; padding-inline: var(--lw-space-sm); color: var(--lw-text-default); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

@@ -1,0 +1,61 @@
+/* min-width: 0 stops a grid or flex parent from growing to the table's width; the frame scrolls instead.
+   position: relative keeps visually hidden text inside the scrolling frame instead of widening the page. */
+.scroll {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  border-radius: var(--lw-table-radius);
+  background: var(--lw-fill-surface-default);
+}
+
+.scroll:focus-visible { outline: none; box-shadow: var(--lw-elevation-focus); }
+
+.table { width: 100%; border-collapse: collapse; }
+.caption { composes: headingXs from "../../styles/type.module.css"; padding: var(--lw-table-cell-padding-y) var(--lw-table-cell-padding-x); text-align: start; color: var(--lw-text-default); }
+
+.th {
+  composes: labelSm from "../../styles/type.module.css";
+  height: var(--lw-table-header-height);
+  padding: 0 var(--lw-table-cell-padding-x);
+  border-bottom: var(--lw-size-border-default) solid var(--lw-border-default);
+  background: var(--lw-fill-surface-bold);
+  color: var(--lw-text-muted);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.td {
+  composes: bodySm from "../../styles/type.module.css";
+  padding: var(--lw-table-cell-padding-y) var(--lw-table-cell-padding-x);
+  border-bottom: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  color: var(--lw-text-default);
+  vertical-align: middle;
+}
+
+.row:last-child .td { border-bottom: 0; }
+.row:hover .td { background: var(--lw-fill-surface-canvas); }
+.end { text-align: end; font-variant-numeric: tabular-nums; }
+
+.sort {
+  composes: labelSm from "../../styles/type.module.css";
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lw-space-2xs);
+  min-height: var(--lw-size-touch-target);
+  padding: 0;
+  border: 0;
+  border-radius: var(--lw-radius-xs);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.end .sort { flex-direction: row-reverse; }
+.sort:hover { color: var(--lw-text-default); }
+.sortIcon { color: var(--lw-icon-subtler); }
+.sortActive { color: var(--lw-icon-default); }
+.empty { composes: bodySm from "../../styles/type.module.css"; padding: var(--lw-space-xl) var(--lw-table-cell-padding-x); text-align: center; color: var(--lw-text-muted); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

@@ -1,0 +1,64 @@
+.bar {
+  position: relative;
+  background: var(--lw-fill-surface-raised);
+  border-top: var(--lw-size-border-default) solid var(--lw-border-subtle);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.list { display: flex; margin: 0; padding: 0; list-style: none; }
+.cell { flex: 1; min-width: 0; }
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-3xs);
+  width: 100%;
+  min-height: var(--lw-navigation-bar-height);
+  padding: var(--lw-space-2xs) var(--lw-space-3xs);
+  border: 0;
+  background: transparent;
+  color: var(--lw-text-muted);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.item:focus-visible { box-shadow: var(--lw-elevation-focus-inset); outline: none; }
+
+/* The current destination: a filled pill behind a bold icon, plus aria-current. */
+.indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lw-navigation-bar-indicator-width);
+  height: var(--lw-navigation-bar-indicator-height);
+  border-radius: var(--lw-navigation-bar-indicator-radius);
+}
+
+.active { color: var(--lw-text-default); }
+.active .indicator { background: var(--lw-fill-primary-weak); color: var(--lw-icon-primary-on-subtle); }
+.item:hover:not(.active) .indicator { background: var(--lw-fill-surface-bold); }
+
+.label { composes: labelXs from "../../styles/type.module.css"; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.active .label { font-weight: var(--lw-type-label-sm-weight); }
+
+.count {
+  composes: badge from "../../styles/type.module.css";
+  position: absolute;
+  top: 0;
+  inset-inline-end: var(--lw-space-xs);
+  min-width: var(--lw-indicator-count-height);
+  height: var(--lw-indicator-count-height);
+  padding-inline: var(--lw-indicator-count-padding-x);
+  border-radius: var(--lw-indicator-radius);
+  background: var(--lw-fill-danger-default);
+  color: var(--lw-fill-danger-on-default);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

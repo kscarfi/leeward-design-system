@@ -50,3 +50,23 @@ export { SavingsGoal, type SavingsGoalProps } from "./patterns/SavingsGoal/Savin
 export { SpendingBreakdown, type SpendingBreakdownProps, type SpendingCategory } from "./patterns/SpendingBreakdown/SpendingBreakdown.tsx";
 
 export { formatAmount, formatDate, formatIban, maskIban, spokenAmount, MINUS, type Locale } from "./utils/format.ts";
+export { Stack, type StackProps, type SpaceToken } from "./components/Stack/Stack.tsx";
+export { SkipLink, type SkipLinkProps } from "./components/SkipLink/SkipLink.tsx";
+export { Fieldset, type FieldsetProps } from "./components/Fieldset/Fieldset.tsx";
+export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from "./components/Breadcrumbs/Breadcrumbs.tsx";
+export { Pagination, pageRange, type PaginationProps } from "./components/Pagination/Pagination.tsx";
+export { PageHeader, type PageHeaderProps } from "./components/PageHeader/PageHeader.tsx";
+export { NavigationBar, type NavigationBarProps, type NavigationItem } from "./components/NavigationBar/NavigationBar.tsx";
+export { Banner, type BannerProps, type BannerTone } from "./components/Banner/Banner.tsx";
+export { Popover, type PopoverProps } from "./components/Popover/Popover.tsx";
+export { AvatarGroup, type AvatarGroupProps, type AvatarGroupPerson } from "./components/AvatarGroup/AvatarGroup.tsx";
+export { Indicator, type IndicatorProps } from "./components/Indicator/Indicator.tsx";
+export { Image, type ImageProps } from "./components/Image/Image.tsx";
+export { Table, type TableProps, type TableColumn, type TableSort } from "./components/Table/Table.tsx";
+export { SearchField, type SearchFieldProps } from "./components/SearchField/SearchField.tsx";
+export { NumberInput, type NumberInputProps } from "./components/NumberInput/NumberInput.tsx";
+export { Slider, type SliderProps } from "./components/Slider/Slider.tsx";
+export { FileUpload, formatFileSize, type FileUploadProps } from "./components/FileUpload/FileUpload.tsx";
+export { Combobox, type ComboboxProps, type ComboboxOption } from "./components/Combobox/Combobox.tsx";
+export { Calendar, type CalendarProps } from "./components/Calendar/Calendar.tsx";
+export { DatePicker, formatDateInput, parseDateInput, type DatePickerProps } from "./components/DatePicker/DatePicker.tsx";

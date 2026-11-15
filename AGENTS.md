@@ -66,7 +66,20 @@ export function App({ children }: { children: ReactNode }) {
 | A secondary action | `Button variant="secondary"` or `"outline"` | A second primary button |
 | An icon-only action (close, more, settings) | `IconButton` with `label` | `IconButton` for money movement |
 | Navigation to another page | `Link`, or `ListItem href` for rows | `Button` |
+| The top of a screen | `PageHeader` (back, title, actions) | A custom header |
+| Main sections on phones | `NavigationBar` (3 to 5 items) | Tabs at the bottom |
+| Where a page sits, on desktop | `Breadcrumbs` | Breadcrumbs on phones |
+| Pages of a long list | `Pagination` (desktop) | Pagination on phones: load more |
+| Jumping past navigation | `SkipLink`, first on the page | Nothing |
 | A short text value | `TextField` | Raw `<input>` |
+| A search box | `SearchField` | `TextField` with a hand-made icon |
+| One choice from many, by typing | `Combobox` | A long `Select` |
+| A date | `DatePicker` (or `Calendar` when the month is the screen) | Three selects or a raw date input |
+| A small whole number with limits | `NumberInput` | `TextField` |
+| A value in a range, by feel | `Slider` (with a field when exact values matter) | A slider for money people must type |
+| A document from the person | `FileUpload` | A raw file input |
+| Related fields under one name | `Fieldset` | A heading over loose fields |
+| Several choices under one question | `CheckboxGroup` | Loose checkboxes |
 | A money amount to type | `AmountInput` | `TextField` |
 | A one-time code | `OTPInput` | Six inputs |
 | Long text | `Textarea` | `TextField` |
@@ -87,6 +100,13 @@ export function App({ children }: { children: ReactNode }) {
 | A savings goal | `SavingsGoal` | `ProgressBar` alone |
 | Spending by category | `SpendingBreakdown` | A chart without the list |
 | A status label | `Badge` | Colored text |
+| Something new on an icon or avatar | `Indicator` | A Badge on top of an icon |
+| Several people at once | `AvatarGroup` | A row of Avatars |
+| Data people compare on desktop | `Table` | A grid of divs |
+| An image with a fallback | `Image` | A raw `<img>` without alt |
+| Extra detail people open on purpose | `Popover` | A Tooltip with links |
+| A message about the whole app | `Banner` | An Alert at the top |
+| Spacing between elements | `Stack` | Margins on children |
 | A message on the page | `Alert` | A colored box |
 | A confirmation after an action | `useToast().show(...)` | `Alert` |
 | A decision that blocks the flow | `Dialog` | `Sheet` |

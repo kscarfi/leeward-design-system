@@ -1,0 +1,20 @@
+.nav { min-width: 0; }
+.list { display: flex; flex-wrap: wrap; align-items: center; gap: var(--lw-breadcrumbs-gap); margin: 0; padding: 0; list-style: none; }
+.item { composes: bodySm from "../../styles/type.module.css"; display: inline-flex; align-items: center; gap: var(--lw-breadcrumbs-gap); min-width: 0; }
+.link, .current { display: inline-flex; align-items: center; gap: var(--lw-space-3xs); border-radius: var(--lw-radius-xs); }
+.link { color: var(--lw-text-link-default); text-decoration: underline; text-underline-offset: 0.2em; }
+.link:hover { color: var(--lw-text-link-hover); }
+.current { color: var(--lw-text-default); font-weight: var(--lw-type-label-sm-weight); }
+.separator { color: var(--lw-icon-muted); flex-shrink: 0; }
+.more {
+  composes: bodySm from "../../styles/type.module.css";
+  position: relative;
+  padding: 0 var(--lw-space-2xs);
+  border: 0;
+  border-radius: var(--lw-radius-xs);
+  background: transparent;
+  color: var(--lw-text-link-default);
+  cursor: pointer;
+}
+.more::before { content: ""; position: absolute; inset: 50% auto auto 50%; width: var(--lw-size-touch-target); height: var(--lw-size-touch-target); transform: translate(-50%, -50%); }
+.more:hover { background: var(--lw-fill-surface-bold); }

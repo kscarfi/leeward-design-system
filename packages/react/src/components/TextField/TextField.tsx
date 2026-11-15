@@ -12,6 +12,8 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   /** Short text or symbol before the value, for example "₺". */
   prefix?: ReactNode;
   suffix?: ReactNode;
+  /** An interactive control at the end of the field, such as a clear or show-password IconButton. Unlike `suffix`, it stays in the accessibility tree. */
+  endAction?: ReactNode;
   optional?: boolean;
   /** Use tabular figures, for amounts and codes. */
   numeric?: boolean;
@@ -23,7 +25,7 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   ref?: Ref<HTMLInputElement>;
 }
 
-export function TextField({ label, hint, error, prefix, suffix, optional, numeric, size = "md", shape = "rounded", id, className, disabled, ref, ...rest }: TextFieldProps) {
+export function TextField({ label, hint, error, prefix, suffix, endAction, optional, numeric, size = "md", shape = "rounded", id, className, disabled, ref, ...rest }: TextFieldProps) {
   const ids = useFieldIds({ id, hint, error });
   return (
     <FieldRoot className={className}>
@@ -60,6 +62,7 @@ export function TextField({ label, hint, error, prefix, suffix, optional, numeri
             {suffix}
           </span>
         )}
+        {endAction && <span className={styles.endAction}>{endAction}</span>}
       </div>
       <FieldError id={ids.error}>{error}</FieldError>
     </FieldRoot>

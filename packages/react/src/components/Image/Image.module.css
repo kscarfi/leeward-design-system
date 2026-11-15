@@ -1,0 +1,18 @@
+.image { display: block; max-width: 100%; height: auto; background: var(--lw-fill-surface-bold); }
+.cover { object-fit: cover; width: 100%; }
+.contain { object-fit: contain; width: 100%; }
+.rounded { border-radius: var(--lw-image-radius); }
+
+.fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lw-space-2xs);
+  width: 100%;
+  min-height: var(--lw-size-avatar-xl);
+  background: var(--lw-fill-surface-bold);
+  color: var(--lw-icon-muted);
+}
+
+.fallbackText { composes: caption from "../../styles/type.module.css"; color: var(--lw-text-muted); }

@@ -1,0 +1,38 @@
+.root { position: relative; }
+
+.list {
+  position: absolute;
+  inset-inline: 0;
+  z-index: var(--lw-layer-overlay);
+  margin: var(--lw-space-2xs) 0 0;
+  padding: var(--lw-menu-padding);
+  max-height: calc(var(--lw-menu-item-height) * 6.5);
+  overflow-y: auto;
+  list-style: none;
+  border: var(--lw-size-border-default) solid var(--lw-border-muted);
+  border-radius: var(--lw-menu-radius);
+  background: var(--lw-fill-surface-overlay);
+  box-shadow: var(--lw-elevation-500);
+}
+
+.list[hidden] { display: none; }
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-sm);
+  min-height: var(--lw-menu-item-height);
+  padding: var(--lw-space-2xs) var(--lw-space-sm);
+  border-radius: var(--lw-menu-item-radius);
+  color: var(--lw-text-default);
+  cursor: pointer;
+}
+
+.active { background: var(--lw-fill-surface-bold); }
+.optionIcon { color: var(--lw-icon-muted); flex-shrink: 0; }
+.text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.optionLabel { composes: labelSm from "../../styles/type.module.css"; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.description { composes: caption from "../../styles/type.module.css"; color: var(--lw-text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.check { color: var(--lw-icon-primary); flex-shrink: 0; }
+.empty { composes: bodySm from "../../styles/type.module.css"; color: var(--lw-text-muted); }
+.srOnly { composes: visuallyHidden from "../../styles/type.module.css"; }

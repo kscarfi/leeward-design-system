@@ -19,6 +19,26 @@ import { Spinner } from "./Spinner/Spinner.tsx";
 import { Stepper } from "./Stepper/Stepper.tsx";
 import { Textarea } from "./Textarea/Textarea.tsx";
 import { CheckboxGroup } from "./CheckboxGroup/CheckboxGroup.tsx";
+import { Stack } from "./Stack/Stack.tsx";
+import { SkipLink } from "./SkipLink/SkipLink.tsx";
+import { Fieldset } from "./Fieldset/Fieldset.tsx";
+import { Breadcrumbs } from "./Breadcrumbs/Breadcrumbs.tsx";
+import { Pagination, pageRange } from "./Pagination/Pagination.tsx";
+import { PageHeader } from "./PageHeader/PageHeader.tsx";
+import { NavigationBar } from "./NavigationBar/NavigationBar.tsx";
+import { Banner } from "./Banner/Banner.tsx";
+import { Popover } from "./Popover/Popover.tsx";
+import { AvatarGroup } from "./AvatarGroup/AvatarGroup.tsx";
+import { Indicator } from "./Indicator/Indicator.tsx";
+import { Image } from "./Image/Image.tsx";
+import { Table } from "./Table/Table.tsx";
+import { SearchField } from "./SearchField/SearchField.tsx";
+import { NumberInput } from "./NumberInput/NumberInput.tsx";
+import { Slider } from "./Slider/Slider.tsx";
+import { FileUpload, formatFileSize } from "./FileUpload/FileUpload.tsx";
+import { Combobox } from "./Combobox/Combobox.tsx";
+import { Calendar } from "./Calendar/Calendar.tsx";
+import { DatePicker, formatDateInput, parseDateInput } from "./DatePicker/DatePicker.tsx";
 
 describe("Icon v2", () => {
   it("ships the curated Solar set in three weights", () => {
@@ -190,5 +210,192 @@ describe("Link icons", () => {
   it("keeps the text as the accessible name", () => {
     render(<Link href="#s" variant="standalone" iconStart="download">Download statement</Link>);
     expect(screen.getByRole("link", { name: "Download statement" })).toBeInTheDocument();
+  });
+});
+
+describe("Stack", () => {
+  it("spaces children with a token", () => {
+    render(<Stack gap="lg" data-testid="s"><span>a</span></Stack>);
+    expect(screen.getByTestId("s").style.gap).toBe("var(--lw-space-lg)");
+  });
+});
+
+describe("SkipLink", () => {
+  it("links to the main content", () => {
+    render(<SkipLink locale="tr-TR" />);
+    expect(screen.getByRole("link", { name: "Ana içeriğe geç" })).toHaveAttribute("href", "#main");
+  });
+});
+
+describe("Fieldset", () => {
+  it("names the group by its legend and describes it", () => {
+    render(<Fieldset legend="Card address" error="Enter a city"><input aria-label="City" /></Fieldset>);
+    expect(screen.getByRole("group", { name: "Card address" })).toHaveAccessibleDescription("Enter a city");
+  });
+});
+
+describe("Breadcrumbs", () => {
+  it("marks the current page and collapses long paths", async () => {
+    render(<Breadcrumbs items={[{ label: "A", href: "#a" }, { label: "B", href: "#b" }, { label: "C", href: "#c" }, { label: "D", href: "#d" }, { label: "E" }]} />);
+    expect(screen.getByText("E")).toHaveAttribute("aria-current", "page");
+    expect(screen.queryByText("B")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Show full path" }));
+    expect(screen.getByText("B")).toBeInTheDocument();
+  });
+});
+
+describe("Pagination", () => {
+  it("shows first, last and neighbours with gaps", () => {
+    expect(pageRange(5, 12)).toEqual([1, null, 4, 5, 6, null, 12]);
+    expect(pageRange(2, 4)).toEqual([1, 2, 3, 4]);
+  });
+  it("disables previous on the first page and moves forward", async () => {
+    const onPageChange = vi.fn();
+    render(<Pagination page={1} totalPages={3} onPageChange={onPageChange} />);
+    expect(screen.getByRole("button", { name: "Previous page" })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: "Next page" }));
+    expect(onPageChange).toHaveBeenCalledWith(2);
+  });
+});
+
+describe("PageHeader", () => {
+  it("renders the title as h1 and a back button", () => {
+    render(<PageHeader title="Send money" onBack={() => {}} />);
+    expect(screen.getByRole("heading", { level: 1, name: "Send money" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
+  });
+});
+
+describe("NavigationBar", () => {
+  it("marks the current destination and reads counts", () => {
+    render(<NavigationBar current="Cards" items={[{ label: "Home", icon: "home", href: "#h" }, { label: "Cards", icon: "card", href: "#c", count: 2 }]} />);
+    expect(screen.getByRole("link", { name: "Cards, 2 new" })).toHaveAttribute("aria-current", "page");
+  });
+});
+
+describe("Banner", () => {
+  it("is a status by default and an alert when urgent", () => {
+    const { rerender } = render(<Banner>Maintenance tonight</Banner>);
+    expect(screen.getByRole("status")).toHaveTextContent("Maintenance tonight");
+    rerender(<Banner live="alert">Outage</Banner>);
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+});
+
+describe("Popover", () => {
+  it("opens a dialog named by its title", async () => {
+    render(<Popover title="About fees" trigger={<button type="button">Info</button>}>Text</Popover>);
+    await userEvent.click(screen.getByRole("button", { name: "Info" }));
+    expect(await screen.findByRole("dialog", { name: "About fees" })).toBeInTheDocument();
+  });
+});
+
+describe("AvatarGroup", () => {
+  it("names everyone, with a count for the rest", () => {
+    render(<AvatarGroup people={[{ name: "A" }, { name: "B" }, { name: "C" }]} max={2} />);
+    expect(screen.getByRole("img", { name: "A, B and 1 more" })).toBeInTheDocument();
+  });
+});
+
+describe("Indicator", () => {
+  it("caps the count and hides at zero", () => {
+    const { rerender, container } = render(<Indicator count={150}><span>x</span></Indicator>);
+    expect(container.textContent).toContain("99+");
+    rerender(<Indicator count={0}><span>x</span></Indicator>);
+    expect(container.textContent).toBe("x");
+  });
+});
+
+describe("Image", () => {
+  it("shows a fallback with the same name when loading fails", () => {
+    render(<Image src="/missing.png" alt="Merchant logo" />);
+    fireEvent.error(screen.getByRole("img", { name: "Merchant logo" }));
+    expect(screen.getByText("Image unavailable")).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Merchant logo" })).toBeInTheDocument();
+  });
+});
+
+describe("Table", () => {
+  it("sorts by a column and reports the direction", async () => {
+    render(<Table caption="People" rowKey={(r: { n: string }) => r.n} rows={[{ n: "B" }, { n: "A" }]} columns={[{ key: "n", header: "Name", sortable: true }]} />);
+    await userEvent.click(screen.getByRole("button", { name: /Name/ }));
+    expect(screen.getByRole("columnheader", { name: /Name/ })).toHaveAttribute("aria-sort", "ascending");
+    expect(screen.getAllByRole("row")[1]).toHaveTextContent("A");
+  });
+});
+
+describe("SearchField", () => {
+  it("searches on Enter and clears", async () => {
+    const onSearch = vi.fn();
+    render(<SearchField label="Search" onSearch={onSearch} />);
+    await userEvent.type(screen.getByRole("searchbox", { name: "Search" }), "rent{Enter}");
+    expect(onSearch).toHaveBeenCalledWith("rent");
+    await userEvent.click(screen.getByRole("button", { name: "Clear search" }));
+    expect(screen.getByRole("searchbox")).toHaveValue("");
+  });
+});
+
+describe("NumberInput", () => {
+  it("steps with arrow keys and stays within limits", async () => {
+    const onValueChange = vi.fn();
+    render(<NumberInput label="Term" min={1} max={3} defaultValue={3} onValueChange={onValueChange} />);
+    const input = screen.getByRole("spinbutton", { name: "Term" });
+    await userEvent.click(input);
+    await userEvent.keyboard("{ArrowUp}");
+    expect(onValueChange).toHaveBeenLastCalledWith(3);
+    await userEvent.keyboard("{ArrowDown}");
+    expect(onValueChange).toHaveBeenLastCalledWith(2);
+  });
+});
+
+describe("Slider", () => {
+  it("names the thumb and reads the formatted value", () => {
+    render(<Slider label="Amount" defaultValue={500} formatValue={(v) => `${v} TL`} />);
+    expect(screen.getByRole("slider", { name: "Amount" })).toHaveAttribute("aria-valuetext", "500 TL");
+  });
+});
+
+describe("FileUpload", () => {
+  it("formats sizes and refuses files that are too large", async () => {
+    expect(formatFileSize(1536)).toBe("1.5 KB");
+    render(<FileUpload label="Document" maxSize={10} />);
+    await userEvent.upload(screen.getByLabelText("Document"), new File(["more than ten bytes"], "big.pdf", { type: "application/pdf" }));
+    expect(screen.getByText(/big.pdf is larger than 10 B/)).toBeInTheDocument();
+  });
+});
+
+describe("Combobox", () => {
+  it("filters with Turkish casing and chooses with Enter", async () => {
+    const onValueChange = vi.fn();
+    render(<Combobox label="Bank" locale="tr-TR" options={[{ value: "is", label: "İş Bankası" }, { value: "zi", label: "Ziraat" }]} onValueChange={onValueChange} />);
+    await userEvent.type(screen.getByRole("combobox", { name: "Bank" }), "iş");
+    expect(screen.getAllByRole("option")).toHaveLength(1);
+    await userEvent.keyboard("{Enter}");
+    expect(onValueChange).toHaveBeenCalledWith("is");
+  });
+});
+
+describe("Calendar", () => {
+  it("starts weeks on Monday in Turkish and selects a day", async () => {
+    const onValueChange = vi.fn();
+    render(<Calendar locale="tr-TR" defaultMonth={new Date(2026, 10, 1)} onValueChange={onValueChange} showToday={false} />);
+    expect(screen.getAllByRole("columnheader")[0]).toHaveAttribute("abbr", "Pazartesi");
+    await userEvent.click(screen.getByRole("button", { name: "18 Kasım 2026 Çarşamba" }));
+    expect(onValueChange).toHaveBeenCalledWith(new Date(2026, 10, 18));
+  });
+});
+
+describe("DatePicker", () => {
+  it("formats and parses dates in the locale's order", () => {
+    expect(formatDateInput(new Date(2026, 10, 2), "tr-TR")).toBe("02.11.2026");
+    expect(formatDateInput(new Date(2026, 10, 2), "en-US")).toBe("11/02/2026");
+    expect(parseDateInput("02.11.2026", "tr-TR")).toEqual(new Date(2026, 10, 2));
+    expect(parseDateInput("31.02.2026", "tr-TR")).toBeNull();
+  });
+  it("shows a message for a date it cannot read", async () => {
+    render(<DatePicker label="Date" />);
+    await userEvent.type(screen.getByLabelText("Date"), "99/99/2026");
+    await userEvent.tab();
+    expect(screen.getByText("Enter a date as MM/DD/YYYY.")).toBeInTheDocument();
   });
 });

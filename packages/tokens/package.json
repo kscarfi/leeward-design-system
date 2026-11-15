@@ -1,6 +1,6 @@
 {
   "name": "@leeward/tokens",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Leeward Design System tokens: CSS variables, typed TS, Figma variables and the partner theme generator, for every brand and mode.",
   "keywords": [
     "design-tokens",
