@@ -37,3 +37,8 @@
 :global(html[data-device="phone"]) .screen:last-child {
   padding-bottom: calc(var(--lw-space-xl) + var(--app-safe-area-bottom));
 }
+
+/* Sheets and dialogs leave env(safe-area-inset-bottom) on a real iPhone. A frame reports 0, so the same space is added here. */
+:global(html[data-device="phone"] [role="dialog"]) {
+  padding-bottom: calc(var(--lw-space-lg) + var(--app-safe-area-bottom));
+}

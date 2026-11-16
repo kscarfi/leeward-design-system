@@ -51,7 +51,7 @@ export function AddMoneySheet({ open, onOpenChange }: SheetState) {
 }
 
 /** Share the details people need to pay you: name and IBAN, or a payment link. */
-export function RequestSheet({ open, onOpenChange }: SheetState) {
+export function RequestSheet({ open, onOpenChange, title = "Request money" }: SheetState & { title?: string }) {
   const { state } = useStore();
   const toast = useToast();
   const iban = state.accounts.everyday.iban;
@@ -59,7 +59,7 @@ export function RequestSheet({ open, onOpenChange }: SheetState) {
   const copied = (what: string, value: string) => void copy(value).then(() => toast.show({ title: `${what} copied` }));
   return (
     <Sheet
-      title="Request money"
+      title={title}
       description="Share your details. People with any Turkish bank can pay you."
       open={open}
       onOpenChange={onOpenChange}

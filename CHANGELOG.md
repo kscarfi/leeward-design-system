@@ -4,6 +4,10 @@ All four packages (`@leeward/react`, `@leeward/tokens`, `@leeward/lint`, `@leewa
 
 ## Unreleased
 
+### Changed
+
+- PageHeader has no background of its own, so it sits on the screen's surface. A sticky PageHeader keeps the canvas fill and border, to cover content scrolling under it.
+
 ### Fixed
 
 - OTPInput: `onComplete` runs again when a new full code replaces a wrong one, for example a code pasted over a mistyped one. Before, it ran only the first time the field filled.

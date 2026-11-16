@@ -4,9 +4,9 @@
   gap: var(--lw-page-header-gap);
   min-height: var(--lw-page-header-height);
   padding-inline: var(--lw-page-header-padding-x);
-  background: var(--lw-fill-surface-canvas);
 }
 
-.sticky { position: sticky; top: 0; z-index: var(--lw-layer-sticky); border-bottom: var(--lw-size-border-default) solid var(--lw-border-subtle); }
+/* Transparent, so it sits on whatever surface the screen uses. Sticky headers need a fill to cover the content scrolling under them. */
+.sticky { position: sticky; top: 0; z-index: var(--lw-layer-sticky); background: var(--lw-fill-surface-canvas); border-bottom: var(--lw-size-border-default) solid var(--lw-border-subtle); }
 .title { composes: titleXs from "../../styles/type.module.css"; flex: 1; min-width: 0; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--lw-text-default); }
 .actions { display: flex; align-items: center; gap: var(--lw-space-2xs); }
