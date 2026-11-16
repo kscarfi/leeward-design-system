@@ -1,12 +1,20 @@
-// Hash routes, so the app works as static files on GitHub Pages: #/home, #/activity/t1, #/payments.
+// Hash routes, so the app works as static files on GitHub Pages: #/home, #/activity/t1, #/send/2.
 import { useSyncExternalStore } from "react";
 
-export type Route = { screen: "home" | "payments" | "cards" | "savings" } | { screen: "activity"; id: string };
+const TABS = ["home", "payments", "cards", "savings"] as const;
+const PAGES = ["transactions", "profile", "notifications"] as const;
+export type Tab = (typeof TABS)[number];
+
+export type Route =
+  | { screen: Tab | (typeof PAGES)[number] }
+  | { screen: "activity"; id: string }
+  | { screen: "send"; to?: number };
 
 function parse(hash: string): Route {
-  const [, screen, id] = hash.replace(/^#/, "").split("/");
-  if (screen === "activity" && id) return { screen, id };
-  if (screen === "payments" || screen === "cards" || screen === "savings") return { screen };
+  const [, screen, param] = hash.replace(/^#/, "").split("/");
+  if (screen === "activity" && param) return { screen, id: param };
+  if (screen === "send") return param && /^\d+$/.test(param) ? { screen, to: Number(param) } : { screen };
+  if ((TABS as readonly string[]).includes(screen ?? "") || (PAGES as readonly string[]).includes(screen ?? "")) return { screen: screen as Tab };
   return { screen: "home" };
 }
 
@@ -18,6 +26,13 @@ const subscribe = (onChange: () => void) => {
 export function useRoute(): Route {
   const hash = useSyncExternalStore(subscribe, () => location.hash);
   return parse(hash);
+}
+
+/** The tab a screen belongs to, for the tab bar. */
+export function tabOf(route: Route): Tab {
+  if (route.screen === "send") return "payments";
+  if ((TABS as readonly string[]).includes(route.screen)) return route.screen as Tab;
+  return "home";
 }
 
 export const href = (path: string) => `#/${path}`;

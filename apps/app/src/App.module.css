@@ -15,7 +15,7 @@
   height: var(--lw-size-touch-target);
 }
 
-/* From the md breakpoint (48rem, --lw-breakpoint-md), the app runs in a phone-sized frame next to the panel. */
+/* From the md breakpoint (48rem, --lw-breakpoint-md), the app runs in an iPhone frame next to the panel. */
 @media (min-width: 48rem) {
   .page {
     display: flex;
@@ -29,16 +29,5 @@
     width: var(--lw-size-content-sm);
     max-width: 22rem;
     padding: 0;
-  }
-
-  /* 390 by 844, the size of a common phone screen. */
-  .phone {
-    flex: none;
-    width: 24.375rem;
-    height: min(52.75rem, calc(100vh - var(--lw-space-xl) * 2));
-    border: var(--lw-size-border-default) solid var(--lw-border-subtle);
-    border-radius: var(--lw-radius-2xl);
-    box-shadow: var(--lw-elevation-400);
-    background: var(--lw-fill-surface-default);
   }
 }

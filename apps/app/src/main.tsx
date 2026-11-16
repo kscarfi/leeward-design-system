@@ -7,6 +7,7 @@ import { createRoot } from "react-dom/client";
 import { ToastProvider, TooltipProvider } from "@leeward/react";
 import { App } from "./App.tsx";
 import { PhoneApp } from "./PhoneApp.tsx";
+import { StoreProvider } from "./store.tsx";
 import { followParent } from "./theme.ts";
 
 // ?embed is the app inside the phone frame; without it, the showcase page around it.
@@ -16,7 +17,9 @@ if (embedded) followParent();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <TooltipProvider>
-      <ToastProvider>{embedded ? <PhoneApp /> : <App />}</ToastProvider>
+      <ToastProvider>
+        <StoreProvider>{embedded ? <PhoneApp /> : <App />}</StoreProvider>
+      </ToastProvider>
     </TooltipProvider>
   </StrictMode>,
 );

@@ -21,3 +21,19 @@
 :global(html) {
   scroll-padding-bottom: var(--lw-navigation-bar-height);
 }
+
+/* Inside the iPhone frame: keep the bottom free for the home indicator. 34 px is the iOS safe area, a device size, not spacing. */
+:global(html[data-device="phone"]) {
+  --app-safe-area-bottom: 2.125rem;
+  /* iOS shows no scrollbar while you are not scrolling. */
+  scrollbar-width: none;
+}
+
+:global(html[data-device="phone"]) .nav {
+  padding-bottom: var(--app-safe-area-bottom);
+  background: var(--lw-fill-surface-raised);
+}
+
+:global(html[data-device="phone"]) .screen:last-child {
+  padding-bottom: calc(var(--lw-space-xl) + var(--app-safe-area-bottom));
+}

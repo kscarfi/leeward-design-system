@@ -5,7 +5,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 const require = createRequire(import.meta.url);
 const axePath = require.resolve("axe-core/axe.min.js");
-const SCREENS = ["home", "activity/t1", "payments", "cards", "savings"];
+const SCREENS = ["home", "transactions", "activity/t2", "payments", "send", "cards", "savings", "profile", "notifications"];
 const THEMES = ["leeward", "business", "harbor"].flatMap((brand) => ["light", "dark"].map((mode) => ({ brand, mode })));
 
 async function axe(page: Page) {
@@ -34,8 +34,9 @@ for (const { brand, mode } of THEMES) {
   }
 }
 
-test("sends money from search to the success screen", async ({ page }) => {
+test("sends money, and the balance and activity follow", async ({ page }) => {
   await page.goto("/?embed#/payments");
+  await page.getByRole("button", { name: "Send money" }).click();
   await page.getByLabel("Who are you paying?").fill("deniz");
   await page.getByRole("button", { name: /Deniz Yılmaz/ }).click();
   await page.getByRole("button", { name: "Continue" }).click();
@@ -43,18 +44,45 @@ test("sends money from search to the success screen", async ({ page }) => {
   await page.getByLabel("Amount").fill("250");
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("heading", { name: "Check the details" })).toBeVisible();
-  await page.getByRole("button", { name: "Send money" }).click();
+  await page.getByRole("button", { name: "Send TRY 250.00" }).click();
   await page.getByLabel("Verification code").fill("111111");
   await expect(page.getByText("This code does not match.", { exact: false })).toBeVisible();
   await page.getByLabel("Verification code").fill("123456");
   await expect(page.getByRole("heading", { name: "TRY 250.00 is on its way" })).toBeVisible();
+  await page.getByRole("button", { name: "Done" }).click();
+  // 24,580.35 + 120,000.00 - 250.00
+  await expect(page.getByText("TRY 144,330.35")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Deniz Yılmaz/ }).first()).toBeVisible();
+});
+
+test("a new recipient needs a valid Turkish IBAN", async ({ page }) => {
+  await page.goto("/?embed#/send");
+  await page.getByRole("button", { name: /New recipient/ }).click();
+  await page.getByLabel("Full name").fill("Ali Veli");
+  await page.getByLabel("IBAN").fill("TR00 1234");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("A Turkish IBAN starts with TR and has 26 characters.")).toBeVisible();
+  await page.getByLabel("IBAN").fill("TR21 0001 0000 1234 5678 9012 35");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("This IBAN is not valid. Check each digit.")).toBeVisible();
+  await page.getByLabel("IBAN").fill("TR21 0001 0000 1234 5678 9012 34");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Ziraat Bankası").first()).toBeVisible();
+  await expect(page.getByText(/Fee TRY 4.50/)).toBeVisible();
+});
+
+test("freezing the card shows everywhere on the card screen", async ({ page }) => {
+  await page.goto("/?embed#/cards");
+  await page.getByRole("button", { name: "Freeze" }).click();
+  await expect(page.getByText("Your card is frozen.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("switch", { name: "Online payments" })).toBeDisabled();
 });
 
 test("the showcase passes the brand and mode into the phone frame", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
   const app = page.frameLocator("iframe");
-  await expect(app.getByRole("heading", { name: "Ece Kaya" })).toBeVisible();
+  await expect(app.getByRole("heading", { name: "Kemal" })).toBeVisible();
   await page.getByRole("radio", { name: "Dark" }).click();
   await expect.poll(() => page.locator("iframe").evaluate((f: HTMLIFrameElement) => f.contentDocument?.documentElement.dataset.theme)).toBe("dark");
   expect(await axe(page)).toEqual([]);

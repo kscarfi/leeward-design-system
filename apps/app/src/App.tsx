@@ -1,5 +1,6 @@
 import { Heading, Link, SegmentedControl, Select, Stack, Text } from "@leeward/react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Device } from "./Device.tsx";
 import { PhoneApp } from "./PhoneApp.tsx";
 import { applyTheme, type Theme } from "./theme.ts";
 import mark from "../../../docs/assets/brand/leeward-mark.svg";
@@ -45,7 +46,7 @@ export function App() {
             <img className={styles.logo} src={mark} alt="" />
             <Heading level={1} size="title-sm" id="about">Leeward app</Heading>
             <Text tone="secondary">
-              A clickable banking app built only from the Leeward Design System: components, patterns and tokens, with no custom component code. Change the brand and mode to see the same app rethemed.
+              A clickable banking app built only from the Leeward Design System. Every screen uses its components, patterns and tokens, and the money adds up: send a transfer and the balance, activity and receipt all follow. Change the brand and mode to see the same app rethemed.
             </Text>
           </Stack>
           <Select label="Brand" value={theme.brand} onValueChange={(brand) => setTheme({ ...theme, brand })} options={BRANDS} />
@@ -59,7 +60,7 @@ export function App() {
               { value: "dark", label: "Dark", icon: "moon" },
             ]}
           />
-          <Text variant="body-sm" tone="secondary">Try sending money to Deniz Yılmaz, freezing your card, or opening a transaction.</Text>
+          <Text variant="body-sm" tone="secondary">Try sending money to a new IBAN, freezing your card, moving money to a goal or adding a note to a payment. The code is 123456.</Text>
           <Stack gap="xs">
             <Link variant="standalone" href="../">Storybook</Link>
             <Link variant="standalone" href="https://www.figma.com/community/file/1703881089318257135/leeward-design-system" external>Figma file</Link>
@@ -69,7 +70,7 @@ export function App() {
       </aside>
 
       {isWide ? (
-        <iframe ref={frame} className={styles.phone} src={src} title="Leeward app on a phone-sized screen" onLoad={send} />
+        <Device theme={theme} src={src} frameRef={frame} onLoad={send} />
       ) : (
         <PhoneApp />
       )}

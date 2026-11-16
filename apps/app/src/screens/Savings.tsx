@@ -1,24 +1,45 @@
-import { Heading, PageHeader, SavingsGoal, SegmentedControl, SpendingBreakdown, Stack, useToast } from "@leeward/react";
+import { AmountDisplay, Card, Heading, PageHeader, SavingsGoal, SegmentedControl, SpendingBreakdown, Stack, Text } from "@leeward/react";
 import { useState } from "react";
 import { spending } from "../data.ts";
-import { go } from "../router.ts";
+import { useStore } from "../store.tsx";
+import { GoalSheet } from "./Sheets.tsx";
 
-const PERIODS = { week: "this week", month: "November", year: "2026" } as const;
+const PERIODS = { week: "Spending this week", month: "Spending in November", year: "Spending in 2026" } as const;
 type Period = keyof typeof PERIODS;
 
 export function Savings() {
-  const toast = useToast();
+  const { state } = useStore();
   const [period, setPeriod] = useState<Period>("month");
-  const addMoney = (goal: string) => toast.show({ title: `Add money to ${goal}`, description: "Moving money between your accounts is not part of this demo." });
+  const [goal, setGoal] = useState<string | null>(null);
+  const { savings } = state.accounts;
 
   return (
     <Stack gap="lg">
-      <PageHeader title="Savings and spending" onBack={() => go("home")} backLabel="Back to home" />
+      <PageHeader title="Savings" />
+      <Card padding="md">
+        <Stack gap="2xs">
+          <Text variant="label-md">{savings.name}</Text>
+          <AmountDisplay value={savings.balance} currency="TRY" locale="en-US" size="lg" />
+          <Text variant="body-sm" tone="secondary">{`${savings.type}. Interest is paid on the 1st of each month.`}</Text>
+        </Stack>
+      </Card>
 
       <Stack as="section" gap="sm" aria-labelledby="goals">
         <Heading level={2} size="h4" id="goals">Goals</Heading>
-        <SavingsGoal name="Holiday fund" icon="airplane" saved={18500} target={30000} currency="TRY" locale="en-US" targetDate={new Date(2027, 5, 1)} onAddMoney={() => addMoney("Holiday fund")} headingLevel={3} />
-        <SavingsGoal name="New laptop" icon="laptop" saved={42000} target={42000} currency="TRY" locale="en-US" onAddMoney={() => addMoney("New laptop")} headingLevel={3} />
+        {state.goals.map((g) => (
+          <SavingsGoal
+            key={g.id}
+            name={g.name}
+            icon={g.icon}
+            saved={g.saved}
+            target={g.target}
+            currency="TRY"
+            locale="en-US"
+            {...(g.targetDate ? { targetDate: g.targetDate } : {})}
+            {...(g.saved < g.target ? { onAddMoney: () => setGoal(g.id) } : {})}
+            headingLevel={3}
+          />
+        ))}
       </Stack>
 
       <Stack as="section" gap="sm" aria-labelledby="spending">
@@ -34,8 +55,10 @@ export function Savings() {
             { value: "year", label: "Year" },
           ]}
         />
-        <SpendingBreakdown title={`Spending ${PERIODS[period] === "this week" ? "this week" : `in ${PERIODS[period]}`}`} categories={spending[period]!} currency="TRY" locale="en-US" headingLevel={3} />
+        <SpendingBreakdown title={PERIODS[period]} categories={spending[period]!} currency="TRY" locale="en-US" headingLevel={3} />
       </Stack>
+
+      <GoalSheet goal={goal} onOpenChange={(open) => !open && setGoal(null)} />
     </Stack>
   );
 }

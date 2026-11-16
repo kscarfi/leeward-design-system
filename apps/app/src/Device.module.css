@@ -1,0 +1,136 @@
+/* An iPhone-sized frame: 390 by 844 screen, a 12 px bezel, a 54 px status bar and a 34 px home indicator area. */
+
+.slot {
+  flex: none;
+  position: relative;
+}
+
+.bezel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26.375rem;
+  height: 54.25rem;
+  padding: var(--lw-space-sm);
+  border-radius: 4.25rem;
+  background: var(--lw-fill-surface-default-static);
+  box-shadow: var(--lw-elevation-600);
+  transform-origin: top left;
+}
+
+.screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 3.5rem;
+  background: var(--lw-fill-surface-default);
+  color: var(--lw-text-default);
+}
+
+.statusBar {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 3.375rem;
+  padding: 0 var(--lw-space-xl) 0 var(--lw-space-2xl);
+  font-family: var(--lw-type-label-md-family);
+  font-size: var(--lw-type-label-md-size);
+  font-weight: var(--lw-type-label-md-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+.island {
+  position: absolute;
+  top: var(--lw-space-sm-tight);
+  left: 50%;
+  width: 7.75rem;
+  height: 2.25rem;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-fill-surface-default-static);
+  transform: translateX(-50%);
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: var(--lw-space-2xs);
+}
+
+.signal {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--lw-space-px);
+  height: 0.75rem;
+}
+
+.signal span {
+  width: 0.1875rem;
+  border-radius: var(--lw-radius-xs);
+  background: currentcolor;
+}
+
+.signal span:nth-child(1) { height: 30%; }
+.signal span:nth-child(2) { height: 55%; }
+.signal span:nth-child(3) { height: 80%; }
+.signal span:nth-child(4) { height: 100%; }
+
+.battery {
+  position: relative;
+  display: flex;
+  width: 1.5625rem;
+  height: 0.75rem;
+  padding: var(--lw-space-px);
+  border: var(--lw-size-border-default) solid currentcolor;
+  border-radius: var(--lw-radius-xs);
+  opacity: 0.9;
+}
+
+.battery::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(var(--lw-space-2xs) * -1);
+  width: var(--lw-space-3xs);
+  height: 0.25rem;
+  border-radius: 0 var(--lw-radius-xs) var(--lw-radius-xs) 0;
+  background: currentcolor;
+  transform: translateY(-50%);
+}
+
+.battery span {
+  width: 80%;
+  border-radius: var(--lw-radius-xs);
+  background: currentcolor;
+}
+
+.frame {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: var(--lw-fill-surface-default);
+}
+
+/* The home indicator floats over the app, as on iOS; the app leaves this strip free (PhoneApp.module.css). */
+.homeArea {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.125rem;
+  pointer-events: none;
+}
+
+.homeIndicator {
+  width: 8.375rem;
+  height: 0.3125rem;
+  border-radius: var(--lw-radius-pill);
+  background: var(--lw-text-default);
+}
