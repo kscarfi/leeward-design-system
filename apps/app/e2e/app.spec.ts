@@ -80,6 +80,8 @@ test("freezing the card shows everywhere on the card screen", async ({ page }) =
 
 test("the showcase passes the brand and mode into the phone frame", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
+  // Colors ease between modes; with reduced motion they switch at once, so axe measures the final colors, not a frame mid-change.
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const app = page.frameLocator("iframe");
   await expect(app.getByRole("heading", { name: "Kemal" })).toBeVisible();
