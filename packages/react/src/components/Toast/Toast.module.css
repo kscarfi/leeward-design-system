@@ -64,5 +64,10 @@
 .action:hover { background: var(--lw-fill-primary-weak); }
 .close { flex-shrink: 0; }
 
+/* At the top, toasts stack downwards under the status bar and slide in from above. */
+.top { top: calc(var(--lw-space-md) + env(safe-area-inset-top)); bottom: auto; }
+.top .toast[data-state="open"] { animation-name: slide-down; }
+
 @keyframes slide-in { from { opacity: 0; transform: translateY(var(--lw-space-md)); } }
+@keyframes slide-down { from { opacity: 0; transform: translateY(calc(var(--lw-space-md) * -1)); } }
 @keyframes fade-out { to { opacity: 0; } }

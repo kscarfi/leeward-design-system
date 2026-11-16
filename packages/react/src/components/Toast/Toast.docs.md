@@ -33,7 +33,8 @@ A short confirmation after an action, such as "Money sent". Shown with `useToast
 
 ## Do
 
-- Wrap the app once in `ToastProvider`.
+- Wrap the app once in `ToastProvider`. Use `placement="top"` in phone apps, where the bottom of the screen holds the tab bar and the main button.
+- While the pointer or focus is on a toast, its timer waits.
 
 ## Don't
 

@@ -4,6 +4,10 @@ All four packages (`@leeward/react`, `@leeward/tokens`, `@leeward/lint`, `@leewa
 
 ## Unreleased
 
+### Added
+
+- ToastProvider: `placement="top"` for phone apps, where the bottom holds the tab bar and main buttons. The default stays at the bottom.
+
 ### Changed
 
 - PageHeader has no background of its own, so it sits on the screen's surface. A sticky PageHeader keeps the canvas fill and border, to cover content scrolling under it.

@@ -36,9 +36,11 @@ export interface ToastProviderProps {
   /** Label for the region, read by screen readers. */
   label?: string;
   dismissLabel?: string;
+  /** bottom (default) sits near the actions on the web. top suits phone apps, where the bottom holds the tab bar and main buttons, as on iOS. */
+  placement?: "bottom" | "top";
 }
 
-export function ToastProvider({ children, label = "Notifications", dismissLabel = "Dismiss" }: ToastProviderProps) {
+export function ToastProvider({ children, label = "Notifications", dismissLabel = "Dismiss", placement = "bottom" }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const show = useCallback((options: ToastOptions) => {
     setToasts((current) => [...current, { ...options, id: Date.now() + Math.random() }]);
@@ -47,7 +49,7 @@ export function ToastProvider({ children, label = "Notifications", dismissLabel 
 
   return (
     <ToastContext.Provider value={show}>
-      <RadixToast.Provider label={label} swipeDirection="down">
+      <RadixToast.Provider label={label} swipeDirection={placement === "top" ? "up" : "down"}>
         {children}
         {toasts.map(({ id, title, description, tone = "neutral", action, duration }) => (
           <RadixToast.Root
@@ -74,7 +76,7 @@ export function ToastProvider({ children, label = "Notifications", dismissLabel 
             </RadixToast.Close>
           </RadixToast.Root>
         ))}
-        <RadixToast.Viewport className={styles.viewport} />
+        <RadixToast.Viewport className={cx(styles.viewport, placement === "top" && styles.top)} />
       </RadixToast.Provider>
     </ToastContext.Provider>
   );

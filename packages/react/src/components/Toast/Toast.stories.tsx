@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, screen, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button/Button.tsx";
-import { useToast, type ToastOptions } from "./Toast.tsx";
+import { ToastProvider, useToast, type ToastOptions } from "./Toast.tsx";
 import docsMd from "./Toast.docs.md?raw";
 import { docsDescription } from "../../stories/docs.ts";
 
@@ -33,4 +33,15 @@ export const Warning: Story = { args: { tone: "warning", title: "You are close t
 export const Danger: Story = { args: { tone: "danger", title: "Payment failed", description: "Nothing left your account. Try again." } };
 export const WithAction: Story = {
   args: { tone: "neutral", title: "Recipient removed", action: { label: "Undo", altText: "Undo removing the recipient", onClick: () => {} } },
+};
+
+/** Phone apps: toasts come from the top, clear of the tab bar and the main button. */
+export const Top: Story = {
+  args: { description: "Deniz gets ₺250,00 in a few seconds." },
+  decorators: [(Story) => <ToastProvider placement="top"><Story /></ToastProvider>],
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole("button", { name: "Show toast" }));
+    const title = await screen.findByText("Money sent");
+    await waitFor(() => expect(title.getBoundingClientRect().top).toBeLessThan(window.innerHeight / 2));
+  },
 };

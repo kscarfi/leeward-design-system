@@ -17,7 +17,7 @@ if (embedded) followParent();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <TooltipProvider>
-      <ToastProvider>
+      <ToastProvider placement="top">
         <StoreProvider>{embedded ? <PhoneApp /> : <App />}</StoreProvider>
       </ToastProvider>
     </TooltipProvider>
