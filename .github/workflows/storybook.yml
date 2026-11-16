@@ -1,6 +1,6 @@
 name: Storybook
 
-# Publishes Storybook to GitHub Pages on every push to main, so the live docs always match main.
+# Publishes Storybook, and the demo app at /app/, to GitHub Pages on every push to main, so both always match main.
 # Pages must use "GitHub Actions" as its source (Settings > Pages). See ADR 0006.
 on:
   push:
@@ -28,6 +28,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @leeward/docs build-storybook
+      # The demo app is served next to Storybook, at /app/.
+      - run: pnpm --filter @leeward/app build
+      - run: cp -r apps/app/dist apps/docs/storybook-static/app
       - uses: actions/upload-pages-artifact@v5
         with:
           path: apps/docs/storybook-static

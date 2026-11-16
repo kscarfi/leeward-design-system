@@ -15,6 +15,7 @@
 <p align="center"><strong>An open-source, AI-ready design system for digital banking.</strong><br>Tokens, React components, banking patterns, lint rules and an MCP server, designed and directed by Kemal Salih Carfi.</p>
 
 <p align="center">
+  <a href="https://kscarfi.github.io/leeward-design-system/app/">Demo app</a> ·
   <a href="https://kscarfi.github.io/leeward-design-system/">Storybook</a> ·
   <a href="https://www.figma.com/community/file/1703881089318257135/leeward-design-system">Figma</a> ·
   <a href="#quick-start">Quick start</a> ·
@@ -135,6 +136,7 @@ npm install @leeward/react
 | **Components** | 53: Accordion, Alert, Avatar, AvatarGroup, Badge, Banner, Breadcrumbs, Button, Calendar, Card, Checkbox, CheckboxGroup, Chip, Combobox, DatePicker, Dialog, Divider, DropdownMenu, EmptyState, Fieldset, FileUpload, Heading, Icon, IconButton, Image, Indicator, Link, ListItem, NavigationBar, NumberInput, PageHeader, Pagination, Popover, ProgressBar, RadioGroup, SearchField, SegmentedControl, Select, Sheet, Skeleton, SkipLink, Slider, Spinner, Stack, Stepper, Switch, Table, Tabs, Text, TextField, Textarea, Toast, Tooltip. |
 | **Banking patterns** | 12: AccountCard, AmountDisplay, AmountInput, BalanceHeader, OTPInput, PaymentCard, QuickActions, RecipientRow, SavingsGoal, SpendingBreakdown, SummaryList, TransactionRow. |
 | **Docs** | A page for every component and pattern: when to use it, variants, sizes, states, content and accessibility rules, keyboard support, a generated token table and examples that compile. Guides for [foundations](docs/guides/foundations.md), [writing and terminology](docs/guides/writing.md), [internationalization](docs/guides/internationalization.md) and [accessibility](docs/guides/accessibility.md). Browse them in the [live Storybook](https://kscarfi.github.io/leeward-design-system/), or run it locally with `pnpm storybook`. |
+| **Demo app** | [A clickable Leeward banking app](https://kscarfi.github.io/leeward-design-system/app/): home, transaction details, a four-step transfer with a one-time code, cards and savings. Built only from Leeward components, patterns and tokens; switch brand and mode to see it rethemed. Source in [apps/app](apps/app). |
 | **Figma file** | The [Leeward Design System file](https://www.figma.com/community/file/1703881089318257135/leeward-design-system) on Figma Community: every component and pattern with the same variants and props as the code, variables named after the tokens, and a documentation page for each. Duplicate it to use it. |
 | **Agent layer** | [AGENTS.md](AGENTS.md), [DESIGN.md](DESIGN.md), [llms.txt](llms.txt), [components.manifest.json](components.manifest.json) and the MCP server. |
 
@@ -174,9 +176,10 @@ Every number below is printed by a script or test runner in this repository, and
 | Control sizes | A story measures every control at sm, md and lg, rounded and pill, against its height token. A token test checks heights increase and radii never shrink. |
 | Layout | No story scrolls sideways on a 360 px screen. |
 | Visual regression | Every story is compared with committed screenshots in Leeward light, Leeward dark and Business light. |
-| Unit tests (`pnpm test`) | 129 tests: React 103, MCP server 11, lint rules 7, tokens 8. |
+| Unit tests (`pnpm test`) | 130 tests: React 104, MCP server 11, lint rules 7, tokens 8. |
 | Docs | 79 code examples and screen recipes compile; every recipe passes `validate_ui`; every component has docs, stories and tests; token tables and links are checked. |
 | Bundle size (`pnpm size`) | An app that imports only Button ships 62.8 KB of JavaScript gzipped; with every export, 148.9 KB. Styles are 13.6 KB and tokens for both brands and modes 22.3 KB gzipped. Most of the Button figure is icon data: every icon ships with the Icon component today, and the icon file alone is 55.4 KB gzipped. Splitting icons into their own modules is on the [roadmap](ROADMAP.md). React and React DOM are not counted. |
+| Demo app (`pnpm --filter @leeward/app test:e2e`) | 5 screens in 3 brands, light and dark: 30 runs with axe, 0 violations, no sideways scroll at 360 px. The transfer flow is tested end to end. `validate_ui` finds 0 problems in its source. |
 | Packages (`pnpm smoke:packages`) | The packed packages are installed into a clean project with npm: types, production build, tokens, lint rules and the MCP server are checked. |
 | Lint and copy | No raw colors, no unknown or primitive tokens, spacing and type on scale, no icon-only money actions, no red amounts, no em dashes. |
 
@@ -243,6 +246,7 @@ packages/
   mcp-server/   MCP server for AI agents
 apps/
   docs/         Storybook, story tests, visual regression
+  app/          Demo banking app built only from the system
   demo/         Same prompt, two results
 docs/
   recipes/      Complete screens built only from the system

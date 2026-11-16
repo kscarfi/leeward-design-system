@@ -5310,7 +5310,7 @@
           "name": "onComplete",
           "type": "(value: string) => void",
           "required": false,
-          "description": "Called once when every digit is filled."
+          "description": "Called when every digit is filled: once per new code, so a new code pasted over a wrong one counts."
         },
         {
           "name": "hint",

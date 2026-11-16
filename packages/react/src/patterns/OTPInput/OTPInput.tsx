@@ -13,7 +13,7 @@ export interface OTPInputProps {
   onValueChange?: (value: string) => void;
   /** @deprecated Use `onValueChange`. Kept until 2.0. */
   onChange?: (value: string) => void;
-  /** Called once when every digit is filled. */
+  /** Called when every digit is filled: once per new code, so a new code pasted over a wrong one counts. */
   onComplete?: (value: string) => void;
   hint?: ReactNode;
   error?: ReactNode;
@@ -42,7 +42,8 @@ export function OTPInput({ label, length = 6, value, defaultValue = "", onValueC
     const next = raw.replace(/\D/g, "").slice(0, length);
     if (value === undefined) setInternal(next);
     (onValueChange ?? onChange)?.(next);
-    if (next.length === length && code.length !== length) onComplete?.(next);
+    // Once per new full code, so pasting a new code over a wrong one completes too.
+    if (next.length === length && next !== code) onComplete?.(next);
   };
 
   const activeIndex = Math.min(code.length, length - 1);

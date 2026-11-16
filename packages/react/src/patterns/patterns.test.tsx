@@ -110,6 +110,18 @@ describe("OTPInput", () => {
     expect(onComplete).toHaveBeenCalledWith("482913");
   });
 
+  it("completes again when a new full code replaces a wrong one", async () => {
+    const onComplete = vi.fn();
+    render(<OTPInput label="Code" onComplete={onComplete} />);
+    const input = screen.getByLabelText("Code");
+    await userEvent.click(input);
+    await userEvent.paste("111111");
+    await userEvent.tripleClick(input);
+    await userEvent.paste("123456");
+    expect(onComplete).toHaveBeenNthCalledWith(1, "111111");
+    expect(onComplete).toHaveBeenNthCalledWith(2, "123456");
+  });
+
   it("reports every change with onValueChange, and with the deprecated onChange", async () => {
     const onValueChange = vi.fn();
     const onChange = vi.fn();

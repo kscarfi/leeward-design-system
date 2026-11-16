@@ -2,6 +2,17 @@
 
 All four packages (`@leeward/react`, `@leeward/tokens`, `@leeward/lint`, `@leeward/mcp-server`) share one version.
 
+## Unreleased
+
+### Fixed
+
+- OTPInput: `onComplete` runs again when a new full code replaces a wrong one, for example a code pasted over a mistyped one. Before, it ran only the first time the field filled.
+- SegmentedControl: no vertical scrollbar where scrollbars are always visible (Windows, or macOS with that setting).
+
+### Added
+
+- A [demo app](https://kscarfi.github.io/leeward-design-system/app/) built only from the system, tested with axe in every brand and mode.
+
 ## 1.0.0
 
 The first stable version. From here on, the public API follows semantic versioning strictly: anything that removes or renames a component, prop or token, or changes a default, waits for 2.0. See [docs/versioning.md](docs/versioning.md).

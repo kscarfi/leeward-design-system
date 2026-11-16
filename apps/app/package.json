@@ -1,0 +1,31 @@
+{
+  "name": "@leeward/app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A clickable Leeward banking app built only from the design system.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@leeward/react": "workspace:*",
+    "@leeward/tokens": "workspace:*",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "axe-core": "4.14.0",
+    "playwright": "1.65.0",
+    "vite": "8.3.8"
+  },
+  "author": "Kemal Salih Carfi (https://kscarfi.com)",
+  "homepage": "https://kscarfi.github.io/leeward-design-system/app/"
+}

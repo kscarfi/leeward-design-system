@@ -9,7 +9,10 @@
   border: var(--lw-size-border-default) solid var(--lw-border-muted);
   border-radius: var(--lw-segmented-radius-md);
   max-width: 100%;
+  /* Scrolls sideways when options do not fit. overflow-y must be set too, or it computes to auto and
+     a 1 px taller selected item shows a vertical scrollbar where scrollbars are always visible. */
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .sm { height: var(--lw-segmented-height-sm); border-radius: var(--lw-segmented-radius-sm); }

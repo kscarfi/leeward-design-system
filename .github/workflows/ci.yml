@@ -89,6 +89,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @leeward/docs exec playwright install --with-deps chromium
       - run: pnpm test:stories
+      # The demo app: every screen in every brand and mode with axe, and the transfer flow.
+      - run: pnpm --filter @leeward/app test:e2e
 
   visual:
     name: Visual regression
