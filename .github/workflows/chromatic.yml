@@ -1,0 +1,36 @@
+name: Chromatic
+
+# Publishes Storybook to Chromatic, which is how the Storybook showcase finds it (storybook.js.org/showcase).
+# Runs on release tags and by hand only: each publish uses Chromatic snapshots, and the free plan has a monthly limit.
+# Visual regression stays in the CI workflow; Chromatic is only the host here. See ADR 0007.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish Storybook to Chromatic
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Chromatic reads the git history to link builds to commits.
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @leeward/docs build-storybook
+      - uses: chromaui/action@v18.14.5
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookBuildDir: apps/docs/storybook-static
+          # Publishing only: accept every snapshot as the new baseline and do not wait for review.
+          autoAcceptChanges: true
+          exitOnceUploaded: true

@@ -12,3 +12,4 @@ Format: `NNNN-short-title.md` with Status, Context, Decision, Consequences.
 | [0004](0004-partner-themes.md) | Partner themes from one seed color | Accepted |
 | [0005](0005-token-system-v2.md) | Token system v2: token source, brands and the contrast resolver | Accepted |
 | [0006](0006-storybook-hosting.md) | Storybook on GitHub Pages | Accepted |
+| [0007](0007-chromatic-for-the-showcase.md) | Chromatic for the Storybook showcase | Accepted |
